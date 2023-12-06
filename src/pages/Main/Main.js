@@ -3,8 +3,6 @@ import PurpleRectangleBtn from "../../components/PurpleRectangleBtn/PurpleRectan
 import PurpleRoundBtn from "../../components/PurpleRoundBtn/PurpleRoundBtn";
 import WhiteRectangleBtn from "../../components/WhiteRectangleBtn/WhiteRectangleBtn";
 import WhiteRoundBtn from "../../components/WhiteRoundBtn/WhiteRoundBtn";
-
-import { useState, useEffect } from 'react';
 import style from "./Main.module.css"
 
 function Main(){
