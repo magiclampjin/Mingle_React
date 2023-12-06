@@ -1,0 +1,76 @@
+@font-face {
+  font-family: "LOTTERIACHAB";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/LOTTERIACHAB.woff2")
+    format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.header {
+  padding: 16px 0;
+}
+.header__pcSize {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header__logo {
+  font-family: "LOTTERIACHAB";
+  font-size: 40px;
+  color: #7b61ff;
+  cursor: pointer;
+}
+.header__logo > span {
+  font-family: "LOTTERIACHAB";
+  font-size: 40px;
+  color: #f9b813;
+}
+.header__menu {
+  display: flex;
+}
+.menu__navi {
+  display: flex;
+}
+.menu__naviTabSize {
+  display: none;
+}
+.navi__conf {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.navi__conf:not(:last-child) {
+  margin-right: 30px;
+}
+.menu__user {
+  display: flex;
+  align-items: center;
+  margin-left: 50px;
+}
+.menu__user > svg {
+  font-size: 20px;
+}
+.menu__user > svg > path {
+  color: #5c4dae;
+}
+.profileImg {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-left: 15px;
+}
+
+@media (max-width: 786px) {
+  .menu__navi {
+    display: none;
+  }
+  .menu__naviTabSize {
+    display: flex;
+    margin-top: 20px;
+  }
+  .menu__naviTabSize > .navi__conf {
+    font-size: 14px;
+    cursor: pointer;
+  }
+}
