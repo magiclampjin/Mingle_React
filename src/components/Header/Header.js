@@ -1,8 +1,8 @@
 import style from "./Header.module.css";
 import PurpleRoundBtn from "../PurpleRoundBtn/PurpleRoundBtn";
 import { MenuContext } from "../../App";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBell } from '@fortawesome/free-solid-svg-icons';
 import { useState } from "react";
 
 const Header = () => {
