@@ -9,6 +9,7 @@ import WhiteRoundBtn from "./components/WhiteRoundBtn/WhiteRoundBtn";
 import Header from "./components/Header/Header";
 
 import { createContext, useState } from "react";
+import Footer from "./components/Footer/Footer";
 
 export const MenuContext = createContext();
 
@@ -32,6 +33,7 @@ function App() {
         ></PurpleRectangleBtn>
         <WhiteRectangleBtn title={"wersdfgfrec"}></WhiteRectangleBtn>
         <WhiteRoundBtn title={"white"}></WhiteRoundBtn>
+        <Footer></Footer>
       </>
     </MenuContext.Provider>
   );
