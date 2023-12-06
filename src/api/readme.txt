@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import AxiosLoader from '../api/AxiosLoader';
 import LoadingSpinner from '../component/LoadingSpinner/LoadingSpinner';
 

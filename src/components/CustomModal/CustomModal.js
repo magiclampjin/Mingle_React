@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 
-Modal.setAppElement('#root'); // 모달의 앱 루트를 설정합니다.
+Modal.setAppElement('#root'); 
 
 const CustomModal = ({ isOpen, onRequestClose, contentLabel, children }) => {
   // isOpen: 모달의 열림 상태
