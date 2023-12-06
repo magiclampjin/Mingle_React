@@ -1,0 +1,8 @@
+.grayRectangleBtn {
+  background-color: #737577;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: white;
+  font-size: 18px;
+}
