@@ -26,7 +26,7 @@ const Footer = () => {
               </div>
             </div>
             <div className={style.info__conf}>
-              <div>이메일 : eyungeniu@gmail.com</div>
+              <div>이메일 : eyungenius@gmail.com</div>
               <div>
                 git :{" "}
                 <a href="https://github.com/magiclampjin" target="_blank">
