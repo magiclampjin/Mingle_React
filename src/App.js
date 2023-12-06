@@ -11,7 +11,7 @@ import Header from "./components/Header/Header";
 import { createContext, useState } from "react";
 import Footer from "./components/Footer/Footer";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Main from "./pages/Main/Main";
+import Main from "./pages/MainContents/Main/Main";
 
 export const MenuContext = createContext();
 

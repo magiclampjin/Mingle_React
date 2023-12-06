@@ -1,8 +1,8 @@
-import GrayRectangleBtn from "../../components/GrayRectangleBtn/GrayRectangleBtn";
-import PurpleRectangleBtn from "../../components/PurpleRectangleBtn/PurpleRectangleBtn";
-import PurpleRoundBtn from "../../components/PurpleRoundBtn/PurpleRoundBtn";
-import WhiteRectangleBtn from "../../components/WhiteRectangleBtn/WhiteRectangleBtn";
-import WhiteRoundBtn from "../../components/WhiteRoundBtn/WhiteRoundBtn";
+import GrayRectangleBtn from "../../../components/GrayRectangleBtn/GrayRectangleBtn";
+import PurpleRectangleBtn from "../../../components/PurpleRectangleBtn/PurpleRectangleBtn";
+import PurpleRoundBtn from "../../../components/PurpleRoundBtn/PurpleRoundBtn";
+import WhiteRectangleBtn from "../../../components/WhiteRectangleBtn/WhiteRectangleBtn";
+import WhiteRoundBtn from "../../../components/WhiteRoundBtn/WhiteRoundBtn";
 import style from "./Main.module.css"
 
 function Main(){
