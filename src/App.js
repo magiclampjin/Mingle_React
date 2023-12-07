@@ -12,7 +12,7 @@ import MemberLogin from "./pages/MemberLogin/MemberLogin";
 import { createContext, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Footer from "./components/Footer/Footer";
-import Main from "./pages/MainContents/Main/Main";
+import Main from "./pages/Main/Main";
 
 export const MenuContext = createContext();
 
@@ -26,7 +26,7 @@ function App() {
 
           <Routes>
             <Route path="/" element={<Main />} />
-            <Route path="/login" element={<MemberLogin />}></Route>
+            <Route path="/login/*" element={<MemberLogin />}></Route>
           </Routes>
 
           <Footer></Footer>
