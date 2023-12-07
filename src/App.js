@@ -7,11 +7,13 @@ import PurpleRectangleBtn from "./components/PurpleRectangleBtn/PurpleRectangleB
 import WhiteRectangleBtn from "./components/WhiteRectangleBtn/WhiteRectangleBtn";
 import WhiteRoundBtn from "./components/WhiteRoundBtn/WhiteRoundBtn";
 import Header from "./components/Header/Header";
+import Login from "./pages/MemberLogin/Login";
 
 import { createContext, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Link} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Footer from "./components/Footer/Footer";
 import Main from "./pages/MainContents/Main/Main";
+import PartyCreate from "./pages/MainContents/Party/PartyCreate/PartyCreate";
 import Board from "./pages/Board/Board";
 
 export const MenuContext = createContext();
@@ -21,15 +23,18 @@ function App() {
   return (
     <MenuContext.Provider value={{ selectedMenu, setSelectedMenu }}>
       <>
-        <Header></Header>
         <Router>
+          <Header></Header>
+
           <Routes>
-            <Route path="/" element={<Main/>}/>
+            <Route path="/" element={<Main />} />
+            <Route path="/login" element={<Login />}></Route>
+            <Route path="/party" element={<PartyCreate />}></Route>
             <Route path="/board" element={<Board></Board>}/>
           </Routes>
-        </Router>
-        <Footer></Footer>
 
+          <Footer></Footer>
+        </Router>
       </>
     </MenuContext.Provider>
   );

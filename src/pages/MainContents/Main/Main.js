@@ -5,7 +5,7 @@ import WhiteRectangleBtn from "../../../components/WhiteRectangleBtn/WhiteRectan
 import WhiteRoundBtn from "../../../components/WhiteRoundBtn/WhiteRoundBtn";
 import style from "./Main.module.css"
 
-function Main(){
+let Main = () => {
     return(
         <>
             <div className={`${style.mainDiv}`}>버튼 component 사용법은 /pages/Main/Main.js 에서 확인하세요 !! 파란색 영역이 추후에 Main으로 변경될 영역입니다<br></br><br></br>
