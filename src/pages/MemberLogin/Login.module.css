@@ -1,0 +1,26 @@
+.loginBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 100px 0 150px 0;
+}
+.logo {
+  font-family: "LOTTERIACHAB";
+  font-size: 40px;
+  color: #7b61ff;
+}
+.logo > span {
+  font-family: "LOTTERIACHAB";
+  font-size: 40px;
+  color: #f9b813;
+}
+input[type="text"],
+input[type="password"] {
+  width: 400px;
+  height: 60px;
+  padding: 0 20px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 1px solid #676d7c;
+  outline: none;
+}
