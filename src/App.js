@@ -7,7 +7,7 @@ import PurpleRectangleBtn from "./components/PurpleRectangleBtn/PurpleRectangleB
 import WhiteRectangleBtn from "./components/WhiteRectangleBtn/WhiteRectangleBtn";
 import WhiteRoundBtn from "./components/WhiteRoundBtn/WhiteRoundBtn";
 import Header from "./components/Header/Header";
-import Login from "./pages/MemberLogin/Login";
+import MemberLogin from "./pages/MemberLogin/MemberLogin";
 
 import { createContext, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -26,7 +26,7 @@ function App() {
 
           <Routes>
             <Route path="/" element={<Main />} />
-            <Route path="/login" element={<Login />}></Route>
+            <Route path="/login" element={<MemberLogin />}></Route>
           </Routes>
 
           <Footer></Footer>
