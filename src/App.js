@@ -7,8 +7,10 @@ import PurpleRectangleBtn from "./components/PurpleRectangleBtn/PurpleRectangleB
 import WhiteRectangleBtn from "./components/WhiteRectangleBtn/WhiteRectangleBtn";
 import WhiteRoundBtn from "./components/WhiteRoundBtn/WhiteRoundBtn";
 import Header from "./components/Header/Header";
+import Login from "./pages/MemberLogin/Login";
 
 import { createContext, useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Footer from "./components/Footer/Footer";
 
 export const MenuContext = createContext();
@@ -17,9 +19,15 @@ function App() {
   const [selectedMenu, setSelectedMenu] = useState("");
   return (
     <MenuContext.Provider value={{ setSelectedMenu }}>
-      <>
-        <Header></Header>
-        <GrayRectangleBtn
+      <div className="container">
+        <Router>
+          <Header></Header>
+          <div className="container__body">
+            <Routes>
+              <Route path="/login" element={<Login />}></Route>
+            </Routes>
+          </div>
+          {/* <GrayRectangleBtn
           title={"gray"}
           width={120}
           heightPadding={20}
@@ -32,9 +40,10 @@ function App() {
           heightPadding={10}
         ></PurpleRectangleBtn>
         <WhiteRectangleBtn title={"wersdfgfrec"}></WhiteRectangleBtn>
-        <WhiteRoundBtn title={"white"}></WhiteRoundBtn>
-        <Footer></Footer>
-      </>
+        <WhiteRoundBtn title={"white"}></WhiteRoundBtn> */}
+          <Footer></Footer>
+        </Router>
+      </div>
     </MenuContext.Provider>
   );
 }
