@@ -2,8 +2,8 @@ import style from "./Header.module.css";
 import PurpleRoundBtn from "../PurpleRoundBtn/PurpleRoundBtn";
 import { Link } from "react-router-dom";
 import { MenuContext } from "../../App";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 
 const Header = () => {
@@ -11,9 +11,11 @@ const Header = () => {
   return (
     <div className={style.header}>
       <div className={style.header__pcSize}>
-        <div className={style.header__logo}>
-          M<span>I</span>NG<span>L</span>E
-        </div>
+        <Link to="/">
+          <div className={style.header__logo}>
+            M<span>I</span>NG<span>L</span>E
+          </div>
+        </Link>
         <div className={style.header__menu}>
           <div className={style.menu__navi}>
             <div className={style.navi__conf}>나의 파티</div>
