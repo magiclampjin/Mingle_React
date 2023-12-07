@@ -1,13 +1,8 @@
 import "./App.css";
 
 //컴포넌트 요소
-import GrayRectangleBtn from "./components/GrayRectangleBtn/GrayRectangleBtn";
-import PurpleRoundBtn from "./components/PurpleRoundBtn/PurpleRoundBtn";
-import PurpleRectangleBtn from "./components/PurpleRectangleBtn/PurpleRectangleBtn";
-import WhiteRectangleBtn from "./components/WhiteRectangleBtn/WhiteRectangleBtn";
-import WhiteRoundBtn from "./components/WhiteRoundBtn/WhiteRoundBtn";
 import Header from "./components/Header/Header";
-import Login from "./pages/MemberLogin/Login";
+import MemberLogin from "./pages/MemberLogin/MemberLogin";
 
 import { createContext, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -15,6 +10,7 @@ import Footer from "./components/Footer/Footer";
 import Main from "./pages/MainContents/Main/Main";
 import PartyCreate from "./pages/MainContents/Party/PartyCreate/PartyCreate";
 import Board from "./pages/Board/Board";
+
 
 export const MenuContext = createContext();
 
@@ -31,8 +27,8 @@ function App() {
             <Route path="/login" element={<Login />}></Route>
             <Route path="/party" element={<PartyCreate />}></Route>
             <Route path="/board" element={<Board></Board>}/>
+7
           </Routes>
-
           <Footer></Footer>
         </Router>
       </>
