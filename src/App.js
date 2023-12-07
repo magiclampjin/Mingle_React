@@ -12,6 +12,7 @@ import Login from "./pages/MemberLogin/Login";
 import { createContext, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Footer from "./components/Footer/Footer";
+import Main from "./pages/MainContents/Main/Main";
 
 export const MenuContext = createContext();
 
@@ -19,31 +20,18 @@ function App() {
   const [selectedMenu, setSelectedMenu] = useState("");
   return (
     <MenuContext.Provider value={{ setSelectedMenu }}>
-      <div className="container">
+      <>
         <Router>
           <Header></Header>
-          <div className="container__body">
-            <Routes>
-              <Route path="/login" element={<Login />}></Route>
-            </Routes>
-          </div>
-          {/* <GrayRectangleBtn
-          title={"gray"}
-          width={120}
-          heightPadding={20}
-        ></GrayRectangleBtn>
-        <PurpleRoundBtn title={"test"} activation={true}></PurpleRoundBtn>
-        <PurpleRoundBtn title={"test"} activation={false}></PurpleRoundBtn>
-        <PurpleRectangleBtn
-          title={"test"}
-          width={150}
-          heightPadding={10}
-        ></PurpleRectangleBtn>
-        <WhiteRectangleBtn title={"wersdfgfrec"}></WhiteRectangleBtn>
-        <WhiteRoundBtn title={"white"}></WhiteRoundBtn> */}
+
+          <Routes>
+            <Route path="/" element={<Main />} />
+            <Route path="/login" element={<Login />}></Route>
+          </Routes>
+
           <Footer></Footer>
         </Router>
-      </div>
+      </>
     </MenuContext.Provider>
   );
 }

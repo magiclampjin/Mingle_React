@@ -1,7 +1,7 @@
 import style from "./Login.module.css";
 
 const Login = () => {
-  return <div></div>;
+  return <div>ㅅㄷㄴㅅ</div>;
 };
 
 export default Login;
