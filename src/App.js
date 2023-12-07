@@ -9,6 +9,7 @@ import WhiteRoundBtn from "./components/WhiteRoundBtn/WhiteRoundBtn";
 import Header from "./components/Header/Header";
 
 import { createContext, useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Link} from "react-router-dom";
 import Footer from "./components/Footer/Footer";
 
 export const MenuContext = createContext();
@@ -16,7 +17,7 @@ export const MenuContext = createContext();
 function App() {
   const [selectedMenu, setSelectedMenu] = useState("");
   return (
-    <MenuContext.Provider value={{ setSelectedMenu }}>
+    <MenuContext.Provider value={{ selectedMenu, setSelectedMenu }}>
       <>
         <Header></Header>
         <GrayRectangleBtn
@@ -34,6 +35,7 @@ function App() {
         <WhiteRectangleBtn title={"wersdfgfrec"}></WhiteRectangleBtn>
         <WhiteRoundBtn title={"white"}></WhiteRoundBtn>
         <Footer></Footer>
+
       </>
     </MenuContext.Provider>
   );
