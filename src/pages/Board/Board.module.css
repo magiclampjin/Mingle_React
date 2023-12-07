@@ -8,7 +8,35 @@
 .board {
     padding: 16px;
     max-width: 1300px;
-    margin: auto;
+    margin-top:100px;
+    margin-bottom:150px;
+    border: 1px solid black;
+    margin:auto;
+}
+
+.board__category{
+    width:100%;
+    margin-bottom:50px;
+    background :gray;
+}
+
+.board__freePosts{
+    margin-bottom:50px;
+}
+
+.board__title{
+    font-size: 25px;
+    margin-bottom : 30px;
+}
+
+.board__table {
+    width: 100%;
+    /* 테이블 스타일링 추가 */
+}
+
+.board__button{
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
 .board__pcSize {
@@ -93,4 +121,59 @@
         font-size: 14px;
         cursor: pointer;
     }
+}
+
+.board__category {
+    margin-bottom: 20px;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.board__title {
+    margin-bottom: 10px;
+    color: #5D5C61;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.board__table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.board__table th, 
+.board__table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.board__table th {
+    background-color: #f7f7f7;
+    color: #333;
+}
+
+.board__table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.board__table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.board__buttonContainer {
+    text-align: right;
+}
+
+
+.board__button:hover {
+    background-color: #45a049;
+}
+
+/* 게시글이 없을 때의 메시지 스타일 */
+.no-posts {
+    text-align: center;
+    color: #888;
+    margin: 20px 0;
 }

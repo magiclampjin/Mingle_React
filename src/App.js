@@ -11,8 +11,8 @@ import Header from "./components/Header/Header";
 import { createContext, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link} from "react-router-dom";
 import Footer from "./components/Footer/Footer";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Main from "./pages/MainContents/Main/Main";
+import Board from "./pages/Board/Board";
 
 export const MenuContext = createContext();
 
@@ -25,6 +25,7 @@ function App() {
         <Router>
           <Routes>
             <Route path="/" element={<Main/>}/>
+            <Route path="/board" element={<Board></Board>}/>
           </Routes>
         </Router>
         <Footer></Footer>
