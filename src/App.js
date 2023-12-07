@@ -7,10 +7,11 @@ import PurpleRectangleBtn from "./components/PurpleRectangleBtn/PurpleRectangleB
 import WhiteRectangleBtn from "./components/WhiteRectangleBtn/WhiteRectangleBtn";
 import WhiteRoundBtn from "./components/WhiteRoundBtn/WhiteRoundBtn";
 import Header from "./components/Header/Header";
+import Login from "./pages/MemberLogin/Login";
 
 import { createContext, useState } from "react";
-import Footer from "./components/Footer/Footer";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Footer from "./components/Footer/Footer";
 import Main from "./pages/MainContents/Main/Main";
 
 export const MenuContext = createContext();
@@ -20,13 +21,16 @@ function App() {
   return (
     <MenuContext.Provider value={{ setSelectedMenu }}>
       <>
-        <Header></Header>
         <Router>
+          <Header></Header>
+
           <Routes>
-            <Route path="/" element={<Main/>}/>
+            <Route path="/" element={<Main />} />
+            <Route path="/login" element={<Login />}></Route>
           </Routes>
+
+          <Footer></Footer>
         </Router>
-        <Footer></Footer>
       </>
     </MenuContext.Provider>
   );
