@@ -19,7 +19,7 @@ const Header = () => {
             <div className={style.navi__conf}>나의 파티</div>
             <div className={style.navi__conf}>파티 만들기</div>
             <div className={style.navi__conf}>파티 찾기</div>
-            <div className={style.navi__conf}>게시판</div>
+            <div className={style.navi__conf}><Link to="board">게시판</Link></div>
             <div className={style.navi__conf}>자주 묻는 질문</div>
             <Link to="login">
               <PurpleRoundBtn

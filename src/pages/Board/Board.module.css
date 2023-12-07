@@ -10,7 +10,6 @@
     max-width: 1300px;
     margin-top:100px;
     margin-bottom:150px;
-    border: 1px solid black;
     margin:auto;
 }
 
@@ -29,11 +28,6 @@
     margin-bottom : 30px;
 }
 
-.board__table {
-    width: 100%;
-    /* 테이블 스타일링 추가 */
-}
-
 .board__button{
     margin-right: 10px;
     margin-left: 10px;
@@ -45,18 +39,6 @@
     align-items: center;
 }
 
-.board__logo {
-    font-family: "LOTTERIACHAB";
-    font-size: 40px;
-    color: #7b61ff;
-    cursor: pointer;
-}
-
-.board__logo>span {
-    font-family: "LOTTERIACHAB";
-    font-size: 40px;
-    color: #f9b813;
-}
 
 .board__menu {
     display: flex;
@@ -172,7 +154,7 @@
 }
 
 /* 게시글이 없을 때의 메시지 스타일 */
-.no-posts {
+.no__posts {
     text-align: center;
     color: #888;
     margin: 20px 0;
