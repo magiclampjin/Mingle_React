@@ -40,6 +40,7 @@
   display: flex;
   align-items: center;
   cursor: pointer;
+  font-size: 14px;
 }
 .navi__conf:not(:last-child) {
   margin-right: 30px;
@@ -62,11 +63,17 @@
   cursor: pointer;
   margin-left: 15px;
 }
+.loginBtn {
+  display: none;
+}
 
 @media (max-width: 786px) {
   .header {
     max-width: 700px;
     margin: auto;
+  }
+  .loginBtn {
+    display: block;
   }
   .menu__navi {
     display: none;
