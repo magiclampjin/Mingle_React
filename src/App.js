@@ -1,11 +1,6 @@
 import "./App.css";
 
 //컴포넌트 요소
-import GrayRectangleBtn from "./components/GrayRectangleBtn/GrayRectangleBtn";
-import PurpleRoundBtn from "./components/PurpleRoundBtn/PurpleRoundBtn";
-import PurpleRectangleBtn from "./components/PurpleRectangleBtn/PurpleRectangleBtn";
-import WhiteRectangleBtn from "./components/WhiteRectangleBtn/WhiteRectangleBtn";
-import WhiteRoundBtn from "./components/WhiteRoundBtn/WhiteRoundBtn";
 import Header from "./components/Header/Header";
 import MemberLogin from "./pages/MemberLogin/MemberLogin";
 
@@ -28,7 +23,6 @@ function App() {
             <Route path="/" element={<Main />} />
             <Route path="/login/*" element={<MemberLogin />}></Route>
           </Routes>
-
           <Footer></Footer>
         </Router>
       </>
