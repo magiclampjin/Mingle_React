@@ -1,0 +1,15 @@
+.body {
+    margin-bottom: 50px;
+}
+
+.VisitorsTitle {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 50px;
+}
+
+.VisitorsBox {
+    border: 1px solid #DFE2E6;
+    border-radius: 10px;
+    height: 300px;
+}

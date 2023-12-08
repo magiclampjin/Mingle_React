@@ -9,6 +9,10 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Footer from "./components/Footer/Footer";
 import Main from "./pages/Main/Main";
 
+// 관리자
+import AdminMain from './pages/AdminMain/AdminMain';
+import DetailMemberManage from "./pages/AdminMain/pages/DetailMemberManage/DetailMemberManage";
+
 export const MenuContext = createContext();
 
 function App() {
@@ -22,6 +26,9 @@ function App() {
           <Routes>
             <Route path="/" element={<Main />} />
             <Route path="/login/*" element={<MemberLogin />}></Route>
+
+            <Route path="/admin" element={<AdminMain />}/>
+            <Route path="/admin/DetailMemberManage" element={<DetailMemberManage />}/>
           </Routes>
           <Footer></Footer>
         </Router>

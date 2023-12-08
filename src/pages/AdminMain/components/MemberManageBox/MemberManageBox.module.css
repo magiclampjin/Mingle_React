@@ -1,0 +1,46 @@
+.body {
+    margin-bottom: 50px;
+}
+
+.memberManageTitle {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 50px;
+}
+
+.memberManageBox {
+    border: 1px solid #DFE2E6;
+    border-radius: 10px;
+    height: 330px;
+}
+
+.memberManageSeeMore {
+    display: grid;
+    grid-template-columns: 1fr 120px;
+    height: 50px;
+}
+
+.memberManageSeeMoreBtn {
+    align-self: center;
+}
+
+.memberManageSeeMoreBtn > a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.memberManageLine {
+    display: grid;
+    grid-template-columns: 50px 1fr 3fr 1fr;
+    height: 30px;
+}
+
+.memberManageItem {
+    min-width: 0;
+    display: inline-block;
+    align-self: center;
+    text-align: center;
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;
+}
