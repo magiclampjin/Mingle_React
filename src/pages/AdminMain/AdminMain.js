@@ -5,10 +5,12 @@ import StatisticsBox from "./components/StatisticsBox/StatisticsBox";
 
 const AdminMain = () => {
     return (
-        <div className={style.body}>
-            <MemberManageBox></MemberManageBox>
-            <NoticeBoardBox></NoticeBoardBox>
-            <StatisticsBox></StatisticsBox>
+        <div className={style.background}>
+            <div className={style.body}>
+                <MemberManageBox></MemberManageBox>
+                <NoticeBoardBox></NoticeBoardBox>
+                <StatisticsBox></StatisticsBox>
+            </div>
         </div>
     );
 }

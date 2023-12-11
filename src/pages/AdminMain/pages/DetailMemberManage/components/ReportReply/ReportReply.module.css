@@ -20,6 +20,10 @@
     height: 50px;
 }
 
+.reportReplyLine:hover {
+    background-color: #DFE2E640;
+}
+
 .reportReplyItem {
     min-width: 0;
     display: inline-block;

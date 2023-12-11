@@ -1,7 +1,8 @@
-
-import style from "./ReportReply.module.css"
+import parentStyle from "../../../../AdminMain.module.css"
+import style from "../../DetailMemberManage.module.css"
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const ReportReply = () => {
 
@@ -9,24 +10,25 @@ const ReportReply = () => {
 
     useEffect(() => {
         axios.get("/api/admin/reportReplyList").then(resp => {
-            console.log(resp.data);
             setReport(resp.data);
         });
     }, []);
 
     return (
         <>
-        <div className={style.body}>
-            <div className={style.reportReplyTitle}>댓글 신고</div>
-            <div className={style.reportReplyBox}>
+        <div className={parentStyle.box}>
+            <div className={parentStyle.componentTitle}>댓글 신고</div>
+            <div className={style.componentBox}>
                 {report.map((e, i) => {
                     return(
-                        <div key={i} className={style.reportReplyLine}>
-                            <div className={style.reportReplyItem}>{e.id}</div>
-                            <div className={style.reportReplyItem}>{e.memberReporterId}</div>
-                            <div className={style.reportReplyItem}>{e.content}</div>
-                            <div className={style.reportReplyItem}>{e.reportDate ? new Date(e.reportDate).toLocaleString('en-US', { timeZone: 'Asia/Seoul' }) : null}</div>
-                        </div>
+                        <Link to="/admin/ReportReadForm" state={{id : e.id, category : "댓글"}}>
+                            <div key={e.id} className={style.componentLine}>
+                                <div className={parentStyle.componentItem}>{e.id}</div>
+                                <div className={parentStyle.componentItem}>{e.memberReporterId}</div>
+                                <div className={parentStyle.componentItem}>{e.content}</div>
+                                <div className={parentStyle.componentItem}>{e.reportDate ? new Date(e.reportDate).toLocaleString('en-US', { timeZone: 'Asia/Seoul' }) : null}</div>
+                            </div>
+                        </Link>
                     );
                 })}
             </div>

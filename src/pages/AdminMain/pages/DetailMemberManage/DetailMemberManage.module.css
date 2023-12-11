@@ -1,4 +1,19 @@
-.body {
-    max-width: 1300px;
-    margin: 100px auto 150px;
+.componentBox {
+    border-radius: 15px;
+    height: 500px;
+    background-color: #ffffff;
+}
+
+.componentBox > a {
+    text-decoration: none;
+}
+
+.componentLine {
+    display: grid;
+    grid-template-columns: 50px 1fr 3fr 1fr;
+    height: 50px;
+}
+
+.componentLine:hover {
+    background-color: #DFE2E640;
 }
