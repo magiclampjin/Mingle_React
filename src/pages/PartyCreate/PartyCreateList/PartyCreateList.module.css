@@ -58,6 +58,7 @@
 
 .partyListLine>.partyContent{
     margin-left: 25px;
+    cursor: pointer;
 }
 
 .partyListLine>.partyContent:first-child{

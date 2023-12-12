@@ -1,18 +1,29 @@
 import style from "./PartyCreateList.module.css"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
-import axios from "axios";
 import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 import LoadingSpinnerMini from "../../../components/LoadingSpinnerMini/LoadingSpinnerMini";
 import ServiceCategoryNavi from "./ServiceCategoryNavi/ServiceCategoryNavi"; 
 
+import React from 'react';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+
 const PartyCreateList = ({selectServiceCategory,setSelectServiceCategory}) => {
+    // 서비스 카테고리 목록
     const [serviceCategory,setServiceCategory] = useState([]);
+    // 카테고리 선택 시 해당 카테고리 내 서비스 목록
     const [service, setService] = useState([]);
+    // 서비스 카테고리 목록 불러오기 로딩 여부
     const [isCategoryLoading, setCategoryLoading] = useState(false);
+    // 서비스 목록 불러오기 로딩 여부
     const [isServiceListLoading, setServiceListLoading]= useState(false);
 
+    // 숫자를 천 단위로 콤마 찍어주는 함수
+    const formatNumber = (value) => {
+        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    };
     useEffect(()=>{
         setCategoryLoading(true);
         axios.get(`/api/party`).then(resp=>{
@@ -59,7 +70,7 @@ const PartyCreateList = ({selectServiceCategory,setSelectServiceCategory}) => {
                                         <div className={`${style.partyContent__name} ${style.centerAlign}`}>{e.name}</div>
                                         <div className={`${style.partyContent__txt} ${style.centerAlign}`}>매달 적립!</div>
                                         <div className={`${style.centerAlign}`}>
-                                            <div className={`${style.maxPrice} ${style.centerAlign}`}>~{e.price}</div>
+                                            <div className={`${style.maxPrice} ${style.centerAlign}`}>~{formatNumber(e.price)}원</div>
                                             <div className={`${style.hotTag} ${style.centerAlign}`}><FontAwesomeIcon icon={faStar} size="1x"/><div className={`${style.hatTagTxt}`}>HOT</div></div>
                                         </div>
                                     </div>  
