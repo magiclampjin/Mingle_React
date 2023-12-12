@@ -6,12 +6,14 @@ import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 
 const SignUp = () => {
-  const [step, setStep] = useState("step01");
+  // const [step, setStep] = useState("step01");
+  const [currentStep, setCurrentStep] = useState("step1");
   const [chkAll, setChhAll] = useState(false);
   const [chkUse, setChkUse] = useState(false);
   const [chkPrivacy, setChkPrivacy] = useState(false);
+  const [isNext, setNext] = useState(false);
   const displayStyle = (stepId) => {
-    if (stepId === step) {
+    if (stepId === currentStep) {
       return { display: "block" };
     } else {
       return { display: "none" };
@@ -24,6 +26,7 @@ const SignUp = () => {
     setChhAll(!check);
     setChkUse(!check);
     setChkPrivacy(!check);
+    setNext(!check);
   };
 
   // 이용약관 동의 눌렀을 때
@@ -31,6 +34,7 @@ const SignUp = () => {
     if (chkUse) {
       setChkUse(false);
       setChhAll(false);
+      setNext(false);
     } else {
       setChkUse(true);
     }
@@ -40,18 +44,60 @@ const SignUp = () => {
     if (chkPrivacy) {
       setChkPrivacy(false);
       setChhAll(false);
+      setNext(false);
     } else {
       setChkPrivacy(true);
     }
   };
 
+  // 약관 둘다 동의 시 전체 동의 체크
   useEffect(() => {
     if (chkUse && chkPrivacy) {
       setChhAll(true);
+      setNext(true);
     }
   }, [chkUse, chkPrivacy]);
+
+  const handleStep = () => {
+    // 다음 단계 구하기
+    let nextStep = "";
+    if (currentStep === "step1") {
+      nextStep = "step2";
+    } else {
+      nextStep = "step3";
+    }
+
+    // 다음 단계 조건이 충족되면
+    if (isNext) {
+      // 현재 단계 currentStep 제거
+      let currentStepElement = document.getElementById(currentStep);
+      if (currentStepElement) {
+        console.log(currentStepElement);
+        currentStepElement.classList.remove(style.currentStep);
+        console.log(currentStepElement);
+      }
+
+      // 다음단계로 이동
+      setCurrentStep(nextStep);
+
+      // 다음 단계에 currentStep 추가
+      let nextStepElement = document.getElementById(nextStep);
+      if (nextStepElement) {
+        nextStepElement.classList.add(style.currentStep);
+      }
+
+      // 다음단계 조건 초기화
+      setNext(false);
+    } else {
+      if (currentStep === "step1") {
+        alert("약관을 모두 동의해주세요.");
+      } else {
+        nextStep = "step3";
+      }
+    }
+  };
   return (
-    <div className={style.signupBox} style={displayStyle("step01")}>
+    <div className={style.signupBox}>
       <div className={style.title}>회원가입</div>
       <div className={style.stepBox}>
         <div
@@ -76,7 +122,7 @@ const SignUp = () => {
           <div className={style.step__title}>가입완료</div>
         </div>
       </div>
-      <div className={style.agrreBox}>
+      <div className={style.agrreBox} style={displayStyle("step1")}>
         <div className={style.totallyAgree}>
           <input
             type="checkbox"
@@ -382,10 +428,8 @@ const SignUp = () => {
           title={"다음"}
           heightPadding={20}
           width={190}
-          activation={chkAll}
-          onClick={() => {
-            setStep("step02");
-          }}
+          activation={isNext}
+          onClick={handleStep}
         ></PurpleRectangleBtn>
       </div>
     </div>
