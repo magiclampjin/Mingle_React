@@ -14,15 +14,16 @@ const ReportReadForm = () => {
     const [reportObj, setReportObj] = useState(null);
 
     useEffect(() => {
-        axios.get(`/api/admin/reportDetailInfo`, {
-            params: {
-                id: id,
-                category: category
-            }
-        }).then(resp => {
-            setReportObj(resp.data);
-            console.log("reportObj : " + resp.data.post.memberId);
-        })
+        if(category === "게시글") {
+            axios.get(`/api/admin/reportPostDetailInfo/${id}`).then(resp => {
+                setReportObj(resp.data);
+            })
+        } else if(category === "댓글") {
+            axios.get(`/api/admin/reportReplyDetailInfo/${id}`).then(resp => {
+                setReportObj(resp.data);
+                console.log("reportObj : " + resp.data.reply);
+            })
+        }
     }, [id, category])
 
     return (
@@ -31,11 +32,16 @@ const ReportReadForm = () => {
                 <div className={style.reportBox}>
                     <div className={style.reportTitle}>신고 내역 : {category}</div>
                     <hr></hr>
-                    {reportObj && (
+                    {reportObj && ( // reportObj 안에 값이 존재해야만 실행
                     <>
                         <div className={style.reportDate}>{reportObj.report.reportDate ? new Date(reportObj.report.reportDate).toLocaleString('en-US', { timeZone: 'Asia/Seoul' }) : null}</div>
                         <div className={style.reportContent}>{reportObj.report.content}</div>
-                        <div className={style.reporterId}>신고대상자 : {reportObj.post.memberId}</div>
+                        {category === "게시글" && (
+                            <div className={style.reporterId}>신고대상자 : {reportObj.post.memberId}</div>
+                        )}
+                        {category === "댓글" && (
+                            <div className={style.reporterId}>신고대상자 : {reportObj.reply.memberId}</div>
+                        )}
                         <div className={style.reporterId}>신고자 : {reportObj.report.memberReporterId}</div>
                     </>
                     )}
