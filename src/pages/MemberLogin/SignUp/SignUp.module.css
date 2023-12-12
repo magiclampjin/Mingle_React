@@ -1,0 +1,62 @@
+.signupBox {
+  margin: 100px auto 150px auto;
+  max-width: 1300px;
+}
+.title {
+  font-size: 40px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.stepBox,
+.stepBox__step {
+  display: flex;
+}
+
+.stepBox {
+  margin-top: 70px;
+  border-radius: 100px;
+  background-color: #7b61ff50;
+  justify-content: space-between;
+}
+
+.stepBox__step {
+  width: calc((100% - 80px) / 3);
+  padding: 20px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.step__info {
+  width: 90px;
+  padding: 7px;
+  text-align: center;
+  color: #7d7d7d;
+  border-radius: 100px;
+  background-color: white;
+  margin-right: 15px;
+  display: none;
+}
+.currentStep .step__info {
+  display: block;
+}
+.currentStep .step__title {
+  font-weight: 700;
+}
+
+.stepBox__arrow {
+  margin: auto 0;
+  width: 30px;
+  text-align: center;
+}
+
+.stepBox__arrow > i {
+  color: #7d7d7d;
+}
+
+@media (max-width: 786px) {
+  .signupBox {
+    margin: 100px auto 100px auto;
+  }
+}

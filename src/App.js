@@ -10,23 +10,31 @@ import Footer from "./components/Footer/Footer";
 import Main from "./pages/Main/Main";
 
 export const MenuContext = createContext();
+export const LoginContext = createContext();
 
 function App() {
-  const [selectedMenu, setSelectedMenu] = useState("");
-  return (
-    <MenuContext.Provider value={{ setSelectedMenu }}>
-      <>
-        <Router>
-          <Header></Header>
+  const [selectedMenu, setSelectedMenu] = useState(null);
+  const [loginId, setLoginId] = useState("");
+  const [loginNick, setLoginNick] = useState("");
 
-          <Routes>
-            <Route path="/" element={<Main />} />
-            <Route path="/login/*" element={<MemberLogin />}></Route>
-          </Routes>
-          <Footer></Footer>
-        </Router>
-      </>
-    </MenuContext.Provider>
+  return (
+    <LoginContext.Provider
+      value={{ loginId, setLoginId, loginNick, setLoginNick }}
+    >
+      <MenuContext.Provider value={{ selectedMenu, setSelectedMenu }}>
+        <>
+          <Router>
+            <Header></Header>
+
+            <Routes>
+              <Route path="/" element={<Main />} />
+              <Route path="/login/*" element={<MemberLogin />}></Route>
+            </Routes>
+            <Footer></Footer>
+          </Router>
+        </>
+      </MenuContext.Provider>
+    </LoginContext.Provider>
   );
 }
 
