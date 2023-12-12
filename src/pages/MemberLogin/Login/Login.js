@@ -2,6 +2,7 @@ import style from "./Login.module.css";
 import PurpleRectangleBtn from "../../../components/PurpleRectangleBtn/PurpleRectangleBtn";
 import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 import axios from "axios";
+import { Cookies } from "react-cookie";
 
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
@@ -10,14 +11,32 @@ import { LoginContext } from "../../../App";
 const Login = () => {
   const [user, setUser] = useState({ id: "", pw: "" });
   const [isLoading, setLoading] = useState(false);
+  const [rememberId, setRememberId] = useState("");
   const { setLoginId } = useContext(LoginContext);
 
   const navi = useNavigate();
+  const cookies = new Cookies();
+
+  useEffect(() => {
+    // 아이디 기억하기를 했다면 쿠키에 있는 아이디 출력하기
+    let cookieRememeberId = cookies.get("rememberID");
+    let cookieLoginId = cookies.get("loginID");
+    if (cookieRememeberId) {
+      setUser({ id: cookieLoginId, pw: "" });
+      setRememberId(cookieRememeberId);
+    }
+  }, []);
 
   // user State 값 채우기
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // id기억하기 클릭 감지
+  const handleRemember = () => {
+    // 체크박스를 토글하면 rememberId 상태를 변경
+    setRememberId(!rememberId);
   };
 
   // 로그인 하기
@@ -28,10 +47,26 @@ const Login = () => {
       formData.append("pw", user.pw);
       setLoading(true);
       axios.post("/api/member/login", formData).then((resp) => {
-        console.log("로그인 성공");
-        console.log(resp);
         if (resp.statusText === "OK") {
           setLoginId(user.id);
+          //if (rememberId) {
+          // 아이디 기억하기를 눌렀다면
+          // 쿠키에 로그인 아이디 저장
+          const expiresInSeconds = 7 * 24 * 60 * 60; // 7일을 초 단위로 계산
+          cookies.set("loginID", user.id, {
+            path: "/",
+            maxAge: expiresInSeconds,
+          });
+          cookies.set("rememberID", rememberId, {
+            path: "/",
+          });
+          // } else {
+          //   cookies.remove("loginID", { path: "/" });
+          //   cookies.set("rememberID", rememberId, {
+          //     path: "/",
+          //   });
+          // }
+
           setUser({ id: "", pw: "" });
           navi(-1);
           setLoading(false);
@@ -90,7 +125,12 @@ const Login = () => {
 
       <div className={style.loginOption}>
         <div>
-          <input type="checkbox" id="saveId" />
+          <input
+            type="checkbox"
+            id="saveId"
+            onChange={handleRemember}
+            checked={rememberId}
+          />
           <label htmlFor="saveId">아이디 기억하기</label>
         </div>
         <div className={style.memberMenu}>

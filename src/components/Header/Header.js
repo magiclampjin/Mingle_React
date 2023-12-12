@@ -10,6 +10,7 @@ import { useState, useContext, useEffect } from "react";
 import { MenuContext } from "../../App";
 import { LoginContext } from "../../App";
 import axios from "axios";
+import { Cookies } from "react-cookie";
 
 const Header = () => {
   const [profileUrl, setProfileUrl] = useState("/assets/basicProfile.png");
@@ -18,6 +19,8 @@ const Header = () => {
   const { loginNick, setLoginNick } = useContext(LoginContext);
 
   const navi = useNavigate();
+  const cookies = new Cookies();
+
   useEffect(() => {
     axios.get("/api/member/userBasicInfo").then((resp) => {
       const data = resp.data; // axios로 받아온 데이터
@@ -51,6 +54,10 @@ const Header = () => {
     console.log("로그아웃 클릭");
     axios.post("/api/member/logout").then((resp) => {
       setLoginId(null);
+      // 아이디 기억하기 하지 않으면 쿠키에 저장된 아이디 지우기
+      if (!cookies.get("rememberID")) {
+        cookies.remove("loginID", { path: "/" });
+      }
       closeModal();
       navi("/");
     });
