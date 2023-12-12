@@ -1,20 +1,60 @@
 import style from "./Header.module.css";
 import PurpleRoundBtn from "../PurpleRoundBtn/PurpleRoundBtn";
+import ProfileModal from "./ProfileModal/ProfileModal";
+import CustomModal from "../CustomModal/CustomModal";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell } from "@fortawesome/free-solid-svg-icons";
+import { faAngleRight, faBell } from "@fortawesome/free-solid-svg-icons";
 import { useState, useContext, useEffect } from "react";
 import { MenuContext } from "../../App";
 import { LoginContext } from "../../App";
+import axios from "axios";
 
 const Header = () => {
   const [profileUrl, setProfileUrl] = useState("/assets/basicProfile.png");
-  const { loginId } = useContext(LoginContext);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const { loginId, setLoginId } = useContext(LoginContext);
+  const { loginNick, setLoginNick } = useContext(LoginContext);
 
+  const navi = useNavigate();
   useEffect(() => {
-    console.log(loginId);
+    axios.get("/api/member/userBasicInfo").then((resp) => {
+      const data = resp.data; // axios로 받아온 데이터
+
+      // data가 Map과 유사한 경우
+      if (typeof data === "object" && data !== null) {
+        // Map의 값들 꺼내오기
+        if (data.loginID !== undefined) {
+          setLoginId(data.loginID);
+        }
+        if (data.loginNick !== undefined) {
+          setLoginNick(data.loginNick);
+        }
+      } else {
+        console.error("Received data is not in a Map-like format.");
+      }
+    });
   }, []);
+
+  // 프로필 모달창 열기
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+
+  // 프로필 모달창 닫기
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
+  const handleLogout = () => {
+    console.log("로그아웃 클릭");
+    axios.post("/api/member/logout").then((resp) => {
+      setLoginId(null);
+      closeModal();
+      navi("/");
+    });
+  };
 
   return (
     <div className={style.header}>
@@ -31,7 +71,7 @@ const Header = () => {
             <div className={style.navi__conf}>파티 찾기</div>
             <div className={style.navi__conf}>게시판</div>
             <div className={style.navi__conf}>자주 묻는 질문</div>
-            {loginId === "" ? (
+            {loginId === "" || loginId === null ? (
               <Link to="login">
                 <PurpleRoundBtn
                   title={"로그인"}
@@ -39,10 +79,44 @@ const Header = () => {
                 ></PurpleRoundBtn>
               </Link>
             ) : (
-              <div className={style.menu__user}>
-                <FontAwesomeIcon icon={faBell} />
-                <img src={profileUrl} alt="" className={style.profileImg} />
-              </div>
+              <>
+                <div className={style.menu__user}>
+                  <FontAwesomeIcon icon={faBell} />
+                  <img
+                    src={profileUrl}
+                    alt=""
+                    className={style.profileImg}
+                    onClick={openModal}
+                  />
+                </div>
+
+                <ProfileModal
+                  isOpen={modalIsOpen}
+                  onRequestClose={closeModal}
+                  contentLabel="정보 모달"
+                >
+                  <div className={style.profileInner}>
+                    <img
+                      src={profileUrl}
+                      alt=""
+                      className={style.profileModalImg}
+                    />
+                    <div className={style.proffileModalInfo}>
+                      <div>{loginNick}님</div>
+                      <div>
+                        마이페이지
+                        <FontAwesomeIcon icon={faAngleRight} />
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    className={style.transparentBtn}
+                    onClick={handleLogout}
+                  >
+                    로그아웃
+                  </button>
+                </ProfileModal>
+              </>
             )}
           </div>
         </div>

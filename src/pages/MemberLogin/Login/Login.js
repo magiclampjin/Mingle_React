@@ -1,14 +1,17 @@
 import style from "./Login.module.css";
 import PurpleRectangleBtn from "../../../components/PurpleRectangleBtn/PurpleRectangleBtn";
+import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 import axios from "axios";
 
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { LoginContext } from "../../../App";
 
 const Login = () => {
   const [user, setUser] = useState({ id: "", pw: "" });
+  const [isLoading, setLoading] = useState(false);
   const { setLoginId } = useContext(LoginContext);
+
   const navi = useNavigate();
 
   // user State 값 채우기
@@ -17,13 +20,13 @@ const Login = () => {
     setUser((prev) => ({ ...prev, [name]: value }));
   };
 
+  // 로그인 하기
   const handleLogin = () => {
-    console.log(user.id);
     if (user.id !== "" && user.pw !== "") {
       const formData = new FormData();
       formData.append("id", user.id);
       formData.append("pw", user.pw);
-
+      setLoading(true);
       axios.post("/api/member/login", formData).then((resp) => {
         console.log("로그인 성공");
         console.log(resp);
@@ -31,15 +34,32 @@ const Login = () => {
           setLoginId(user.id);
           setUser({ id: "", pw: "" });
           navi(-1);
+          setLoading(false);
         } else if (resp.statusText === "UNAUTHORIZED") {
           alert("아이디 혹은 비밀번호가 일치하지 않습니다.");
           setUser({ id: "", pw: "" });
+          setLoading(false);
         }
       });
     } else {
       alert("아이디, 비밀번호를 모두 입력해주세요.");
     }
   };
+
+  // 엔터키로 로그인 감지
+  const handleKeyPress = (event) => {
+    if (event.keyCode === 13) {
+      console.log(user.id);
+      console.log(user.pw);
+      handleLogin();
+      console.log("Enter키 감지");
+    }
+  };
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <div className={style.loginBox}>
       <div className={style.logo}>
@@ -52,6 +72,7 @@ const Login = () => {
             name="id"
             placeholder="아이디"
             onChange={handleChange}
+            onKeyDown={handleKeyPress}
             value={user.id}
           />
         </div>
@@ -61,6 +82,7 @@ const Login = () => {
             name="pw"
             placeholder="비밀번호"
             onChange={handleChange}
+            onKeyDown={handleKeyPress}
             value={user.pw}
           />
         </div>

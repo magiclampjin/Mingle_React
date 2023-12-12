@@ -15,9 +15,12 @@ export const LoginContext = createContext();
 function App() {
   const [selectedMenu, setSelectedMenu] = useState(null);
   const [loginId, setLoginId] = useState("");
+  const [loginNick, setLoginNick] = useState("");
 
   return (
-    <LoginContext.Provider value={{ loginId, setLoginId }}>
+    <LoginContext.Provider
+      value={{ loginId, setLoginId, loginNick, setLoginNick }}
+    >
       <MenuContext.Provider value={{ selectedMenu, setSelectedMenu }}>
         <>
           <Router>
