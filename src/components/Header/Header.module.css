@@ -40,7 +40,7 @@
   display: flex;
   align-items: center;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 16px;
 }
 .navi__conf:not(:last-child) {
   margin-right: 30px;
@@ -48,7 +48,7 @@
 .menu__user {
   display: flex;
   align-items: center;
-  margin-left: 50px;
+  margin-left: 20px;
 }
 .menu__user > svg {
   font-size: 20px;
@@ -91,13 +91,9 @@
   font-size: 16px;
   cursor: pointer;
 }
-@media (max-width: 786px) {
+@media (max-width: 870px) {
   .header {
-    max-width: 700px;
-    margin: auto;
-  }
-  .loginBtn {
-    display: block;
+    padding: 24px 16px;
   }
   .menu__navi {
     display: none;
@@ -109,5 +105,14 @@
   .menu__naviTabSize > .navi__conf {
     font-size: 14px;
     cursor: pointer;
+  }
+}
+@media (max-width: 786px) {
+  .header {
+    /* max-width: 700px; */
+    margin: auto;
+  }
+  .loginBtn {
+    display: block;
   }
 }

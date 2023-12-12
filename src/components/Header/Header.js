@@ -1,7 +1,6 @@
 import style from "./Header.module.css";
 import PurpleRoundBtn from "../PurpleRoundBtn/PurpleRoundBtn";
 import ProfileModal from "./ProfileModal/ProfileModal";
-import CustomModal from "../CustomModal/CustomModal";
 
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -24,18 +23,13 @@ const Header = () => {
   useEffect(() => {
     axios.get("/api/member/userBasicInfo").then((resp) => {
       const data = resp.data; // axios로 받아온 데이터
-
       // data가 Map과 유사한 경우
-      if (typeof data === "object" && data !== null) {
-        // Map의 값들 꺼내오기
-        if (data.loginID !== undefined) {
-          setLoginId(data.loginID);
-        }
-        if (data.loginNick !== undefined) {
-          setLoginNick(data.loginNick);
-        }
-      } else {
-        console.error("Received data is not in a Map-like format.");
+      // Map의 값들 꺼내오기
+      if (data.loginID !== undefined) {
+        setLoginId(data.loginID);
+      }
+      if (data.loginNick !== undefined) {
+        setLoginNick(data.loginNick);
       }
     });
   }, []);
