@@ -1,0 +1,10 @@
+.partyCategory{
+    margin-left: 20px;
+    font-weight: bold;
+    color:#737577;
+    cursor: pointer;
+}
+
+.partyCategory:first-child{
+    margin-left: 0;
+}

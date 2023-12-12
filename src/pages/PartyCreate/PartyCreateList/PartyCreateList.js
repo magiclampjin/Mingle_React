@@ -4,81 +4,70 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
- 
+import LoadingSpinnerMini from "../../../components/LoadingSpinnerMini/LoadingSpinnerMini";
+import ServiceCategoryNavi from "./ServiceCategoryNavi/ServiceCategoryNavi"; 
+
 const PartyCreateList = ({selectServiceCategory,setSelectServiceCategory}) => {
     const [serviceCategory,setServiceCategory] = useState([]);
-    const [service, setService] = useState([{}]);
-    const [isLoading, setLoading] = useState(false);
+    const [service, setService] = useState([]);
+    const [isCategoryLoading, setCategoryLoading] = useState(false);
+    const [isServiceListLoading, setServiceListLoading]= useState(false);
 
     useEffect(()=>{
-        setLoading(true);
+        setCategoryLoading(true);
         axios.get(`/api/party`).then(resp=>{
-            setServiceCategory(resp.data);
+            setServiceCategory(Array.isArray(resp.data) ? resp.data : []);
 
             axios.get(`/api/party/getService/${selectServiceCategory}`).then(resp=>{
-                setLoading(false);
-                console.log(resp.data);
-                setService(resp.data);
+                setService(Array.isArray(resp.data)? resp.data : []);
+                setCategoryLoading(false);
+            }).catch(()=>{
+                setCategoryLoading(false);
+                setService([]);
             })
-        }).catch(()=>{})
+        }).catch(()=>{
+            setCategoryLoading(false);
+            setServiceCategory([]);
+        })
     },[]);
 
-    if(isLoading){
+    if(isCategoryLoading){
         return <LoadingSpinner/>;
     }
 
-    const handleSelectCategory = (e) => {
-        setLoading(true);
-        console.log(e.target.innerText);
-        setSelectServiceCategory(e.target.innerText);
-
-        axios.get(`/api/party/getService/${e.target.innerText}`).then(resp=>{
-            setLoading(false);
-            console.log(resp.data);
-            setService(resp.data);
-        })
-    };
-
     return (
         <>
-            <div className={`${style.partyName} ${style.centerAlign}`}>어떤 파티를 만드시겠어요?</div>
+            <div className={`${style.partyName} ${style.centerAlign}`} >어떤 파티를 만드시겠어요?</div>
             <div className={`${style.partyCategoryList} ${style.centerAlign}`}>
-                <div className={`${style.partyCategory}`} onClick={handleSelectCategory}>전체</div>
+                <ServiceCategoryNavi id="전체" isSelected={selectServiceCategory=="전체"} isServiceListLoading={isServiceListLoading} setServiceListLoading={setServiceListLoading} selectServiceCategory={selectServiceCategory} setSelectServiceCategory={setSelectServiceCategory} service={service} setService={setService}/>
                 {
                     serviceCategory.map((e,i)=>(
-                        <div key={i} className={`${style.partyCategory}`} onClick={handleSelectCategory}>{e.id}</div>
+                        <ServiceCategoryNavi key={i} id={e.id} isSelected={selectServiceCategory==e.id} isServiceListLoading={isServiceListLoading} setServiceListLoading={setServiceListLoading} selectServiceCategory={selectServiceCategory} setSelectServiceCategory={setSelectServiceCategory} service={service} setService={setService}/>
                     ))
                 }
             </div>
             <div className={`${style.partyList}`}>
                 <div className={`${style.partyListLine} ${style.centerAlign}`}>
-                    {    
-                        service.map((e,i)=>{
-                            return(
-                                <div key={i} className={`${style.partyContent}`}>
-                                    <div className={`${style.partyContent__img} ${style.centerAlign}`}><img src={`/assets/serviceLogo/${e.name}.png`}></img></div>
-                                    <div className={`${style.partyContent__name} ${style.centerAlign}`}>{e.name}</div>
-                                    <div className={`${style.partyContent__txt} ${style.centerAlign}`}>매달 적립!</div>
-                                    <div className={`${style.centerAlign}`}>
-                                        <div className={`${style.maxPrice} ${style.centerAlign}`}>~{e.price}</div>
-                                        <div className={`${style.hotTag} ${style.centerAlign}`}><FontAwesomeIcon icon={faStar} size="1x"/><div className={`${style.hatTagTxt}`}>HOT</div></div>
-                                    </div>
-                                </div>  
-                            ); 
-                        })                 
+                    {   
+                        isServiceListLoading ? (
+                            <LoadingSpinnerMini height={50}/>
+                        ) :(
+                            service.map((e,i)=>{                         
+                                return(
+                                    <div key={i} className={`${style.partyContent}`}>
+                                        <div className={`${style.partyContent__img} ${style.centerAlign}`}><img src={`/assets/serviceLogo/${e.name}.png`}></img></div>
+                                        <div className={`${style.partyContent__name} ${style.centerAlign}`}>{e.name}</div>
+                                        <div className={`${style.partyContent__txt} ${style.centerAlign}`}>매달 적립!</div>
+                                        <div className={`${style.centerAlign}`}>
+                                            <div className={`${style.maxPrice} ${style.centerAlign}`}>~{e.price}</div>
+                                            <div className={`${style.hotTag} ${style.centerAlign}`}><FontAwesomeIcon icon={faStar} size="1x"/><div className={`${style.hatTagTxt}`}>HOT</div></div>
+                                        </div>
+                                    </div>  
+                                ); 
+                            })  
+                        )                 
                     }
                 </div>    
-                {/* <div className={`${style.partyListLine} ${style.centerAlign}`}>
-                    <div className={`${style.partyContent}`}>
-                        <div className={`${style.partyContent__img} ${style.centerAlign}`}><img src="/assets/serviceLogo/netflix.png"></img></div>
-                        <div className={`${style.partyContent__name} ${style.centerAlign}`}>넷플릭스 추가 공유</div>
-                        <div className={`${style.partyContent__txt} ${style.centerAlign}`}>매달 적립!</div>
-                        <div className={`${style.centerAlign}`}>
-                            <div className={`${style.maxPrice} ${style.centerAlign}`}>~17,010원</div>
-                            <div className={`${style.hotTag} ${style.centerAlign}`}><FontAwesomeIcon icon={faStar} size="1x"/><div className={`${style.hatTagTxt}`}>HOT</div></div>
-                        </div>
-                    </div>   
-                </div>      */}
             </div>   
         </>
     );
