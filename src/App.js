@@ -6,6 +6,7 @@ import MemberLogin from "./pages/MemberLogin/MemberLogin";
 import Footer from "./components/Footer/Footer";
 import Main from "./pages/Main/Main";
 import Denied from "./components/Denied/Denied";
+import PartyCreate from "./pages/PartyCreate/PartyCreateMain";
 
 import { createContext, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -30,6 +31,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Main />} />
               <Route path="/login/*" element={<MemberLogin />}></Route>
+              <Route path="/party/*" element={<PartyCreate />}></Route>
               <Route path="/denied" element={<Denied />}></Route>
             </Routes>
             <Footer></Footer>
