@@ -7,10 +7,8 @@ import MemberLogin from "./pages/MemberLogin/MemberLogin";
 import { createContext, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Footer from "./components/Footer/Footer";
-import Main from "./pages/MainContents/Main/Main";
-import PartyCreate from "./pages/MainContents/Party/PartyCreate/PartyCreate";
 import Board from "./pages/Board/Board";
-
+import Main from "./pages/Main/Main";
 
 export const MenuContext = createContext();
 
@@ -24,10 +22,8 @@ function App() {
 
           <Routes>
             <Route path="/" element={<Main />} />
-            <Route path="/login" element={<Login />}></Route>
-            <Route path="/party" element={<PartyCreate />}></Route>
+            <Route path="/login/*" element={<MemberLogin />}></Route>
             <Route path="/board" element={<Board></Board>}/>
-7
           </Routes>
           <Footer></Footer>
         </Router>

@@ -1,6 +1,6 @@
 import BoardCategories from "../components/BoardCategory/BoardCategories";
 
-const NoticeBoard = () => {
+const Review = () => {
 
     return(
         <div>
@@ -9,4 +9,4 @@ const NoticeBoard = () => {
     );
 }
 
-export default NoticeBoard;
+export default Review;

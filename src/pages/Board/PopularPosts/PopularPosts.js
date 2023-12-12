@@ -1,6 +1,8 @@
+import styles from "./PopularPosts.module.css";
 import BoardCategories from "../components/BoardCategory/BoardCategories";
 
-const NoticeBoard = () => {
+
+const PopularPosts = () => {
 
     return(
         <div>
@@ -9,4 +11,4 @@ const NoticeBoard = () => {
     );
 }
 
-export default NoticeBoard;
+export default PopularPosts;
