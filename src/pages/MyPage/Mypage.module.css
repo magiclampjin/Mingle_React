@@ -1,0 +1,12 @@
+.container{
+    background-color: #8787D030;
+}
+
+.container__inner{
+    display: flex;
+    min-width: 400px;
+    max-width: 1300px;
+    margin: auto;
+    justify-content: center;
+    padding-top: 60px;
+}

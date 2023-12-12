@@ -1,0 +1,92 @@
+
+/* 전체 박스 */
+.calManage{
+    width: 650px;
+    font-family: 'Noto Sans KR', sans-serif;
+    padding: 0 24px;
+    align-items: flex-start;
+    height: 50vh;
+  }
+  .calManageBox{
+    width: 100%;
+    margin-bottom: 50px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 15px;
+  }
+
+  /* 정산일 관리 제목 */
+  .calManageBox__title{
+    font-size: 18px;
+    font-weight: bold;
+
+  }
+
+  /* 중간에 줄 */
+  .calManage__line{
+    margin: 20px 0px;
+    background-color: rgb(227, 227, 227);
+    height: 1px;
+  }
+
+  /* 셀렉트 박스 + 변경 버튼 */
+  .calManageBox__selectBox{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .calManage__changeSelect{
+    width: 70%;
+  }
+  .calManageBox__changeCom{
+    width: 30%;
+    text-align: center;
+  }
+
+  /* 진짜 안의 셀렉트 박스 */
+  .selectBox{
+    cursor: pointer;
+    max-width: 300px;
+    width: 100%;
+    border-radius: 10px;
+    padding: 0px 18px;
+    height: 50px;
+    margin-right: 20px;
+    appearance: none;
+  }
+
+  .desc{
+    width: 100%;
+    margin-top: 20px;
+    font-size: 14px;
+    line-height: left;
+    color: rgb(101,101,101);
+    white-space: pre-line;
+  }
+
+  /* 달력 */
+  .calendarWrapper{
+    width: 90%;
+    margin:0 20px;
+  }
+
+
+  /* @media (max-width:786px) {
+    .calManage{
+        width: 500px;
+    }
+} */
+
+@media (max-width:786px) {
+  .calManage{
+      width: 600px;
+  }
+}
+
+@media (max-width:500px) {
+  .calManage{
+      width: 500px;
+  }
+}

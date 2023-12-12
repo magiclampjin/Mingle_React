@@ -8,6 +8,7 @@ import { createContext, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Footer from "./components/Footer/Footer";
 import Main from "./pages/Main/Main";
+import Mypage from "./pages/MyPage/Mypage";
 
 export const MenuContext = createContext();
 
@@ -22,6 +23,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Main />} />
             <Route path="/login/*" element={<MemberLogin />}></Route>
+            <Route path="/Mypage/*" element={<Mypage/>}></Route>
           </Routes>
           <Footer></Footer>
         </Router>
