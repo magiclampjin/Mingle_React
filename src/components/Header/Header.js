@@ -45,7 +45,6 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    console.log("로그아웃 클릭");
     axios.post("/api/member/logout").then((resp) => {
       setLoginId(null);
       // 아이디 기억하기 하지 않으면 쿠키에 저장된 아이디 지우기

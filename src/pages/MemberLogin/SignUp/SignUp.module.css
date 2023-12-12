@@ -55,6 +55,71 @@
   color: #7d7d7d;
 }
 
+.agrreBox {
+  padding: 0 35px;
+  margin-top: 30px;
+}
+
+.useAgree,
+.privacyAgree {
+  margin-top: 30px;
+}
+.agree__span {
+  color: #ff4500;
+  margin-left: 10px;
+}
+.useDetail {
+  margin: 20px 0 0 25px;
+  border: 1px solid #d1d2d850;
+  padding: 20px;
+  background-color: #d1d2d850;
+  height: 400px;
+  overflow-y: auto;
+}
+
+.useDetail::-webkit-scrollbar {
+  width: 10px;
+}
+.useDetail::-webkit-scrollbar-thumb {
+  background-color: #d1d2d8;
+  border-radius: 10px;
+  border: 7px solid transparent; /* 스크롤을 적용할 영역 색깔과 border 색상을 똑같이 맞춘다 */
+}
+.useDetail::-webkit-scrollbar-track {
+  background-color: #d1d2d850; /* 스크롤바 뒷 배경을 투명 처리한다 */
+}
+.privacyAgree::-webkit-scrollbar {
+  width: 10px;
+}
+.privacyAgree::-webkit-scrollbar-thumb {
+  background-color: #d1d2d8;
+  border-radius: 10px;
+  border: 7px solid transparent; /* 스크롤을 적용할 영역 색깔과 border 색상을 똑같이 맞춘다 */
+}
+.privacyAgree::-webkit-scrollbar-track {
+  background-color: #d1d2d850; /* 스크롤바 뒷 배경을 투명 처리한다 */
+}
+
+.article:not(:first-child) {
+  margin-top: 50px;
+}
+.article__title {
+  font-weight: 700;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+.article__text {
+  font-size: 14px;
+}
+
+.article__text:not(:first-child) {
+  margin-top: 20px;
+}
+.stepBtns {
+  text-align: center;
+  margin-top: 50px;
+}
+
 @media (max-width: 786px) {
   .signupBox {
     margin: 100px auto 100px auto;

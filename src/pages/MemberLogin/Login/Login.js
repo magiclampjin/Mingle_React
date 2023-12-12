@@ -49,7 +49,6 @@ const Login = () => {
       axios.post("/api/member/login", formData).then((resp) => {
         if (resp.statusText === "OK") {
           setLoginId(user.id);
-          //if (rememberId) {
           // 아이디 기억하기를 눌렀다면
           // 쿠키에 로그인 아이디 저장
           const expiresInSeconds = 7 * 24 * 60 * 60; // 7일을 초 단위로 계산
@@ -60,12 +59,6 @@ const Login = () => {
           cookies.set("rememberID", rememberId, {
             path: "/",
           });
-          // } else {
-          //   cookies.remove("loginID", { path: "/" });
-          //   cookies.set("rememberID", rememberId, {
-          //     path: "/",
-          //   });
-          // }
 
           setUser({ id: "", pw: "" });
           navi(-1);
@@ -84,10 +77,7 @@ const Login = () => {
   // 엔터키로 로그인 감지
   const handleKeyPress = (event) => {
     if (event.keyCode === 13) {
-      console.log(user.id);
-      console.log(user.pw);
       handleLogin();
-      console.log("Enter키 감지");
     }
   };
 
