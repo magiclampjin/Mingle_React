@@ -11,9 +11,7 @@ const ReportReadForm = () => {
     const id = location.state.id; // location으로 데이터에 접근해 받아옴
     const category = location.state.category;
 
-    const [report, setReport] = useState([{}]);
-
-    console.log("category:" + category);
+    const [reportObj, setReportObj] = useState(null);
 
     useEffect(() => {
         axios.get(`/api/admin/reportDetailInfo`, {
@@ -22,19 +20,25 @@ const ReportReadForm = () => {
                 category: category
             }
         }).then(resp => {
-            setReport(resp.data);
+            setReportObj(resp.data);
+            console.log("reportObj : " + resp.data.post.memberId);
         })
-    }, [])
+    }, [id, category])
 
     return (
         <div className={parentStyle.background}>
             <div className={parentStyle.body}>
                 <div className={style.reportBox}>
-                    <div className={style.reportTitle}>신고 내역</div>
+                    <div className={style.reportTitle}>신고 내역 : {category}</div>
                     <hr></hr>
-                    <div className={style.reportDate}>{report.reportDate ? new Date(report.reportDate).toLocaleString('en-US', { timeZone: 'Asia/Seoul' }) : null}</div>
-                    <div className={style.reportContent}>{report.content}</div>
-                    <div className={style.reporterId}>신고자 : {report.memberReporterId}</div>
+                    {reportObj && (
+                    <>
+                        <div className={style.reportDate}>{reportObj.report.reportDate ? new Date(reportObj.report.reportDate).toLocaleString('en-US', { timeZone: 'Asia/Seoul' }) : null}</div>
+                        <div className={style.reportContent}>{reportObj.report.content}</div>
+                        <div className={style.reporterId}>신고대상자 : {reportObj.post.memberId}</div>
+                        <div className={style.reporterId}>신고자 : {reportObj.report.memberReporterId}</div>
+                    </>
+                    )}
                     <Link to="" className={style.moveToPost}>신고 게시물로 이동</Link>
                     <hr></hr>
                     <div className={style.reportBtns}>

@@ -7,7 +7,8 @@ const ReportPartyReplyBox = () => {
     const [report, setReport] = useState([{}]);
 
     useEffect(() => {
-        axios.get("/api/admin/reportPartyReplyList").then(resp => {
+        const category = "댓글";
+        axios.get(`/api/admin/reportPartyCategoryList/${category}`).then(resp => {
             console.log(resp.data);
             setReport(resp.data);
         });

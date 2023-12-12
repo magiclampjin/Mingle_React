@@ -11,6 +11,7 @@ const ReportReply = () => {
     useEffect(() => {
         axios.get("/api/admin/reportReplyList").then(resp => {
             setReport(resp.data);
+            console.log("data : " + resp.data);
         });
     }, []);
 

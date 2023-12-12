@@ -17,7 +17,7 @@ const ReportPost = () => {
     return (
         <>
         <div className={parentStyle.box}>
-            <div className={parentStyle.componentTitle}>게시물 신고</div>
+            <div className={parentStyle.componentTitle}>게시글 신고</div>
             <div className={style.componentBox}>
                 {report.map((e, i) => {
                     return(

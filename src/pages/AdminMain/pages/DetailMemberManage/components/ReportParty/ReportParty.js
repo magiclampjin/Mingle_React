@@ -1,5 +1,4 @@
-import parentStyle from "../../../../AdminMain.module.css"
-import style from "../../DetailMemberManage.module.css"
+import style from "../../../../AdminMain.module.css"
 import { useEffect, useState } from "react";
 import {Link} from 'react-router-dom';
 import axios from "axios";
@@ -18,12 +17,12 @@ const ReportParty = () => {
 
     return (
         <>
-        <div className={parentStyle.box}>
-            <div className={parentStyle.componentTitle}>파티 신고</div>
+        <div className={style.box}>
+            <div className={style.componentTitle}>파티 신고</div>
             <div className={style.componentBox}>
-                <div className={parentStyle.componentSeeMore}>
+                <div className={style.componentSeeMore}>
                     <div></div>
-                    <div className={parentStyle.componentSeeMoreBtn}>
+                    <div className={style.componentSeeMoreBtn}>
                     <Link to="DetailReportParty">
                         <WhiteRoundBtn title={"더보기"} activation={true}></WhiteRoundBtn>
                     </Link>
@@ -32,10 +31,10 @@ const ReportParty = () => {
                 {report.map((e, i) => {
                     return(
                         <div key={i} className={style.componentLine}>
-                            <div className={parentStyle.componentItem}>{e.id}</div>
-                            <div className={parentStyle.componentItem}>{e.memberReporterId}</div>
-                            <div className={parentStyle.componentItem}>{e.content}</div>
-                            <div className={parentStyle.componentItem}>{e.reportDate ? new Date(e.reportDate).toLocaleString('en-US', { timeZone: 'Asia/Seoul' }) : null}</div>
+                            <div className={style.componentItem}>{e.id}</div>
+                            <div className={style.componentItem}>{e.memberReporterId}</div>
+                            <div className={style.componentItem}>{e.content}</div>
+                            <div className={style.componentItem}>{e.reportDate ? new Date(e.reportDate).toLocaleString('en-US', { timeZone: 'Asia/Seoul' }) : null}</div>
                         </div>
                     );
                 })}
