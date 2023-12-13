@@ -19,6 +19,10 @@
     display: flex;
 }
 
+.partyCreateList{
+    overflow: hidden;
+}
+
 .partyName{
     font-size: 28px;
     font-weight: bold;
@@ -26,6 +30,23 @@
 
 .partyCategoryList{
     margin: 30px 0 25px 0;
+    min-width: 500px;
+}
+
+@media (max-width: 600px){
+
+    .partyCategoryList{
+        margin-bottom: 20px;
+        flex-flow: row wrap;
+    }
+    .partyCategoryList>*{
+        margin-left: 0 !important;
+        width: fit-content;
+        min-width: 100px;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+    }
 }
 
 .partyCategory{
@@ -45,25 +66,33 @@
     box-shadow: 0 0 5px 0 #73757750 ;
     padding:20px 10px;
     border-radius: 10px;
-}
-
-.partyList>.partyListLine{
     margin-bottom: 25px;
 }
 
-.partyList>.partyListLine:last-child{
+.partyList{
+    
+}
+/* .partyList>.partyListLine{
+    margin-bottom: 25px;
+} */
+
+/* .partyList>.partyListLine:last-child{
     margin-bottom: 0px;
+} */
+.partyListLine{
+    margin: auto;
+    flex-flow: row wrap;
+    max-width: 1000px;
 }
 
-
 .partyListLine>.partyContent{
-    margin-left: 25px;
+    margin: 20px;
     cursor: pointer;
 }
 
-.partyListLine>.partyContent:first-child{
+/* .partyListLine>.partyContent:first-child{
     margin-left: 0;
-}
+} */
 
 
 .partyContent__img>img{

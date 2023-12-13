@@ -1,0 +1,109 @@
+.board {
+    padding: 16px;
+    max-width: 1300px;
+    margin-top:100px;
+    margin-bottom:150px;
+    margin:auto;
+}
+
+
+.post__container {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+}
+
+.post__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.post__title {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.post__author {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.post__content {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    min-height: 150px;
+    resize: vertical;
+}
+
+.post__file {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.post__file-label {
+    display: inline-block;
+    padding: 10px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    background-color: #fff;
+    color: #000;
+}
+
+.post__file-label:hover {
+    background-color: #eee;
+}
+
+.post__file-input {
+    width: 0;
+    height: 0;
+    padding: 0;
+    margin: 0;
+    opacity: 0;
+}
+
+.post__buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.post__button {
+    padding: 10px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    background-color: #fff;
+    color: #000;
+}
+
+.post__button:hover {
+    background-color: #eee;
+}
+
+.post__button--write {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.post__category {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.post__category select {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: #fff;
+    margin-right: 10px;
+}

@@ -1,0 +1,48 @@
+.category__bar {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 10px;
+    /* 배경색 */
+    margin-bottom: 50px;
+}
+
+.category__bar::-webkit-scrollbar {
+    width: 8px;
+    /* 스크롤 바의 너비 */
+    height: 8px;
+    /* 스크롤 바의 높이 */
+    background-color: #f0f0f0;
+    /* 스크롤 바의 배경색 */
+}
+
+.category__bar::-webkit-scrollbar-thumb {
+    background-color: #7B61FF;
+    /* 스크롤 바의 색상 */
+}
+
+.category__bar::-webkit-scrollbar-thumb:hover {
+    background-color: #7171AA;
+    /* 스크롤 바의 색상 */
+}
+
+.category__item {
+    display: inline-block;
+    margin-right: 30px;
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+    /* 테두리 */
+    border-radius: 20px;
+    /* 둥근 모서리 */
+    background-color: white;
+    /* 아이템 배경색 */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    /* 부드러운 전환 효과 */
+}
+
+.category__item:hover {
+    border: 1px solid #7b61ff;
+    color: #7b61ff;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
