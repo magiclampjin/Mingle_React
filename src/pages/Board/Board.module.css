@@ -1,0 +1,156 @@
+@font-face {
+    font-family: "LOTTERIACHAB";
+    src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.0/LOTTERIACHAB.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+}
+
+.board {
+    padding: 16px;
+    max-width: 1300px;
+    margin-top:100px;
+    margin-bottom:150px;
+    margin:auto;
+}
+
+.board__category {
+    margin-bottom: 20px;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.board__title {
+    margin-bottom: 30px;
+    color: #5D5C61;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.board__layer{
+    margin-top:30px;
+    margin-bottom:50px;
+}
+
+.board__table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.board__table th, 
+.board__table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.board__table th {
+    background-color: #f7f7f7;
+    color: #333;
+}
+
+.board__table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.board__table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.board__buttonContainer {
+    text-align: right;
+}
+
+.board__button {
+    width: 150px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: #7b61ff;
+    border : none;
+    border-radius: 4px;
+    margin-left: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    color:white;
+}
+
+
+/* 게시글이 없을 때의 메시지 스타일 */
+.no__posts {
+    text-align: center;
+    color: #888;
+    margin: 20px 0;
+}
+
+.board__pcSize {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.board__menu {
+    display: flex;
+}
+
+.menu__navi {
+    display: flex;
+}
+
+.menu__naviTabSize {
+    display: none;
+}
+
+.navi__conf {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.navi__conf:not(:last-child) {
+    margin-right: 30px;
+}
+
+.menu__user {
+    display: flex;
+    align-items: center;
+    margin-left: 50px;
+}
+
+.menu__user>svg {
+    font-size: 20px;
+}
+
+.menu__user>svg>path {
+    color: #5c4dae;
+}
+
+.profileImg {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-left: 15px;
+}
+
+@media (max-width: 786px) {
+    .board {
+        max-width: 700px;
+        margin: auto;
+    }
+
+    .menu__navi {
+        display: none;
+    }
+
+    .menu__naviTabSize {
+        display: flex;
+        margin-top: 20px;
+    }
+
+    .menu__naviTabSize>.navi__conf {
+        font-size: 14px;
+        cursor: pointer;
+    }
+}
+

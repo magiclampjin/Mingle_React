@@ -10,6 +10,7 @@ const SomeComponent = () => {
     axiosInstance.get('/some-endpoint')
       .then(response => {
         // 데이터 처리
+        // 스테이트 변환로직 (setLogin())
       })
       .catch(error => {
         // 에러 처리
