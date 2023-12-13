@@ -149,10 +149,23 @@ const SignUp = () => {
   // user State 값 채우기
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUser((prev) => ({ ...prev, [name]: value }));
+    if (name !== "pwCheck") {
+      setUser((prev) => ({ ...prev, [name]: value }));
+    } else {
+      setPwCheck(value);
+    }
   };
-
-  const [idcheckText, setIdCheckText] = useState("");
+  const [pwCheck, setPwCheck] = useState("");
+  const [checkText, setCheckText] = useState({
+    id: "",
+    pw: "",
+    name: "",
+    email: "",
+    phone: "",
+    nickname: "",
+    birth: "",
+    memberRecommenderId: "",
+  });
   const [signupConditions, setSignupConditions] = useState({
     id: "",
     pw: "",
@@ -186,7 +199,7 @@ const SignUp = () => {
       setNext(false);
     }
 
-    // 아이디 검사
+    // 아이디 유효성 및 중복 검사
     if (user.id !== "") {
       console.log(user.id);
       // 정규식: 영문자, 숫자, 밑줄(_) 허용, 한글 불허용
@@ -200,31 +213,69 @@ const SignUp = () => {
         axios.post("/api/member/idDuplicateCheck", user.id).then((resp) => {
           console.log(resp.data === true);
           if (resp.data) {
-            setIdCheckText("중복된 아이디입니다. 사용하실 수 없습니다.");
+            //setUser((prev) => ({ ...prev, [name]: value }));
+            setCheckText((prev) => ({
+              ...prev,
+              ["id"]: "중복된 아이디입니다. 사용하실 수 없습니다.",
+            }));
+            // setIdCheckText("중복된 아이디입니다. 사용하실 수 없습니다.");
             handleCondition("id", false);
           } else {
-            setIdCheckText("");
+            setCheckText((prev) => ({ ...prev, ["id"]: "" }));
+            // setIdCheckText("");
             // 정규식: 8~14자로 구성, 알파벳 대소문자, 숫자, _로만 구성
             let regexId = /^[\w]{8,14}$/;
             let resultId = regexId.test(user.id);
             console.log(resultId);
             if (resultId) {
-              setIdCheckText("사용가능한 아이디입니다.");
+              setCheckText((prev) => ({
+                ...prev,
+                ["id"]: "사용가능한 아이디입니다.",
+              }));
+              // setIdCheckText("사용가능한 아이디입니다.");
               handleCondition("id", true);
             } else {
-              setIdCheckText(
-                "8~14자의 영문자, 숫자, 밑줄(_)만 입력 가능합니다."
-              );
+              setCheckText((prev) => ({
+                ...prev,
+                ["id"]: "8~14자의 영문자, 숫자, 밑줄(_)만 입력 가능합니다.",
+              }));
+              // setIdCheckText(
+              //   "8~14자의 영문자, 숫자, 밑줄(_)만 입력 가능합니다."
+              // );
               handleCondition("id", false);
             }
           }
         });
       } else {
-        setIdCheckText("8~14자의 영문자, 숫자, 밑줄(_)만 입력 가능합니다.");
-        handleCondition("id", false);
+        setCheckText((prev) => ({ ...prev, ["id"]: "" }));
+        // setIdCheckText("");
       }
     } else {
-      setIdCheckText("");
+      setCheckText((prev) => ({ ...prev, ["id"]: "" }));
+      // setIdCheckText("");
+    }
+
+    // 비밀번호 유효성 검사
+    if (user.pw !== "") {
+      let regexPw =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,30}$/;
+      let resultPw = regexPw.test(user.pw);
+      if (resultPw) {
+        setCheckText((prev) => ({
+          ...prev,
+          ["pw"]: "사용가능한 비밀번호입니다.",
+        }));
+        handleCondition("pw", true);
+      } else {
+        setCheckText((prev) => ({
+          ...prev,
+          ["pw"]:
+            "비밀번호 형식이 올바르지 않습니다. 8~30자의 영문 대소문자, 숫자 밑 특수문자를 사용하세요.",
+        }));
+        handleCondition("pw", false);
+      }
+    } else {
+      setCheckText((prev) => ({ ...prev, ["pw"]: "" }));
     }
   }, [user, currentStep]);
 
@@ -578,7 +629,7 @@ const SignUp = () => {
                 id="idCheck"
                 style={colorStyle(signupConditions.id)}
               >
-                {idcheckText}
+                {checkText.id}
               </div>
             </div>
           </div>
@@ -594,7 +645,13 @@ const SignUp = () => {
                 placeholder="8~30자의 영문 대소문자, 숫자 및 특수문자를 사용하세요."
                 onChange={handleChange}
               />
-              <div className={style.signup__chk} id="pwCheck"></div>
+              <div
+                className={style.signup__chk}
+                id="pwCheck"
+                style={colorStyle(signupConditions.pw)}
+              >
+                {checkText.pw}
+              </div>
             </div>
           </div>
           <div className={style.basicInfo__line} id="verify">
@@ -605,7 +662,9 @@ const SignUp = () => {
               <input
                 type="text"
                 id="verifyInput"
+                name="pwCheck"
                 placeholder="비밀번호를 확인해주세요."
+                onChange={handleChange}
               />
               <div className={style.signup__chk} id="verifyCheck"></div>
             </div>
