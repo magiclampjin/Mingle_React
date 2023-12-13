@@ -47,15 +47,19 @@ const PartyCreateList = ({selectServiceCategory,setSelectServiceCategory}) => {
     }
 
     return (
-        <>
+        <div className={`${style.partyCreateList}`}>  
             <div className={`${style.partyName} ${style.centerAlign}`} >어떤 파티를 만드시겠어요?</div>
-            <div className={`${style.partyCategoryList} ${style.centerAlign}`}>
-                <ServiceCategoryNavi id="전체" isSelected={selectServiceCategory==="전체"} isServiceListLoading={isServiceListLoading} setServiceListLoading={setServiceListLoading} selectServiceCategory={selectServiceCategory} setSelectServiceCategory={setSelectServiceCategory} service={service} setService={setService}/>
-                {
-                    serviceCategory.map((e,i)=>(
-                        <ServiceCategoryNavi key={i} id={e.id} isSelected={selectServiceCategory===e.id} isServiceListLoading={isServiceListLoading} setServiceListLoading={setServiceListLoading} selectServiceCategory={selectServiceCategory} setSelectServiceCategory={setSelectServiceCategory} service={service} setService={setService}/>
-                    ))
-                }
+            <div className={`${style.categoryListCover}`}>
+
+          
+                <div className={`${style.partyCategoryList} ${style.centerAlign}`}>
+                    <ServiceCategoryNavi id="전체" isSelected={selectServiceCategory==="전체"} isServiceListLoading={isServiceListLoading} setServiceListLoading={setServiceListLoading} selectServiceCategory={selectServiceCategory} setSelectServiceCategory={setSelectServiceCategory} service={service} setService={setService}/>
+                    {
+                        serviceCategory.map((e,i)=>(
+                            <ServiceCategoryNavi key={i} id={e.id} isSelected={selectServiceCategory===e.id} isServiceListLoading={isServiceListLoading} setServiceListLoading={setServiceListLoading} selectServiceCategory={selectServiceCategory} setSelectServiceCategory={setSelectServiceCategory} service={service} setService={setService}/>
+                        ))
+                    }
+                </div>
             </div>
             <div className={`${style.partyList}`}>
                 <div className={`${style.partyListLine} ${style.centerAlign}`}>
@@ -80,7 +84,7 @@ const PartyCreateList = ({selectServiceCategory,setSelectServiceCategory}) => {
                     }
                 </div>    
             </div>   
-        </>
+        </div>
     );
 }
 
