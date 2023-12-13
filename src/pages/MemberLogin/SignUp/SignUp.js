@@ -6,15 +6,17 @@ import axios from "axios";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
+  // 현재 회원가입 단계
   const [currentStep, setCurrentStep] = useState("step1");
-  const [chkAll, setChhAll] = useState(false);
-  const [chkUse, setChkUse] = useState(false);
-  const [chkPrivacy, setChkPrivacy] = useState(false);
-  const [isNext, setNext] = useState(false);
+  const [chkAll, setChhAll] = useState(false); // 1단계 약관 모두 돵의
+  const [chkUse, setChkUse] = useState(false); // 1단계 이용약관 동의
+  const [chkPrivacy, setChkPrivacy] = useState(false); // 1단계 개인정보 활용 동의
+  const [isNext, setNext] = useState(false); // 다음 단계로 넘어갈 수 있는지 확인
+  // 2단계 입력값 저장
   const [user, setUser] = useState({
     id: "",
     pw: "",
@@ -25,7 +27,54 @@ const SignUp = () => {
     birth: "",
     memberRecommenderId: "",
   });
+  // 비밀번호 확인 input value
+  const [pwCheck, setPwCheck] = useState("");
+  // 입력값 유효성 검사 결과
+  const [checkText, setCheckText] = useState({
+    id: "",
+    pw: "",
+    pwCheck: "",
+    name: "",
+    email: "",
+    phone: "",
+    nickname: "",
+    birth: "",
+    memberRecommenderId: "",
+  });
+  // 회원가입 조건 검사
+  const [signupConditions, setSignupConditions] = useState({
+    id: "",
+    pw: "",
+    pwCheck: "",
+    name: "",
+    email: "",
+    phone: "",
+    nickname: "",
+    birth: "",
+    memberRecommenderId: "",
+  });
+  // 글씨 색 변경 css
+  const colorStyle = (check) => {
+    return {
+      color: check ? "forestgreen" : "#ff4500",
+    };
+  };
   const navi = useNavigate();
+
+  // 현재 몇단계인지 저장
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      // 이벤트를 취소하여 브라우저가 페이지를 떠날 때 사용자에게 경고를 표시
+      event.preventDefault();
+    };
+
+    // 이벤트 리스너 등록
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      // 컴포넌트가 언마운트되면 이벤트 리스너 제거
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
   // 각 단계별 페이지 보이기 설정
   const displayStyle = (stepId) => {
@@ -155,35 +204,9 @@ const SignUp = () => {
       setPwCheck(value);
     }
   };
-  const [pwCheck, setPwCheck] = useState("");
-  const [checkText, setCheckText] = useState({
-    id: "",
-    pw: "",
-    name: "",
-    email: "",
-    phone: "",
-    nickname: "",
-    birth: "",
-    memberRecommenderId: "",
-  });
-  const [signupConditions, setSignupConditions] = useState({
-    id: "",
-    pw: "",
-    name: "",
-    email: "",
-    phone: "",
-    nickname: "",
-    birth: "",
-    memberRecommenderId: "",
-  });
-  const colorStyle = (check) => {
-    return {
-      color: check ? "forestgreen" : "#ff4500",
-    };
-  };
+
   // 2단계 조건 검사
   useEffect(() => {
-    console.log(user);
     if (
       user.id !== "" &&
       user.pw !== "" &&
@@ -201,72 +224,72 @@ const SignUp = () => {
 
     // 아이디 유효성 및 중복 검사
     if (user.id !== "") {
-      console.log(user.id);
+      // 아이디 input가 비어있지 않으면
       // 정규식: 영문자, 숫자, 밑줄(_) 허용, 한글 불허용
       const regex = /^[a-zA-Z0-9_]+$/;
       // 입력값과 정규식을 비교하여 매치 여부 확인
       const isValid = regex.test(user.id);
-      console.log(isValid);
 
       // 영문자, 숫자, 밑줄만 입력했을 때 아이디 중복 검사 실행
       if (isValid) {
         axios.post("/api/member/idDuplicateCheck", user.id).then((resp) => {
-          console.log(resp.data === true);
           if (resp.data) {
-            //setUser((prev) => ({ ...prev, [name]: value }));
+            // 중복된 아이디가 있을 때
             setCheckText((prev) => ({
               ...prev,
               ["id"]: "중복된 아이디입니다. 사용하실 수 없습니다.",
             }));
-            // setIdCheckText("중복된 아이디입니다. 사용하실 수 없습니다.");
             handleCondition("id", false);
           } else {
+            // 중복된 아이디가 없을 때
             setCheckText((prev) => ({ ...prev, ["id"]: "" }));
-            // setIdCheckText("");
             // 정규식: 8~14자로 구성, 알파벳 대소문자, 숫자, _로만 구성
             let regexId = /^[\w]{8,14}$/;
             let resultId = regexId.test(user.id);
-            console.log(resultId);
             if (resultId) {
+              // 아이디 유효성 검사
               setCheckText((prev) => ({
                 ...prev,
                 ["id"]: "사용가능한 아이디입니다.",
               }));
-              // setIdCheckText("사용가능한 아이디입니다.");
               handleCondition("id", true);
             } else {
+              // 사용불가능한 아이디 형식일 때
               setCheckText((prev) => ({
                 ...prev,
                 ["id"]: "8~14자의 영문자, 숫자, 밑줄(_)만 입력 가능합니다.",
               }));
-              // setIdCheckText(
-              //   "8~14자의 영문자, 숫자, 밑줄(_)만 입력 가능합니다."
-              // );
               handleCondition("id", false);
             }
           }
         });
       } else {
+        // 중복된 아이디는 아니지만 유효성검사에 통과하지 못했을 때
         setCheckText((prev) => ({ ...prev, ["id"]: "" }));
-        // setIdCheckText("");
+        handleCondition("id", false);
       }
     } else {
+      // 아이디 input에 값이 없을 때
       setCheckText((prev) => ({ ...prev, ["id"]: "" }));
-      // setIdCheckText("");
+      handleCondition("id", false);
     }
 
     // 비밀번호 유효성 검사
     if (user.pw !== "") {
+      // 비밀번호 input에 값이 있을 때
+      // 정규식 : 특수문자 1개, 대문자 1개, 소문자 1개가 모두 포함된 8~30글자
       let regexPw =
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,30}$/;
       let resultPw = regexPw.test(user.pw);
       if (resultPw) {
+        // 정규식 검사 통과
         setCheckText((prev) => ({
           ...prev,
           ["pw"]: "사용가능한 비밀번호입니다.",
         }));
         handleCondition("pw", true);
       } else {
+        // 비밀번호 형식 불일치
         setCheckText((prev) => ({
           ...prev,
           ["pw"]:
@@ -275,9 +298,137 @@ const SignUp = () => {
         handleCondition("pw", false);
       }
     } else {
+      // 비밀번호 input에 값이 없을 때
       setCheckText((prev) => ({ ...prev, ["pw"]: "" }));
+      handleCondition("pw", false);
     }
-  }, [user, currentStep]);
+
+    // 비밀번호 확인 일치 검사
+    if (pwCheck !== "") {
+      // 비밀번호 확인 input에 값이 있을 때
+      if (user.pw !== "") {
+        // 비밀번호 input에 값이 있을 때
+        if (pwCheck === user.pw) {
+          // 비밀번호랑 비밀번호 확인이랑 값이 일치할 때
+          setCheckText((prev) => ({
+            ...prev,
+            ["pwCheck"]: "비밀번호가 일치합니다.",
+          }));
+          handleCondition("pwCheck", true);
+        } else {
+          // 비밀번호랑 비밀번호 확인이랑 값이 일치하지 않을 때
+          setCheckText((prev) => ({
+            ...prev,
+            ["pwCheck"]: "비밀번호가 일치하지 않습니다.",
+          }));
+          handleCondition("pwCheck", false);
+        }
+      } else {
+        // 비밀번호 input에 값이 없을 때
+        setCheckText((prev) => ({
+          ...prev,
+          ["pwCheck"]: "비밀번호를 입력해주세요.",
+        }));
+        handleCondition("pwCheck", false);
+      }
+    } else {
+      // 비밀번호 확인 input에 값이 없을 때
+      setCheckText((prev) => ({ ...prev, ["pwCheck"]: "" }));
+      handleCondition("pwCheck", false);
+    }
+    console.log(user);
+
+    // 이름 유효성 검사
+    if (user.name !== "") {
+      // 정규식 : 한글 2~5글자인지 검사
+      let regexName = /^[가-힣]{2,5}$/;
+      let resultName = regexName.test(user.name);
+
+      // 이름 형식이 올바를때
+      if (resultName) {
+        setCheckText((prev) => ({ ...prev, ["name"]: "" }));
+        handleCondition("name", true);
+      } else {
+        // 이름 형식이 올바르지 않을 때
+        setCheckText((prev) => ({
+          ...prev,
+          ["name"]:
+            "이름 형식이 올바르지 않습니다. 한글 2~5글자로 입력해주세요.",
+        }));
+        handleCondition("name", false);
+      }
+    } else {
+      setCheckText((prev) => ({ ...prev, ["name"]: "" }));
+      handleCondition("name", false);
+    }
+
+    // 생년월일 유효성 검사
+    if (user.birth !== "") {
+      // 정규식 : 1900~2000대에 태어났으며 1~12월생, 01~31일생
+      let regexBirth = /^(19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])$/;
+      let resultBirth = regexBirth.test(user.birth);
+      // 생년월일 형식이 올바를 때
+      if (resultBirth) {
+        setCheckText((prev) => ({ ...prev, ["birth"]: "" }));
+        handleCondition("birth", true);
+      } else {
+        // 생년월일 형식이 올바르지 않을때
+        setCheckText((prev) => ({
+          ...prev,
+          ["birth"]:
+            "생년월일 형식이 올바르지 않습니다. 숫자만 8글자 입력해주세요.",
+        }));
+        handleCondition("birth", false);
+      }
+    } else {
+      setCheckText((prev) => ({ ...prev, ["birth"]: "" }));
+      handleCondition("birth", false);
+    }
+
+    // 이메일 유효성 검사
+    if (user.email !== "") {
+      // 정규식 : 영문 대소문자,숫자, 밑줄(_)이 오고, @다음 메인 도메인+점(.)+서브도메인
+      let regexEmail = /^[a-zA-Z0-9_]+@[a-z]+\.[a-z]+(\.*[a-z])*$/;
+      let resultEmail = regexEmail.test(user.email);
+      if (resultEmail) {
+        // 이메일 형식이 올바를 때
+        setCheckText((prev) => ({ ...prev, ["email"]: "" }));
+        handleCondition("email", true);
+      } else {
+        // 이메일 형식이 올바르지 않을때
+        setCheckText((prev) => ({
+          ...prev,
+          ["email"]: "이메일 형식이 올바르지 않습니다.",
+        }));
+        handleCondition("email", false);
+      }
+    } else {
+      setCheckText((prev) => ({ ...prev, ["email"]: "" }));
+      handleCondition("email", false);
+    }
+
+    // 전화번호 유효성 검사
+    if (user.phone !== "") {
+      //정규식 : 2~3자리, 3~4자리, 4자리로 지역번호를 포함한 번호도 입력 가능
+      let regexPhone = /^^\d{2,3}(\d{3,4})(\d{4})$/;
+      let resultPhone = regexPhone.test(user.phone);
+      if (resultPhone) {
+        // 전화번호 형식이 올바를 때
+        setCheckText((prev) => ({ ...prev, ["phone"]: "" }));
+        handleCondition("phone", true);
+      } else {
+        // 전화번호 형식이 올바르지 않을때
+        setCheckText((prev) => ({
+          ...prev,
+          ["phone"]: "전화번호 형식이 올바르지 않습니다.",
+        }));
+        handleCondition("phone", false);
+      }
+    } else {
+      setCheckText((prev) => ({ ...prev, ["phone"]: "" }));
+      handleCondition("phone", false);
+    }
+  }, [user, pwCheck, currentStep]);
 
   const handleCondition = (key, value) => {
     setSignupConditions((prev) => ({ ...prev, [key]: value }));
@@ -639,7 +790,7 @@ const SignUp = () => {
             </div>
             <div className={style.signup__inputBox}>
               <input
-                type="text"
+                type="password"
                 id="pwInput"
                 name="pw"
                 placeholder="8~30자의 영문 대소문자, 숫자 및 특수문자를 사용하세요."
@@ -660,13 +811,19 @@ const SignUp = () => {
             </div>
             <div className={style.signup__inputBox}>
               <input
-                type="text"
+                type="password"
                 id="verifyInput"
                 name="pwCheck"
                 placeholder="비밀번호를 확인해주세요."
                 onChange={handleChange}
               />
-              <div className={style.signup__chk} id="verifyCheck"></div>
+              <div
+                className={style.signup__chk}
+                id="verifyCheck"
+                style={colorStyle(signupConditions.pwCheck)}
+              >
+                {checkText.pwCheck}
+              </div>
             </div>
           </div>
         </div>
@@ -684,8 +841,13 @@ const SignUp = () => {
                 placeholder="이름을 입력해주세요."
                 onChange={handleChange}
               />
-              <div className={style.signup__chk} id="nameCheck">
+              <div
+                className={style.signup__chk}
+                id="nameCheck"
+                style={colorStyle(signupConditions.name)}
+              >
                 <WhiteRoundBtn title={"본인인증"}></WhiteRoundBtn>
+                {checkText.name}
               </div>
             </div>
           </div>
@@ -701,7 +863,13 @@ const SignUp = () => {
                 placeholder="생년월일 8자를 입력해주세요. ex)20000101"
                 onChange={handleChange}
               />
-              <div className={style.signup__chk} id="birthCheck"></div>
+              <div
+                className={style.signup__chk}
+                id="birthCheck"
+                style={colorStyle(signupConditions.birth)}
+              >
+                {checkText.birth}
+              </div>
             </div>
           </div>
           <div className={style.myInfo__line} id="email">
@@ -716,7 +884,13 @@ const SignUp = () => {
                 placeholder="이메일을 입력해주세요."
                 onChange={handleChange}
               />
-              <div className={style.signup__chk} id="emailCheck"></div>
+              <div
+                className={style.signup__chk}
+                id="emailCheck"
+                style={colorStyle(signupConditions.email)}
+              >
+                {checkText.email}
+              </div>
             </div>
           </div>
           <div className={style.myInfo__line} id="phone">
@@ -731,7 +905,13 @@ const SignUp = () => {
                 placeholder="- 없이 숫자만 입력해주세요. ex)01012345678"
                 onChange={handleChange}
               />
-              <div className={style.signup__chk} id="phoneCheck"></div>
+              <div
+                className={style.signup__chk}
+                id="phoneCheck"
+                style={colorStyle(signupConditions.phone)}
+              >
+                {checkText.phone}
+              </div>
             </div>
           </div>
           <div className={style.myInfo__line} id="nick">
@@ -760,12 +940,15 @@ const SignUp = () => {
             <div className={style.signup__inputBox}>
               <input
                 type="text"
-                id="phoneInput"
-                name="member_recommender_id"
+                id="recommenderInput"
+                name="memberRecommenderId"
                 placeholder="추천인 아이디를 입력해주세요."
                 onChange={handleChange}
               />
-              <div className={style.signup__chk} id="phoneCheck"></div>
+              <div
+                className={style.signup__chk}
+                id="memberRecommenderIdCheck"
+              ></div>
             </div>
           </div>
         </div>
