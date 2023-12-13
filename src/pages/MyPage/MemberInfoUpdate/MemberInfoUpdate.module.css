@@ -46,6 +46,10 @@
     margin-right: 20px;
 }
 
+.none{
+    display: none;
+}
+
 @media (max-width:786px) {
     .container{
         width: 600px;
