@@ -1,8 +1,8 @@
 .whiteRectangleBtn {
-  padding: 10px 25px;
   background-color: transparent;
   border: 1px solid #7b61ff;
   border-radius: 5px;
   cursor: pointer;
   color: #7b61ff;
+  font-size: 18px;
 }
