@@ -121,9 +121,53 @@ const Header = () => {
           </div>
         </div>
         <div className={style.loginBtn}>
-          <Link to="login">
+          {/* <Link to="login">
             <PurpleRoundBtn title={"로그인"} activation={true}></PurpleRoundBtn>
-          </Link>
+          </Link> */}
+          {loginId === "" || loginId === null ? (
+            <Link to="login">
+              <PurpleRoundBtn
+                title={"로그인"}
+                activation={true}
+              ></PurpleRoundBtn>
+            </Link>
+          ) : (
+            <>
+              <div className={style.menu__user}>
+                <FontAwesomeIcon icon={faBell} />
+                <img
+                  src={profileUrl}
+                  alt=""
+                  className={style.profileImg}
+                  onClick={openModal}
+                />
+              </div>
+
+              <ProfileModal
+                isOpen={modalIsOpen}
+                onRequestClose={closeModal}
+                contentLabel="정보 모달"
+              >
+                <div className={style.profileInner}>
+                  <img
+                    src={profileUrl}
+                    alt=""
+                    className={style.profileModalImg}
+                  />
+                  <div className={style.proffileModalInfo}>
+                    <div>{loginNick}님</div>
+                    <div>
+                      마이페이지
+                      <FontAwesomeIcon icon={faAngleRight} />
+                    </div>
+                  </div>
+                </div>
+                <button className={style.transparentBtn} onClick={handleLogout}>
+                  로그아웃
+                </button>
+              </ProfileModal>
+            </>
+          )}
         </div>
       </div>
 

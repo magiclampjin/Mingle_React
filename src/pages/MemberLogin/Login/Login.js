@@ -136,6 +136,7 @@ const Login = () => {
           width={400}
           heightPadding={15}
           onClick={handleLogin}
+          activation={true}
         ></PurpleRectangleBtn>
       </div>
     </div>

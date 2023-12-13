@@ -1,17 +1,32 @@
 import style from "./SignUp.module.css";
 import PurpleRectangleBtn from "../../../components/PurpleRectangleBtn/PurpleRectangleBtn";
+import GrayRectangleBtn from "../../../components/GrayRectangleBtn/GrayRectangleBtn";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import WhiteRoundBtn from "../../../components/WhiteRoundBtn/WhiteRoundBtn";
 
 const SignUp = () => {
-  // const [step, setStep] = useState("step01");
   const [currentStep, setCurrentStep] = useState("step1");
   const [chkAll, setChhAll] = useState(false);
   const [chkUse, setChkUse] = useState(false);
   const [chkPrivacy, setChkPrivacy] = useState(false);
   const [isNext, setNext] = useState(false);
+  const [user, setUser] = useState({
+    id: "",
+    pw: "",
+    name: "",
+    email: "",
+    phone: "",
+    nickname: "",
+    birth: "",
+    member_recommender_id: "",
+  });
+  const navi = useNavigate();
+
+  // 각 단계별 페이지 보이기 설정
   const displayStyle = (stepId) => {
     if (stepId === currentStep) {
       return { display: "block" };
@@ -56,7 +71,12 @@ const SignUp = () => {
       setChhAll(true);
       setNext(true);
     }
-  }, [chkUse, chkPrivacy]);
+    if (currentStep === "step2") {
+      setNext(false);
+      console.log("durl2");
+      console.log(currentStep);
+    }
+  }, [chkUse, chkPrivacy, currentStep]);
 
   const handleStep = () => {
     // 다음 단계 구하기
@@ -72,22 +92,21 @@ const SignUp = () => {
       // 현재 단계 currentStep 제거
       let currentStepElement = document.getElementById(currentStep);
       if (currentStepElement) {
-        console.log(currentStepElement);
         currentStepElement.classList.remove(style.currentStep);
-        console.log(currentStepElement);
       }
 
       // 다음단계로 이동
       setCurrentStep(nextStep);
+      // 다음단계 조건 초기화
+      if (nextStep === "step2" || nextStep === "step3") {
+        setNext(false);
+      }
 
       // 다음 단계에 currentStep 추가
       let nextStepElement = document.getElementById(nextStep);
       if (nextStepElement) {
         nextStepElement.classList.add(style.currentStep);
       }
-
-      // 다음단계 조건 초기화
-      setNext(false);
     } else {
       if (currentStep === "step1") {
         alert("약관을 모두 동의해주세요.");
@@ -96,6 +115,65 @@ const SignUp = () => {
       }
     }
   };
+
+  //취소 혹은 이전 버튼 눌렀을 때
+  const handleCancle = () => {
+    console.log("현재 단계" + currentStep);
+    // 현재 단계 currentStep 제거
+    let currentStepElement = document.getElementById(currentStep);
+    if (currentStepElement) {
+      currentStepElement.classList.remove(style.currentStep);
+    }
+
+    // 이전 단계 구하기
+    let prevStep = "";
+    if (currentStep === "step2") {
+      prevStep = "step1";
+    } else if (currentStep === "step3") {
+      prevStep = "step2";
+    }
+
+    if (currentStep === "step1") {
+      navi(-1);
+    } else if (currentStep === "step2") {
+      setCurrentStep("step1");
+    } else if (currentStep === "step3") {
+      setCurrentStep("step2");
+    }
+
+    // 이전 단계에 currentStep 추가
+    let prevStepElement = document.getElementById(prevStep);
+    if (prevStepElement) {
+      prevStepElement.classList.add(style.currentStep);
+    }
+  };
+
+  // user State 값 채우기
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUser((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // 2단계 조건 검사
+  useEffect(() => {
+    console.log(user);
+    if (
+      user.id !== "" &&
+      user.pw !== "" &&
+      user.name !== "" &&
+      user.birth !== "" &&
+      user.email !== "" &&
+      user.phone !== ""
+    ) {
+      setNext(true);
+    }
+
+    if (currentStep === "step3") {
+      console.log("durl");
+      console.log(currentStep);
+      setNext(false);
+    }
+  }, [user, currentStep]);
   return (
     <div className={style.signupBox}>
       <div className={style.title}>회원가입</div>
@@ -423,7 +501,159 @@ const SignUp = () => {
           </div>
         </div>
       </div>
+      <div className={style.signupBox} style={displayStyle("step2")}>
+        <div className={style.signupTitle}>아이디/비밀번호</div>
+        <div className={style.basicInfo}>
+          <div className={style.basicInfo__line} id="id">
+            <div className={style.signup__title}>
+              아이디<span className={style.essential}>*</span>
+            </div>
+            <div className={style.signup__inputBox}>
+              <input
+                type="text"
+                id="idInput"
+                name="id"
+                placeholder="8~14자의 영문, 숫자, _를 사용할 수 있습니다."
+                onChange={handleChange}
+              />
+              <div className={style.signup__chk} id="idCheck"></div>
+            </div>
+          </div>
+          <div className={style.basicInfo__line} id="pw">
+            <div className={style.signup__title}>
+              비밀번호<span className={style.essential}>*</span>
+            </div>
+            <div className={style.signup__inputBox}>
+              <input
+                type="text"
+                id="pwInput"
+                name="pw"
+                placeholder="8~30자의 영문 대소문자, 숫자 및 특수문자를 사용하세요."
+                onChange={handleChange}
+              />
+              <div className={style.signup__chk} id="pwCheck"></div>
+            </div>
+          </div>
+          <div className={style.basicInfo__line} id="verify">
+            <div className={style.signup__title}>
+              비밀번호 확인<span className={style.essential}>*</span>
+            </div>
+            <div className={style.signup__inputBox}>
+              <input
+                type="text"
+                id="verifyInput"
+                placeholder="비밀번호를 확인해주세요."
+              />
+              <div className={style.signup__chk} id="verifyCheck"></div>
+            </div>
+          </div>
+        </div>
+        <div className={style.signupTitle}>내 정보 입력</div>
+        <div className={style.myInfo}>
+          <div className={style.myInfo__line} id="name">
+            <div className={style.signup__title}>이름</div>
+            <div className={style.signup__inputBox}>
+              <input
+                type="text"
+                id="nameInput"
+                name="name"
+                placeholder="이름을 입력해주세요."
+                onChange={handleChange}
+              />
+              <div className={style.signup__chk} id="nameCheck">
+                <WhiteRoundBtn title={"본인인증"}></WhiteRoundBtn>
+              </div>
+            </div>
+          </div>
+          <div className={style.myInfo__line} id="birth">
+            <div className={style.signup__title}>생년월일</div>
+            <div className={style.signup__inputBox}>
+              <input
+                type="text"
+                id="birthInput"
+                name="birth"
+                placeholder="생년월일 8자를 입력해주세요. ex)20000101"
+                onChange={handleChange}
+              />
+              <div className={style.signup__chk} id="birthCheck"></div>
+            </div>
+          </div>
+          <div className={style.myInfo__line} id="email">
+            <div className={style.signup__title}>이메일</div>
+            <div className={style.signup__inputBox}>
+              <input
+                type="text"
+                id="emailInput"
+                name="email"
+                placeholder="이메일을 입력해주세요."
+                onChange={handleChange}
+              />
+              <div className={style.signup__chk} id="emailCheck"></div>
+            </div>
+          </div>
+          <div className={style.myInfo__line} id="phone">
+            <div className={style.signup__title}>전화번호</div>
+            <div className={style.signup__inputBox}>
+              <input
+                type="text"
+                id="phoneInput"
+                name="phone"
+                placeholder="- 없이 숫자만 입력해주세요. ex)01012345678"
+                onChange={handleChange}
+              />
+              <div className={style.signup__chk} id="phoneCheck"></div>
+            </div>
+          </div>
+          <div className={style.myInfo__line} id="nick">
+            <div className={style.signup__title}>닉네임</div>
+            <div className={style.signup__inputBox}>
+              <input
+                type="text"
+                id="nickInput"
+                name="nickname"
+                placeholder="직접 입력은 불가능합니다."
+                onChange={handleChange}
+                readOnly
+              />
+              <div className={style.signup__chk} id="nickCheck">
+                <WhiteRoundBtn title={"닉네임 선택"}></WhiteRoundBtn>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className={style.signupTitle}>기타입력</div>
+        <div className={style.etcInfo}>
+          <div className={style.etcInfo__line} id="referral">
+            <div className={style.signup__title}>추천인 아이디</div>
+            <div className={style.signup__inputBox}>
+              <input
+                type="text"
+                id="phoneInput"
+                name="member_recommender_id"
+                placeholder="추천인 아이디를 입력해주세요."
+                onChange={handleChange}
+              />
+              <div className={style.signup__chk} id="phoneCheck"></div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className={style.stepBtns}>
+        {currentStep === "step1" ? (
+          <GrayRectangleBtn
+            title={"취소"}
+            heightPadding={20}
+            width={190}
+            onClick={handleCancle}
+          ></GrayRectangleBtn>
+        ) : (
+          <GrayRectangleBtn
+            title={"이전"}
+            heightPadding={20}
+            width={190}
+            onClick={handleCancle}
+          ></GrayRectangleBtn>
+        )}
         <PurpleRectangleBtn
           title={"다음"}
           heightPadding={20}
