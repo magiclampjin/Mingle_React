@@ -101,7 +101,7 @@ const PartyCreateList = ({selectServiceCategory,setSelectServiceCategory}) => {
                 <div className={`${style.partyListLine} ${style.centerAlign}`}>
                     {   
                         isServiceListLoading ? (
-                            <LoadingSpinnerMini height={50} width={100}/>
+                            <LoadingSpinnerMini height={260} width={100}/>
                         ) :(
                             service.map((e,i)=>{                         
                                 return(

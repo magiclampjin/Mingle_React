@@ -4,8 +4,8 @@ import styles from './LoadingSpinnerMini.module.css';
 
 const LoadingSpinnerMini = ({height, width}) => {
   const heightStyle = {
-    height: height +"vh",
-    width: width +"vw" 
+    height: height +"px",
+    width: width +"px" 
   };
 
   return (

@@ -74,7 +74,7 @@ const ServiceInfoModal = ({ isOpen, onRequestClose, contentLabel, selectService,
     >
         {
             isServiceLoading ?
-            <LoadingSpinnerMini height={55} width={26}/>
+            <LoadingSpinnerMini height={380} width={400}/>
             : service.name ? (
             <>
                 <div className={style.title}>요금 안내</div>
