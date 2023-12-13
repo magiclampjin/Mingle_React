@@ -6,6 +6,7 @@ import PurpleRectangleBtn from '../../../components/PurpleRectangleBtn/PurpleRec
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faXmark} from "@fortawesome/free-solid-svg-icons";
 import WhiteRectangleBtn from '../../../components/WhiteRectangleBtn/WhiteRectangleBtn';
+import MypageModal from '../components/MypageModal/MypageModal';
 
 const MemberInfoUpdate = () =>{
 
@@ -119,11 +120,11 @@ const MemberInfoUpdate = () =>{
                 {/* 휴대폰 번호 변경하기 버튼 누르면 바로 모달창 뜸 */}
                 {!phone && 
                 <>
-                    <CustomModal
+                    <MypageModal
                     isOpen={isModalOpen}
                     onRequestClose={closeModal}
-                    width={100}
-                    height={100}
+                    width={500}
+                    height={150}
                     >
                         <div>
                             <div className={style.modalTitle}>휴대폰 번호 변경을 위해서는 본인 인증이 필요합니다.</div>
@@ -138,7 +139,7 @@ const MemberInfoUpdate = () =>{
                             </div>
                             
                         </div>
-                    </CustomModal>
+                    </MypageModal>
                 </>
                 }
                  
@@ -163,11 +164,11 @@ const MemberInfoUpdate = () =>{
                 {/* 이메일 등록하기 버튼 누르면 뜨는 모달 */}
                {email && 
                <>
-                <CustomModal
+                <MypageModal
                 isOpen={isEmailModalOpen}
                 onRequestClose={closeEmailModal}
-                width={200}
-                height={150}
+                width={500}
+                height={340}
                 >
                     <div>
                         <div className={style.closeBtn}>
@@ -204,7 +205,7 @@ const MemberInfoUpdate = () =>{
                             
                         </div>
                     </div>
-                </CustomModal>
+                </MypageModal>
                </>
                }
                
