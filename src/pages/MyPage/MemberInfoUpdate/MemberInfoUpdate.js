@@ -122,6 +122,8 @@ const MemberInfoUpdate = () =>{
                     <CustomModal
                     isOpen={isModalOpen}
                     onRequestClose={closeModal}
+                    width={100}
+                    height={100}
                     >
                         <div>
                             <div className={style.modalTitle}>휴대폰 번호 변경을 위해서는 본인 인증이 필요합니다.</div>
@@ -164,6 +166,8 @@ const MemberInfoUpdate = () =>{
                 <CustomModal
                 isOpen={isEmailModalOpen}
                 onRequestClose={closeEmailModal}
+                width={200}
+                height={150}
                 >
                     <div>
                         <div className={style.closeBtn}>

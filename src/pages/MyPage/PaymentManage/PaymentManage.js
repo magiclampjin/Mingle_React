@@ -47,6 +47,8 @@ const PaymentManage = () =>{
                 <CustomModal
                 isOpen={setIsCardModalOpen}
                 onRequestClose={closeCardModal}
+                width={150}
+                height={150}
                 >
                     <div>
                         <div className={style.closeBtn}>
