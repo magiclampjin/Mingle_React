@@ -3,6 +3,10 @@
     font-weight: 900;
 }
 
+.servicePriceInfo{
+    margin-bottom: 5px;
+}
+
 .servicePlanNotice{
     margin: 10px 0 20px 0;
     color:#737577;
@@ -30,4 +34,16 @@
 
 .serviceNoticeUL *{
     list-style:inside;
+}
+
+.chkBox{
+    font-size: 13px;
+    display: flex;
+    align-items: end;
+    margin-left: 10px;
+    margin-bottom: 20px;
+}
+
+#chkBox{
+    margin-bottom: 1.8px;
 }

@@ -1,17 +1,33 @@
 import Modal from "react-modal";
-import { useEffect, useState } from "react";
-import LoadingSpinnerMini from "../../../../components/LoadingSpinnerMini/LoadingSpinnerMini";
 import axios from "axios";
 import style from "./ServiceInfoModal.module.css";
+import { useEffect, useState } from "react";
+import LoadingSpinnerMini from "../../../../components/LoadingSpinnerMini/LoadingSpinnerMini";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTriangleExclamation, faCheck } from "@fortawesome/free-solid-svg-icons";
+import PurpleRectangleBtn from "../../../../components/PurpleRectangleBtn/PurpleRectangleBtn"
 
 Modal.setAppElement("#root");
 
 const ServiceInfoModal = ({ isOpen, onRequestClose, contentLabel, selectService, width, height }) => {
 
+    // 선택한 서비스 정보 불러오기 로딩
     const [isServiceLoading, setServiceLoading] = useState(false);
+    // 선택한 서비스 정보
     const [service, setService] = useState({});
+    
+    // 요금 안내 확인용 chkBox 
+    const [isChked, setChked] = useState(false);
+    // 요금 안내 확인용 chkBox 체크 여부
+    const handleChange = (e) => {
+        setChked(!isChked);
+    };
+
+    // 요금 안내 확인 후 파티 생성창으로 이동하는 버튼 클릭 (다음 버튼)
+    const handleNext = (e) => {
+        
+    }
+
     useEffect(()=>{
         if(isOpen){
             console.log(selectService);
@@ -53,11 +69,11 @@ const ServiceInfoModal = ({ isOpen, onRequestClose, contentLabel, selectService,
     >
         {
             isServiceLoading ?
-            <LoadingSpinnerMini height={35} width={25}/>
+            <LoadingSpinnerMini height={51} width={26}/>
             : service.name ? (
             <>
                 <div className={style.title}>요금 안내</div>
-                <div>
+                <div className={style.servicePriceInfo}>
                     <div className={style.servicePlanNotice}>
                        {service.name} {service.plan} 요금제만 공유할 수 있어요
                     </div>
@@ -74,6 +90,10 @@ const ServiceInfoModal = ({ isOpen, onRequestClose, contentLabel, selectService,
                         <FontAwesomeIcon icon={faTriangleExclamation} size="xs"/>&nbsp;&nbsp;원단위 올림으로 10원 이내 차이가 있을 수 있어요.
                     </div>
                 </div>
+                <div className={style.chkBox}>
+                    <input type="checkbox" id="chkBox" onChange={handleChange}></input><label for="chkBox">안내를 확인했어요.</label>
+                </div>
+                <PurpleRectangleBtn title="다음" activation={isChked} onClick={handleNext} width={405} heightPadding={10}/>
             </>):null         
         }
 

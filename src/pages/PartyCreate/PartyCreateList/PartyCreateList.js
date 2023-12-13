@@ -110,20 +110,6 @@ const PartyCreateList = ({selectServiceCategory,setSelectServiceCategory}) => {
                                                 <div className={`${style.hotTag} ${style.centerAlign}`}><FontAwesomeIcon icon={faStar} size="1x"/><div className={`${style.hatTagTxt}`}>HOT</div></div>
                                             </div>
                                         </div>
-                                        
-                                        {/* <ServiceInfoModal
-                                            key={`modal-${i}`}
-                                            isOpen={modalIsOpen}
-                                            onRequestClose={closeModal}
-                                            contentLabel="정보 모달"
-                                            name = {e.name}
-                                        >
-                                            <b>요금제 선택</b>
-                                            <div>
-                                                {`${e.name}`} 프리미엄
-                                            </div>
-
-                                        </ServiceInfoModal> */}
                                     </>
                                 ); 
                             })  
@@ -135,8 +121,8 @@ const PartyCreateList = ({selectServiceCategory,setSelectServiceCategory}) => {
                     onRequestClose={closeModal}
                     contentLabel="정보 모달"
                     selectService = {selectService}
-                    width={430}
-                    height={315}
+                    width={450}
+                    height={400}
                 >
                 </ServiceInfoModal>   
             </div>   
