@@ -6,6 +6,7 @@ import LoadingSpinnerMini from "../../../../components/LoadingSpinnerMini/Loadin
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTriangleExclamation, faCheck } from "@fortawesome/free-solid-svg-icons";
 import PurpleRectangleBtn from "../../../../components/PurpleRectangleBtn/PurpleRectangleBtn"
+import { useNavigate } from "react-router-dom";
 
 Modal.setAppElement("#root");
 
@@ -22,10 +23,13 @@ const ServiceInfoModal = ({ isOpen, onRequestClose, contentLabel, selectService,
         setChked(!isChked);
     };
 
+    // 파티 만들기 화면으로 이동
+    const navi = useNavigate();
+
     // 요금 안내 확인 후 파티 생성창으로 이동하는 버튼 클릭 (다음 버튼)
-    const handleNext = (e) => {
+    const handleNext = () => {
         if(isChked){
-            console.log("f");
+            navi("/");
         }
     }
 
