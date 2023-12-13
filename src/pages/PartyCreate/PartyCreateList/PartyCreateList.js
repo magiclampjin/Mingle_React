@@ -136,7 +136,7 @@ const PartyCreateList = ({selectServiceCategory,setSelectServiceCategory}) => {
                     contentLabel="정보 모달"
                     selectService = {selectService}
                     width={430}
-                    height={330}
+                    height={315}
                 >
                 </ServiceInfoModal>   
             </div>   
