@@ -3,6 +3,7 @@
     font-weight: bold;
     color:#737577;
     cursor: pointer;
+    margin-bottom: 20px;
 }
 
 .partyCategory:first-child{
