@@ -104,7 +104,9 @@ const Header = () => {
                     <div className={style.proffileModalInfo}>
                       <div>{loginNick}님</div>
                       <div>
+                        <Link to="/Mypage">
                         마이페이지
+                        </Link>
                         <FontAwesomeIcon icon={faAngleRight} />
                       </div>
                     </div>
