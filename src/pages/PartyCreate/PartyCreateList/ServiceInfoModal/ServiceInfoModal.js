@@ -29,7 +29,7 @@ const ServiceInfoModal = ({ isOpen, onRequestClose, contentLabel, selectService,
     // 요금 안내 확인 후 파티 생성창으로 이동하는 버튼 클릭 (다음 버튼)
     const handleNext = () => {
         if(isChked){
-            navi("/");
+            navi("/party/PartyCreatePage");
         }
     }
 
