@@ -37,6 +37,42 @@
     font-size: 14px;
     color: rgb(101,101,101);
 }
+.flex{
+    display: flex;
+}
+/* 카드 등록되었을 때 */
+.inner__card{
+    line-height: 42px;
+    display: flex;
+    justify-content: space-between;
+}
+.cardLeft{
+    display: flex;
+    justify-content: space-between;
+    width: 300px; height: 52px;
+    border-radius: 13px;
+    background-color: rgb(246, 246, 246);
+    padding: 5px 13px;
+}
+
+.cardRight{
+    line-height: 52px;
+    display: flex;
+}
+
+.cardRight>div:nth-child(1){
+    margin-right: 5px;
+}
+
+.bankName{
+    font-weight: 600;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+.bankAccount{
+    font-size: 14px;
+}
 
 /* 모달 */
 /* Modal */
@@ -63,7 +99,7 @@
 
 /* card */
 .cardBox{
-    padding-top: 10px;
+    padding-top: 20px;
 }
 .cardBox>div:nth-child(1)>input{
     width: 100%;
