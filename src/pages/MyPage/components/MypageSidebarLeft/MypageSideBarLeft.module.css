@@ -26,7 +26,7 @@
     background-color: rgb(247,  247, 247);
  }
  
- @media (max-width:786px) {
+ @media (max-width:1050px) {
      .sidebarBox{
          display: none;
      }

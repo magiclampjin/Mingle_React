@@ -16,7 +16,7 @@
     
 }
 
-@media (max-width:786px) {
+@media (max-width:1050px) {
     .dropDownNavi{
         display: block;
     }
