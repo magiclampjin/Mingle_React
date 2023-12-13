@@ -26,6 +26,22 @@
 
 .partyCategoryList{
     margin: 30px 0 25px 0;
+    min-width: 500px;
+    overflow-x: auto;
+}
+
+.partyCategoryList::-webkit-scrollbar {
+    width: 20px;
+    
+}
+.partyCategoryList::-webkit-scrollbar-thumb{
+    background-color: #7d7d7d20;
+    border-radius: 10px; 
+
+    border: 7px solid #FFFFFF /* 스크롤을 적용할 영역 색깔과 border 색상을 똑같이 맞춘다 */
+}
+.partyCategoryList::-webkit-scrollbar-track{
+    background-color: #FFFFFF/* 스크롤바 뒷 배경을 투명 처리한다 */
 }
 
 .partyCategory{
@@ -45,25 +61,33 @@
     box-shadow: 0 0 5px 0 #73757750 ;
     padding:20px 10px;
     border-radius: 10px;
-}
-
-.partyList>.partyListLine{
     margin-bottom: 25px;
 }
 
-.partyList>.partyListLine:last-child{
+.partyList{
+    
+}
+/* .partyList>.partyListLine{
+    margin-bottom: 25px;
+} */
+
+/* .partyList>.partyListLine:last-child{
     margin-bottom: 0px;
+} */
+.partyListLine{
+    margin: auto;
+    flex-flow: row wrap;
+    max-width: 1000px;
 }
 
-
 .partyListLine>.partyContent{
-    margin-left: 25px;
+    margin: 20px;
     cursor: pointer;
 }
 
-.partyListLine>.partyContent:first-child{
+/* .partyListLine>.partyContent:first-child{
     margin-left: 0;
-}
+} */
 
 
 .partyContent__img>img{
