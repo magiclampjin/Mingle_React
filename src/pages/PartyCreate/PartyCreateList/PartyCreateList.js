@@ -50,10 +50,10 @@ const PartyCreateList = ({selectServiceCategory,setSelectServiceCategory}) => {
         <>
             <div className={`${style.partyName} ${style.centerAlign}`} >어떤 파티를 만드시겠어요?</div>
             <div className={`${style.partyCategoryList} ${style.centerAlign}`}>
-                <ServiceCategoryNavi id="전체" isSelected={selectServiceCategory=="전체"} isServiceListLoading={isServiceListLoading} setServiceListLoading={setServiceListLoading} selectServiceCategory={selectServiceCategory} setSelectServiceCategory={setSelectServiceCategory} service={service} setService={setService}/>
+                <ServiceCategoryNavi id="전체" isSelected={selectServiceCategory==="전체"} isServiceListLoading={isServiceListLoading} setServiceListLoading={setServiceListLoading} selectServiceCategory={selectServiceCategory} setSelectServiceCategory={setSelectServiceCategory} service={service} setService={setService}/>
                 {
                     serviceCategory.map((e,i)=>(
-                        <ServiceCategoryNavi key={i} id={e.id} isSelected={selectServiceCategory==e.id} isServiceListLoading={isServiceListLoading} setServiceListLoading={setServiceListLoading} selectServiceCategory={selectServiceCategory} setSelectServiceCategory={setSelectServiceCategory} service={service} setService={setService}/>
+                        <ServiceCategoryNavi key={i} id={e.id} isSelected={selectServiceCategory===e.id} isServiceListLoading={isServiceListLoading} setServiceListLoading={setServiceListLoading} selectServiceCategory={selectServiceCategory} setSelectServiceCategory={setSelectServiceCategory} service={service} setService={setService}/>
                     ))
                 }
             </div>
@@ -66,7 +66,7 @@ const PartyCreateList = ({selectServiceCategory,setSelectServiceCategory}) => {
                             service.map((e,i)=>{                         
                                 return(
                                     <div key={i} className={`${style.partyContent}`}>
-                                        <div className={`${style.partyContent__img} ${style.centerAlign}`}><img src={`/assets/serviceLogo/${e.englishName}.png`}></img></div>
+                                        <div className={`${style.partyContent__img} ${style.centerAlign}`}><img src={`/assets/serviceLogo/${e.englishName}.png`} alt={`${e.name} 로고 이미지`}></img></div>
                                         <div className={`${style.partyContent__name} ${style.centerAlign}`}>{e.name}</div>
                                         <div className={`${style.partyContent__txt} ${style.centerAlign}`}>매달 적립!</div>
                                         <div className={`${style.centerAlign}`}>
