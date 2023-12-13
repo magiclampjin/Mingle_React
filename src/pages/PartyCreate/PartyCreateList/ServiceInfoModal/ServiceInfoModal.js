@@ -24,7 +24,7 @@ const ServiceInfoModal = ({ isOpen, onRequestClose, contentLabel, selectService,
 
     // 요금 안내 확인 후 파티 생성창으로 이동하는 버튼 클릭 (다음 버튼)
     const handleNext = (e) => {
-
+        console.log("Gg");
     }
 
     useEffect(()=>{
@@ -90,7 +90,7 @@ const ServiceInfoModal = ({ isOpen, onRequestClose, contentLabel, selectService,
                     </div>
                 </div>
                 <div className={style.chkBox}>
-                    <input type="checkbox" id="chkBox" onChange={handleChange}></input><label for="chkBox">안내를 확인했어요.</label>
+                    <input type="checkbox" id="chkBox" onChange={handleChange}></input><label htmlFor="chkBox">안내를 확인했어요.</label>
                 </div>
                 <PurpleRectangleBtn title="다음" activation={isChked} onClick={handleNext} width={405} heightPadding={10}/>
             </>):null         
