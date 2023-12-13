@@ -1,0 +1,69 @@
+.container{
+    width: 650px;
+    font-family: 'Noto Sans KR', sans-serif;
+    padding: 0px 24px;
+    border-radius: 15px;
+    align-items: flex-start;
+    position: relative;
+    margin-bottom: 20px;
+    height: 50vh;
+}
+
+.profileBack{
+    width: 100%;
+    height: 70px;
+    position: relative;
+    top: 0px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    background-color: #6A57D7;
+}
+
+img{
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
+
+.nickname{
+    font-weight: 700;
+    position: absolute;
+    left: 50%; top: 130px;
+    transform: translate(-50%,-50%);
+}
+
+.updateIcon{
+    margin-top: 5px;
+    position: absolute;
+    left: 50%; top: 150px;
+    transform: translate(-50%,-50%);
+    cursor: pointer;
+}
+
+.profileBackBottom{
+    width: 100%;
+    height: 130px;
+    background-color: white;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.imgInput{
+    display: none;
+}
+
+
+@media (max-width:786px) {
+    .container{
+        width: 600px;
+    }
+}
+
+@media (max-width:500px) {
+    .container{
+        width: 500px;
+    }
+}
