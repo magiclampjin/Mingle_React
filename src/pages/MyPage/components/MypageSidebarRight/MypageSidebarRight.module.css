@@ -25,9 +25,7 @@
     background-color: rgb(227,227,227);
 }
 
-.withdrawBtn{
-    width: 100% !important;
-}
+
 
 @media (max-width:786px) {
     .moneyBox{

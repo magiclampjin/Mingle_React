@@ -19,7 +19,7 @@
     background-color: #6A57D7;
 }
 
-img{
+.profileImage{
     position: absolute;
     left: 50%;
     transform: translate(-50%,-50%);
