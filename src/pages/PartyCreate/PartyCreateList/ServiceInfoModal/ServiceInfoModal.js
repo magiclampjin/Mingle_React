@@ -47,8 +47,9 @@ const ServiceInfoModal = ({ isOpen, onRequestClose, contentLabel, selectService,
       }}
     >
         {
-            isServiceLoading?
-            <LoadingSpinnerMini height={43} width={27}/>:
+            isServiceLoading ?
+            <LoadingSpinnerMini height={43} width={27}/>
+            : service.name ? (
             <>
                 {/* {children} */}
                 <div>
@@ -68,7 +69,8 @@ const ServiceInfoModal = ({ isOpen, onRequestClose, contentLabel, selectService,
                         - 원단위 올림으로 10원 이내 차이가 있을 수 있어요.
                     </div>
                 </div>
-            </>
+            </>):null
+            
         }
       
         
