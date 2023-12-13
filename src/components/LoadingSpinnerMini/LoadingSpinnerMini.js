@@ -2,9 +2,10 @@ import React from 'react';
 import spinner from './Spinner.gif';
 import styles from './LoadingSpinnerMini.module.css';
 
-const LoadingSpinnerMini = ({height}) => {
+const LoadingSpinnerMini = ({height, width}) => {
   const heightStyle = {
-    height: height +"vh"
+    height: height +"vh",
+    width: width +"vw" 
   };
 
   return (

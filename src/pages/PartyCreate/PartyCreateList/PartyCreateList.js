@@ -8,7 +8,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import ServiceInfoModal from "./ServiceInfoModal/ServiceInfoModal";
+import { createContext } from "react";
 
+export const selectService = createContext();
 
 const PartyCreateList = ({selectServiceCategory,setSelectServiceCategory}) => {
     // 서비스 카테고리 목록
@@ -20,10 +23,18 @@ const PartyCreateList = ({selectServiceCategory,setSelectServiceCategory}) => {
     // 서비스 목록 불러오기 로딩 여부
     const [isServiceListLoading, setServiceListLoading]= useState(false);
 
+    // 서비스 모달창 열림 / 닫힘
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+
+    // 모달창을 띄울 서비스 종류
+    const [selectService, setSelectService] = useState("");
+
     // 숫자를 천 단위로 콤마 찍어주는 함수
     const formatNumber = (value) => {
         return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     };
+
+    // 초기 카테고리 & 카테고리별 목록 불러오기
     useEffect(()=>{
         setCategoryLoading(true);
         axios.get(`/api/party`).then(resp=>{
@@ -42,9 +53,29 @@ const PartyCreateList = ({selectServiceCategory,setSelectServiceCategory}) => {
         })
     },[]);
 
+    // 카테고리 불러오기 로딩
     if(isCategoryLoading){
         return <LoadingSpinner/>;
     }
+
+    // 서비스 정보 모달창 열기
+    const openModal = (e) => {
+        const partyContentElement = e.currentTarget;
+        const clickedElement = e.target; 
+       
+        if (clickedElement === partyContentElement || partyContentElement.contains(clickedElement)) {
+            // partyContent 또는 그 자식 요소를 클릭한 경우에만 처리
+            setSelectService(partyContentElement.dataset.id);
+            setModalIsOpen(true);
+        }
+        
+    };
+
+    // 서비스 정보 모달창 닫기
+    const closeModal = () => {
+        setModalIsOpen(false);
+    };
+
 
     return (
         <div className={`${style.partyCreateList}`}>  
@@ -65,24 +96,47 @@ const PartyCreateList = ({selectServiceCategory,setSelectServiceCategory}) => {
                 <div className={`${style.partyListLine} ${style.centerAlign}`}>
                     {   
                         isServiceListLoading ? (
-                            <LoadingSpinnerMini height={50}/>
+                            <LoadingSpinnerMini height={50} width={100}/>
                         ) :(
                             service.map((e,i)=>{                         
                                 return(
-                                    <div key={i} className={`${style.partyContent}`}>
-                                        <div className={`${style.partyContent__img} ${style.centerAlign}`}><img src={`/assets/serviceLogo/${e.englishName}.png`} alt={`${e.name} 로고 이미지`}></img></div>
-                                        <div className={`${style.partyContent__name} ${style.centerAlign}`}>{e.name}</div>
-                                        <div className={`${style.partyContent__txt} ${style.centerAlign}`}>매달 적립!</div>
-                                        <div className={`${style.centerAlign}`}>
-                                            <div className={`${style.maxPrice} ${style.centerAlign}`}>~{formatNumber(Math.ceil((e.price)/(e.maxPeopleCount))*(e.maxPeopleCount-1)-(e.commission)*(e.maxPeopleCount-1))}원</div>
-                                            <div className={`${style.hotTag} ${style.centerAlign}`}><FontAwesomeIcon icon={faStar} size="1x"/><div className={`${style.hatTagTxt}`}>HOT</div></div>
+                                    <>
+                                        <div key={i} data-id={e.id} className={`${style.partyContent}`} onClick={openModal}>
+                                            <div className={`${style.partyContent__img} ${style.centerAlign}`}><img src={`/assets/serviceLogo/${e.englishName}.png`} alt={`${e.name} 로고 이미지`}></img></div>
+                                            <div className={`${style.partyContent__name} ${style.centerAlign}`}>{e.name}</div>
+                                            <div className={`${style.partyContent__txt} ${style.centerAlign}`}>매달 적립!</div>
+                                            <div className={`${style.centerAlign}`}>
+                                                <div className={`${style.maxPrice} ${style.centerAlign}`}>~{formatNumber(Math.ceil((e.price)/(e.maxPeopleCount))*(e.maxPeopleCount-1)-(e.commission)*(e.maxPeopleCount-1))}원</div>
+                                                <div className={`${style.hotTag} ${style.centerAlign}`}><FontAwesomeIcon icon={faStar} size="1x"/><div className={`${style.hatTagTxt}`}>HOT</div></div>
+                                            </div>
                                         </div>
-                                    </div>  
+                                        
+                                        {/* <ServiceInfoModal
+                                            key={`modal-${i}`}
+                                            isOpen={modalIsOpen}
+                                            onRequestClose={closeModal}
+                                            contentLabel="정보 모달"
+                                            name = {e.name}
+                                        >
+                                            <b>요금제 선택</b>
+                                            <div>
+                                                {`${e.name}`} 프리미엄
+                                            </div>
+
+                                        </ServiceInfoModal> */}
+                                    </>
                                 ); 
                             })  
                         )                 
                     }
-                </div>    
+                </div> 
+                <ServiceInfoModal
+                    isOpen={modalIsOpen}
+                    onRequestClose={closeModal}
+                    contentLabel="정보 모달"
+                    selectService = {selectService}
+                >
+                </ServiceInfoModal>   
             </div>   
         </div>
     );
