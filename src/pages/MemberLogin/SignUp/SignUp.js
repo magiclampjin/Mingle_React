@@ -51,7 +51,7 @@ const SignUp = () => {
     phone: "",
     nickname: "",
     birth: "",
-    memberRecommenderId: "",
+    memberRecommenderId: true,
   });
   // 글씨 색 변경 css
   const colorStyle = (check) => {
@@ -207,6 +207,7 @@ const SignUp = () => {
 
   // 2단계 조건 검사
   useEffect(() => {
+    // 필요 정보를 모두 입력하면 넘어갈 수 있음, nickname은 아직 추가 안함
     if (
       user.id !== "" &&
       user.pw !== "" &&
@@ -218,11 +219,14 @@ const SignUp = () => {
       setNext(true);
     }
 
+    // 현재 단계가 3단계면 다음단계없음
     if (currentStep === "step3") {
       setNext(false);
     }
+  }, [user, pwCheck, currentStep]);
 
-    // 아이디 유효성 및 중복 검사
+  // 아이디 유효성 및 중복 검사
+  useEffect(() => {
     if (user.id !== "") {
       // 아이디 input가 비어있지 않으면
       // 정규식: 영문자, 숫자, 밑줄(_) 허용, 한글 불허용
@@ -273,8 +277,10 @@ const SignUp = () => {
       setCheckText((prev) => ({ ...prev, ["id"]: "" }));
       handleCondition("id", false);
     }
+  }, [user.id]);
 
-    // 비밀번호 유효성 검사
+  // 비밀번호 유효성 검사
+  useEffect(() => {
     if (user.pw !== "") {
       // 비밀번호 input에 값이 있을 때
       // 정규식 : 특수문자 1개, 대문자 1개, 소문자 1개가 모두 포함된 8~30글자
@@ -302,8 +308,10 @@ const SignUp = () => {
       setCheckText((prev) => ({ ...prev, ["pw"]: "" }));
       handleCondition("pw", false);
     }
+  }, [user.pw]);
 
-    // 비밀번호 확인 일치 검사
+  // 비밀번호 확인 일치 검사
+  useEffect(() => {
     if (pwCheck !== "") {
       // 비밀번호 확인 input에 값이 있을 때
       if (user.pw !== "") {
@@ -336,9 +344,10 @@ const SignUp = () => {
       setCheckText((prev) => ({ ...prev, ["pwCheck"]: "" }));
       handleCondition("pwCheck", false);
     }
-    console.log(user);
+  }, [user.pwCheck]);
 
-    // 이름 유효성 검사
+  // 이름 유효성 검사
+  useEffect(() => {
     if (user.name !== "") {
       // 정규식 : 한글 2~5글자인지 검사
       let regexName = /^[가-힣]{2,5}$/;
@@ -361,8 +370,10 @@ const SignUp = () => {
       setCheckText((prev) => ({ ...prev, ["name"]: "" }));
       handleCondition("name", false);
     }
+  }, [user.name]);
 
-    // 생년월일 유효성 검사
+  // 생년월일 유효성 검사
+  useEffect(() => {
     if (user.birth !== "") {
       // 정규식 : 1900~2000대에 태어났으며 1~12월생, 01~31일생
       let regexBirth = /^(19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])$/;
@@ -384,8 +395,10 @@ const SignUp = () => {
       setCheckText((prev) => ({ ...prev, ["birth"]: "" }));
       handleCondition("birth", false);
     }
+  }, [user.birth]);
 
-    // 이메일 유효성 검사
+  // 이메일 유효성 검사
+  useEffect(() => {
     if (user.email !== "") {
       // 정규식 : 영문 대소문자,숫자, 밑줄(_)이 오고, @다음 메인 도메인+점(.)+서브도메인
       let regexEmail = /^[a-zA-Z0-9_]+@[a-z]+\.[a-z]+(\.*[a-z])*$/;
@@ -394,6 +407,22 @@ const SignUp = () => {
         // 이메일 형식이 올바를 때
         setCheckText((prev) => ({ ...prev, ["email"]: "" }));
         handleCondition("email", true);
+        axios
+          .post("/api/member/emailDuplicateCheck", user.email)
+          .then((resp) => {
+            if (resp.data) {
+              // 중복된 이메일이 있을 때
+              setCheckText((prev) => ({
+                ...prev,
+                ["email"]: "중복된 이메일입니다. 사용하실 수 없습니다.",
+              }));
+              handleCondition("email", false);
+            } else {
+              // 중복된 이메일이 없을 때
+              setCheckText((prev) => ({ ...prev, ["email"]: "" }));
+              handleCondition("email", true);
+            }
+          });
       } else {
         // 이메일 형식이 올바르지 않을때
         setCheckText((prev) => ({
@@ -406,8 +435,10 @@ const SignUp = () => {
       setCheckText((prev) => ({ ...prev, ["email"]: "" }));
       handleCondition("email", false);
     }
+  }, [user.email]);
 
-    // 전화번호 유효성 검사
+  // 전화번호 유효성 검사
+  useEffect(() => {
     if (user.phone !== "") {
       //정규식 : 2~3자리, 3~4자리, 4자리로 지역번호를 포함한 번호도 입력 가능
       let regexPhone = /^^\d{2,3}(\d{3,4})(\d{4})$/;
@@ -416,6 +447,22 @@ const SignUp = () => {
         // 전화번호 형식이 올바를 때
         setCheckText((prev) => ({ ...prev, ["phone"]: "" }));
         handleCondition("phone", true);
+        axios
+          .post("/api/member/phoneDuplicateCheck", user.phone)
+          .then((resp) => {
+            if (resp.data) {
+              // 중복된 전화번호가 있을 때
+              setCheckText((prev) => ({
+                ...prev,
+                ["phone"]: "중복된 전화번호입니다. 사용하실 수 없습니다.",
+              }));
+              handleCondition("phone", false);
+            } else {
+              // 중복된 전화번호가 없을 때
+              setCheckText((prev) => ({ ...prev, ["phone"]: "" }));
+              handleCondition("phone", true);
+            }
+          });
       } else {
         // 전화번호 형식이 올바르지 않을때
         setCheckText((prev) => ({
@@ -428,11 +475,40 @@ const SignUp = () => {
       setCheckText((prev) => ({ ...prev, ["phone"]: "" }));
       handleCondition("phone", false);
     }
-  }, [user, pwCheck, currentStep]);
+  }, [user.phone]);
+
+  // 추천인 아이디 존재하는지 검사
+  useEffect(() => {
+    if (user.memberRecommenderId !== "") {
+      axios
+        .post("/api/member/idDuplicateCheck", user.memberRecommenderId)
+        .then((resp) => {
+          if (resp.data) {
+            // 추천인 아이디 있을 때
+            setCheckText((prev) => ({
+              ...prev,
+              ["memberRecommenderId"]: "",
+            }));
+            handleCondition("memberRecommenderId", true);
+          } else {
+            // 추천인 아이디가 없을 때
+            setCheckText((prev) => ({
+              ...prev,
+              ["memberRecommenderId"]: "존재하지 않는 추천인입니다.",
+            }));
+            handleCondition("memberRecommenderId", false);
+          }
+        });
+    } else {
+      setCheckText((prev) => ({ ...prev, ["memberRecommenderId"]: "" }));
+      handleCondition("memberRecommenderId", true);
+    }
+  }, [user.memberRecommenderId]);
 
   const handleCondition = (key, value) => {
     setSignupConditions((prev) => ({ ...prev, [key]: value }));
   };
+
   return (
     <div className={style.signupBox}>
       <div className={style.title}>회원가입</div>
@@ -948,7 +1024,10 @@ const SignUp = () => {
               <div
                 className={style.signup__chk}
                 id="memberRecommenderIdCheck"
-              ></div>
+                style={colorStyle(signupConditions.memberRecommenderId)}
+              >
+                {checkText.memberRecommenderId}
+              </div>
             </div>
           </div>
         </div>
