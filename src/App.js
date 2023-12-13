@@ -16,6 +16,7 @@ import NoticeBoard from "./pages/Board/NoticeBoard/NoticeBoard";
 import Post from "./pages/Board/Post/Post";
 import PopularPosts from "./pages/Board/PopularPosts/PopularPosts";
 import Mypage from "./pages/MyPage/Mypage";
+import AdminMain from './pages/AdminMain/AdminMain';
 
 import { createContext, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -43,6 +44,9 @@ function App() {
               <Route path="/party/*" element={<PartyCreate />}></Route>
               <Route path="/Mypage/*" element={<Mypage/>}></Route>
               <Route path="/denied" element={<Denied />}></Route>
+
+              <Route path="/admin/*" element={<AdminMain />}/>
+
               <Route path="/board" element={<Board/>}/>
               <Route path="/board/review" element={<Review/>}/>
               <Route path="/board/popularposts" element={<PopularPosts/>}/>

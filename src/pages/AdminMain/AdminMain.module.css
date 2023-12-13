@@ -1,0 +1,70 @@
+.background {
+    width: 100%;
+    height: 100%;
+    background-color: #8787D020;
+}
+
+.body {
+    max-width: 1300px;
+    margin: auto;
+    padding-top: 100px;
+    padding-bottom: 150px;
+}
+
+.box {
+    margin-bottom: 50px;
+}
+
+.componentTitle {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 50px;
+}
+
+.componentBox {
+    border-radius: 15px;
+    height: 350px;
+    background-color: #ffffff;
+}
+
+.componentSeeMore {
+    display: grid;
+    grid-template-columns: 1fr 120px;
+    height: 50px;
+}
+
+.componentSeeMoreBtn {
+    align-self: center;
+}
+
+.componentSeeMoreBtn > a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.componentSeeMoreBtn button:hover {
+    transition: background-color 0.5s ease;
+    background-color: #7B61FF;
+    color: #ffffff;
+}
+
+.componentLine {
+    display: grid;
+    grid-template-columns: 50px 1fr 3fr 1fr;
+    height: 30px;
+}
+
+.componentItem {
+    min-width: 0;
+    display: inline-block;
+    align-self: center;
+    text-align: center;
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;
+}
+
+a {
+    text-decoration: none !important;
+    color: rgba(0, 0, 0) !important;
+}

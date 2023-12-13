@@ -1,0 +1,45 @@
+.reportTitle {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.reportBox {
+    border-radius: 15px;
+    padding: 30px 20px 30px;
+    background-color: #ffffff;
+}
+
+.reportDate {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 14px;
+    color: #676D7C;
+}
+
+.reportContent {
+    padding-top: 10px;
+    min-height: 300px;
+}
+
+.reporterId {
+    font-size: 14px;
+    color: #676D7C;
+}
+
+.moveToPost {
+    font-size: 14px;
+}
+
+.reportBtns {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.reportBtns > button:first-child {
+    margin-right: 20px;
+}
+
+hr {
+    color: #676D7C;
+}
