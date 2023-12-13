@@ -34,8 +34,8 @@ function App() {
               <Route path="/" element={<Main />} />
               <Route path="/login/*" element={<MemberLogin />}></Route>
               <Route path="/party/*" element={<PartyCreate />}></Route>
-              <Route path="/denied" element={<Denied />}></Route>
               <Route path="/Mypage/*" element={<Mypage/>}></Route>
+              <Route path="/denied" element={<Denied />}></Route>
             </Routes>
             <Footer></Footer>
           </Router>
