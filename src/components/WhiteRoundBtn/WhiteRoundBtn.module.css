@@ -1,0 +1,8 @@
+.writeBtn {
+  padding: 5px 20px;
+  border: 1px solid #7b61ff;
+  border-radius: 15px;
+  background-color: transparent;
+  cursor: pointer;
+  color: #7b61ff;
+}

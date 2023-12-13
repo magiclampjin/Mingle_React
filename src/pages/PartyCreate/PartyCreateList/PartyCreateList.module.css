@@ -1,0 +1,104 @@
+
+.centerAlign {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.VAlign{
+    display:flex;
+    align-items: center;
+}
+
+.hAlign{
+    display:flex;
+    justify-content: center;
+}
+
+.dflex{
+    display: flex;
+}
+
+.partyName{
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.partyCategoryList{
+    margin: 30px 0 25px 0;
+}
+
+.partyCategory{
+    margin-left: 20px;
+    font-weight: bold;
+    color:#737577;
+    cursor: pointer;
+}
+
+.partyCategory:first-child{
+    margin-left: 0;
+}
+
+.partyContent{
+    width: 150px;
+    height: 220px;
+    box-shadow: 0 0 5px 0 #73757750 ;
+    padding:20px 10px;
+    border-radius: 10px;
+}
+
+.partyList>.partyListLine{
+    margin-bottom: 25px;
+}
+
+.partyList>.partyListLine:last-child{
+    margin-bottom: 0px;
+}
+
+
+.partyListLine>.partyContent{
+    margin-left: 25px;
+    cursor: pointer;
+}
+
+.partyListLine>.partyContent:first-child{
+    margin-left: 0;
+}
+
+
+.partyContent__img>img{
+    width: 90px;
+    height: 90px;
+    border-radius: 50px;
+}
+
+.partyContent__name{
+    font-weight: 500;
+    margin: 15px 0 10px 0;
+}
+
+.partyContent__txt{
+    font-size: 13px;
+    font-weight: 500;
+    color:#6A57D7;
+}
+
+.maxPrice{
+    font-size: 13px;
+    color:#737577;
+}
+
+.hotTag{
+    margin-left: 5px;
+    background-color: #F9DD7F45;
+    width: 50px;
+    border-radius: 20px;
+}
+.hotTag *{
+    font-size: 12px;
+    color:#FFAE6F;
+}
+
+.hatTagTxt{
+    margin-left: 2px;
+}

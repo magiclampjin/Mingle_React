@@ -1,0 +1,67 @@
+.loginBox {
+  margin: 100px auto 150px auto;
+  width: 400px;
+}
+.logo {
+  font-family: "LOTTERIACHAB";
+  font-size: 40px;
+  color: #7b61ff;
+  text-align: center;
+}
+.logo > span {
+  font-family: "LOTTERIACHAB";
+  font-size: 40px;
+  color: #f9b813;
+}
+.loginInputBox {
+  margin-top: 40px;
+}
+.loginInputBox input {
+  width: 400px;
+  height: 60px;
+  padding: 0 20px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 1px solid #676d7c50;
+  background-color: #7b61ff15;
+  outline: none;
+}
+input[type="password"] {
+  margin-top: 15px;
+}
+.loginOption {
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+.memberMenu {
+  display: flex;
+}
+.memberMenu div:first-child {
+  padding-right: 10px;
+  position: relative;
+}
+.memberMenu div:first-child:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0px;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 15px;
+  background: #676d7c50;
+}
+.memberMenu div:last-child {
+  padding-left: 10px;
+}
+input[type="checkbox"] {
+  margin-right: 10px;
+}
+@media (max-width: 786px) {
+  .loginBox {
+    margin: 100px auto 100px auto;
+  }
+}
