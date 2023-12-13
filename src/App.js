@@ -13,9 +13,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // 관리자
 import AdminMain from './pages/AdminMain/AdminMain';
-import DetailMemberManage from "./pages/AdminMain/pages/DetailMemberManage/DetailMemberManage";
-import DetailReportParty from './pages/AdminMain/pages/DetailMemberManage/pages/DetailReportParty/DetailReportParty';
-import ReportReadForm from "./pages/AdminMain/pages/ReportReadForm/ReportReadForm";
+// import DetailMemberManage from "./pages/AdminMain/pages/DetailMemberManage/DetailMemberManage";
+// import DetailReportParty from './pages/AdminMain/pages/DetailMemberManage/pages/DetailReportParty/DetailReportParty';
+// import ReportReadForm from "./pages/AdminMain/pages/ReportReadForm/ReportReadForm";
 
 export const MenuContext = createContext();
 export const LoginContext = createContext();
@@ -41,10 +41,10 @@ function App() {
               <Route path="/denied" element={<Denied />}></Route>
 
               {/* 관리자 */}
-              <Route path="/admin" element={<AdminMain />}/>
-              <Route path="/admin/ReportReadForm" element={<ReportReadForm />}/>
+              <Route path="/admin/*" element={<AdminMain />}/>
+              {/* <Route path="/admin/ReportReadForm" element={<ReportReadForm />}/>
               <Route path="/admin/DetailMemberManage" element={<DetailMemberManage />}/>
-              <Route path="/admin/DetailMemberManage/DetailReportParty" element={<DetailReportParty />}/>
+              <Route path="/admin/DetailMemberManage/DetailReportParty" element={<DetailReportParty />}/> */}
             </Routes>
             <Footer></Footer>
           </Router>

@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const ReportReadForm = () => {
+
     const location = useLocation();
     const id = location.state.id; // location으로 데이터에 접근해 받아옴
     const category = location.state.category;
@@ -21,7 +22,6 @@ const ReportReadForm = () => {
         } else if(category === "댓글") {
             axios.get(`/api/admin/reportReplyDetailInfo/${id}`).then(resp => {
                 setReportObj(resp.data);
-                console.log("reportObj : " + resp.data.reply);
             })
         }
     }, [id, category])
