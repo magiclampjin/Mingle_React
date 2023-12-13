@@ -3,6 +3,11 @@ import WhiteRectangleBtn from '../../../../components/WhiteRectangleBtn/WhiteRec
 import style from '../MypageSidebarRight/MypageSidebarRight.module.css';
 
 const MypageSidebarRight = () =>{
+
+    const withdrawBtn = {
+        fontSize : '14px'
+    };
+
     return(
         <div className={style.moneyBox}>
             <div>
@@ -10,7 +15,12 @@ const MypageSidebarRight = () =>{
                 <div className={style.money__inner}>0원</div>
                 <div className={style.money__inner}></div>
                 <div className={style.money__inner}>
-                    <WhiteRectangleBtn className={style.withdrawBtn} title={"인출하기"}></WhiteRectangleBtn>
+                    <WhiteRectangleBtn 
+                    style={withdrawBtn}
+                    width={170} 
+                    heightPadding={10} 
+                    title={"인출하기"}
+                    ></WhiteRectangleBtn>
                 </div>
             </div>
         </div>
