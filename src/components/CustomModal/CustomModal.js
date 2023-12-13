@@ -14,6 +14,8 @@ const CustomModal = ({ isOpen, onRequestClose, contentLabel, children }) => {
       isOpen={isOpen}
       onRequestClose={onRequestClose}
       contentLabel={contentLabel}
+      width = {width}
+      height = {height}
       style={{
         overlay: {
           backgroundColor: 'rgba(0, 0, 0, 0.5)'
@@ -25,8 +27,8 @@ const CustomModal = ({ isOpen, onRequestClose, contentLabel, children }) => {
           bottom: 'auto',
           marginRight: '-50%',
           transform: 'translate(-50%, -50%)',
-          width: '60%', // 모달의 가로 크기
-          height: '80%', // 모달의 세로 크기
+          width: '40%', // 모달의 가로 크기
+          height: '30%', // 모달의 세로 크기
           maxWidth: '500px', // 최대 가로 크기
           maxHeight: '300px', // 최대 세로 크기
           overflow: 'auto' // 내용이 넘칠 경우 스크롤

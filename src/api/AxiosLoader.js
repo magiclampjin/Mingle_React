@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const AxiosLoader = (setLoading) => {
     const axiosInstance = axios.create({
-      baseURL: 'http://localhost', // 나중에 배포할 때 사이트 이름 바꿔줘야 함
+      //baseURL: 'http://localhost', // 나중에 배포할 때 사이트 이름 바꿔줘야 함
     });
   
     axiosInstance.interceptors.request.use(
