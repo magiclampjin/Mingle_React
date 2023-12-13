@@ -32,6 +32,10 @@ const Board = () => {
             console.log(resp.data);
         })
 
+        axios.get("/api/post/test").then(resp => {
+            console.log(resp.data)
+        })
+
 
     }, []);
 

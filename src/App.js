@@ -29,7 +29,6 @@ function App() {
         <>
           <Router>
             <Header></Header>
-
             <Routes>
               <Route path="/" element={<Main />} />
               <Route path="/login/*" element={<MemberLogin />}></Route>
