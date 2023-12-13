@@ -1,12 +1,13 @@
 import style from "./SignUp.module.css";
 import PurpleRectangleBtn from "../../../components/PurpleRectangleBtn/PurpleRectangleBtn";
 import GrayRectangleBtn from "../../../components/GrayRectangleBtn/GrayRectangleBtn";
+import WhiteRoundBtn from "../../../components/WhiteRoundBtn/WhiteRoundBtn";
+import axios from "axios";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import WhiteRoundBtn from "../../../components/WhiteRoundBtn/WhiteRoundBtn";
 
 const SignUp = () => {
   const [currentStep, setCurrentStep] = useState("step1");
@@ -22,7 +23,7 @@ const SignUp = () => {
     phone: "",
     nickname: "",
     birth: "",
-    member_recommender_id: "",
+    memberRecommenderId: "",
   });
   const navi = useNavigate();
 
@@ -73,8 +74,6 @@ const SignUp = () => {
     }
     if (currentStep === "step2") {
       setNext(false);
-      console.log("durl2");
-      console.log(currentStep);
     }
   }, [chkUse, chkPrivacy, currentStep]);
 
@@ -118,7 +117,6 @@ const SignUp = () => {
 
   //취소 혹은 이전 버튼 눌렀을 때
   const handleCancle = () => {
-    console.log("현재 단계" + currentStep);
     // 현재 단계 currentStep 제거
     let currentStepElement = document.getElementById(currentStep);
     if (currentStepElement) {
@@ -154,6 +152,22 @@ const SignUp = () => {
     setUser((prev) => ({ ...prev, [name]: value }));
   };
 
+  const [idcheckText, setIdCheckText] = useState("");
+  const [signupConditions, setSignupConditions] = useState({
+    id: "",
+    pw: "",
+    name: "",
+    email: "",
+    phone: "",
+    nickname: "",
+    birth: "",
+    memberRecommenderId: "",
+  });
+  const colorStyle = (check) => {
+    return {
+      color: check ? "forestgreen" : "#ff4500",
+    };
+  };
   // 2단계 조건 검사
   useEffect(() => {
     console.log(user);
@@ -169,11 +183,54 @@ const SignUp = () => {
     }
 
     if (currentStep === "step3") {
-      console.log("durl");
-      console.log(currentStep);
       setNext(false);
     }
+
+    // 아이디 검사
+    if (user.id !== "") {
+      console.log(user.id);
+      // 정규식: 영문자, 숫자, 밑줄(_) 허용, 한글 불허용
+      const regex = /^[a-zA-Z0-9_]+$/;
+      // 입력값과 정규식을 비교하여 매치 여부 확인
+      const isValid = regex.test(user.id);
+      console.log(isValid);
+
+      // 영문자, 숫자, 밑줄만 입력했을 때 아이디 중복 검사 실행
+      if (isValid) {
+        axios.post("/api/member/idDuplicateCheck", user.id).then((resp) => {
+          console.log(resp.data === true);
+          if (resp.data) {
+            setIdCheckText("중복된 아이디입니다. 사용하실 수 없습니다.");
+            handleCondition("id", false);
+          } else {
+            setIdCheckText("");
+            // 정규식: 8~14자로 구성, 알파벳 대소문자, 숫자, _로만 구성
+            let regexId = /^[\w]{8,14}$/;
+            let resultId = regexId.test(user.id);
+            console.log(resultId);
+            if (resultId) {
+              setIdCheckText("사용가능한 아이디입니다.");
+              handleCondition("id", true);
+            } else {
+              setIdCheckText(
+                "8~14자의 영문자, 숫자, 밑줄(_)만 입력 가능합니다."
+              );
+              handleCondition("id", false);
+            }
+          }
+        });
+      } else {
+        setIdCheckText("8~14자의 영문자, 숫자, 밑줄(_)만 입력 가능합니다.");
+        handleCondition("id", false);
+      }
+    } else {
+      setIdCheckText("");
+    }
   }, [user, currentStep]);
+
+  const handleCondition = (key, value) => {
+    setSignupConditions((prev) => ({ ...prev, [key]: value }));
+  };
   return (
     <div className={style.signupBox}>
       <div className={style.title}>회원가입</div>
@@ -513,10 +570,16 @@ const SignUp = () => {
                 type="text"
                 id="idInput"
                 name="id"
-                placeholder="8~14자의 영문, 숫자, _를 사용할 수 있습니다."
+                placeholder="8~14자의 영문, 숫자, 밑줄(_)를 사용할 수 있습니다."
                 onChange={handleChange}
               />
-              <div className={style.signup__chk} id="idCheck"></div>
+              <div
+                className={style.signup__chk}
+                id="idCheck"
+                style={colorStyle(signupConditions.id)}
+              >
+                {idcheckText}
+              </div>
             </div>
           </div>
           <div className={style.basicInfo__line} id="pw">
@@ -551,7 +614,9 @@ const SignUp = () => {
         <div className={style.signupTitle}>내 정보 입력</div>
         <div className={style.myInfo}>
           <div className={style.myInfo__line} id="name">
-            <div className={style.signup__title}>이름</div>
+            <div className={style.signup__title}>
+              이름<span className={style.essential}>*</span>
+            </div>
             <div className={style.signup__inputBox}>
               <input
                 type="text"
@@ -566,7 +631,9 @@ const SignUp = () => {
             </div>
           </div>
           <div className={style.myInfo__line} id="birth">
-            <div className={style.signup__title}>생년월일</div>
+            <div className={style.signup__title}>
+              생년월일<span className={style.essential}>*</span>
+            </div>
             <div className={style.signup__inputBox}>
               <input
                 type="text"
@@ -579,7 +646,9 @@ const SignUp = () => {
             </div>
           </div>
           <div className={style.myInfo__line} id="email">
-            <div className={style.signup__title}>이메일</div>
+            <div className={style.signup__title}>
+              이메일<span className={style.essential}>*</span>
+            </div>
             <div className={style.signup__inputBox}>
               <input
                 type="text"
@@ -592,7 +661,9 @@ const SignUp = () => {
             </div>
           </div>
           <div className={style.myInfo__line} id="phone">
-            <div className={style.signup__title}>전화번호</div>
+            <div className={style.signup__title}>
+              전화번호<span className={style.essential}>*</span>
+            </div>
             <div className={style.signup__inputBox}>
               <input
                 type="text"
@@ -605,7 +676,9 @@ const SignUp = () => {
             </div>
           </div>
           <div className={style.myInfo__line} id="nick">
-            <div className={style.signup__title}>닉네임</div>
+            <div className={style.signup__title}>
+              닉네임<span className={style.essential}>*</span>
+            </div>
             <div className={style.signup__inputBox}>
               <input
                 type="text"

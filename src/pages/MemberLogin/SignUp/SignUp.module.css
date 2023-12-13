@@ -65,6 +65,10 @@
 .privacyAgree {
   margin-top: 30px;
 }
+.agrreBox input,
+.agrreBox label {
+  cursor: pointer;
+}
 .agree__span {
   color: #ff4500;
   margin-left: 10px;
@@ -151,6 +155,7 @@
 .essential {
   color: #ff4500;
   vertical-align: middle;
+  margin-left: 3px;
 }
 .signup__inputBox {
   width: calc(100% - 120px);
@@ -164,6 +169,8 @@
 .signup__chk {
   height: 25px;
   color: #ff4500;
+  font-size: 14px;
+  padding-left: 10px;
 }
 .myInfo__line:first-child .signup__inputBox,
 .myInfo__line:last-child .signup__inputBox {

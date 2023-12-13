@@ -2,8 +2,8 @@ import style from "./Login.module.css";
 import PurpleRectangleBtn from "../../../components/PurpleRectangleBtn/PurpleRectangleBtn";
 import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 import axios from "axios";
-import { Cookies } from "react-cookie";
 
+import { Cookies } from "react-cookie";
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
 import { LoginContext } from "../../../App";
