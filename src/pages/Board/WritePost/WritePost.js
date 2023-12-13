@@ -23,6 +23,16 @@ const WritePost = () => {
         <div className={styles.board}> 
             <div className={styles.post__container}>
             <h1 className={styles.post__title}>게시물 등록</h1>
+            <div className={styles.post__category}>
+                <select
+                    value={category}
+                    onChange={(event) => setCategory(event.target.value)}
+                >
+                    <option value="자유게시판">자유게시판</option>
+                    <option value="공지게시판">공지게시판</option>
+                    <option value="리뷰게시판">리뷰게시판</option>
+                </select>
+            </div>
             <div className={styles.post__header}>
                 <input
                     type="text"
@@ -71,16 +81,7 @@ const WritePost = () => {
                     취소
                 </button>
             </div>
-            <div className={styles.post__category}>
-                <select
-                    value={category}
-                    onChange={(event) => setCategory(event.target.value)}
-                >
-                    <option value="자유게시판">자유게시판</option>
-                    <option value="공지게시판">공지게시판</option>
-                    <option value="리뷰게시판">리뷰게시판</option>
-                </select>
-            </div>
+            
         </div>
 
         </div>

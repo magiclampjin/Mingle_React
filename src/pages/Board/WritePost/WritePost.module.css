@@ -9,11 +9,11 @@
 
 .post__container {
     width: 100%;
-    max-width: 500px;
     margin: 0 auto;
     padding: 20px;
     border: 1px solid #ccc;
     background-color: #fff;
+    border-radius: 10px;
 }
 
 .post__header {
@@ -77,11 +77,17 @@
 }
 
 .post__button {
-    padding: 10px;
-    border: 1px solid #ccc;
+    width: 150px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: #7b61ff;
+    border : none;
+    border-radius: 4px;
+    margin-left: 10px;
     cursor: pointer;
-    background-color: #fff;
-    color: #000;
+    font-size: 18px;
+    color:white;
+    transition-duration: 0.3s;
 }
 
 .post__button:hover {
