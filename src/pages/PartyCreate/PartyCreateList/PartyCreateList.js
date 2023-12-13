@@ -29,6 +29,9 @@ const PartyCreateList = ({selectServiceCategory,setSelectServiceCategory}) => {
     // 모달창을 띄울 서비스 종류
     const [selectService, setSelectService] = useState("");
 
+    // 요금 안내 확인용 chkBox 
+    const [isChked, setChked] = useState(false);
+
     // 숫자를 천 단위로 콤마 찍어주는 함수
     const formatNumber = (value) => {
         return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -67,6 +70,7 @@ const PartyCreateList = ({selectServiceCategory,setSelectServiceCategory}) => {
             // partyContent 또는 그 자식 요소를 클릭한 경우에만 처리
             setSelectService(partyContentElement.dataset.id);
             setModalIsOpen(true);
+            setChked(false);
         }
         
     };
@@ -74,6 +78,7 @@ const PartyCreateList = ({selectServiceCategory,setSelectServiceCategory}) => {
     // 서비스 정보 모달창 닫기
     const closeModal = () => {
         setModalIsOpen(false);
+        setChked(false);
     };
 
 
@@ -122,7 +127,9 @@ const PartyCreateList = ({selectServiceCategory,setSelectServiceCategory}) => {
                     contentLabel="정보 모달"
                     selectService = {selectService}
                     width={450}
-                    height={400}
+                    height={430}
+                    isChked={isChked}
+                    setChked={setChked}
                 >
                 </ServiceInfoModal>   
             </div>   

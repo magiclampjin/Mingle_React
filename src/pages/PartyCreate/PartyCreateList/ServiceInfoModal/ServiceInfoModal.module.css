@@ -39,11 +39,10 @@
 .chkBox{
     font-size: 13px;
     display: flex;
-    align-items: end;
     margin-left: 10px;
     margin-bottom: 20px;
 }
 
 #chkBox{
-    margin-bottom: 1.8px;
+    margin-top: 3px;
 }
