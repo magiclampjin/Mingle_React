@@ -10,3 +10,14 @@
     justify-content: center;
     padding-top: 60px;
 }
+
+.dropDownNavi{
+    display: none;
+    
+}
+
+@media (max-width:786px) {
+    .dropDownNavi{
+        display: block;
+    }
+}

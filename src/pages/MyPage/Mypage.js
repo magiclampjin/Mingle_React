@@ -8,19 +8,32 @@ import MemberInfoUpdate from './MemberInfoUpdate/MemberInfoUpdate';
 import PaymentManage from './PaymentManage/PaymentManage';
 import PaymentRecord from './PaymentRecord/PaymentRecord';
 import { createContext,useState } from 'react';
+import MypageHam from './components/MypageHam/MypageHam';
 
+// sidebar에서 사용하는 컨텍스트
 export const mypageMenuContext = createContext();
 
 const Mypage= () => {
 
-    const [menu, setMenu] = useState("메뉴");
+    // sidebar로 넘겨주는 State
+    const [menu, setMenu] = useState("");
 
-    console.log(menu);
+    // 드롭다운 메뉴 State
+    const [dropDown, setDropDown] = useState(true);
 
+    // on,off
+    const ondropDownHandle = () =>{
+        setDropDown(!dropDown);
+    }
+    
     return(
         <mypageMenuContext.Provider value={{menu,setMenu}}>
             <div className={style.container}>
-                <div className={style.container__inner}>
+                <div className={style.dropDownNavi} onClick={ondropDownHandle}>
+                    <MypageHam></MypageHam>
+                </div>
+                {dropDown && 
+                 <div className={style.container__inner}>
                     <div >
                         <MyPageSideBarLeft></MyPageSideBarLeft>
                     </div>
@@ -37,6 +50,8 @@ const Mypage= () => {
                         <MypageSidebarRight></MypageSidebarRight>
                     </div>
                 </div>
+                }
+               
             </div>
         </mypageMenuContext.Provider>
     );

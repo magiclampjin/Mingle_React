@@ -10,13 +10,12 @@ const MyPageSideBarLeft = () =>{
     // 메뉴 컨텍스트 사용
     const {menu, setMenu} = useContext(mypageMenuContext);
 
-
     // 사이드바 클릭 시 내용에 맞게 setMenu
     const handleClickNav = (e) => {
         let value = e.target.parentNode.textContent;
         setMenu(value);
     };
-
+    // 클릭한 내용과 같으면 적용하는 스타일
     const backStyle = {
         color:"rgb(64, 64, 204)"
     };
