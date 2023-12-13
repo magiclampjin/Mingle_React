@@ -1,0 +1,48 @@
+.title{
+    font-size: 23px;
+    font-weight: 900;
+}
+
+.servicePriceInfo{
+    margin-bottom: 5px;
+}
+
+.servicePlanNotice{
+    margin: 10px 0 20px 0;
+    color:#737577;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.serviceNotice{
+    font-size: 14px;
+    border: 2px solid #7B61FF;
+    border-radius: 20px;
+    padding:20px;
+}
+
+.servicePlan{
+    margin-bottom: 15px;
+    font-weight: 500;
+    font-size: 18px;
+    color:#7B61FF;
+}
+
+.servicePlan *{
+    color:#7B61FF;  
+}
+
+.serviceNoticeUL *{
+    list-style:inside;
+}
+
+.chkBox{
+    font-size: 13px;
+    display: flex;
+    margin-left: 10px;
+    margin-bottom: 20px;
+}
+
+#chkBox{
+    margin-top: 3px;
+}

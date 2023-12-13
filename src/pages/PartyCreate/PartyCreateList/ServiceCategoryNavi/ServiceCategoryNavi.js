@@ -17,8 +17,8 @@ const ServiceCategoryNavi = ({id,isSelected,setSelectServiceCategory, service, s
     };
 
     const CategoryStyle = {
-        borderBottom : isSelected == 1 ? "3px solid black" : "",
-        color: isSelected == 1 ? "black" : "#737577"
+        borderBottom : isSelected === true ? "3px solid black" : "",
+        color: isSelected === true ? "black" : "#737577"
     };
 
     return (

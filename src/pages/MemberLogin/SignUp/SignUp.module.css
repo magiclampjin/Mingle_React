@@ -55,8 +55,165 @@
   color: #7d7d7d;
 }
 
+.agrreBox,
+.signupBox {
+  padding: 0 35px;
+  margin-top: 30px;
+}
+
+.useAgree,
+.privacyAgree {
+  margin-top: 30px;
+}
+.agrreBox input,
+.agrreBox label {
+  cursor: pointer;
+}
+.agree__span {
+  color: #ff4500;
+  margin-left: 10px;
+}
+.useDetail {
+  margin: 20px 0 0 25px;
+  border: 1px solid #d1d2d850;
+  padding: 20px;
+  background-color: #d1d2d850;
+  height: 400px;
+  overflow-y: auto;
+}
+
+.useDetail::-webkit-scrollbar {
+  width: 10px;
+}
+.useDetail::-webkit-scrollbar-thumb {
+  background-color: #d1d2d8;
+  border-radius: 10px;
+  border: 7px solid transparent; /* 스크롤을 적용할 영역 색깔과 border 색상을 똑같이 맞춘다 */
+}
+.useDetail::-webkit-scrollbar-track {
+  background-color: #d1d2d850; /* 스크롤바 뒷 배경을 투명 처리한다 */
+}
+.privacyAgree::-webkit-scrollbar {
+  width: 10px;
+}
+.privacyAgree::-webkit-scrollbar-thumb {
+  background-color: #d1d2d8;
+  border-radius: 10px;
+  border: 7px solid transparent; /* 스크롤을 적용할 영역 색깔과 border 색상을 똑같이 맞춘다 */
+}
+.privacyAgree::-webkit-scrollbar-track {
+  background-color: #d1d2d850; /* 스크롤바 뒷 배경을 투명 처리한다 */
+}
+
+.article:not(:first-child) {
+  margin-top: 50px;
+}
+.article__title {
+  font-weight: 700;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+.article__text {
+  font-size: 14px;
+}
+
+.article__text:not(:first-child) {
+  margin-top: 20px;
+}
+.stepBtns {
+  text-align: center;
+  margin-top: 50px;
+}
+.stepBtns button:last-child {
+  margin-left: 20px;
+}
+.signupTitle {
+  padding: 0 0 7px 24px;
+  font-size: 20px;
+  font-weight: 700;
+}
+.signupTitle:not(:first-child) {
+  margin-top: 100px;
+}
+.basicInfo,
+.myInfo,
+.etcInfo {
+  border: 1px solid #676d7c50;
+  border-radius: 20px;
+  padding: 16px 24px;
+}
+.basicInfo__line,
+.myInfo__line,
+.etcInfo__line {
+  display: flex;
+}
+.signup__title {
+  margin-right: 15px;
+  width: 120px;
+  padding-top: 10px;
+}
+.essential {
+  color: #ff4500;
+  vertical-align: middle;
+  margin-left: 3px;
+}
+.signup__inputBox {
+  width: calc(100% - 120px);
+}
+.signup__inputBox input {
+  padding: 10px;
+  border-radius: 7px;
+  border: 1px solid #676d7c50;
+  width: 100%;
+}
+.signup__chk {
+  height: 25px;
+  color: #ff4500;
+  font-size: 14px;
+  padding-left: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.myInfo__line:first-child .signup__inputBox,
+.myInfo__line:last-child .signup__inputBox {
+  display: flex;
+  margin-bottom: 25px;
+  align-items: center;
+}
+.myInfo__line:first-child .signup__inputBox input,
+.myInfo__line:last-child .signup__inputBox input {
+  width: 200px;
+}
+.myInfo__line:first-child .signup__chk button,
+.myInfo__line:last-child .signup__chk button {
+  margin: 0 10px;
+}
+
+.myInfo__line:first-child .signup__chk,
+.myInfo__line:last-child .signup__chk {
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+
 @media (max-width: 786px) {
   .signupBox {
     margin: 100px auto 100px auto;
+  }
+  .myInfo__line:first-child .signup__inputBox input,
+  .myInfo__line:last-child .signup__inputBox input {
+    width: 100%;
+  }
+  .myInfo__line:first-child .signup__inputBox,
+  .myInfo__line:last-child .signup__inputBox {
+    display: block;
+    margin-bottom: 0;
+    align-items: center;
+  }
+
+  .myInfo__line:first-child .signup__chk button,
+  .myInfo__line:last-child .signup__chk button {
+    margin: 0;
   }
 }

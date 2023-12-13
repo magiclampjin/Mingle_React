@@ -37,6 +37,107 @@
     font-size: 14px;
     color: rgb(101,101,101);
 }
+.flex{
+    display: flex;
+}
+/* 카드 등록되었을 때 */
+.inner__card{
+    line-height: 42px;
+    display: flex;
+    justify-content: space-between;
+}
+.cardLeft{
+    display: flex;
+    justify-content: space-between;
+    width: 300px; height: 52px;
+    border-radius: 13px;
+    background-color: rgb(246, 246, 246);
+    padding: 5px 13px;
+}
+
+.cardRight{
+    line-height: 52px;
+    display: flex;
+}
+
+.cardRight>div:nth-child(1){
+    margin-right: 5px;
+}
+
+.bankName{
+    font-weight: 600;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+.bankAccount{
+    font-size: 14px;
+}
+
+/* 모달 */
+/* Modal */
+.modalTitle{
+    font-size: 18px;
+    font-weight: 600;
+    text-align: start;
+}
+
+.modalSubTitle{
+    font-size: 14px;
+    text-align: start;
+    color: rgb(101, 101, 101);
+}
+
+.modalBtn{
+    margin-top:15px;
+    text-align: right;
+}
+
+.closeBtn{
+    text-align: right;
+}
+
+/* card */
+.cardBox{
+    padding-top: 20px;
+}
+.cardBox>div:nth-child(1)>input{
+    width: 100%;
+    height: 50px;
+    padding-left: 10px;
+    border-radius: 15px;
+    border: 1px solid rgb(101, 101, 101);
+    margin-bottom: 10px;
+}
+.card{
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.card>div:nth-child(1){
+    padding-right: 10px;
+}
+
+.card input[type="text"]{
+    margin-top: 15px;
+    width: 100%;
+    height: 50px;
+    padding-left: 10px;
+    border-radius: 15px;
+    border: 1px solid rgb(101, 101, 101);
+}
+
+.card input[type="password"]{
+    width: 100%;
+    height: 50px;
+    padding-left: 10px;
+    border-radius: 15px;
+    border: 1px solid rgb(101, 101, 101);
+}
+
+.card>div{
+    width: 50%;
+}
 
 @media (max-width:786px) {
     .container{

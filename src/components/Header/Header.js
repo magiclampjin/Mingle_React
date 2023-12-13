@@ -45,7 +45,6 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    console.log("로그아웃 클릭");
     axios.post("/api/member/logout").then((resp) => {
       setLoginId(null);
       // 아이디 기억하기 하지 않으면 쿠키에 저장된 아이디 지우기
@@ -105,7 +104,9 @@ const Header = () => {
                     <div className={style.proffileModalInfo}>
                       <div>{loginNick}님</div>
                       <div>
+                        <Link to="/Mypage">
                         마이페이지
+                        </Link>
                         <FontAwesomeIcon icon={faAngleRight} />
                       </div>
                     </div>
@@ -122,15 +123,59 @@ const Header = () => {
           </div>
         </div>
         <div className={style.loginBtn}>
-          <Link to="login">
+          {/* <Link to="login">
             <PurpleRoundBtn title={"로그인"} activation={true}></PurpleRoundBtn>
-          </Link>
+          </Link> */}
+          {loginId === "" || loginId === null ? (
+            <Link to="login">
+              <PurpleRoundBtn
+                title={"로그인"}
+                activation={true}
+              ></PurpleRoundBtn>
+            </Link>
+          ) : (
+            <>
+              <div className={style.menu__user}>
+                <FontAwesomeIcon icon={faBell} />
+                <img
+                  src={profileUrl}
+                  alt=""
+                  className={style.profileImg}
+                  onClick={openModal}
+                />
+              </div>
+
+              <ProfileModal
+                isOpen={modalIsOpen}
+                onRequestClose={closeModal}
+                contentLabel="정보 모달"
+              >
+                <div className={style.profileInner}>
+                  <img
+                    src={profileUrl}
+                    alt=""
+                    className={style.profileModalImg}
+                  />
+                  <div className={style.proffileModalInfo}>
+                    <div>{loginNick}님</div>
+                    <div>
+                      마이페이지
+                      <FontAwesomeIcon icon={faAngleRight} />
+                    </div>
+                  </div>
+                </div>
+                <button className={style.transparentBtn} onClick={handleLogout}>
+                  로그아웃
+                </button>
+              </ProfileModal>
+            </>
+          )}
         </div>
       </div>
 
       <div className={style.menu__naviTabSize}>
         <div className={style.navi__conf}>나의 파티</div>
-        <div className={style.navi__conf}>파티 만들기</div>
+        <div className={style.navi__conf}><Link to="party">파티 만들기</Link></div>
         <div className={style.navi__conf}>파티 찾기</div>
         <div className={style.navi__conf}>게시판</div>
         <div className={style.navi__conf}>자주 묻는 질문</div>

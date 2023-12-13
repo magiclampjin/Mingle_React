@@ -1,0 +1,35 @@
+.body {
+    margin-bottom: 50px;
+}
+
+.reportReplyTitle {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 50px;
+}
+
+.reportReplyBox {
+    border: 1px solid #DFE2E6;
+    border-radius: 10px;
+    height: 500px;
+}
+
+.reportReplyLine {
+    display:grid;
+    grid-template-columns: 50px 1fr 3fr 1fr;
+    height: 50px;
+}
+
+.reportReplyLine:hover {
+    background-color: #DFE2E640;
+}
+
+.reportReplyItem {
+    min-width: 0;
+    display: inline-block;
+    align-self: center;
+    text-align: center;
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;
+}
