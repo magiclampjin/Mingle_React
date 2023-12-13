@@ -107,11 +107,11 @@
 /* email */
 .emailBox{
     padding: 0 25px;
-    padding-top: 10px;
+    padding-top: 20px;
 }
 .email__inner{
     display: flex;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 .email__inner>div:nth-child(1){
     width: 80%;
