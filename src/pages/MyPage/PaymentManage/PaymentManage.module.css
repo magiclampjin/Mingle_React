@@ -38,6 +38,71 @@
     color: rgb(101,101,101);
 }
 
+/* 모달 */
+/* Modal */
+.modalTitle{
+    font-size: 18px;
+    font-weight: 600;
+    text-align: start;
+}
+
+.modalSubTitle{
+    font-size: 14px;
+    text-align: start;
+    color: rgb(101, 101, 101);
+}
+
+.modalBtn{
+    margin-top:15px;
+    text-align: right;
+}
+
+.closeBtn{
+    text-align: right;
+}
+
+/* card */
+.cardBox{
+    padding-top: 10px;
+}
+.cardBox>div:nth-child(1)>input{
+    width: 100%;
+    height: 50px;
+    padding-left: 10px;
+    border-radius: 15px;
+    border: 1px solid rgb(101, 101, 101);
+    margin-bottom: 10px;
+}
+.card{
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.card>div:nth-child(1){
+    padding-right: 10px;
+}
+
+.card input[type="text"]{
+    margin-top: 15px;
+    width: 100%;
+    height: 50px;
+    padding-left: 10px;
+    border-radius: 15px;
+    border: 1px solid rgb(101, 101, 101);
+}
+
+.card input[type="password"]{
+    width: 100%;
+    height: 50px;
+    padding-left: 10px;
+    border-radius: 15px;
+    border: 1px solid rgb(101, 101, 101);
+}
+
+.card>div{
+    width: 50%;
+}
+
 @media (max-width:786px) {
     .container{
         width: 600px;
