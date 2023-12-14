@@ -20,8 +20,12 @@ const PartyCreatePage = () =>{
     // 다음 버튼 클릭
     const handleNext = () =>{
         if(isGoNext){
-            setStep(prev=>prev+1);
-            setGoNext(false);
+            setStep(prev=>
+                {   
+                    if(prev+1 !== 2) setGoNext(false);
+                    return prev+1;
+                });
+           
         }
     }
 
