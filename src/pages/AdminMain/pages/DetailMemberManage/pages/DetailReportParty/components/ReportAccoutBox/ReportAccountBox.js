@@ -17,7 +17,7 @@ const ReportAccountBox = () => {
     }, []);
 
     return (
-        <div className={style.box}>
+        <div className={parentStyle.box}>
             <div className={parentStyle.componentTitle}>파티 계정 신고</div>
             <div className={style.componentBox}>
                 {report.map((e, i) => {
