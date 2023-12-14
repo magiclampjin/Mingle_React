@@ -29,7 +29,7 @@ const MemberManageBox = () => {
                 </div>
                 {report.map((e, i) => {
                     return(
-                        <div className={style.componentLine}>
+                        <div key={i} className={style.componentLine}>
                             <div className={style.componentItem}>{e.id}</div>
                             <div className={style.componentItem}>{e.memberReporterId}</div>
                             <div className={style.componentItem}>{e.content}</div>
