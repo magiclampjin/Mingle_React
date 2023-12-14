@@ -5,6 +5,7 @@ import PurpleRoundBtn from '../../../../components/PurpleRoundBtn/PurpleRoundBtn
 import WhiteRoundBtn from '../../../../components/WhiteRoundBtn/WhiteRoundBtn';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import LoadingSpinner from '../../../../components/LoadingSpinner/LoadingSpinner';
 
 const ReportReadForm = () => {
 
@@ -13,6 +14,9 @@ const ReportReadForm = () => {
     const category = location.state.category;
 
     const [reportObj, setReportObj] = useState(null);
+
+    // 선택한 서비스 정보 불러오기 로딩
+    const [isServiceLoading, setServiceLoading] = useState(false);
 
     useEffect(() => {
         let url; // category에 따른 서버 경로를 저장할 변수
@@ -28,15 +32,22 @@ const ReportReadForm = () => {
             url = `/api/admin/reportPartyDetailInfo/${id}`;
         }
     
+        setServiceLoading(true);
+
         if (url) {
             axios.get(url).then(resp => {
                 setReportObj(resp.data);
-                console.log(resp.data);
+                setServiceLoading(false);
+            }).catch(() => {
+                setServiceLoading(false);
             });
         }
     }, [category, id]);
 
     return (
+        isServiceLoading ? (
+            <LoadingSpinner />
+        ) : (
         <div className={parentStyle.background}>
             <div className={parentStyle.body}>
                 <div className={style.reportBox}>
@@ -67,7 +78,7 @@ const ReportReadForm = () => {
                 </div>
             </div>
         </div>
-    );
+    ));
 }
 
 export default ReportReadForm;
