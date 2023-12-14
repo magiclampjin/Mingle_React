@@ -1,30 +1,27 @@
-import style from "../../AdminMain.module.css"
+import style from '../../../../../../../AdminMain/AdminMain.module.css'
 import { useEffect, useState } from "react";
-import {Link} from 'react-router-dom';
 import axios from "axios";
 
-import WhiteRoundBtn from '../../../../components/WhiteRoundBtn/WhiteRoundBtn';
-
-const MemberManageBox = () => {
+const ReportChattingBox = () => {
 
     const [report, setReport] = useState([{}]);
 
     useEffect(() => {
-        axios.get("/api/admin/reportList").then(resp => {
+        const category = "채팅";
+        axios.get(`/api/admin/reportPartyCategoryList/${category}`).then(resp => {
+            console.log(resp.data);
             setReport(resp.data);
         });
     }, []);
 
     return (
         <div className={style.box}>
-            <div className={style.componentTitle}>신고된 회원 / 불량 회원</div>
+            <div className={style.componentTitle}>파티 채팅 신고</div>
             <div className={style.componentBox}>
                 <div className={style.componentSeeMore}>
                     <div></div>
                     <div className={style.componentSeeMoreBtn}>
-                    <Link to="DetailMemberManage">
-                        <WhiteRoundBtn title={"더보기"} activation={true}></WhiteRoundBtn>
-                    </Link>
+
                     </div>
                 </div>
                 {report.map((e, i) => {
@@ -42,4 +39,4 @@ const MemberManageBox = () => {
     );
 }
 
-export default MemberManageBox;
+export default ReportChattingBox;

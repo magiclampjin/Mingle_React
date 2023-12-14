@@ -15,16 +15,26 @@ const ReportReadForm = () => {
     const [reportObj, setReportObj] = useState(null);
 
     useEffect(() => {
-        if(category === "게시글") {
-            axios.get(`/api/admin/reportPostDetailInfo/${id}`).then(resp => {
-                setReportObj(resp.data);
-            })
-        } else if(category === "댓글") {
-            axios.get(`/api/admin/reportReplyDetailInfo/${id}`).then(resp => {
-                setReportObj(resp.data);
-            })
+        let url; // category에 따른 서버 경로를 저장할 변수
+        
+        // 게시글
+        if (category === "게시글") {
+            url = `/api/admin/reportPostDetailInfo/${id}`;
+        // 댓글
+        } else if (category === "댓글") {
+            url = `/api/admin/reportReplyDetailInfo/${id}`;
+        // 파티
+        } else if (category === "미납" || category === "계좌" || category === "댓글") {
+            url = `/api/admin/reportPartyDetailInfo/${id}`;
         }
-    }, [id, category])
+    
+        if (url) {
+            axios.get(url).then(resp => {
+                setReportObj(resp.data);
+                console.log(resp.data);
+            });
+        }
+    }, [category, id]);
 
     return (
         <div className={parentStyle.background}>
