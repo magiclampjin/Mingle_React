@@ -24,7 +24,7 @@ const ReportReadForm = () => {
         } else if (category === "댓글") {
             url = `/api/admin/reportReplyDetailInfo/${id}`;
         // 파티
-        } else if (category === "미납" || category === "계좌" || category === "댓글") {
+        } else if (category.includes("파티")) {
             url = `/api/admin/reportPartyDetailInfo/${id}`;
         }
     
@@ -51,6 +51,9 @@ const ReportReadForm = () => {
                         )}
                         {category === "댓글" && (
                             <div className={style.reporterId}>신고대상자 : {reportObj.reply.memberId}</div>
+                        )}
+                        {category.includes("파티") && (
+                            <div className={style.reporterId}>신고대상자 : {reportObj.memberId}</div>
                         )}
                         <div className={style.reporterId}>신고자 : {reportObj.report.memberReporterId}</div>
                     </>
