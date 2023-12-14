@@ -115,6 +115,7 @@
 .inputNotice{
     display: flex;
     align-items: flex-start;
+    margin-top: 40px;
 }
 
 .inputNotice *{
@@ -185,14 +186,14 @@
 
 /* 2단계 */
 
-.peopleCntCover{
+.peopleCntCover,.periodCover{
     border: 1px solid #DFE2E6;
     border-radius: 10px;
     padding:15px;
     margin-bottom: 20px;
 }
 
-.peopleCnt{
+.peopleCnt, .period{
     display: flex;
     align-items: center;
     justify-content: space-between;   
@@ -215,3 +216,38 @@
     font-size: 20px;
     font-weight: bold;
 }
+
+
+/* 3단계 */
+
+.periodCover{
+    display: flex;
+}
+
+.periodCover:hover{
+    cursor: pointer;
+}
+
+.period{
+    width: 93%;
+}
+
+.periodTitle{
+    color:#676D7C99;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.periodTxt{
+    color:#676D7C;
+    font-weight: bold;
+}
+
+.periodIcon{
+    width: 7%;
+}
+
+.periodIcon * {
+    color:#676D7C99;
+}
+

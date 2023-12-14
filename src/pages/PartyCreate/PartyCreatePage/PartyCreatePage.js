@@ -2,8 +2,9 @@ import style from "./PartyCreatePage.module.css";
 import {useLocation} from "react-router-dom";
 import {useState} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faTriangleExclamation, faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faTriangleExclamation, faPlus, faMinus, faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import PurpleRectangleBtn from "../../../components/PurpleRectangleBtn/PurpleRectangleBtn";
+import StartDateModal from "./StartDateModal/StartDateModal"
 
 const PartyCreatePage = () =>{
     //  공통 사용 -------------------------------------------------
@@ -99,7 +100,7 @@ const PartyCreatePage = () =>{
     // 파티원 명수 버튼 클릭할 수 있는지
     const [isUpdatePeopleCnt, setUpdatePeopleCnt] = useState({minus:peopleCnt!==1, plus:false})
 
-    // 명수 줄이기
+    // 파티원 명수 조절
     const handleUpdatePeopleCnt = (e) => {
         const partyContentElement = e.currentTarget;
         const clickedElement = e.target; 
@@ -141,9 +142,36 @@ const PartyCreatePage = () =>{
         }  
     }
 
-     // 명수 늘리기
-    // -------------------------------------------------------------------------------
 
+    // -------------------------------------------------------------------------------
+    // 3단계 -------------------------------------------------------------------------
+    
+    // 3단계 내에서 기간 설정 단계 (1. 시작일, 2. 기간, 3. 종료일)
+    const [periodStep, setPeriodStep] = useState(1);
+
+
+     // 파티 시작일 모달창 열림 / 닫힘
+     const [modalIsOpen, setModalIsOpen] = useState(false);
+
+    // 파티 시작일 모달창 열기
+    const openModal = (e) => {
+        const partyContentElement = e.currentTarget;
+        const clickedElement = e.target; 
+       
+        if (clickedElement === partyContentElement || partyContentElement.contains(clickedElement)) {
+            // partyContent 또는 그 자식 요소를 클릭한 경우에만 처리
+            setModalIsOpen(true);
+        }
+        
+    };
+
+    // 파티 시작일 모달창 닫기
+    const closeModal = () => {
+        setModalIsOpen(false);
+    };
+
+    
+    // ------------------------------------------------------------------------------
       
 
     return(
@@ -187,10 +215,57 @@ const PartyCreatePage = () =>{
                             <div className={style.prevBtn}><PurpleRectangleBtn title="이전" activation={true} onClick={handlePrev} width={150} heightPadding={10}/></div>
                             <div className={style.nextBtn}><PurpleRectangleBtn title="다음" activation={isGoNext} onClick={handleNext} width={150} heightPadding={10}/></div>
                         </div>
-                         </>:
+                    </>:
                     <>
-                        3단계
-                        <div className={style.prevBtn}><PurpleRectangleBtn title="이전" activation={true} onClick={handlePrev} width={150} heightPadding={10}/></div>
+                        <div className={style.title}>파티 기간을<br></br>설정해 주세요.</div>
+                        <div className={`${style.partyDateCover}`}>
+                            <div className={`${style.partyStartDateCover} ${style.periodCover}`} onClick={openModal}>
+                                <div className={`${style.partyStartDate} ${style.period}`}>
+                                    <div className={`${style.periodTitle}`}>시작일</div>
+                                    <div className={`${style.periodTxt}`}>내용</div>
+                                </div>
+                                <div className={`${style.periodIcon} ${style.centerAlign}`}><FontAwesomeIcon icon={faChevronDown}/></div>
+                            </div>
+                            <StartDateModal
+                                isOpen={modalIsOpen}
+                                onRequestClose={closeModal}
+                                contentLabel="정보 모달"
+                                width={450}
+                                height={430}
+                            >
+                            </StartDateModal>   
+                            {
+                                periodStep>=2?
+                                <>
+                                    <div className={`${style.partyPeriodCover} ${style.periodCover}`}>
+                                        <div className={`${style.partyPeriod} ${style.period}`}>
+                                            <div className={`${style.periodTitle}`}>파티 기간</div>
+                                            <div className={`${style.periodTxt}`}>내용</div>
+                                        </div>
+                                        <div className={`${style.periodIcon} ${style.centerAlign}`}><FontAwesomeIcon icon={faChevronDown}/></div>
+                                    </div>
+                                </>:null
+                            }
+                            {
+                                periodStep===3?
+                                <>
+                                    <div className={`${style.partyEndDateCover} ${style.periodCover}`}>
+                                        <div className={`${style.partyEndDate} ${style.period}`}>
+                                            <div className={`${style.periodTitle}`}>종료일</div>
+                                            <div className={`${style.periodTxt}`}>내용</div>
+                                        </div>
+                                        <div className={`${style.periodIcon} ${style.centerAlign}`}><FontAwesomeIcon icon={faChevronDown}/></div>
+                                    </div>
+                                </>:null
+                            }
+                         
+                           
+                        </div>
+                        <div className={`${style.inputNotice}`}><FontAwesomeIcon icon={faTriangleExclamation} size="xs"/><div className={style.inputNoticeTxt}>파티를 만들고 난 뒤에는 파티 기간 수정이 불가능하며, 파티 종료일 이전에 파티를 해산할 경우 위약금이 부과돼요.</div></div>
+                        <div className={style.bnts}>
+                            <div className={style.prevBtn}><PurpleRectangleBtn title="이전" activation={true} onClick={handlePrev} width={150} heightPadding={10}/></div>
+                            <div className={style.nextBtn}><PurpleRectangleBtn title="다음" activation={isGoNext} onClick={handleNext} width={150} heightPadding={10}/></div>
+                        </div>
                     </>
                 }
             </div>
