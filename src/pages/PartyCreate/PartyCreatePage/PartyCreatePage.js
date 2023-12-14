@@ -231,11 +231,11 @@ const PartyCreatePage = () =>{
                                 onRequestClose={closeModal}
                                 contentLabel="정보 모달"
                                 width={450}
-                                height={430}
+                                height={500}
                             >
                             </StartDateModal>   
                             {
-                                periodStep>=2?
+                                periodStep===2?
                                 <>
                                     <div className={`${style.partyPeriodCover} ${style.periodCover}`}>
                                         <div className={`${style.partyPeriod} ${style.period}`}>
@@ -246,7 +246,7 @@ const PartyCreatePage = () =>{
                                     </div>
                                 </>:null
                             }
-                            {
+                            {/* {
                                 periodStep===3?
                                 <>
                                     <div className={`${style.partyEndDateCover} ${style.periodCover}`}>
@@ -257,7 +257,7 @@ const PartyCreatePage = () =>{
                                         <div className={`${style.periodIcon} ${style.centerAlign}`}><FontAwesomeIcon icon={faChevronDown}/></div>
                                     </div>
                                 </>:null
-                            }
+                            } */}
                          
                            
                         </div>

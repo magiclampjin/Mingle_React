@@ -1,12 +1,12 @@
 import Modal from "react-modal";
-
+import style from "./StartDateModal.module.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import LoadingSpinnerMini from "../../../../components/LoadingSpinnerMini/LoadingSpinnerMini";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTriangleExclamation, faCheck } from "@fortawesome/free-solid-svg-icons";
-import PurpleRectangleBtn from "../../../../components/PurpleRectangleBtn/PurpleRectangleBtn"
-import { useNavigate } from "react-router-dom";
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 Modal.setAppElement("#root");
 
@@ -31,9 +31,11 @@ const StartDateModal = ({ isOpen, onRequestClose, contentLabel, width, height}) 
         },
       }}
     >
-    {/* <div className={style.title}>파티 시작일 선택</div>
-    <div className={style.explain}>30일 이내의 날짜만 선택 가능</div> */}
-       
+    <div className={style.title}>파티 시작일 선택</div>
+    <div className={style.explain}>30일 이내의 날짜만 선택 가능</div>
+    <div>
+        
+    </div>
     </Modal>
   );
 };
