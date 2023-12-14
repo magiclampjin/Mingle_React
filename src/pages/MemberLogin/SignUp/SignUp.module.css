@@ -74,7 +74,8 @@
   margin-left: 10px;
 }
 .useDetail {
-  margin: 20px 0 0 25px;
+  /* margin: 20px 0 0 25px; */
+  margin-top: 20px;
   border: 1px solid #d1d2d850;
   padding: 20px;
   background-color: #d1d2d850;
@@ -165,32 +166,33 @@
   border-radius: 7px;
   border: 1px solid #676d7c50;
   width: 100%;
+  margin: 0;
 }
 .signup__chk {
   height: 25px;
-  color: #ff4500;
+  color: #ffae6f;
   font-size: 14px;
   padding-left: 10px;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  /* white-space: nowrap; */
 }
-.myInfo__line:first-child .signup__inputBox,
+.myInfo__line:nth-child(4) .signup__inputBox,
 .myInfo__line:last-child .signup__inputBox {
   display: flex;
   margin-bottom: 25px;
   align-items: center;
 }
-.myInfo__line:first-child .signup__inputBox input,
+.myInfo__line:nth-child(4) .signup__inputBox input,
 .myInfo__line:last-child .signup__inputBox input {
   width: 200px;
 }
-.myInfo__line:first-child .signup__chk button,
+.myInfo__line:nth-child(4) .signup__chk button,
 .myInfo__line:last-child .signup__chk button {
   margin: 0 10px;
 }
 
-.myInfo__line:first-child .signup__chk,
+.myInfo__line:nth-child(4) .signup__chk,
 .myInfo__line:last-child .signup__chk {
   height: 40px;
   display: flex;
@@ -201,18 +203,34 @@
   .signupBox {
     margin: 100px auto 100px auto;
   }
-  .myInfo__line:first-child .signup__inputBox input,
+
+  .stepBox__step {
+    padding: 10px;
+    width: calc((100% - 30px) / 3);
+  }
+  .stepBox__arrow {
+    width: 15px;
+  }
+  .stepBtns button {
+    width: 150px !important;
+  }
+  .myInfo__line:nth-child(4) .signup__inputBox input,
   .myInfo__line:last-child .signup__inputBox input {
     width: 100%;
   }
-  .myInfo__line:first-child .signup__inputBox,
+  .myInfo__line:nth-child(4) .signup__inputBox,
   .myInfo__line:last-child .signup__inputBox {
     display: block;
     margin-bottom: 0;
     align-items: center;
   }
 
-  .myInfo__line:first-child .signup__chk button,
+  .myInfo__line:nth-child(4) .signup__chk,
+  .myInfo__line:last-child .signup__chk {
+    padding: 0;
+  }
+
+  .myInfo__line:nth-child(4) .signup__chk button,
   .myInfo__line:last-child .signup__chk button {
     margin: 0;
   }

@@ -2,6 +2,7 @@ import style from "./SignUp.module.css";
 import PurpleRectangleBtn from "../../../components/PurpleRectangleBtn/PurpleRectangleBtn";
 import GrayRectangleBtn from "../../../components/GrayRectangleBtn/GrayRectangleBtn";
 import WhiteRoundBtn from "../../../components/WhiteRoundBtn/WhiteRoundBtn";
+import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 import axios from "axios";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -28,7 +29,7 @@ const SignUp = () => {
     memberRecommenderId: "",
   });
   // 비밀번호 확인 input value
-  const [pwCheck, setPwCheck] = useState("");
+  const [pwCheckText, setPwCheckText] = useState("");
   // 입력값 유효성 검사 결과
   const [checkText, setCheckText] = useState({
     id: "",
@@ -53,6 +54,7 @@ const SignUp = () => {
     birth: "",
     memberRecommenderId: true,
   });
+  const [isLoading, setLoading] = useState(false); // 닉네임 로딩 상태
   // 글씨 색 변경 css
   const colorStyle = (check) => {
     return {
@@ -201,20 +203,21 @@ const SignUp = () => {
     if (name !== "pwCheck") {
       setUser((prev) => ({ ...prev, [name]: value }));
     } else {
-      setPwCheck(value);
+      setPwCheckText(value);
     }
   };
 
   // 2단계 조건 검사
   useEffect(() => {
-    // 필요 정보를 모두 입력하면 넘어갈 수 있음, nickname은 아직 추가 안함
+    // 필요 정보를 모두 입력하면 넘어갈 수 있음
     if (
       user.id !== "" &&
       user.pw !== "" &&
       user.name !== "" &&
       user.birth !== "" &&
       user.email !== "" &&
-      user.phone !== ""
+      user.phone !== "" &&
+      user.nickname
     ) {
       setNext(true);
     }
@@ -223,7 +226,8 @@ const SignUp = () => {
     if (currentStep === "step3") {
       setNext(false);
     }
-  }, [user, pwCheck, currentStep]);
+    console.log(user);
+  }, [user, pwCheckText, currentStep]);
 
   // 아이디 유효성 및 중복 검사
   useEffect(() => {
@@ -312,11 +316,12 @@ const SignUp = () => {
 
   // 비밀번호 확인 일치 검사
   useEffect(() => {
-    if (pwCheck !== "") {
+    if (pwCheckText !== "") {
       // 비밀번호 확인 input에 값이 있을 때
       if (user.pw !== "") {
         // 비밀번호 input에 값이 있을 때
-        if (pwCheck === user.pw) {
+        if (pwCheckText === user.pw) {
+          console.log("test");
           // 비밀번호랑 비밀번호 확인이랑 값이 일치할 때
           setCheckText((prev) => ({
             ...prev,
@@ -344,7 +349,7 @@ const SignUp = () => {
       setCheckText((prev) => ({ ...prev, ["pwCheck"]: "" }));
       handleCondition("pwCheck", false);
     }
-  }, [user.pwCheck]);
+  }, [pwCheckText]);
 
   // 이름 유효성 검사
   useEffect(() => {
@@ -509,6 +514,25 @@ const SignUp = () => {
     setSignupConditions((prev) => ({ ...prev, [key]: value }));
   };
 
+  useEffect(() => {
+    // 페이지 로딩시 바로 닉네임 한번 불러오기
+    handleNickName();
+  }, []);
+
+  // 랜덤 닉네임 가져오기
+  const handleNickName = () => {
+    setLoading(true);
+    axios.get("/api/member/createNickName").then((resp) => {
+      setLoading(false);
+      console.log(resp);
+      setUser((prev) => ({ ...prev, ["nickname"]: resp.data }));
+    });
+  };
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <div className={style.signupBox}>
       <div className={style.title}>회원가입</div>
@@ -532,7 +556,7 @@ const SignUp = () => {
         </div>
         <div className={style.stepBox__step} id="step3">
           <div className={style.step__info}>STEP 03</div>
-          <div className={style.step__title}>가입완료</div>
+          <div className={style.step__title}>계좌등록</div>
         </div>
       </div>
       <div className={style.agrreBox} style={displayStyle("step1")}>
@@ -850,6 +874,7 @@ const SignUp = () => {
                 name="id"
                 placeholder="8~14자의 영문, 숫자, 밑줄(_)를 사용할 수 있습니다."
                 onChange={handleChange}
+                value={user.id !== "" ? user.id : ""}
               />
               <div
                 className={style.signup__chk}
@@ -871,6 +896,7 @@ const SignUp = () => {
                 name="pw"
                 placeholder="8~30자의 영문 대소문자, 숫자 및 특수문자를 사용하세요."
                 onChange={handleChange}
+                value={user.pw !== "" ? user.pw : ""}
               />
               <div
                 className={style.signup__chk}
@@ -892,6 +918,7 @@ const SignUp = () => {
                 name="pwCheck"
                 placeholder="비밀번호를 확인해주세요."
                 onChange={handleChange}
+                value={user.pwCheck !== "" ? user.pwCheck : ""}
               />
               <div
                 className={style.signup__chk}
@@ -916,6 +943,28 @@ const SignUp = () => {
                 name="name"
                 placeholder="이름을 입력해주세요."
                 onChange={handleChange}
+                value={user.name !== "" ? user.name : ""}
+              />
+              <div
+                className={style.signup__chk}
+                id="nameCheck"
+                style={colorStyle(signupConditions.name)}
+              >
+                {checkText.name}
+              </div>
+            </div>
+          </div>
+          {/* <div className={style.myInfo__line} id="name">
+            <div className={style.signup__title}>
+              이름<span className={style.essential}>*</span>
+            </div>
+            <div className={style.signup__inputBox}>
+              <input
+                type="text"
+                id="nameInput"
+                name="name"
+                placeholder="이름을 입력해주세요."
+                onChange={handleChange}
               />
               <div
                 className={style.signup__chk}
@@ -926,7 +975,7 @@ const SignUp = () => {
                 {checkText.name}
               </div>
             </div>
-          </div>
+          </div> */}
           <div className={style.myInfo__line} id="birth">
             <div className={style.signup__title}>
               생년월일<span className={style.essential}>*</span>
@@ -938,6 +987,7 @@ const SignUp = () => {
                 name="birth"
                 placeholder="생년월일 8자를 입력해주세요. ex)20000101"
                 onChange={handleChange}
+                value={user.birth !== "" ? user.birth : ""}
               />
               <div
                 className={style.signup__chk}
@@ -959,6 +1009,7 @@ const SignUp = () => {
                 name="email"
                 placeholder="이메일을 입력해주세요."
                 onChange={handleChange}
+                value={user.email !== "" ? user.email : ""}
               />
               <div
                 className={style.signup__chk}
@@ -980,6 +1031,29 @@ const SignUp = () => {
                 name="phone"
                 placeholder="- 없이 숫자만 입력해주세요. ex)01012345678"
                 onChange={handleChange}
+                value={user.phone !== "" ? user.phone : ""}
+              />
+              <div
+                className={style.signup__chk}
+                id="phoneCheck"
+                style={colorStyle(signupConditions.phone)}
+              >
+                <WhiteRoundBtn title={"본인인증"}></WhiteRoundBtn>
+                {checkText.phone}
+              </div>
+            </div>
+          </div>
+          {/* <div className={style.myInfo__line} id="phone">
+            <div className={style.signup__title}>
+              전화번호<span className={style.essential}>*</span>
+            </div>
+            <div className={style.signup__inputBox}>
+              <input
+                type="text"
+                id="phoneInput"
+                name="phone"
+                placeholder="- 없이 숫자만 입력해주세요. ex)01012345678"
+                onChange={handleChange}
               />
               <div
                 className={style.signup__chk}
@@ -989,7 +1063,7 @@ const SignUp = () => {
                 {checkText.phone}
               </div>
             </div>
-          </div>
+          </div> */}
           <div className={style.myInfo__line} id="nick">
             <div className={style.signup__title}>
               닉네임<span className={style.essential}>*</span>
@@ -1000,11 +1074,14 @@ const SignUp = () => {
                 id="nickInput"
                 name="nickname"
                 placeholder="직접 입력은 불가능합니다."
-                onChange={handleChange}
+                value={user.nickname}
                 readOnly
               />
               <div className={style.signup__chk} id="nickCheck">
-                <WhiteRoundBtn title={"닉네임 선택"}></WhiteRoundBtn>
+                <WhiteRoundBtn
+                  title={"닉네임 선택"}
+                  onClick={handleNickName}
+                ></WhiteRoundBtn>
               </div>
             </div>
           </div>
@@ -1020,6 +1097,11 @@ const SignUp = () => {
                 name="memberRecommenderId"
                 placeholder="추천인 아이디를 입력해주세요."
                 onChange={handleChange}
+                value={
+                  user.memberRecommenderId !== ""
+                    ? user.memberRecommenderId
+                    : ""
+                }
               />
               <div
                 className={style.signup__chk}

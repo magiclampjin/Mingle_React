@@ -26,7 +26,7 @@
   background-color: #7b61ff15;
   outline: none;
 }
-input[type="password"] {
+.loginInputBox input[type="password"] {
   margin-top: 15px;
 }
 .loginOption {
