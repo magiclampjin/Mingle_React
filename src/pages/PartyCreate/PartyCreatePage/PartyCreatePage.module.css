@@ -2,7 +2,6 @@
     max-width: 1200px;
     margin: auto;
     padding:20px 0px;
-
 }
 
 .right, .left{
@@ -33,11 +32,10 @@
     display: flex;
 }
 
+/* 1단계 */
 .title{
     font-size: 20px;
     font-weight: bold;
-}
-.title{
     margin-bottom: 35px;
 }
 
@@ -101,7 +99,7 @@
 
 .inputTitle{
     display: flex;
-    align-items: end;
+    align-items: flex-end;
     height: 40%;
     font-size: 12px;
     font-weight: 500;
@@ -116,7 +114,7 @@
 
 .inputNotice{
     display: flex;
-    align-items: start;
+    align-items: flex-start;
 }
 
 .inputNotice *{
@@ -134,13 +132,29 @@
 }
 
 .inputNoticeTxt{
+    color:#676D7C;
+    font-size: 13px;
+    font-weight: 500;
     margin-left: 5px;
 }
+
+.bnts{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.prevBtn{
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-start;
+}
+
 
 .nextBtn{
     margin-top: 20px;
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
 }
 
 .goService{
@@ -166,4 +180,38 @@
     .right{
         width: 100%;
     }
+}
+
+
+/* 2단계 */
+
+.peopleCntCover{
+    border: 1px solid #DFE2E6;
+    border-radius: 10px;
+    padding:15px;
+    margin-bottom: 20px;
+}
+
+.peopleCnt{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;   
+}
+
+.peopleCntBtn *{
+    font-size: 20px;
+    color:#676D7C;
+}
+
+.peopleCntBtn:hover{
+    cursor: pointer;
+}
+
+.disabled *{
+    color:#676D7C50;
+}
+
+.peopelCntTxt{
+    font-size: 20px;
+    font-weight: bold;
 }
