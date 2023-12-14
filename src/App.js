@@ -47,14 +47,7 @@ function App() {
 
               <Route path="/admin/*" element={<AdminMain />}/>
 
-              <Route path="/board" element={<Board/>}/>
-              <Route path="/board/review" element={<Review/>}/>
-              <Route path="/board/popularposts" element={<PopularPosts/>}/>
-              <Route path="/board/freeboard" element={<FreeBoard/>}/>
-              <Route path="/board/noticeboard" element={<NoticeBoard/>}/>
-              <Route path="/board/writepost" element={<WritePost/>}/>
-              <Route path="/board/updatepost" element={<UpdatePost/>}/>
-              <Route path="/board/post/*" element={<Post/>}/>
+              <Route path="/board/*" element={<Board/>}/>
             </Routes>
             <Footer></Footer>
           </Router>

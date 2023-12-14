@@ -1,14 +1,15 @@
 import { useContext, useEffect, useState } from 'react';
-import styles from './Board.module.css'
+import styles from './BoardMain.module.css'
 import axios from 'axios';
-import BoardCategories from '../components/BoardCategory/BoardCategories';
 import RenderTable from '../components/RenderTable/RenderTable';
+import RenderNewVideo from '../components/RenderNewVideo/RenderNewVideo';
 
 const BoardMain = () => {
 
     // 상태로 게시글 목록을 저장
     const [freePosts, setFreePosts] = useState([]);
     const [noticePosts, setNoticePosts] = useState([]);
+    const [newVideoInfo, setNewVideoInfo] = useState([]);
 
     // 컴포넌트가 마운트될 때 데이터 로드
     useEffect(() => {
@@ -26,37 +27,34 @@ const BoardMain = () => {
 
         });
 
-        axios.get("/api/external/youtube/netflix").then(resp => {
+        axios.get("/api/external/youtube/latestvideo").then(resp => {
             console.log(resp.data);
-        }).catch(error => {
-
-        });
-
+            setNewVideoInfo(resp.data);
+        })
 
     }, []);
 
 
     return (
         <div className={styles.board}>
-            <BoardCategories></BoardCategories>
             <div className={styles.board__layer}>
-                <p className={styles.board__title}>인기글</p>
+                <RenderTable posts={[]} title={`인기글`} />
             </div>
-
+            <hr />
             <div className={styles.board__layer}>
                 <RenderTable posts={freePosts} title={`자유게시판`} />
             </div>
-
+            <hr />
             <div className={styles.board__layer}>
                 <RenderTable posts={noticePosts} title={"공지게시판"} />
             </div>
-
+            <hr />
             <div className={styles.board__layer}>
-                <p className={styles.board__title}>리뷰</p>
+                <RenderTable posts={[]} title={"리뷰"} />
             </div>
-
+            <hr />
             <div className={styles.board__layer}>
-                <p className={styles.board__title}>신작소개</p>
+                <RenderNewVideo newVideoInfo={newVideoInfo}/>
             </div>
         </div>
     );

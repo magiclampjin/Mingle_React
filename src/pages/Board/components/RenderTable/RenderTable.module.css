@@ -1,35 +1,92 @@
+.render{
+    padding : 10px;
+    margin-top : 20px;
+    margin-bottom : 20px;
+    border-radius: 10px;
+}
+
 .board__title {
-    margin-bottom: 30px;
+    margin-top: 15px;
+    margin-bottom: 15px;
     color: #5D5C61;
     font-weight: bold;
     font-size: 20px;
+    text-align: center;
 }
 
-.board__table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
+.board__container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
 }
 
-.board__table th, 
-.board__table td {
+.post__item {
+    display: flex;
+    align-items: center;
     padding: 10px;
-    border: 1px solid #ddd;
-    text-align: left;
+    border-bottom: none;
+    border-radius: 4px;
+    transition-duration: 0.5s;
+    background-color: white;
+    border: 1px solid #7b61ff20;
 }
 
-.board__table th {
-    background-color: #f7f7f7;
-    color: #333;
+.post__item:hover{
+    background-color: #7b61ff50;
 }
 
-.board__table tr:nth-child(even) {
-    background-color: #f9f9f9;
+.post__item-rownum {
+    flex: 1;
+    font-weight: bold;
+    color:#7b61ff;
 }
 
-.board__table tr:hover {
-    background-color: #f1f1f1;
+.post__item-title {
+    flex: 3;
+    font-weight: bold;
 }
+
+/* 기본 폰트 사이즈 */
+.post__item-nickname {
+    flex: 1;
+    text-align: center;
+}
+
+/* 중간 크기의 화면 (가령 태블릿) */
+@media (max-width: 768px) {
+    .post__item-nickname {
+        font-size: 14px; /* 폰트 사이즈를 조금 줄임 */
+    }
+    .post__item-date {
+        font-size: 14px;
+    }
+}
+
+/* 작은 화면 (가령 모바일) */
+@media (max-width: 576px) {
+    .post__item-nickname {
+        font-size: 12px; /* 폰트 사이즈를 더 줄임 */
+    }
+    .post__item-date {
+        font-size: 10px;
+    }
+}
+
+.post__item-date {
+    flex: 1;
+    text-align: center;
+}
+
+.post__item-viewcount {
+    flex: 1;
+    text-align: center;
+}
+
+/* 마지막 post 항목의 하단 테두리를 제거합니다. */
+.post__item:last-child {
+    border-bottom: 1px solid #7b61ff20;
+}
+
 
 .board__buttonContainer {
     text-align: right;
@@ -41,7 +98,7 @@
     padding-bottom: 10px;
     background-color: #7b61ff;
     border : none;
-    border-radius: 4px;
+    border-radius: 10px;
     margin-left: 10px;
     cursor: pointer;
     font-size: 18px;

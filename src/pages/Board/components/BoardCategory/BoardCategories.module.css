@@ -5,6 +5,7 @@
     padding: 10px;
     /* 배경색 */
     margin-bottom: 50px;
+    justify-content: center;
 }
 
 .category__bar::-webkit-scrollbar {
