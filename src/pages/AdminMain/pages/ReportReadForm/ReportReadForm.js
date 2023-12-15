@@ -15,7 +15,7 @@ const ReportReadForm = () => {
 
     const [reportObj, setReportObj] = useState(null); // 신고 정보
     const [memberId, setMemberId] = useState(null); // 신고 대상자
-    let warningCount = 0; // 경고 횟수 
+    const [warningCount, setWarningCount] = useState(0); // 경고 횟수 
 
     // 선택한 서비스 정보 불러오기 로딩
     const [isServiceLoading, setServiceLoading] = useState(false);
@@ -59,10 +59,21 @@ const ReportReadForm = () => {
 
         // 신고 대상자의 경고 횟수
         axios.get(`/api/admin/memberWarningCount/${memberId}`).then(resp => {
-            warningCount = resp.data;
+            let cnt = resp.data;
+            setWarningCount(cnt);
         })
 
     }, [category, id, memberId]);
+
+    const handleApproval = async (reportId, memberId) => {
+        try {
+            axios.put(`/api/admin/reportProcess/${reportId}`);
+            // axios.post(`/giveWarning`, { reportId, memberId });
+            console.log("두 요청 모두 성공");
+        } catch (error) {
+            console.log("오류 : " + error);
+        }
+    }
 
     return (
         isServiceLoading ? (
@@ -87,7 +98,7 @@ const ReportReadForm = () => {
                     <hr></hr>
                     <div className={style.reportBtns}>
                         <WhiteRoundBtn title={"신고 거부"}></WhiteRoundBtn>
-                        <PurpleRoundBtn title={"신고 승인"} activation={true} ></PurpleRoundBtn>
+                        <PurpleRoundBtn title={"신고 승인"} activation={true} onClick={() => handleApproval(reportObj.reportId, memberId)}></PurpleRoundBtn>
                     </div>
                 </div>
             </div>
