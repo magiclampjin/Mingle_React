@@ -6,6 +6,7 @@ import { faEye, faTriangleExclamation, faPlus, faMinus, faChevronDown, faChevron
 import PurpleRectangleBtn from "../../../components/PurpleRectangleBtn/PurpleRectangleBtn";
 import StartDateModal from "./StartDateModal/StartDateModal"
 import moment from "moment";
+import PeriodModal from "./PeriodModal/PeriodModal";
 
 const PartyCreatePage = () =>{
     //  공통 사용 -------------------------------------------------
@@ -33,8 +34,21 @@ const PartyCreatePage = () =>{
 
     // 이전 버튼 클릭
     const handlePrev = () =>{
+        let currentStep = step;
         setStep(prev=>prev-1);
         setGoNext(true);
+
+        // 저장된 2단계 정보 초기화
+        if(currentStep-1 == 1){
+            setPeopleCnt(service.maxPeopleCount-1);
+            setUpdatePeopleCnt({minus:(service.maxPeopleCount-1)!==1, plus:false})
+
+        // 저장된 3단계 정보 초기화
+        }else if(currentStep-1 == 2){
+            onChange();
+            setPeriodMonth();
+            setPeriodStep(1);
+        }
     }
     
     // ----------------------------------------------------------
@@ -99,7 +113,7 @@ const PartyCreatePage = () =>{
     const [peopleCnt, setPeopleCnt] = useState(service.maxPeopleCount-1);
     
     // 파티원 명수 버튼 클릭할 수 있는지
-    const [isUpdatePeopleCnt, setUpdatePeopleCnt] = useState({minus:peopleCnt!==1, plus:false})
+    const [isUpdatePeopleCnt, setUpdatePeopleCnt] = useState({minus:(service.maxPeopleCount-1)!==1, plus:false})
 
     // 파티원 명수 조절
     const handleUpdatePeopleCnt = (e) => {
@@ -151,8 +165,11 @@ const PartyCreatePage = () =>{
     const [periodStep, setPeriodStep] = useState(1);
 
 
-     // 파티 시작일 모달창 열림 / 닫힘
-     const [modalIsOpen, setModalIsOpen] = useState(false);
+    // 파티 시작일 모달창 열림 / 닫힘
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+
+    // 파티 기간 모달창 열림 / 닫힘
+    const [periodModalIsOpen, setperiodModalIsOpen] = useState(false);
 
     // 파티 시작일 모달창 열기
     const openModal = (e) => {
@@ -172,7 +189,26 @@ const PartyCreatePage = () =>{
     };
 
     // 파티 시작일 선택날짜
-    const [value, onChange] = useState(new Date());
+    const [value, onChange] = useState();
+
+    // 파티 개월수 선택날짜
+    const [periodMonth, setPeriodMonth] = useState();
+
+    // 파티 개월 수 모달창 열기
+    const openPeriodModal = (e) => {
+        const periodElement = e.currentTarget;
+        const clickedElement = e.target; 
+       
+        if (clickedElement === periodElement || periodElement.contains(clickedElement)) {
+            // periodElement 또는 그 자식 요소를 클릭한 경우에만 처리
+            setperiodModalIsOpen(true);
+        }
+    }
+
+    //  파티 개월 수 모달창 열기
+       const closePeriodModal = () => {
+        setperiodModalIsOpen(false);
+    };
 
     
     // ------------------------------------------------------------------------------
@@ -238,18 +274,30 @@ const PartyCreatePage = () =>{
                                 height={500}
                                 value={value}
                                 onChange={onChange}
+                                setPeriodStep={setPeriodStep}
                             >
                             </StartDateModal>   
                             {
                                 periodStep===2?
                                 <>
-                                    <div className={`${style.partyPeriodCover} ${style.periodCover}`}>
+                                    <div className={`${style.partyPeriodCover} ${style.periodCover}`} onClick={openPeriodModal}>
                                         <div className={`${style.partyPeriod} ${style.period}`}>
                                             <div className={`${style.periodTitle}`}>파티 기간</div>
-                                            <div className={`${style.periodTxt}`}>내용</div>
+                                            <div className={`${style.periodTxt}`}>{periodMonth ? periodMonth+"개월":`선택`}</div>
                                         </div>
                                         <div className={`${style.periodIcon} ${style.centerAlign}`}><FontAwesomeIcon icon={faChevronDown}/></div>
                                     </div>
+                                    <PeriodModal
+                                        isOpen={periodModalIsOpen}
+                                        onRequestClose={closePeriodModal}
+                                        contentLabel="정보 모달"
+                                        width={450}
+                                        height={500}
+                                        periodMonth={periodMonth}
+                                        setPeriodMonth={setPeriodMonth}
+                                        setPeriodStep={setPeriodStep}
+                                    >
+                                    </PeriodModal>  
                                 </>:null
                             }
                             {/* {

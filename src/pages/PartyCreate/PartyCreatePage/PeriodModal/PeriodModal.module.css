@@ -1,0 +1,31 @@
+.title{
+    font-size:22px;
+    font-weight: bold;
+}
+
+.explain{
+    font-size: 14px;
+    font-weight: 500;
+    color:#676D7C99;
+}
+
+.content{
+    margin-top: 20px;
+    background-color: #676D7C15;
+    border-radius: 10px;
+    padding:10px 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.btns{
+    margin-top: 20px;
+}
+
+.btns>*:first-child{
+    margin-right: 18px;
+}
+
+.btns>*:first-child *{
+    color:#7b61ff;
+}

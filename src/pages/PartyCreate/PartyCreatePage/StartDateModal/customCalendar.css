@@ -22,29 +22,24 @@
     cursor:no-drop;
 }
 
-.react-calendar__tile:enabled:hover {
-    background-color: #F9B81350; 
+.react-calendar__tile:enabled:hover, .react-calendar__navigation button:enabled:hover {
+    background-color: #F9B81350;
     border-radius: 50px;   
 }
 
-.react-calendar__tile:enabled:focus {
-    background-color: #F9B813;
+.react-calendar__tile:enabled:focus, .react-calendar__tile--now:enabled:focus, .react-calendar__tile--active {
+    background-color: #F9B813 !important;
     border-radius: 50px;
 }
 
-.react-calendar__tile:enabled:focus>abbr {
+.react-calendar__tile:enabled:focus>abbr, .react-calendar__tile--active>abbr {
     color:white;
 }
 
-.react-calendar__navigation button:enabled:hover{
-    background-color: #F9B81350 !important;
-    border-radius: 50px;
+.react-calendar__tile--now:enabled{
+    background-color: transparent;
 }
 
-.react-calendar__tile--active {
-    background-color: #F9B813;
-    border-radius: 50px;
-}
-.react-calendar__tile--active>abbr {
-    color:white;
+.react-calendar__tile--now:enabled>abbr {
+    color: black;
 }
