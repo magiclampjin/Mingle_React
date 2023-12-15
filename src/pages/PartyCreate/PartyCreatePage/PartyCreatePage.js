@@ -8,6 +8,7 @@ import StartDateModal from "./StartDateModal/StartDateModal"
 import moment from "moment";
 import PeriodModal from "./PeriodModal/PeriodModal";
 import WhiteRectangleBtn from "../../../components/WhiteRectangleBtn/WhiteRectangleBtn";
+import CalculationSelectBox from "../../../components/CalculationSelectBox/CalculationSelectBox";
 
 const PartyCreatePage = () =>{
     //  공통 사용 -------------------------------------------------
@@ -50,6 +51,9 @@ const PartyCreatePage = () =>{
             onChange();
             setPeriodMonth();
             setPeriodStep(1);
+        // 저장된 4단계 정보 초기화
+        }else if(currentStep-1 === 3){
+            setCalculation(1);
         }
     }
     
@@ -109,6 +113,8 @@ const PartyCreatePage = () =>{
     }
 
     // -------------------------------------------------------------------------------
+
+
     // 2단계 -------------------------------------------------------------------------
     // 파티원 명수
     const [peopleCnt, setPeopleCnt] = useState(service.maxPeopleCount-1);
@@ -333,13 +339,10 @@ const PartyCreatePage = () =>{
                         </div>
                         <div className={style.subMenu}>
                             <div className={style.subTitle}>정산일 정보 등록</div>
-                            <div className={`${style.partyPeriodCover} ${style.periodCover}`} onClick={openDateList}>
-                                <div className={`${style.partyPeriod} ${style.period}`}>
-                                    <div className={`${style.periodTitle}`}>정산일</div>
-                                    <div className={`${style.periodTxt}`}>{`매달 ${calculation}일`}</div>
-                                </div>
-                                <div className={`${style.periodIcon} ${style.centerAlign}`}><FontAwesomeIcon icon={faChevronDown}/></div>
-                            </div>
+                            <CalculationSelectBox
+                                setDay={setCalculation}
+                                day={calculation}
+                            ></CalculationSelectBox>
                             <div className={`${style.inputNotice}`}><FontAwesomeIcon icon={faTriangleExclamation} size="xs"/><div className={style.inputNoticeTxt}>정산일은 파티 요금 적립과 결제가 이루어지는 기준일입니다.</div></div>
                         </div>
                         
