@@ -1,5 +1,5 @@
-import parentStyle from "../../../../AdminMain.module.css"
-import style from "../../DetailMemberManage.module.css"
+import parentStyle from '../../../../../../../AdminMain/AdminMain.module.css'
+import style from '../../../../DetailMemberManage.module.css'
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -11,16 +11,16 @@ import {
     faAnglesRight,
   } from "@fortawesome/free-solid-svg-icons";
 import Pagination from "react-js-pagination";
-import "../../../../../../components/Pagination/Pagination.css"
+import "../../../../../../../../components/Pagination/Pagination.css"
 
-const ReportReply = () => {
+const ReportChattingBox = () => {
 
     const [report, setReport] = useState([{}]);
+    const category = "채팅";
 
     useEffect(() => {
-        axios.get("/api/admin/reportReplyList").then(resp => {
+        axios.get(`/api/admin/reportPartyCategoryList/${category}`).then(resp => {
             setReport(resp.data);
-            console.log("data : " + resp.data);
         });
     }, []);
 
@@ -40,14 +40,13 @@ const ReportReply = () => {
     }, [report, page]);
 
     return (
-        <>
         <div className={parentStyle.box}>
-            <div className={parentStyle.componentTitle}>댓글 신고</div>
+            <div className={parentStyle.componentTitle}>파티 채팅 신고</div>
             <div className={style.componentBox}>
                 {currentReports.map((e, i) => {
                     return(
-                        <Link key={i} to="/admin/ReportReadForm" state={{id : e.id, category : "댓글"}}>
-                            <div key={e.id} className={style.componentLine}>
+                        <Link key={i} to="/admin/ReportReadForm" state={{id : e.id, category : `파티 ${category}`}}>
+                            <div className={style.componentLine}>
                                 <div className={parentStyle.componentItem}>{e.id}</div>
                                 <div className={parentStyle.componentItem}>{e.memberReporterId}</div>
                                 <div className={parentStyle.componentItem}>{e.content}</div>
@@ -69,8 +68,7 @@ const ReportReply = () => {
                 onChange={handlePageChange}
             ></Pagination>
         </div>
-        </>
     );
 }
 
-export default ReportReply;
+export default ReportChattingBox;
