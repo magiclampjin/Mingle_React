@@ -7,6 +7,7 @@ import PurpleRectangleBtn from "../../../components/PurpleRectangleBtn/PurpleRec
 import StartDateModal from "./StartDateModal/StartDateModal"
 import moment from "moment";
 import PeriodModal from "./PeriodModal/PeriodModal";
+import WhiteRectangleBtn from "../../../components/WhiteRectangleBtn/WhiteRectangleBtn";
 
 const PartyCreatePage = () =>{
     //  공통 사용 -------------------------------------------------
@@ -37,14 +38,15 @@ const PartyCreatePage = () =>{
         let currentStep = step;
         setStep(prev=>prev-1);
         setGoNext(true);
+        setAllComplete(false);
 
         // 저장된 2단계 정보 초기화
-        if(currentStep-1 == 1){
+        if(currentStep-1 === 1){
             setPeopleCnt(service.maxPeopleCount-1);
             setUpdatePeopleCnt({minus:(service.maxPeopleCount-1)!==1, plus:false})
 
         // 저장된 3단계 정보 초기화
-        }else if(currentStep-1 == 2){
+        }else if(currentStep-1 === 2){
             onChange();
             setPeriodMonth();
             setPeriodStep(1);
@@ -209,7 +211,24 @@ const PartyCreatePage = () =>{
 
     
     // ------------------------------------------------------------------------------
-      
+    // 4단계 - 결제수단 등록 및 정산일 관리
+    // 모든 입력이 완료 되었나요 ?
+    const [isAllComplete, setAllComplete] = useState(false);
+
+    // 결제 계좌 정보
+
+    // 정산일 정보
+    const [calculation, setCalculation] = useState(1); 
+    const handleComplete = () => {
+        console.log("진짜 파티 등록만 하면 되.. 힘내");
+    }
+
+    // 정산일 목록 (1 ~ 28일)
+    const openDateList = (e) => {
+
+    }
+
+    // -------------------------------------------------------------------------------
 
     return(
         <div className={`${style.body} ${style.dflex}`}>
@@ -252,7 +271,7 @@ const PartyCreatePage = () =>{
                             <div className={style.prevBtn}><PurpleRectangleBtn title="이전" activation={true} onClick={handlePrev} width={150} heightPadding={10}/></div>
                             <div className={style.nextBtn}><PurpleRectangleBtn title="다음" activation={isGoNext} onClick={handleNext} width={150} heightPadding={10}/></div>
                         </div>
-                    </>:
+                    </>:step===3?
                     <>
                         <div className={style.title}>파티 기간을<br></br>설정해 주세요.</div>
                         <div className={`${style.partyDateCover}`}>
@@ -292,30 +311,42 @@ const PartyCreatePage = () =>{
                                         height={350}
                                         periodMonth={periodMonth}
                                         setPeriodMonth={setPeriodMonth}
-                                        setPeriodStep={setPeriodStep}
+                                        setGoNext={setGoNext}
                                     >
                                     </PeriodModal>  
                                 </>:null
                             }
-                            {/* {
-                                periodStep===3?
-                                <>
-                                    <div className={`${style.partyEndDateCover} ${style.periodCover}`}>
-                                        <div className={`${style.partyEndDate} ${style.period}`}>
-                                            <div className={`${style.periodTitle}`}>종료일</div>
-                                            <div className={`${style.periodTxt}`}>내용</div>
-                                        </div>
-                                        <div className={`${style.periodIcon} ${style.centerAlign}`}><FontAwesomeIcon icon={faChevronDown}/></div>
-                                    </div>
-                                </>:null
-                            } */}
-                         
-                           
                         </div>
                         <div className={`${style.inputNotice}`}><FontAwesomeIcon icon={faTriangleExclamation} size="xs"/><div className={style.inputNoticeTxt}>파티를 만들고 난 뒤에는 파티 기간 수정이 불가능하며, 파티 종료일 이전에 파티를 해산할 경우 위약금이 부과돼요.</div></div>
                         <div className={style.bnts}>
                             <div className={style.prevBtn}><PurpleRectangleBtn title="이전" activation={true} onClick={handlePrev} width={150} heightPadding={10}/></div>
                             <div className={style.nextBtn}><PurpleRectangleBtn title="다음" activation={isGoNext} onClick={handleNext} width={150} heightPadding={10}/></div>
+                        </div>
+                    </>:
+                    <>
+                        <div className={style.title}>마지막 단계<br></br>결제 계좌와 정산일을 등록해주세요.</div>
+                       
+                        <div className={style.subMenu}>
+                            <div className={style.subTitle}>결제 정보 등록</div>
+                            <WhiteRectangleBtn title="+ 결제 계좌 등록하기" onClick={()=>{}} width={300} heightPadding={5}/>
+                            <div className={`${style.inputNotice}`}><FontAwesomeIcon icon={faTriangleExclamation} size="xs"/><div className={style.inputNoticeTxt}>결제 계좌는 파티장의 귀책 사유 발생시 위약금 부과를 위해 필요하며, 유효성 검증을 위해 1원 시범 결제 후 즉시 취소처리 합니다.</div></div>
+                        </div>
+                        <div className={style.subMenu}>
+                            <div className={style.subTitle}>정산일 정보 등록</div>
+                            <div className={`${style.partyPeriodCover} ${style.periodCover}`} onClick={openDateList}>
+                                <div className={`${style.partyPeriod} ${style.period}`}>
+                                    <div className={`${style.periodTitle}`}>정산일</div>
+                                    <div className={`${style.periodTxt}`}>{`매달 ${calculation}일`}</div>
+                                </div>
+                                <div className={`${style.periodIcon} ${style.centerAlign}`}><FontAwesomeIcon icon={faChevronDown}/></div>
+                            </div>
+                            <div className={`${style.inputNotice}`}><FontAwesomeIcon icon={faTriangleExclamation} size="xs"/><div className={style.inputNoticeTxt}>정산일은 파티 요금 적립과 결제가 이루어지는 기준일입니다.</div></div>
+                        </div>
+                        
+                       
+                        <div className={style.bnts}>
+                            <div className={style.prevBtn}><PurpleRectangleBtn title="이전" activation={true} onClick={handlePrev} width={150} heightPadding={10}/></div>
+                            <div className={style.nextBtn}><PurpleRectangleBtn title="파티 만들기" activation={isAllComplete} onClick={handleComplete} width={150} heightPadding={10}/></div>
                         </div>
                     </>
                 }

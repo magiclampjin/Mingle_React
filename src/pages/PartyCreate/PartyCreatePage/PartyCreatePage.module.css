@@ -251,3 +251,21 @@
     color:#676D7C99;
 }
 
+
+
+/* 4단계 (마지막) */
+.subMenu{
+    margin-top: 50px;
+}
+
+.subMenu>button:hover{
+    background-color: #7b61ff50;
+    color:white;
+    border: 1px solid #7b61ff50;
+}
+
+
+.subTitle{
+    font-weight: bold;
+    margin-bottom: 15px;
+}

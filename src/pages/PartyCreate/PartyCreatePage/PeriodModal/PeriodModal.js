@@ -10,7 +10,7 @@ import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
 Modal.setAppElement("#root");
 
 
-const PeriodModal = ({ isOpen, onRequestClose, contentLabel, width, height, periodMonth, setPeriodMonth, setPeriodStep}) => {
+const PeriodModal = ({ isOpen, onRequestClose, contentLabel, width, height, periodMonth, setPeriodMonth, setGoNext}) => {
     const [periodMonthTemp, setPeriodMonthTemp] = useState();
 
     useEffect(()=>{
@@ -25,8 +25,8 @@ const PeriodModal = ({ isOpen, onRequestClose, contentLabel, width, height, peri
     }
     const handleApply = (e) => {
         setPeriodMonth(periodMonthTemp);
+        setGoNext(true);
         onRequestClose(true);
-        setPeriodStep(3);
     }
 
   return (
