@@ -1,6 +1,6 @@
 import parentStyle from '../../AdminMain.module.css';
 import style from './ReportReadForm.module.css';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import PurpleRoundBtn from '../../../../components/PurpleRoundBtn/PurpleRoundBtn';
 import WhiteRoundBtn from '../../../../components/WhiteRoundBtn/WhiteRoundBtn';
 import { useState, useEffect } from 'react';
@@ -15,7 +15,9 @@ const ReportReadForm = () => {
 
     const [reportObj, setReportObj] = useState(null); // 신고 정보
     const [memberId, setMemberId] = useState(null); // 신고 대상자
-    const [warningCount, setWarningCount] = useState(0); // 경고 횟수 
+    const [warningCount, setWarningCount] = useState(0); // 경고 횟수
+
+    const navigate = useNavigate();
 
     // 선택한 서비스 정보 불러오기 로딩
     const [isServiceLoading, setServiceLoading] = useState(false);
@@ -66,12 +68,19 @@ const ReportReadForm = () => {
     }, [category, id, memberId]);
 
     const handleApproval = async (reportId, memberId) => {
-        try {
-            axios.put(`/api/admin/reportProcess/${reportId}`);
-            // axios.post(`/giveWarning`, { reportId, memberId });
-            console.log("두 요청 모두 성공");
-        } catch (error) {
-            console.log("오류 : " + error);
+        const isConfirmed = window.confirm("신고를 승인하시겠습니까?");
+
+        if(isConfirmed) {
+            try {
+                axios.put(`/api/admin/reportProcess/${reportId}`); // 신고 처리 true로 변경
+                axios.post(`/api/admin/giveWarning`, { reportId, memberId }); // 신고 테이블에 회원 등록
+
+                alert("신고가 승인되었습니다."); // 신고 처리 후 alert창
+                navigate(-1); // 이전 페이지로 이동
+                
+            } catch (error) {
+                console.log("오류 : " + error);
+            }
         }
     }
 
@@ -88,7 +97,7 @@ const ReportReadForm = () => {
                     <>
                         <div className={style.reportDate}>{reportObj.report.reportDate ? new Date(reportObj.report.reportDate).toLocaleString('en-US', { timeZone: 'Asia/Seoul' }) : null}</div>
                         <div className={style.reportContent}>{reportObj.report.content}</div>
-                        <div className={style.reporterId}>신고대상자 : {memberId} [경고 횟수 : {warningCount}]</div>
+                        <div className={style.reporterId}>신고대상자 : {memberId} [경고 : {warningCount}]</div>
                         <div className={style.reporterId}>신고자 : {reportObj.report.memberReporterId}</div>
                     </>
                     )}
