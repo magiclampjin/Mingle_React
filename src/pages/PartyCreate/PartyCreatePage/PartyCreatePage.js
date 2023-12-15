@@ -106,7 +106,6 @@ const PartyCreatePage = () =>{
         }        
     }
 
-    
     // -------------------------------------------------------------------------------
     // 2단계 -------------------------------------------------------------------------
     // 파티원 명수
@@ -141,7 +140,6 @@ const PartyCreatePage = () =>{
             }
 
             // 더이상 마이너스 불가
-            console.log(currentCnt);
             if(currentCnt===1){
                 setUpdatePeopleCnt(prev=>({...prev, minus:false}));
             }else{
@@ -180,7 +178,6 @@ const PartyCreatePage = () =>{
             // partyContent 또는 그 자식 요소를 클릭한 경우에만 처리
             setModalIsOpen(true);
         }
-        
     };
 
     // 파티 시작일 모달창 닫기
@@ -292,7 +289,7 @@ const PartyCreatePage = () =>{
                                         onRequestClose={closePeriodModal}
                                         contentLabel="정보 모달"
                                         width={450}
-                                        height={500}
+                                        height={350}
                                         periodMonth={periodMonth}
                                         setPeriodMonth={setPeriodMonth}
                                         setPeriodStep={setPeriodStep}

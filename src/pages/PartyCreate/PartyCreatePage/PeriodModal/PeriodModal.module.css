@@ -29,3 +29,31 @@
 .btns>*:first-child *{
     color:#7b61ff;
 }
+
+.range{
+    margin:50px 0 30px 0;
+}
+
+.range>input{
+    width: 100%;
+    accent-color:#7b61ff;
+}
+
+.range>datalist{
+    margin-left: 4px;
+    width:100%;
+    font-size: 12px;
+    display: grid;
+    grid-auto-flow: column;
+    grid-column-gap: 15px;
+}
+.range>datalist>option:first-child{
+    text-align: start;
+}
+.range>datalist>option:last-child{
+    text-align: end;
+}
+.range>datalist>option{
+    text-align: center;
+    width: 15px;
+}
