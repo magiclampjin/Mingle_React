@@ -1,0 +1,62 @@
+
+.modalContent {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+/* 모바일 화면에서 모달 크기 */
+@media (max-width: 599px) {
+    .modalContent {
+        width: 90%;
+        height: 90%;
+    }
+}
+
+/* 태블릿 화면에서 모달 크기 */
+@media (min-width: 600px) and (max-width: 1023px) {
+    .modalContent {
+        width: 70%;
+        height: 70%;
+    }
+}
+
+/* 데스크톱 화면에서 모달 크기 */
+@media (min-width: 1024px) {
+    .modalContent {
+        width: 50%;
+        height: 60%;
+    }
+}
+
+
+.modal__title {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.modal__script{
+    margin-top: 10px;
+    background-color: #88888820;
+    border-radius: 10px;
+    padding : 10px;
+}
+
+.modal__info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #555;
+}
+
+.modal__description {
+    font-size: 16px;
+    color: #333;
+    
+}
+
+/* 기타 필요한 스타일 */

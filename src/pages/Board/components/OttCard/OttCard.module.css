@@ -18,7 +18,7 @@
     position: absolute; /* 절대 위치 설정 */
     bottom: 80%; /* 하단에서 10px 떨어진 곳에 위치 */
     left: 3%; /* 좌측에서 10px 떨어진 곳에 위치 */
-    z-index: 10; /* z-index 설정으로 겹치기 순서 결정 */
+    z-index: 3; /* z-index 설정으로 겹치기 순서 결정 */
     color: white; /* 제목 글자색 변경 */
     background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경색 추가 */
     padding: 5px; /* 패딩 추가 */

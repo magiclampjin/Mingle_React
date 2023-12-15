@@ -1,6 +1,6 @@
 import styles from "./OttCard.module.css";
 
-const OttCard = ({ ott, thumbnail, title }) => {
+const OttCard = ({ ott, thumbnail, title, onClick }) => {
 
     const MAX_LENGTH = 30; // 제목 글자수 제한
 
@@ -10,7 +10,7 @@ const OttCard = ({ ott, thumbnail, title }) => {
     };
 
     return (
-      <div className={styles.ott__card}>
+      <div className={styles.ott__card} onClick={onClick}>
         <div className={styles.ott__title}>{ott}</div>
         <div className={styles[`ott__image-container`]}>
             <img src={thumbnail} alt="Thumbnail" className={styles.ott__image} />

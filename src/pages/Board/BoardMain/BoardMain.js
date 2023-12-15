@@ -11,6 +11,7 @@ const BoardMain = () => {
     const [noticePosts, setNoticePosts] = useState([]);
     const [newVideoInfo, setNewVideoInfo] = useState([]);
 
+
     // 컴포넌트가 마운트될 때 데이터 로드
     useEffect(() => {
         axios.get("/api/post/freeTop10").then(resp => {

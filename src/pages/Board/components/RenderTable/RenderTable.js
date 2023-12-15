@@ -1,6 +1,8 @@
 import styles from "./RenderTable.module.css"
 import { timeFormatter } from "../../../../components/TimeFormatter/TimeFormatter";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 
 const RenderDivBoard = ({ posts, title }) => {
 
@@ -24,7 +26,7 @@ const RenderDivBoard = ({ posts, title }) => {
                         <div className={styles[`post__item-title`]}>{post.title}</div>
                         <div className={styles[`post__item-nickname`]}>{post.memberNickname}</div>
                         <div className={styles[`post__item-date`]}>{timeFormatter(post.writeDate)}</div>
-                        <div className={styles[`post__item-viewcount`]}>{post.viewCount}</div>
+                        <div className={styles[`post__item-viewcount`]}><FontAwesomeIcon icon={faEye} />{` ${post.viewCount}`}</div>
                     </div>
                 ))}
             </div>

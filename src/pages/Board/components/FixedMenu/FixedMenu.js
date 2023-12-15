@@ -1,14 +1,19 @@
-// FixedMenu.js
-import React from 'react';
-import styles from './FixedMenu.module.css'; // 해당 컴포넌트의 스타일 시트
+import React, { useState } from 'react';
+import styles from './FixedMenu.module.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faMinus, faPen } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
 const FixedMenu = () => {
+
     return (
         <div className={styles.fixedMenu}>
-            {/* 메뉴 아이템들을 여기에 추가 */}
-            <button>메뉴 1</button>
-            <button>메뉴 2</button>
-            {/* 추가적인 메뉴 아이템이 있다면 계속 추가 */}
+
+            <Link to="/board/writepost">
+                <button className={`${styles.menuItem} menuItem`}> <FontAwesomeIcon icon={faPen} />&nbsp;게시글 작성</button>
+            </Link>
+
+
         </div>
     );
 };

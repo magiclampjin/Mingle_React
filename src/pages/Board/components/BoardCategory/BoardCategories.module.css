@@ -1,11 +1,25 @@
+/* BoardCategories.module.css */
 .category__bar {
     display: flex;
     overflow-x: auto;
     white-space: nowrap;
     padding: 10px;
-    /* 배경색 */
     margin-bottom: 50px;
     justify-content: center;
+    flex-wrap: nowrap; /* 기본적으로는 줄바꿈하지 않음 */
+    /* 기타 스타일 */
+}
+
+/* 화면 크기가 768px 이하일 때 */
+@media (max-width: 768px) {
+    .category__bar {
+        flex-wrap: wrap; /* 화면이 좁을 때 줄바꿈 허용 */
+        justify-content: center; /* 왼쪽 정렬로 변경 */
+    }
+
+    .category__item {
+        margin-bottom: 10px; /* 아이템 사이의 수직 간격 */
+    }
 }
 
 .category__bar::-webkit-scrollbar {
@@ -29,7 +43,7 @@
 
 .category__item {
     display: inline-block;
-    margin-right: 30px;
+    margin-right: 20px;
     padding: 10px 20px;
     border: 1px solid #ddd;
     /* 테두리 */

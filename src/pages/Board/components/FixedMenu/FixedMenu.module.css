@@ -1,13 +1,19 @@
 /* FixedMenu.module.css */
 .fixedMenu {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #ffffff;
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    z-index: 1000; /* 다른 요소 위에 표시되도록 z-index 설정 */
+    bottom: 30px;
+    right: 30px;
+    z-index: 5;
     display: flex;
     flex-direction: column;
+}
+
+
+
+.menuItem {
+    border:none;
+    padding : 10px;
+    border-radius: 5px;
+    background-color: #7b61ff;
+    color:white !important;
 }

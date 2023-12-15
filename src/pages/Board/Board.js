@@ -30,7 +30,7 @@ const Board = () => {
                     <Route path="freeboard" element={<FreeBoard />} />
                     <Route path="noticeboard" element={<NoticeBoard />} />
                     <Route path="writepost" element={<WritePost />} />
-                    <Route path="updatepost" element={<UpdatePost />} />
+                    <Route path="updatepost/*" element={<UpdatePost />} />
                     <Route path="post/*" element={<Post />} />
                 </Routes>
                 <FixedMenu />
