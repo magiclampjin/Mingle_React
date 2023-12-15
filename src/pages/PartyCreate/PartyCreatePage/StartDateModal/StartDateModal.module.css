@@ -8,3 +8,10 @@
     font-weight: 500;
     color:#676D7C99;
 }
+
+
+.calendar{
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+}

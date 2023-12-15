@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faTriangleExclamation, faPlus, faMinus, faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import PurpleRectangleBtn from "../../../components/PurpleRectangleBtn/PurpleRectangleBtn";
 import StartDateModal from "./StartDateModal/StartDateModal"
+import moment from "moment";
 
 const PartyCreatePage = () =>{
     //  공통 사용 -------------------------------------------------
@@ -170,6 +171,9 @@ const PartyCreatePage = () =>{
         setModalIsOpen(false);
     };
 
+    // 파티 시작일 선택날짜
+    const [value, onChange] = useState(new Date());
+
     
     // ------------------------------------------------------------------------------
       
@@ -222,7 +226,7 @@ const PartyCreatePage = () =>{
                             <div className={`${style.partyStartDateCover} ${style.periodCover}`} onClick={openModal}>
                                 <div className={`${style.partyStartDate} ${style.period}`}>
                                     <div className={`${style.periodTitle}`}>시작일</div>
-                                    <div className={`${style.periodTxt}`}>내용</div>
+                                    <div className={`${style.periodTxt}`}>{value ? moment(value).format("YYYY-MM-DD"):`선택`}</div>
                                 </div>
                                 <div className={`${style.periodIcon} ${style.centerAlign}`}><FontAwesomeIcon icon={faChevronDown}/></div>
                             </div>
@@ -232,6 +236,8 @@ const PartyCreatePage = () =>{
                                 contentLabel="정보 모달"
                                 width={450}
                                 height={500}
+                                value={value}
+                                onChange={onChange}
                             >
                             </StartDateModal>   
                             {
