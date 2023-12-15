@@ -67,6 +67,7 @@ const ReportReadForm = () => {
 
     }, [category, id, memberId]);
 
+    // 신고 승인
     const handleApproval = async (reportId, memberId) => {
         const isConfirmed = window.confirm("신고를 승인하시겠습니까?");
 
@@ -81,6 +82,17 @@ const ReportReadForm = () => {
             } catch (error) {
                 console.log("오류 : " + error);
             }
+        }
+    }
+
+    // 신고 반려
+    const handleRejection = (reportId) => {
+        const isConfirmed = window.confirm("신고를 반려하시겠습니까?");
+        if(isConfirmed) {
+            axios.put(`/api/admin/reportProcess/${reportId}`); // 신고 처리 true로 변경
+
+            alert("신고가 반려되었습니다."); // 신고 처리 후 alert창
+            navigate(-1); // 이전 페이지로 이동
         }
     }
 
@@ -106,7 +118,7 @@ const ReportReadForm = () => {
                     </Link>
                     <hr></hr>
                     <div className={style.reportBtns}>
-                        <WhiteRoundBtn title={"신고 거부"}></WhiteRoundBtn>
+                        <WhiteRoundBtn title={"신고 반려"} onClick={() => handleRejection(reportObj.reportId)}></WhiteRoundBtn>
                         <PurpleRoundBtn title={"신고 승인"} activation={true} onClick={() => handleApproval(reportObj.reportId, memberId)}></PurpleRoundBtn>
                     </div>
                 </div>
