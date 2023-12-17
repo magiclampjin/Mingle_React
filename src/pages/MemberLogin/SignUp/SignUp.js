@@ -6,7 +6,7 @@ import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 import axios from "axios";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { faChevronRight, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -20,7 +20,7 @@ const SignUp = () => {
   // 2단계 입력값 저장
   const [user, setUser] = useState({
     id: "",
-    pw: "",
+    password: "",
     name: "",
     email: "",
     phone: "",
@@ -33,7 +33,7 @@ const SignUp = () => {
   // 입력값 유효성 검사 결과
   const [checkText, setCheckText] = useState({
     id: "",
-    pw: "",
+    password: "",
     pwCheck: "",
     name: "",
     email: "",
@@ -45,7 +45,7 @@ const SignUp = () => {
   // 회원가입 조건 검사
   const [signupConditions, setSignupConditions] = useState({
     id: "",
-    pw: "",
+    password: "",
     pwCheck: "",
     name: "",
     email: "",
@@ -140,29 +140,65 @@ const SignUp = () => {
     // 다음 단계 조건이 충족되면
     if (isNext) {
       // 현재 단계 currentStep 제거
-      let currentStepElement = document.getElementById(currentStep);
-      if (currentStepElement) {
-        currentStepElement.classList.remove(style.currentStep);
-      }
+      // let currentStepElement = document.getElementById(currentStep);
+      // if (currentStepElement) {
+      //   currentStepElement.classList.remove(style.currentStep);
+      // }
 
       // 다음단계로 이동
-      setCurrentStep(nextStep);
+
       // 다음단계 조건 초기화
-      if (nextStep === "step2" || nextStep === "step3") {
+      if (nextStep === "step2") {
+        setCurrentStep(nextStep);
         setNext(false);
       }
 
       // 다음 단계에 currentStep 추가
-      let nextStepElement = document.getElementById(nextStep);
-      if (nextStepElement) {
-        nextStepElement.classList.add(style.currentStep);
-      }
+      // let nextStepElement = document.getElementById(nextStep);
+      // if (nextStepElement) {
+      //   nextStepElement.classList.add(style.currentStep);
+      // }
     } else {
       if (currentStep === "step1") {
         alert("약관을 모두 동의해주세요.");
+      } else if (currentStep === "step2") {
+        alert("회원가입 필수 내용을 모두 입력해주세요.");
       } else {
         nextStep = "step3";
       }
+    }
+
+    if (currentStep === "step2") {
+      setLoading(true);
+      // 'YYYYMMDD' 형식의 문자열을 'YYYY-MM-DD' 날짜형식으로 변환
+      const formattedBirth = `${user.birth.substring(
+        0,
+        4
+      )}-${user.birth.substring(4, 6)}-${user.birth.substring(6, 8)}`;
+      const birthToSend = new Date(formattedBirth).toISOString();
+
+      // setUser((prev) => {
+      // ...prev, ["birth"]: birthToSend
+      console.log("인서트문");
+      axios
+        .post("/api/member/insertMember", { ...user, birth: birthToSend })
+        .then((resp) => {
+          console.log(resp);
+          setLoading(false);
+          if (resp.data === 1 && nextStep === "step3") {
+            setCurrentStep(nextStep);
+          } else {
+            alert("회원가입에 실패했습니다.");
+          }
+          // return { ...prev, birth: birthToSend };
+        })
+        .catch((error) => {
+          console.error("에러 발생:", error);
+          setLoading(false);
+          // 에러 발생 시에도 상태 업데이트
+          // return { ...prev, birth: birthToSend };
+        });
+      // });
     }
   };
 
@@ -191,10 +227,10 @@ const SignUp = () => {
     }
 
     // 이전 단계에 currentStep 추가
-    let prevStepElement = document.getElementById(prevStep);
-    if (prevStepElement) {
-      prevStepElement.classList.add(style.currentStep);
-    }
+    // let prevStepElement = document.getElementById(prevStep);
+    // if (prevStepElement) {
+    //   prevStepElement.classList.add(style.currentStep);
+    // }
   };
 
   // user State 값 채우기
@@ -212,7 +248,7 @@ const SignUp = () => {
     // 필요 정보를 모두 입력하면 넘어갈 수 있음
     if (
       user.id !== "" &&
-      user.pw !== "" &&
+      user.password !== "" &&
       user.name !== "" &&
       user.birth !== "" &&
       user.email !== "" &&
@@ -227,6 +263,7 @@ const SignUp = () => {
       setNext(false);
     }
     console.log(user);
+    console.log(currentStep);
   }, [user, pwCheckText, currentStep]);
 
   // 아이디 유효성 및 중복 검사
@@ -245,12 +282,12 @@ const SignUp = () => {
             // 중복된 아이디가 있을 때
             setCheckText((prev) => ({
               ...prev,
-              ["id"]: "중복된 아이디입니다. 사용하실 수 없습니다.",
+              id: "중복된 아이디입니다. 사용하실 수 없습니다.",
             }));
             handleCondition("id", false);
           } else {
             // 중복된 아이디가 없을 때
-            setCheckText((prev) => ({ ...prev, ["id"]: "" }));
+            setCheckText((prev) => ({ ...prev, id: "" }));
             // 정규식: 8~14자로 구성, 알파벳 대소문자, 숫자, _로만 구성
             let regexId = /^[\w]{8,14}$/;
             let resultId = regexId.test(user.id);
@@ -258,14 +295,14 @@ const SignUp = () => {
               // 아이디 유효성 검사
               setCheckText((prev) => ({
                 ...prev,
-                ["id"]: "사용가능한 아이디입니다.",
+                id: "사용가능한 아이디입니다.",
               }));
               handleCondition("id", true);
             } else {
               // 사용불가능한 아이디 형식일 때
               setCheckText((prev) => ({
                 ...prev,
-                ["id"]: "8~14자의 영문자, 숫자, 밑줄(_)만 입력 가능합니다.",
+                id: "8~14자의 영문자, 숫자, 밑줄(_)만 입력 가능합니다.",
               }));
               handleCondition("id", false);
             }
@@ -273,80 +310,113 @@ const SignUp = () => {
         });
       } else {
         // 중복된 아이디는 아니지만 유효성검사에 통과하지 못했을 때
-        setCheckText((prev) => ({ ...prev, ["id"]: "" }));
+        setCheckText((prev) => ({ ...prev, id: "" }));
         handleCondition("id", false);
       }
     } else {
       // 아이디 input에 값이 없을 때
-      setCheckText((prev) => ({ ...prev, ["id"]: "" }));
+      setCheckText((prev) => ({ ...prev, id: "" }));
       handleCondition("id", false);
     }
   }, [user.id]);
 
   // 비밀번호 유효성 검사
   useEffect(() => {
-    if (user.pw !== "") {
+    if (user.password !== "") {
       // 비밀번호 input에 값이 있을 때
       // 정규식 : 특수문자 1개, 대문자 1개, 소문자 1개가 모두 포함된 8~30글자
       let regexPw =
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,30}$/;
-      let resultPw = regexPw.test(user.pw);
+      let resultPw = regexPw.test(user.password);
       if (resultPw) {
         // 정규식 검사 통과
         setCheckText((prev) => ({
           ...prev,
-          ["pw"]: "사용가능한 비밀번호입니다.",
+          password: "사용가능한 비밀번호입니다.",
         }));
-        handleCondition("pw", true);
+        handleCondition("password", true);
+        if (pwCheckText === user.password) {
+          console.log("test");
+          // 비밀번호랑 비밀번호 확인이랑 값이 일치할 때
+          setCheckText((prev) => ({
+            ...prev,
+            pwCheck: "비밀번호가 일치합니다.",
+          }));
+          handleCondition("pwCheck", true);
+        } else {
+          setCheckText((prev) => ({
+            ...prev,
+            pwCheck: "비밀번호가 일치하지 않습니다.",
+          }));
+          handleCondition("pwCheck", false);
+        }
       } else {
         // 비밀번호 형식 불일치
         setCheckText((prev) => ({
           ...prev,
-          ["pw"]:
+          password:
             "비밀번호 형식이 올바르지 않습니다. 8~30자의 영문 대소문자, 숫자 밑 특수문자를 사용하세요.",
         }));
-        handleCondition("pw", false);
+        handleCondition("password", false);
+
+        if (pwCheckText !== user.password) {
+          console.log("test");
+          // 비밀번호랑 비밀번호 확인이랑 값이 일치할 때
+          setCheckText((prev) => ({
+            ...prev,
+            pwCheck: "비밀번호가 일치하지 않습니다.",
+          }));
+          handleCondition("pwCheck", false);
+        }
       }
     } else {
+      if (pwCheckText !== "") {
+        setCheckText((prev) => ({
+          ...prev,
+          pwCheck: "비밀번호를 입력해주세요.",
+        }));
+        handleCondition("pwCheck", false);
+      }
       // 비밀번호 input에 값이 없을 때
-      setCheckText((prev) => ({ ...prev, ["pw"]: "" }));
-      handleCondition("pw", false);
+      setCheckText((prev) => ({ ...prev, password: "" }));
+      handleCondition("password", false);
     }
-  }, [user.pw]);
+  }, [user.password]);
 
   // 비밀번호 확인 일치 검사
   useEffect(() => {
     if (pwCheckText !== "") {
       // 비밀번호 확인 input에 값이 있을 때
-      if (user.pw !== "") {
+      if (user.password !== "") {
         // 비밀번호 input에 값이 있을 때
-        if (pwCheckText === user.pw) {
+        if (pwCheckText === user.password) {
           console.log("test");
           // 비밀번호랑 비밀번호 확인이랑 값이 일치할 때
           setCheckText((prev) => ({
             ...prev,
-            ["pwCheck"]: "비밀번호가 일치합니다.",
+            pwCheck: "비밀번호가 일치합니다.",
           }));
           handleCondition("pwCheck", true);
         } else {
           // 비밀번호랑 비밀번호 확인이랑 값이 일치하지 않을 때
           setCheckText((prev) => ({
             ...prev,
-            ["pwCheck"]: "비밀번호가 일치하지 않습니다.",
+            pwCheck: "비밀번호가 일치하지 않습니다.",
           }));
           handleCondition("pwCheck", false);
         }
-      } else {
-        // 비밀번호 input에 값이 없을 때
-        setCheckText((prev) => ({
-          ...prev,
-          ["pwCheck"]: "비밀번호를 입력해주세요.",
-        }));
-        handleCondition("pwCheck", false);
       }
+      // else {
+      //   // 비밀번호 input에 값이 없을 때
+      //   setCheckText((prev) => ({
+      //     ...prev,
+      //     pwCheck: "비밀번호를 입력해주세요.",
+      //   }));
+      //   handleCondition("pwCheck", false);
+      // }
     } else {
       // 비밀번호 확인 input에 값이 없을 때
-      setCheckText((prev) => ({ ...prev, ["pwCheck"]: "" }));
+      setCheckText((prev) => ({ ...prev, pwCheck: "" }));
       handleCondition("pwCheck", false);
     }
   }, [pwCheckText]);
@@ -360,19 +430,18 @@ const SignUp = () => {
 
       // 이름 형식이 올바를때
       if (resultName) {
-        setCheckText((prev) => ({ ...prev, ["name"]: "" }));
+        setCheckText((prev) => ({ ...prev, name: "" }));
         handleCondition("name", true);
       } else {
         // 이름 형식이 올바르지 않을 때
         setCheckText((prev) => ({
           ...prev,
-          ["name"]:
-            "이름 형식이 올바르지 않습니다. 한글 2~5글자로 입력해주세요.",
+          name: "이름 형식이 올바르지 않습니다. 한글 2~5글자로 입력해주세요.",
         }));
         handleCondition("name", false);
       }
     } else {
-      setCheckText((prev) => ({ ...prev, ["name"]: "" }));
+      setCheckText((prev) => ({ ...prev, name: "" }));
       handleCondition("name", false);
     }
   }, [user.name]);
@@ -385,19 +454,19 @@ const SignUp = () => {
       let resultBirth = regexBirth.test(user.birth);
       // 생년월일 형식이 올바를 때
       if (resultBirth) {
-        setCheckText((prev) => ({ ...prev, ["birth"]: "" }));
+        setCheckText((prev) => ({ ...prev, birth: "" }));
         handleCondition("birth", true);
       } else {
         // 생년월일 형식이 올바르지 않을때
         setCheckText((prev) => ({
           ...prev,
-          ["birth"]:
+          birth:
             "생년월일 형식이 올바르지 않습니다. 숫자만 8글자 입력해주세요.",
         }));
         handleCondition("birth", false);
       }
     } else {
-      setCheckText((prev) => ({ ...prev, ["birth"]: "" }));
+      setCheckText((prev) => ({ ...prev, birth: "" }));
       handleCondition("birth", false);
     }
   }, [user.birth]);
@@ -410,34 +479,35 @@ const SignUp = () => {
       let resultEmail = regexEmail.test(user.email);
       if (resultEmail) {
         // 이메일 형식이 올바를 때
-        setCheckText((prev) => ({ ...prev, ["email"]: "" }));
+        setCheckText((prev) => ({ ...prev, email: "" }));
         handleCondition("email", true);
-        axios
-          .post("/api/member/emailDuplicateCheck", user.email)
-          .then((resp) => {
-            if (resp.data) {
-              // 중복된 이메일이 있을 때
-              setCheckText((prev) => ({
-                ...prev,
-                ["email"]: "중복된 이메일입니다. 사용하실 수 없습니다.",
-              }));
-              handleCondition("email", false);
-            } else {
-              // 중복된 이메일이 없을 때
-              setCheckText((prev) => ({ ...prev, ["email"]: "" }));
-              handleCondition("email", true);
-            }
-          });
+
+        const formData = new FormData();
+        formData.append("email", user.email);
+        axios.post("/api/member/emailDuplicateCheck", formData).then((resp) => {
+          if (resp.data) {
+            // 중복된 이메일이 있을 때
+            setCheckText((prev) => ({
+              ...prev,
+              email: "중복된 이메일입니다. 사용하실 수 없습니다.",
+            }));
+            handleCondition("email", false);
+          } else {
+            // 중복된 이메일이 없을 때
+            setCheckText((prev) => ({ ...prev, email: "" }));
+            handleCondition("email", true);
+          }
+        });
       } else {
         // 이메일 형식이 올바르지 않을때
         setCheckText((prev) => ({
           ...prev,
-          ["email"]: "이메일 형식이 올바르지 않습니다.",
+          email: "이메일 형식이 올바르지 않습니다.",
         }));
         handleCondition("email", false);
       }
     } else {
-      setCheckText((prev) => ({ ...prev, ["email"]: "" }));
+      setCheckText((prev) => ({ ...prev, email: "" }));
       handleCondition("email", false);
     }
   }, [user.email]);
@@ -450,7 +520,7 @@ const SignUp = () => {
       let resultPhone = regexPhone.test(user.phone);
       if (resultPhone) {
         // 전화번호 형식이 올바를 때
-        setCheckText((prev) => ({ ...prev, ["phone"]: "" }));
+        setCheckText((prev) => ({ ...prev, phone: "" }));
         handleCondition("phone", true);
         axios
           .post("/api/member/phoneDuplicateCheck", user.phone)
@@ -459,12 +529,12 @@ const SignUp = () => {
               // 중복된 전화번호가 있을 때
               setCheckText((prev) => ({
                 ...prev,
-                ["phone"]: "중복된 전화번호입니다. 사용하실 수 없습니다.",
+                phone: "중복된 전화번호입니다. 사용하실 수 없습니다.",
               }));
               handleCondition("phone", false);
             } else {
               // 중복된 전화번호가 없을 때
-              setCheckText((prev) => ({ ...prev, ["phone"]: "" }));
+              setCheckText((prev) => ({ ...prev, phone: "" }));
               handleCondition("phone", true);
             }
           });
@@ -472,12 +542,12 @@ const SignUp = () => {
         // 전화번호 형식이 올바르지 않을때
         setCheckText((prev) => ({
           ...prev,
-          ["phone"]: "전화번호 형식이 올바르지 않습니다.",
+          phone: "전화번호 형식이 올바르지 않습니다.",
         }));
         handleCondition("phone", false);
       }
     } else {
-      setCheckText((prev) => ({ ...prev, ["phone"]: "" }));
+      setCheckText((prev) => ({ ...prev, phone: "" }));
       handleCondition("phone", false);
     }
   }, [user.phone]);
@@ -492,20 +562,20 @@ const SignUp = () => {
             // 추천인 아이디 있을 때
             setCheckText((prev) => ({
               ...prev,
-              ["memberRecommenderId"]: "",
+              memberRecommenderId: "",
             }));
             handleCondition("memberRecommenderId", true);
           } else {
             // 추천인 아이디가 없을 때
             setCheckText((prev) => ({
               ...prev,
-              ["memberRecommenderId"]: "존재하지 않는 추천인입니다.",
+              memberRecommenderId: "존재하지 않는 추천인입니다.",
             }));
             handleCondition("memberRecommenderId", false);
           }
         });
     } else {
-      setCheckText((prev) => ({ ...prev, ["memberRecommenderId"]: "" }));
+      setCheckText((prev) => ({ ...prev, memberRecommenderId: "" }));
       handleCondition("memberRecommenderId", true);
     }
   }, [user.memberRecommenderId]);
@@ -525,21 +595,22 @@ const SignUp = () => {
     axios.get("/api/member/createNickName").then((resp) => {
       setLoading(false);
       console.log(resp);
-      setUser((prev) => ({ ...prev, ["nickname"]: resp.data }));
+      setUser((prev) => ({ ...prev, nickname: resp.data }));
     });
   };
 
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
+  // if (isLoading) {
+  //   return <LoadingSpinner />;
+  // }
 
   return (
     <div className={style.signupBox}>
       <div className={style.title}>회원가입</div>
       <div className={style.stepBox}>
         <div
-          className={`${style.stepBox__step} ${style.currentStep}`}
-          id="step1"
+          className={`${style.stepBox__step} ${
+            currentStep === "step1" ? style.currentStep : ""
+          }`}
         >
           <div className={style.step__info}>STEP 01</div>
           <div className={style.step__title}>약관동의</div>
@@ -547,16 +618,24 @@ const SignUp = () => {
         <div className={style.stepBox__arrow}>
           <FontAwesomeIcon icon={faChevronRight} />
         </div>
-        <div className={style.stepBox__step} id="step2">
+        <div
+          className={`${style.stepBox__step} ${
+            currentStep === "step2" ? style.currentStep : ""
+          }`}
+        >
           <div className={style.step__info}>STEP 02</div>
           <div className={style.step__title}>정보입력</div>
         </div>
         <div className={style.stepBox__arrow}>
           <FontAwesomeIcon icon={faChevronRight} />
         </div>
-        <div className={style.stepBox__step} id="step3">
+        <div
+          className={`${style.stepBox__step} ${
+            currentStep === "step3" ? style.currentStep : ""
+          }`}
+        >
           <div className={style.step__info}>STEP 03</div>
-          <div className={style.step__title}>계좌등록</div>
+          <div className={style.step__title}>가입완료</div>
         </div>
       </div>
       <div className={style.agrreBox} style={displayStyle("step1")}>
@@ -885,7 +964,7 @@ const SignUp = () => {
               </div>
             </div>
           </div>
-          <div className={style.basicInfo__line} id="pw">
+          <div className={style.basicInfo__line} id="password">
             <div className={style.signup__title}>
               비밀번호<span className={style.essential}>*</span>
             </div>
@@ -893,17 +972,17 @@ const SignUp = () => {
               <input
                 type="password"
                 id="pwInput"
-                name="pw"
+                name="password"
                 placeholder="8~30자의 영문 대소문자, 숫자 및 특수문자를 사용하세요."
                 onChange={handleChange}
-                value={user.pw !== "" ? user.pw : ""}
+                value={user.password !== "" ? user.password : ""}
               />
               <div
                 className={style.signup__chk}
                 id="pwCheck"
-                style={colorStyle(signupConditions.pw)}
+                style={colorStyle(signupConditions.password)}
               >
-                {checkText.pw}
+                {checkText.password}
               </div>
             </div>
           </div>
@@ -954,28 +1033,6 @@ const SignUp = () => {
               </div>
             </div>
           </div>
-          {/* <div className={style.myInfo__line} id="name">
-            <div className={style.signup__title}>
-              이름<span className={style.essential}>*</span>
-            </div>
-            <div className={style.signup__inputBox}>
-              <input
-                type="text"
-                id="nameInput"
-                name="name"
-                placeholder="이름을 입력해주세요."
-                onChange={handleChange}
-              />
-              <div
-                className={style.signup__chk}
-                id="nameCheck"
-                style={colorStyle(signupConditions.name)}
-              >
-                <WhiteRoundBtn title={"본인인증"}></WhiteRoundBtn>
-                {checkText.name}
-              </div>
-            </div>
-          </div> */}
           <div className={style.myInfo__line} id="birth">
             <div className={style.signup__title}>
               생년월일<span className={style.essential}>*</span>
@@ -1043,27 +1100,6 @@ const SignUp = () => {
               </div>
             </div>
           </div>
-          {/* <div className={style.myInfo__line} id="phone">
-            <div className={style.signup__title}>
-              전화번호<span className={style.essential}>*</span>
-            </div>
-            <div className={style.signup__inputBox}>
-              <input
-                type="text"
-                id="phoneInput"
-                name="phone"
-                placeholder="- 없이 숫자만 입력해주세요. ex)01012345678"
-                onChange={handleChange}
-              />
-              <div
-                className={style.signup__chk}
-                id="phoneCheck"
-                style={colorStyle(signupConditions.phone)}
-              >
-                {checkText.phone}
-              </div>
-            </div>
-          </div> */}
           <div className={style.myInfo__line} id="nick">
             <div className={style.signup__title}>
               닉네임<span className={style.essential}>*</span>
@@ -1114,30 +1150,60 @@ const SignUp = () => {
           </div>
         </div>
       </div>
-      <div className={style.stepBtns}>
-        {currentStep === "step1" ? (
-          <GrayRectangleBtn
-            title={"취소"}
-            heightPadding={20}
-            width={190}
-            onClick={handleCancle}
-          ></GrayRectangleBtn>
-        ) : (
-          <GrayRectangleBtn
-            title={"이전"}
-            heightPadding={20}
-            width={190}
-            onClick={handleCancle}
-          ></GrayRectangleBtn>
-        )}
-        <PurpleRectangleBtn
-          title={"다음"}
-          heightPadding={20}
-          width={190}
-          activation={isNext}
-          onClick={handleStep}
-        ></PurpleRectangleBtn>
+      <div className={style.userWelcome} style={displayStyle("step3")}>
+        <div className={style.userWelcomeInfo}>
+          <div>
+            <div className={style.backCircle}>
+              <div className={style.mainCircle}>
+                <FontAwesomeIcon icon={faCheck} />
+              </div>
+            </div>
+          </div>
+          <div className={style.userWelcome__title}>회원가입 완료</div>
+          <div className={style.userWelcome__conf}>
+            {user.name}님({user.id})의 회원가입이 성공적으로 완료되었습니다.
+          </div>
+          <div className={style.userWelcome__info}>
+            입력한 회원 정보는 마이페이지에서 확인 및 수정이 가능합니다.
+          </div>
+        </div>
       </div>
+      {currentStep !== "step3" ? (
+        <div className={style.stepBtns}>
+          {currentStep === "step1" ? (
+            <GrayRectangleBtn
+              title={"취소"}
+              heightPadding={20}
+              width={190}
+              onClick={handleCancle}
+            ></GrayRectangleBtn>
+          ) : (
+            <GrayRectangleBtn
+              title={"이전"}
+              heightPadding={20}
+              width={190}
+              onClick={handleCancle}
+            ></GrayRectangleBtn>
+          )}
+          {currentStep !== "step2" ? (
+            <PurpleRectangleBtn
+              title={"다음"}
+              heightPadding={20}
+              width={190}
+              activation={isNext}
+              onClick={handleStep}
+            ></PurpleRectangleBtn>
+          ) : (
+            <PurpleRectangleBtn
+              title={"회원가입"}
+              heightPadding={20}
+              width={190}
+              activation={isNext}
+              onClick={handleStep}
+            ></PurpleRectangleBtn>
+          )}
+        </div>
+      ) : null}
     </div>
   );
 };

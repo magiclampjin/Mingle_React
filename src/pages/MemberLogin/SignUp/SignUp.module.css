@@ -56,7 +56,8 @@
 }
 
 .agrreBox,
-.signupBox {
+.signupBox,
+.userWelcome {
   padding: 0 35px;
   margin-top: 30px;
 }
@@ -74,7 +75,6 @@
   margin-left: 10px;
 }
 .useDetail {
-  /* margin: 20px 0 0 25px; */
   margin-top: 20px;
   border: 1px solid #d1d2d850;
   padding: 20px;
@@ -198,6 +198,14 @@
   display: flex;
   align-items: center;
 }
+.currentBtn {
+  display: flex;
+}
+.userWelcomeInfo {
+  border: 1px solid #7b61ff;
+  border-radius: 20px;
+  padding: 16px 24px;
+}
 
 @media (max-width: 786px) {
   .signupBox {
@@ -227,11 +235,11 @@
 
   .myInfo__line:nth-child(4) .signup__chk,
   .myInfo__line:last-child .signup__chk {
-    padding: 0;
+    padding: 0 10px 0 0;
   }
 
   .myInfo__line:nth-child(4) .signup__chk button,
   .myInfo__line:last-child .signup__chk button {
-    margin: 0;
+    margin: 0 10px 0 0;
   }
 }
