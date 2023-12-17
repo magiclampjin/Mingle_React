@@ -4,7 +4,7 @@ import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 import axios from "axios";
 
 import { Cookies } from "react-cookie";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
 import { LoginContext } from "../../../App";
 
@@ -15,6 +15,7 @@ const Login = () => {
   const { setLoginId } = useContext(LoginContext);
 
   const navi = useNavigate();
+  const location = useLocation();
   const cookies = new Cookies();
 
   useEffect(() => {
@@ -46,6 +47,9 @@ const Login = () => {
       formData.append("id", user.id);
       formData.append("pw", user.pw);
       setLoading(true);
+
+      // const location = useLocation();
+
       axios.post("/api/member/login", formData).then((resp) => {
         if (resp.statusText === "OK") {
           setLoginId(user.id);
@@ -61,7 +65,9 @@ const Login = () => {
           });
 
           setUser({ id: "", pw: "" });
+
           navi(-1);
+
           setLoading(false);
         } else if (resp.statusText === "UNAUTHORIZED") {
           alert("아이디 혹은 비밀번호가 일치하지 않습니다.");

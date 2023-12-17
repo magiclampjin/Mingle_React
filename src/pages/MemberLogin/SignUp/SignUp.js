@@ -7,10 +7,12 @@ import axios from "axios";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight, faCheck } from "@fortawesome/free-solid-svg-icons";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { LoginContext } from "../../../App";
 
 const SignUp = () => {
+  const { loginId, setLoginId } = useContext(LoginContext);
   // 현재 회원가입 단계
   const [currentStep, setCurrentStep] = useState("step1");
   const [chkAll, setChhAll] = useState(false); // 1단계 약관 모두 돵의
@@ -62,6 +64,13 @@ const SignUp = () => {
     };
   };
   const navi = useNavigate();
+
+  // 로그인 된 사용자가 만약 이전 페이지가 마이페이지라면 홈으로 돌려보내기
+  useEffect(() => {
+    if (loginId !== "") {
+      navi("/");
+    }
+  }, [loginId]);
 
   // 현재 몇단계인지 저장
   useEffect(() => {
@@ -177,25 +186,22 @@ const SignUp = () => {
       )}-${user.birth.substring(4, 6)}-${user.birth.substring(6, 8)}`;
       const birthToSend = new Date(formattedBirth).toISOString();
 
-      // setUser((prev) => {
-      // ...prev, ["birth"]: birthToSend
-      console.log("인서트문");
       axios
         .post("/api/member/insertMember", { ...user, birth: birthToSend })
         .then((resp) => {
-          console.log(resp);
           setLoading(false);
           if (resp.data === 1 && nextStep === "step3") {
             setCurrentStep(nextStep);
           } else {
             alert("회원가입에 실패했습니다.");
           }
-          // return { ...prev, birth: birthToSend };
         })
         .catch((error) => {
+          // 에러 발생 시
           console.error("에러 발생:", error);
           setLoading(false);
-          // 에러 발생 시에도 상태 업데이트
+          alert("회원가입에 실패했습니다.");
+
           // return { ...prev, birth: birthToSend };
         });
       // });
@@ -262,8 +268,6 @@ const SignUp = () => {
     if (currentStep === "step3") {
       setNext(false);
     }
-    console.log(user);
-    console.log(currentStep);
   }, [user, pwCheckText, currentStep]);
 
   // 아이디 유효성 및 중복 검사
@@ -335,8 +339,7 @@ const SignUp = () => {
           password: "사용가능한 비밀번호입니다.",
         }));
         handleCondition("password", true);
-        if (pwCheckText === user.password) {
-          console.log("test");
+        if (pwCheckText !== "" && pwCheckText === user.password) {
           // 비밀번호랑 비밀번호 확인이랑 값이 일치할 때
           setCheckText((prev) => ({
             ...prev,
@@ -359,8 +362,7 @@ const SignUp = () => {
         }));
         handleCondition("password", false);
 
-        if (pwCheckText !== user.password) {
-          console.log("test");
+        if (pwCheckText !== "" && pwCheckText !== user.password) {
           // 비밀번호랑 비밀번호 확인이랑 값이 일치할 때
           setCheckText((prev) => ({
             ...prev,
@@ -390,7 +392,6 @@ const SignUp = () => {
       if (user.password !== "") {
         // 비밀번호 input에 값이 있을 때
         if (pwCheckText === user.password) {
-          console.log("test");
           // 비밀번호랑 비밀번호 확인이랑 값이 일치할 때
           setCheckText((prev) => ({
             ...prev,
@@ -594,14 +595,21 @@ const SignUp = () => {
     setLoading(true);
     axios.get("/api/member/createNickName").then((resp) => {
       setLoading(false);
-      console.log(resp);
       setUser((prev) => ({ ...prev, nickname: resp.data }));
     });
   };
 
-  // if (isLoading) {
-  //   return <LoadingSpinner />;
-  // }
+  const handleHome = () => {
+    navi("/");
+  };
+
+  const handleLogin = () => {
+    navi("/login");
+  };
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className={style.signupBox}>
@@ -1165,7 +1173,9 @@ const SignUp = () => {
           </div>
           <div className={style.userWelcome__info}>
             입력한 회원 정보는 마이페이지에서 확인 및 수정이 가능합니다.
+            <br></br>파티를 이용하시려면 계좌 정보를 등록해주세요.
           </div>
+          <div className={style.accountInfo}>계좌 정보 등록하기</div>
         </div>
       </div>
       {currentStep !== "step3" ? (
@@ -1203,7 +1213,23 @@ const SignUp = () => {
             ></PurpleRectangleBtn>
           )}
         </div>
-      ) : null}
+      ) : (
+        <div className={style.stepBtns}>
+          <GrayRectangleBtn
+            title={"홈으로"}
+            heightPadding={20}
+            width={190}
+            onClick={handleHome}
+          ></GrayRectangleBtn>
+          <PurpleRectangleBtn
+            title={"로그인"}
+            heightPadding={20}
+            width={190}
+            activation={true}
+            onClick={handleLogin}
+          ></PurpleRectangleBtn>
+        </div>
+      )}
     </div>
   );
 };

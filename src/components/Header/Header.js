@@ -46,13 +46,13 @@ const Header = () => {
 
   const handleLogout = () => {
     axios.post("/api/member/logout").then((resp) => {
-      setLoginId(null);
+      setLoginId("");
       // 아이디 기억하기 하지 않으면 쿠키에 저장된 아이디 지우기
       if (!cookies.get("rememberID")) {
         cookies.remove("loginID", { path: "/" });
       }
       closeModal();
-      navi("/");
+      // navi(-1);
     });
   };
 

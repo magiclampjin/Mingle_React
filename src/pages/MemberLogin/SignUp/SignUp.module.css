@@ -204,7 +204,62 @@
 .userWelcomeInfo {
   border: 1px solid #7b61ff;
   border-radius: 20px;
-  padding: 16px 24px;
+  padding: 30px 24px;
+  /* text-align: center; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.backCircle {
+  position: relative;
+  border-radius: 50%;
+  background-color: #7b61ff50;
+  width: 80px;
+  height: 80px;
+}
+.mainCircle {
+  position: absolute;
+  border-radius: 50%;
+  background-color: white;
+  width: 60px;
+  height: 60px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mainCircle svg {
+  font-size: 40px;
+}
+
+.userWelcome__title {
+  margin-top: 20px;
+  font-size: 30px;
+  font-weight: 700;
+}
+.userWelcome__conf {
+  margin-top: 50px;
+  font-size: 20px;
+  /* width: 90%; */
+  text-align: center;
+}
+.userWelcome__info {
+  margin-top: 50px;
+  border-radius: 100px;
+  background-color: #7b61ff70;
+  padding: 16px;
+  width: 90%;
+  text-align: center;
+  color: white;
+}
+.accountInfo {
+  text-decoration: underline;
+  color: #5c4dae;
+  margin-top: 20px;
+  cursor: pointer;
 }
 
 @media (max-width: 786px) {
