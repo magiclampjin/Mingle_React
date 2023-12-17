@@ -17,7 +17,7 @@ const Header = () => {
   const { loginId, setLoginId } = useContext(LoginContext);
   const { loginNick, setLoginNick } = useContext(LoginContext);
 
-  const navi = useNavigate();
+  // const navi = useNavigate();
   const cookies = new Cookies();
 
   useEffect(() => {
@@ -76,7 +76,7 @@ const Header = () => {
             </div>
             <div className={style.navi__conf}>자주 묻는 질문</div>
             {loginId === "" || loginId === null ? (
-              <Link to="login">
+              <Link to="member/login">
                 <PurpleRoundBtn
                   title={"로그인"}
                   activation={true}
@@ -129,7 +129,7 @@ const Header = () => {
             <PurpleRoundBtn title={"로그인"} activation={true}></PurpleRoundBtn>
           </Link> */}
           {loginId === "" || loginId === null ? (
-            <Link to="login">
+            <Link to="member/login">
               <PurpleRoundBtn
                 title={"로그인"}
                 activation={true}

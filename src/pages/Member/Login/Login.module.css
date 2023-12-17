@@ -57,8 +57,11 @@
 .memberMenu div:last-child {
   padding-left: 10px;
 }
-input[type="checkbox"] {
+.loginOption input[type="checkbox"] {
   margin-right: 10px;
+}
+.memberMenu {
+  cursor: pointer;
 }
 @media (max-width: 786px) {
   .loginBox {

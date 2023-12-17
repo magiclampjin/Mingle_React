@@ -4,7 +4,7 @@ import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 import axios from "axios";
 
 import { Cookies } from "react-cookie";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
 import { LoginContext } from "../../../App";
 
@@ -15,7 +15,7 @@ const Login = () => {
   const { setLoginId } = useContext(LoginContext);
 
   const navi = useNavigate();
-  const location = useLocation();
+  // const location = useLocation();
   const cookies = new Cookies();
 
   useEffect(() => {
@@ -87,6 +87,10 @@ const Login = () => {
     }
   };
 
+  const handleSignup = () => {
+    navi("/member/signup");
+  };
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -130,9 +134,8 @@ const Login = () => {
           <label htmlFor="saveId">아이디 기억하기</label>
         </div>
         <div className={style.memberMenu}>
-          <Link to="signup">
-            <div>회원가입</div>
-          </Link>
+          <div onClick={handleSignup}>회원가입</div>
+
           <div>아이디/비밀번호 찾기</div>
         </div>
       </div>
