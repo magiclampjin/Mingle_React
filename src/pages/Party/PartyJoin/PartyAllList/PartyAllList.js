@@ -8,8 +8,9 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import React from 'react';
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const PartyJoinList = ({selectServiceCategory,setSelectServiceCategory}) => {
+const PartyAllList = ({selectServiceCategory,setSelectServiceCategory}) => {
      // 서비스 카테고리 목록
      const [serviceCategory,setServiceCategory] = useState([]);
      // 카테고리 선택 시 해당 카테고리 내 서비스 목록
@@ -18,6 +19,8 @@ const PartyJoinList = ({selectServiceCategory,setSelectServiceCategory}) => {
      const [isCategoryLoading, setCategoryLoading] = useState(false);
      // 서비스 목록 불러오기 로딩 여부
      const [isServiceListLoading, setServiceListLoading]= useState(false);
+
+     const navi = useNavigate();
 
      // 선택한 서비스 종류
      const [selectService, setSelectService] = useState("");
@@ -33,7 +36,6 @@ const PartyJoinList = ({selectServiceCategory,setSelectServiceCategory}) => {
         axios.get(`/api/party`).then(resp=>{
             setServiceCategory(Array.isArray(resp.data) ? resp.data : []);
             axios.get(`/api/party/getService/${selectServiceCategory}`).then(resp=>{
-                console.log(resp.data);
                 setService(Array.isArray(resp.data)? resp.data : []);
                 setCategoryLoading(false);
             }).catch(()=>{
@@ -59,6 +61,7 @@ const PartyJoinList = ({selectServiceCategory,setSelectServiceCategory}) => {
         if (clickedElement === partyContentElement || partyContentElement.contains(clickedElement)) {
             // partyContent 또는 그 자식 요소를 클릭한 경우에만 처리
             setSelectService(partyContentElement.dataset.id);
+            navi("/party/PartyJoin/PartyList",{state:{selectService:partyContentElement.dataset.id}});
         }
         
     };
@@ -108,4 +111,4 @@ const PartyJoinList = ({selectServiceCategory,setSelectServiceCategory}) => {
     );
 };
 
-export default PartyJoinList;
+export default PartyAllList;
