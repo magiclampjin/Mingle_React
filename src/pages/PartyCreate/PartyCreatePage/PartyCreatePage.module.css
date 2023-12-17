@@ -1,0 +1,271 @@
+.body{
+    max-width: 1200px;
+    margin: auto;
+    padding:20px 0px;
+}
+
+.right, .left{
+    padding:0px 20px;
+    width: 50%;
+}
+
+.right{
+}
+
+.centerAlign {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.VAlign{
+    display:flex;
+    align-items: center;
+}
+
+.hAlign{
+    display:flex;
+    justify-content: center;
+}
+
+.dflex{
+    display: flex;
+}
+
+/* 1단계 */
+.title{
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 35px;
+}
+
+.inputTags>div{
+    background-color: #DFE2E680;
+    width: 100%;
+    height: 55px; 
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding:5px 0px 5px 20px;
+}
+
+.inputTag{
+    display: flex;
+}
+
+.inputTag>div{
+    width: 90%;
+}
+
+.inputTags>div>div>input{
+    background-color: transparent;
+    width: 100%;
+    height: 100%;
+    border:0;
+    margin-top: 0px !important;
+    outline: none;
+}
+
+.hasContent{
+    height: 60% !important;
+    background-color: white;
+}
+
+.iconCover{
+    width: 10% !important;
+    height: 100%;
+}
+
+.eyeIcon{
+    width: 100%;
+}
+.eyeIcon *{
+    color: #676D7C50;
+}
+
+.eyeIconActive * {
+    color: #676D7C !important;
+}
+
+.eyeIcon:hover{
+    cursor:pointer;
+}
+
+.pwCheck{
+    color:#FFAE6F;
+    font-size: 14px;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+.inputTitle{
+    display: flex;
+    align-items: flex-end;
+    height: 40%;
+    font-size: 12px;
+    font-weight: 500;
+    color: #676D7C;
+    margin-bottom: 2px;
+}
+
+
+.inputTitleHidden{
+    display:none;
+}
+
+.inputNotice{
+    display: flex;
+    align-items: flex-start;
+    margin-top: 40px;
+}
+
+.inputNotice *{
+    font-size: 13px;
+    color:#676D7C;
+    font-weight: 500;
+}
+
+.inputNotice svg{
+    margin-top: 3.4px;
+}
+
+.inputNotice path{
+    color:#F05050;
+}
+
+.inputNoticeTxt{
+    color:#676D7C;
+    font-size: 13px;
+    font-weight: 500;
+    margin-left: 5px;
+}
+
+.bnts{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.prevBtn{
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+
+.nextBtn{
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.goService{
+    font-size: 13px;
+    text-align: center;
+    margin-top: 50px;
+    
+}
+.goService>a{
+    font-weight: 500;
+    color:#676D7C99 !important;
+    text-decoration: underline !important;
+}
+
+.goService>a:hover{
+    cursor: pointer;
+}
+
+@media (max-width:850px){
+    .left{
+        display: none;
+    }
+    .right{
+        width: 100%;
+    }
+}
+
+
+/* 2단계 */
+
+.peopleCntCover,.periodCover{
+    border: 1px solid #DFE2E6;
+    border-radius: 10px;
+    padding:15px;
+    margin-bottom: 20px;
+}
+
+.peopleCnt, .period{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;   
+}
+
+.peopleCntBtn *{
+    font-size: 20px;
+    color:#676D7C;
+}
+
+.peopleCntBtn:hover{
+    cursor: pointer;
+}
+
+.disabled *{
+    color:#676D7C50;
+}
+
+.peopelCntTxt{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+
+/* 3단계 */
+
+.periodCover{
+    display: flex;
+}
+
+.periodCover:hover{
+    cursor: pointer;
+}
+
+.period{
+    width: 93%;
+}
+
+.periodTitle{
+    color:#676D7C99;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.periodTxt{
+    color:#676D7C;
+    font-weight: bold;
+}
+
+.periodIcon{
+    width: 7%;
+}
+
+.periodIcon * {
+    color:#676D7C99;
+}
+
+
+
+/* 4단계 (마지막) */
+.subMenu{
+    margin-top: 50px;
+}
+
+.subMenu>button:hover{
+    background-color: #7b61ff50;
+    color:white;
+    border: 1px solid #7b61ff50;
+}
+
+
+.subTitle{
+    font-weight: bold;
+    margin-bottom: 15px;
+}

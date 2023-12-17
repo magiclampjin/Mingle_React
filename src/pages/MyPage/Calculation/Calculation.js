@@ -1,43 +1,45 @@
+import CalculationSelectBox from '../../../components/CalculationSelectBox/CalculationSelectBox';
 import PurpleRoundBtn from '../../../components/PurpleRoundBtn/PurpleRoundBtn';
 import style from '../Calculation/Calculation.module.css';
 import { useState } from 'react';
 // import MyCalendar from './../MyCalendar';
 
 
-const SelectBox = ({day, setDay}) =>{
+// const SelectBox = ({day, setDay}) =>{
 
-  // select 핸들
-  const handleSelect = (e) =>{
-    // 함수형 업데이트로 업데이트된 select값 확인
-    setDay((prev) => {
-      console.log("이전 select값 : " + prev);
-      console.log("현재 select값 : " + e.target.value);
-      return e.target.value;
-    });
-  }
+// component로 뺌
+//   // select 핸들
+//   const handleSelect = (e) =>{
+//     // 함수형 업데이트로 업데이트된 select값 확인
+//     setDay((prev) => {
+//       console.log("이전 select값 : " + prev);
+//       console.log("현재 select값 : " + e.target.value);
+//       return e.target.value;
+//     });
+//   }
 
-  // 일 배열
-  const dayList = [];
+//   // 일 배열
+//   const dayList = [];
 
-  // 매달 1일부터 28일까지 배열에 삽입
-  for(let i = 1; i <= 28 ; i++){
-    dayList.push(i);
-  }
+//   // 매달 1일부터 28일까지 배열에 삽입
+//   for(let i = 1; i <= 28 ; i++){
+//     dayList.push(i);
+//   }
 
-  // 배열 요소 map으로 출력
-  return(
-    <select name="" id="" className={style.selectBox} onChange={handleSelect} value={day}>
-      {dayList.map((item)=>{
-        return(
-          <option key={item} value={item}>
-          매달 {item} 일
-        </option>
-        )
-      })}
-    </select>
+//   // 배열 요소 map으로 출력
+//   return(
+//     <select name="" id="" className={style.selectBox} onChange={handleSelect} value={day}>
+//       {dayList.map((item)=>{
+//         return(
+//           <option key={item} value={item}>
+//           매달 {item} 일
+//         </option>
+//         )
+//       })}
+//     </select>
 
-  );
-}
+//   );
+// }
 
 // 버튼 누르면 변경된 날짜 저장
 const DayChangeHandler = ({day}) =>{
@@ -59,7 +61,7 @@ const Calculation = () => {
 
             <div className={style.calManageBox__selectBox}>
               <div className={style.calManage__changeSelect}>
-                <SelectBox day={day} setDay={setDay}/>
+                <CalculationSelectBox day={day} setDay={setDay}/>
               </div>
               <div className={style.calManageBox__changeCom}>
                   <PurpleRoundBtn title={"변경완료"} activation={true} onClick={()=>{ DayChangeHandler({day})}}></PurpleRoundBtn>
