@@ -30,20 +30,20 @@ const ServiceInfoModal = ({ isOpen, onRequestClose, contentLabel, selectService,
     const handleNext = () => {
         if(isChked){
             // 로그인 여부 판별
-            axios.get("/api/party/isAuthenticated").then(resp=>{
-                if(resp===true){
-                    // 로그인된 유저일 경우 파티 생성 창으로 이동
-                    navi("/party/PartyCreatePage",{state:{service:service}});
-                }else{
-                    // 로그인하지않은 유저일 경우 로그인창으로 이동 혹은 현재 페이지 유지
-                    if(window.confirm("로그인 후 이용 가능한 서비스입니다.\n로그인 화면으로 이동하시겠습니까?")){
-                        navi("/login");
-                    }else{
+            // axios.get("/api/party/isAuthenticated").then(resp=>{
+            //     if(resp===true){
+            //         // 로그인된 유저일 경우 파티 생성 창으로 이동
+            //         navi("/party/PartyCreatePage",{state:{service:service}});
+            //     }else{
+            //         // 로그인하지않은 유저일 경우 로그인창으로 이동 혹은 현재 페이지 유지
+            //         if(window.confirm("로그인 후 이용 가능한 서비스입니다.\n로그인 화면으로 이동하시겠습니까?")){
+            //             navi("/login");
+            //         }else{
 
-                    }
-                }
-            })
-            
+            //         }
+            //     }
+            // })
+            navi("/party/PartyCreate/PartyCreatePage",{state:{service:service}});
         }
     }
 
