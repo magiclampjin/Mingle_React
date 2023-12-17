@@ -2,10 +2,10 @@ import Modal from "react-modal";
 import axios from "axios";
 import style from "./ServiceInfoModal.module.css";
 import { useEffect, useState } from "react";
-import LoadingSpinnerMini from "../../../../components/LoadingSpinnerMini/LoadingSpinnerMini";
+import LoadingSpinnerMini from "../../../../../components/LoadingSpinnerMini/LoadingSpinnerMini";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTriangleExclamation, faCheck } from "@fortawesome/free-solid-svg-icons";
-import PurpleRectangleBtn from "../../../../components/PurpleRectangleBtn/PurpleRectangleBtn"
+import PurpleRectangleBtn from "../../../../../components/PurpleRectangleBtn/PurpleRectangleBtn"
 import { useNavigate } from "react-router-dom";
 
 Modal.setAppElement("#root");

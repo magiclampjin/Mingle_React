@@ -1,6 +1,6 @@
 import style from "./PartyCreateList.module.css"
-import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
-import LoadingSpinnerMini from "../../../components/LoadingSpinnerMini/LoadingSpinnerMini";
+import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
+import LoadingSpinnerMini from "../../../../components/LoadingSpinnerMini/LoadingSpinnerMini";
 import ServiceCategoryNavi from "./ServiceCategoryNavi/ServiceCategoryNavi"; 
 
 import React from 'react';

@@ -1,6 +1,6 @@
 import style from "../../PartyCreate/PartyCreateList/PartyCreateList.module.css"
-import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
-import LoadingSpinnerMini from "../../../components/LoadingSpinnerMini/LoadingSpinnerMini";
+import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
+import LoadingSpinnerMini from "../../../../components/LoadingSpinnerMini/LoadingSpinnerMini";
 import ServiceCategoryNavi from "../../PartyCreate/PartyCreateList/ServiceCategoryNavi/ServiceCategoryNavi"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

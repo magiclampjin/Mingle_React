@@ -4,12 +4,12 @@ import {useState} from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faTriangleExclamation, faPlus, faMinus, faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
-import PurpleRectangleBtn from "../../../components/PurpleRectangleBtn/PurpleRectangleBtn";
+import PurpleRectangleBtn from "../../../../components/PurpleRectangleBtn/PurpleRectangleBtn";
 import StartDateModal from "./StartDateModal/StartDateModal"
 import moment from "moment";
 import PeriodModal from "./PeriodModal/PeriodModal";
-import WhiteRectangleBtn from "../../../components/WhiteRectangleBtn/WhiteRectangleBtn";
-import CalculationSelectBox from "../../../components/CalculationSelectBox/CalculationSelectBox";
+import WhiteRectangleBtn from "../../../../components/WhiteRectangleBtn/WhiteRectangleBtn";
+import CalculationSelectBox from "../../../../components/CalculationSelectBox/CalculationSelectBox";
 import { useNavigate } from "react-router-dom";
 
 const PartyCreatePage = () =>{
