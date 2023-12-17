@@ -160,7 +160,7 @@ const Header = () => {
                   />
                   <div className={style.proffileModalInfo}>
                     <div>{loginNick}님</div>
-                    <div>
+                    <div className={style.mypageBtn}>
                       마이페이지
                       <FontAwesomeIcon icon={faAngleRight} />
                     </div>
