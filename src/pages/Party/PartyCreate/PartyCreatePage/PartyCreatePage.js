@@ -1,9 +1,9 @@
 import style from "./PartyCreatePage.module.css";
 import {useLocation} from "react-router-dom";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faTriangleExclamation, faPlus, faMinus, faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faTriangleExclamation, faPlus, faMinus, faChevronDown, faChevronUp, faCheck } from "@fortawesome/free-solid-svg-icons";
 import PurpleRectangleBtn from "../../../../components/PurpleRectangleBtn/PurpleRectangleBtn";
 import StartDateModal from "./StartDateModal/StartDateModal"
 import moment from "moment";
@@ -227,6 +227,14 @@ const PartyCreatePage = () =>{
     const [isAllComplete, setAllComplete] = useState(false);
 
     // 결제 계좌 정보
+    const [account, setAccount] = useState();
+
+    // 등록된 계좌 정보 있는 지 확인
+    useEffect(()=>{
+        axios.get("/api/paymentAccount/accountSelect").then(resp=>{
+            setAccount(resp.data);
+        });
+    },[isAllComplete])
 
     // 정산일 정보
     const [calculation, setCalculation] = useState(1); 
@@ -357,8 +365,19 @@ const PartyCreatePage = () =>{
                         <div className={style.title}>마지막 단계<br></br>결제 계좌와 정산일을 등록해주세요.</div>
                        
                         <div className={style.subMenu}>
-                            <div className={style.subTitle}>결제 정보 등록</div>
-                            <WhiteRectangleBtn title="+ 결제 계좌 등록하기" onClick={()=>{alert("구현 예정 기능입니다."); setAllComplete(true);}} width={300} heightPadding={5}/>
+                            <div className={style.subTitle}>{account?"결제 정보 확인":"결제 정보 등록"}</div>
+                            {
+                                account?
+                                <>
+                                    <div className={style.accountBox}>
+                                        <div className={style.bank}>{account.bankId}</div>
+                                        <div className={style.accountNumber}>{account.accountNumber}</div>
+                                        <div className={style.accountChkIcon}><FontAwesomeIcon icon={faCheck} /></div>
+                                    </div>
+                                </>
+                                :<WhiteRectangleBtn title="+ 결제 계좌 등록하기" onClick={()=>{alert("구현 예정 기능입니다."); setAllComplete(true);}} width={300} heightPadding={5}/>
+                                
+                            }
                             <div className={`${style.inputNotice}`}><FontAwesomeIcon icon={faTriangleExclamation} size="xs"/><div className={style.inputNoticeTxt}>결제 계좌는 파티장의 귀책 사유 발생시 위약금 부과를 위해 필요하며, 유효성 검증을 위해 1원 시범 결제 후 즉시 취소처리 합니다.</div></div>
                         </div>
                         <div className={style.subMenu}>

@@ -65,9 +65,9 @@ const PaymentManage = () =>{
     // 계좌번호 입력
     const handleAccountNum = (e) =>{
         console.log(e.target.value);
-        const newAccountValue = e.target.value;
+        // 숫자만 입력 받기
+        const newAccountValue = e.target.value.replace(/[^0-9]/g, '');
         setAccountNum(newAccountValue);
-
         // 입력된 계좌 번호 유효성 검사
         const valid = isValidKoreanBankAccountNumber(newAccountValue);
         setIsAccount(valid);
@@ -362,6 +362,7 @@ const PaymentManage = () =>{
                                             borderColor: accountNum ? (isAccount ? 'black' : 'red') : 'black'
                                         }} 
                                         onChange={handleAccountNum}
+                                        value={accountNum}
                                         />
                                     </div>
                                 </div>
@@ -449,6 +450,7 @@ const PaymentManage = () =>{
                                             borderColor: accountNum ? (isAccount ? 'black' : 'red') : 'black'
                                         }} 
                                         onChange={handleAccountNum}
+                                        value={accountNum}
                                         />
                                     </div>
                                 </div>
