@@ -48,7 +48,26 @@ const PartyList = () => {
         let now = new Date();
         now.setHours(0,0,0,0);
         now.setHours(now.getHours()+9);
-        return Math.abs((new Date(value).getTime() - now.getTime())/(1000*60*60*24));
+        const diff = (new Date(value).getTime() - now.getTime())/(1000*60*60*24);
+        if(diff === 0){
+            return (
+                <>
+                    <span className={style.colorMainPurple}>오늘</span> 시작되는
+                </>
+            );
+        }else if(diff < 0){
+            return (
+                <>
+                    <span className={style.colorMainPurple}>현재</span> 진행중인
+                </>
+            );
+        }else{
+            return (
+                <>
+                    <span className={style.colorMainPurple}>{diff}일 후</span> 시작되는
+                </>
+            );
+        }
     }
 
     // 종료일 계산하는 함수
@@ -83,7 +102,7 @@ const PartyList = () => {
                                 <div key={i} className={`${style.party}`} data-id={e.id}>
                                     <div className={`${style.partyTop} ${style.dflex}`}>
                                         <div className={`${style.partyStartDate} ${style.title} ${style.w70}`}>
-                                            <span className={style.colorMainPurple}>{getStartDate(e.startDate)}일 후</span> 시작되는 <span className={style.colorMainPurple}>{e.monthCount}개월</span> 파티
+                                            {getStartDate(e.startDate)}<span className={style.colorMainPurple}> {e.monthCount}개월</span> 파티
                                         </div>
                                         <div className={`${style.price} ${style.centerAlign} ${style.w30}`}><div className={`${style.wonIcon} ${style.centerAlign}`}><FontAwesomeIcon icon={faWonSign}/></div>월 {price}원</div>
                                     </div>
