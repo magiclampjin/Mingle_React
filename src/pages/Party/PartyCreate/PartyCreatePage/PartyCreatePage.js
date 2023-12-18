@@ -11,6 +11,7 @@ import PeriodModal from "./PeriodModal/PeriodModal";
 import WhiteRectangleBtn from "../../../../components/WhiteRectangleBtn/WhiteRectangleBtn";
 import CalculationSelectBox from "../../../../components/CalculationSelectBox/CalculationSelectBox";
 import { useNavigate } from "react-router-dom";
+import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
 
 const PartyCreatePage = () =>{
     //  공통 사용 -------------------------------------------------
@@ -18,6 +19,7 @@ const PartyCreatePage = () =>{
     const location = useLocation();
     const service = location.state.service;
     const navi = useNavigate();
+    const [isLoading, setLoading] = useState(false);
 
     // 현재 단계
     const [step, setStep] = useState(1);
@@ -230,16 +232,20 @@ const PartyCreatePage = () =>{
     const [calculation, setCalculation] = useState(1); 
     const handleComplete = () => {
         if(isAllComplete){
+            setLoading(true);
+            let date = new Date(value);
+            date.setHours(date.getHours()+9);
             let partyData = {
                 peopleCount:peopleCnt,
                 serviceId:service.id,
-                startDate:new Date(value).toISOString(),
+                startDate:date.toISOString(),
                 monthCount:periodMonth,
                 content:"내용",
                 loginId:accountInfo.id,
                 loginPw:accountInfo.pw
             }
             axios.post("/api/party", partyData).then(resp=>{
+                setLoading(false);
                 if(window.confirm("파티 등록 성공! 등록된 정보를 확인하시겠어요?")){
                     navi("/");
                 }else{
@@ -249,6 +255,9 @@ const PartyCreatePage = () =>{
         }
     }
 
+    if(isLoading){
+        return <LoadingSpinner/>;
+    }
     // -------------------------------------------------------------------------------
 
     return(

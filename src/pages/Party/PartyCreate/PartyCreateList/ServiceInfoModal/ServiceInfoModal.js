@@ -108,7 +108,7 @@ const ServiceInfoModal = ({ isOpen, onRequestClose, contentLabel, selectService,
                     </div>
                 </div>
                 <div className={style.chkBox}>
-                    <input type="checkbox" id="chkBox" onChange={handleChange}></input><label htmlFor="chkBox">안내를 확인했어요.</label>
+                    <input type="checkbox" id="chkBox" className={style.chkBoxInput} onChange={handleChange}></input><label htmlFor="chkBox">안내를 확인했어요.</label>
                 </div>
                 <PurpleRectangleBtn title="다음" activation={isChked} onClick={handleNext} width={405} heightPadding={10}/>
             </>):null         
