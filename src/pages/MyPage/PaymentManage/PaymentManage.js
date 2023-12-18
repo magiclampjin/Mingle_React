@@ -255,13 +255,12 @@ const PaymentManage = () =>{
     
     // 수정모달의 제출
     const handleUpdateSubmit = () => {
-        console.log(totalValid);
         
         if(totalValid){
             // 카드 등록
             console.log("은행 : "+selectedBank);
             console.log("계좌번호 : "+accountNum);
-            axios.post("/api/paymentAccount/accountUpdate",postData).then((resp)=>{
+            axios.put("/api/paymentAccount/accountUpdate",postData).then((resp)=>{
                 closeUpdateModal();
             })
             window.location.reload();
@@ -321,7 +320,7 @@ const PaymentManage = () =>{
                     
                 </div>
             </div>
-
+                {/* 등록 모달 */}
                  {card && 
                     <>
                         <MypageModal
