@@ -12,29 +12,23 @@ import axios from 'axios';
 
 const PaymentManage = () =>{
 
-    // 카드 State
+    // 계좌 State
     const [card,setCard] = useState(false);
-    // 카드 모달창 State
+    // 계좌 모달창 State
     const [isCardModalOpen, setIsCardModalOpen] = useState(false);
 
-    // 카드 등록 버튼 클릭
-    const handleCardUpdate = () =>{
+    // 계좌카드 등록 버튼 클릭
+    const handleCardInsert = () =>{
         setCard(!card);
-        setIsCardModalOpen(true); // 모달 열기
+        setIsCardModalOpen(!isCardModalOpen); // 모달 열기
     }
-    // 카드 모달창 닫기
+    // 계좌 모달창 닫기
     const closeCardModal = () => {
         setCard(!card);
-        setIsCardModalOpen(false);
+        setIsCardModalOpen(!isCardModalOpen);
     };
 
-    // 카드는 하나만 등록가능하니까 로그인 정보 보내서
-    // 있는 데이터 삭제하면 될듯...
-    const handleCardDelete = () =>{
-
-    }
-
-    // // ------ 카드번호 유효성 검사
+    // // ------ 계좌번호 유효성 검사
     // const isValidCardNumber = (cardNumber) => {
     //     // 숫자만 허용하고, 전체 길이가 16이어야 함
     //     const cardNumberRegex = /^\d{16}$/;
@@ -195,133 +189,288 @@ const PaymentManage = () =>{
     accountNumber: accountNum
    }
 
+   // 카드 등록 완료 버튼
     const handleSubmit = () =>{
         console.log(totalValid);
         
         if(totalValid){
-            // 카드 등록.. 부분..
+            // 카드 등록
             console.log("은행 : "+selectedBank);
             console.log("계좌번호 : "+accountNum);
-            axios.post("/api/paymentAccount/accountInsert",postData)
+            axios.post("/api/paymentAccount/accountInsert",postData).then((resp)=>{
+                closeCardModal();
+            })
+            window.location.reload();
         }else{
-            //alert("카드 등록에 실패했습니다.");
+            alert("카드 등록에 실패했습니다.");
         }
 
     }
 
+    // 불러온 계좌 State
+    const [account, setAccount] = useState({});
 
+    // 등록된 계좌 불러오기
+    useEffect(()=>{
+        axios.get("/api/paymentAccount/accountSelect").then((resp)=>{
+            console.log(resp.data);
+            setAccount(resp.data);
+        })
+    },[])
 
+    // 계좌 삭제하시겠습니까 모달 상태
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+    // 모달의 취소버튼
+    const closeDelModal = () =>{
+        setIsDeleteModalOpen(!isDeleteModalOpen);
+    }
+
+    // 삭제 버튼 눌렀을 때
+    const handleDelModalOpen = () =>{
+        setIsDeleteModalOpen(!isDeleteModalOpen);
+    }
+
+    // 모달에서 삭제버튼 눌렀을 때에
+    const handleCardDelete = () =>{
+        axios.delete("/api/paymentAccount/accountDelete").then((resp)=>{
+
+        })
+        setIsDeleteModalOpen(!isDeleteModalOpen);
+        window.location.reload();
+    }
+
+    // 계좌 수정 모달창 State
+    const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+
+    // 계좌 수정 모달
+    const handleCardUpdate = () =>{
+        setIsUpdateModalOpen(!isUpdateModalOpen);
+    }
+
+    // 수정 모달닫기
+    const closeUpdateModal = () =>{
+        setIsUpdateModalOpen(!isUpdateModalOpen);
+    }
     
+    // 수정모달의 제출
+    const handleUpdateSubmit = () => {
+        
+        if(totalValid){
+            // 카드 등록
+            console.log("은행 : "+selectedBank);
+            console.log("계좌번호 : "+accountNum);
+            axios.put("/api/paymentAccount/accountUpdate",postData).then((resp)=>{
+                closeUpdateModal();
+            })
+            window.location.reload();
+        }else{
+            alert("카드 등록에 실패했습니다.");
+        }
+    }
 
     return(
         <>
-        <div className={style.container}>
-            <div className={style.container__inner}>
+            <div className={style.container}>
+                <div className={style.container__inner}>
 
-                <div className={style.inner__title}>결제 수단 관리</div>
-                <div className={style.inner__line}></div>
+                    <div className={style.inner__title}>결제 수단 관리</div>
+                    <div className={style.inner__line}></div>
 
-                {/* 계좌 등록 안됨 */}
-                <div className={style.inner}>
-                    <div className={style.inner__left}>등록된 결제 수단이 없어요.</div>
-                    <div className={style.inner__right}>
-                        <PurpleRoundBtn title={"계좌 등록"} activation={true} onClick={handleCardUpdate}></PurpleRoundBtn>
+                    {account == "" ? 
+                        // {/* 계좌 등록 안됨 */}
+                        <div className={style.inner}>
+                            <div className={style.inner__left}>등록된 결제 수단이 없어요.</div>
+                            <div className={style.inner__right}>
+                                <PurpleRoundBtn title={"계좌 등록"} activation={true} onClick={handleCardInsert}></PurpleRoundBtn>
+                            </div>
+                        </div>
+                    :
+                    // {/* 계좌 등록됨 */}
+                    <div className={style.inner__card}>
+                        <div className={style.cardLeft}>
+                            <div className={`${style.flex}`}>
+                                <div className={style.bankName}>{account.bankId}</div>
+                                <div className={style.bankAccount}>{account.accountNumber}</div>
+                            </div>
+                            <div>
+                                <FontAwesomeIcon icon={faCheck} />
+                            </div>
+                        </div>
+                        <div className={style.cardRight}>
+                            <div>
+                                <button type='button'
+                                 onClick={handleCardUpdate}
+                                >
+                                    수정
+                                </button>
+                            </div>
+                            <div>
+                                <button type='button'
+                                onClick={handleDelModalOpen}
+                                >
+                                    삭제
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                    }
+                    
 
-                {/* 계좌 등록됨 */}
-                <div className={style.inner__card}>
-                    <div className={style.cardLeft}>
-                        <div className={`${style.flex}`}>
-                            <div className={style.bankName}>NH</div>
-                            <div className={style.bankAccount}>1233 4322 3443 2342</div>
-                        </div>
-                        <div>
-                            <FontAwesomeIcon icon={faCheck} />
-                        </div>
-                    </div>
-                    <div className={style.cardRight}>
-                        <div>
-                            <button type='button'
-                             onClick={handleCardUpdate}
-                            >
-                                수정
-                            </button>
-                        </div>
-                        <div>
-                            <button type='button'
-                             onClick={handleCardDelete}
-                            >
-                                삭제
-                            </button>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
-        </div>
-
-        {card && 
-                <>
-                <MypageModal
-                isOpen={setIsCardModalOpen}
-                onRequestClose={closeCardModal}
-                width={500}
-                height={300}
-                >
-                    <div>
-                        <div className={style.closeBtn}>
-                            <FontAwesomeIcon icon={faXmark} size="lg" onClick={closeCardModal}/>
-                        </div>
-                        <div className={style.modalTitle}>결제 계좌를 등록해 주세요.</div>
-                        <div className={style.modalSubTitle}>
-                            계좌번호 9~16자리를 입력해주세요.
-                        </div>
-                        
-                        <div className={style.cardBox}>
+                {/* 등록 모달 */}
+                 {card && 
+                    <>
+                        <MypageModal
+                        isOpen={setIsCardModalOpen}
+                        onRequestClose={closeCardModal}
+                        width={500}
+                        height={270}
+                        >
                             <div>
-                                <select id="bankSelect" className={style.bankSelect}
-                                value={selectedBank} 
-                                onChange={handleBankChange}
-                                >
-                                    <option value = "선택">선택</option>
-                                    {bankList.map((item,index) => {
-                                        return(
-                                            <option key = {item.id} value = {item.id}>
-                                                {item.id}
-                                            </option>
-                                            )
-                                        })
+                                <div className={style.closeBtn}>
+                                    <FontAwesomeIcon icon={faXmark} size="lg" onClick={closeCardModal}/>
+                                </div>
+                                <div className={style.modalTitle}>결제 계좌를 등록해 주세요.</div>
+                                <div className={style.modalSubTitle}>
+                                    본인 명의의 계좌만 등록가능합니다.
+                                    계좌번호 9~16자리를 입력해주세요.
+                                </div>
+                                
+                                <div className={style.cardBox}>
+                                    <div>
+                                        <select id="bankSelect" className={style.bankSelect}
+                                        value={selectedBank} 
+                                        onChange={handleBankChange}
+                                        >
+                                            <option value = "선택">선택</option>
+                                            {bankList.map((item,index) => {
+                                                return(
+                                                    <option key = {item.id} value = {item.id}>
+                                                        {item.id}
+                                                    </option>
+                                                    )
+                                                })
+                                            }
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <input type="text" placeholder='계좌 번호 입력'
+                                        style={{
+                                            borderColor: accountNum ? (isAccount ? 'black' : 'red') : 'black'
+                                        }} 
+                                        onChange={handleAccountNum}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className={style.modalBtn}>
+                                    {totalValid &&
+                                    <>
+                                        <PurpleRectangleBtn
+                                        title={"완료"}
+                                        width={150}
+                                        heightPadding={10}
+                                        onClick={handleSubmit}
+                                        activation={true}
+                                        ></PurpleRectangleBtn>
+                                    </>
                                     }
-                                </select>
+                                </div>
+                            </div>
+                        </MypageModal>
+                    </>
+                }
+
+                {/* 삭제모달 */}
+                {isDeleteModalOpen&&
+                    <>
+                    <MypageModal
+                    isOpen={setIsDeleteModalOpen}
+                    onRequestClose={closeDelModal}
+                    width={260}
+                    height={110}
+                    >
+                        <div className={style.modalTitle}>계좌를 삭제하시겠습니까?</div>
+                        <div className={style.deleteBtnBox}>
+                            <div>
+                               <PurpleRoundBtn title={"취소"} activation={false} onClick={closeDelModal}></PurpleRoundBtn>
                             </div>
                             <div>
-                                <input type="text" placeholder='계좌 번호 입력'
-                                style={{
-                                    borderColor: accountNum ? (isAccount ? 'black' : 'red') : 'black'
-                                }} 
-                                onChange={handleAccountNum}
-                                />
+                                <PurpleRoundBtn title={"삭제"} activation={true} onClick={handleCardDelete}></PurpleRoundBtn>
                             </div>
                         </div>
-                        {/* <div className={`${style.modalSubTitle}`}>본인 명의의 계좌만 등록가능합니다.</div> */}
 
-                        <div className={style.modalBtn}>
-                            {totalValid &&
-                            <>
-                                <PurpleRectangleBtn
-                                title={"완료"}
-                                width={150}
-                                heightPadding={10}
-                                onClick={handleSubmit}
-                                activation={true}
-                                ></PurpleRectangleBtn>
-                            </>
-                            }
-                        </div>
-                    </div>
-                </MypageModal>
-                </>
-            }
+                    </MypageModal>
+                    </>
+                }
+
+                {/* 수정모달 */}
+                {isUpdateModalOpen &&
+                    <>
+                        <MypageModal
+                        isOpen={setIsCardModalOpen}
+                        onRequestClose={closeUpdateModal}
+                        width={500}
+                        height={270}
+                        >
+                            <div>
+                                <div className={style.closeBtn}>
+                                    <FontAwesomeIcon icon={faXmark} size="lg" onClick={closeUpdateModal}/>
+                                </div>
+                                <div className={style.modalTitle}>결제 계좌를 등록해 주세요.</div>
+                                <div className={style.modalSubTitle}>
+                                    본인 명의의 계좌만 등록가능합니다.
+                                    계좌번호 9~16자리를 입력해주세요.
+                                </div>
+                                
+                                <div className={style.cardBox}>
+                                    <div>
+                                        <select id="bankSelect" className={style.bankSelect}
+                                        value={selectedBank} 
+                                        onChange={handleBankChange}
+                                        >
+                                            <option value = "선택">선택</option>
+                                            {bankList.map((item,index) => {
+                                                return(
+                                                    <option key = {item.id} value = {item.id}>
+                                                        {item.id}
+                                                    </option>
+                                                    )
+                                                })
+                                            }
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <input type="text" placeholder='계좌 번호 입력'
+                                        style={{
+                                            borderColor: accountNum ? (isAccount ? 'black' : 'red') : 'black'
+                                        }} 
+                                        onChange={handleAccountNum}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className={style.modalBtn}>
+                                    {totalValid &&
+                                    <>
+                                        <PurpleRectangleBtn
+                                        title={"완료"}
+                                        width={150}
+                                        heightPadding={10}
+                                        onClick={handleUpdateSubmit}
+                                        activation={true}
+                                        ></PurpleRectangleBtn>
+                                    </>
+                                    }
+                                </div>
+                            </div>
+                        </MypageModal>
+                    </>
+                }
+            
 
             {/* {card && 
                 <>
@@ -392,6 +541,8 @@ const PaymentManage = () =>{
                 </MypageModal>
                 </>
             } */}
+
+            
             
         </>
     );

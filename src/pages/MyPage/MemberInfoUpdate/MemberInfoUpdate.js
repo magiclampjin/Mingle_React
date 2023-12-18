@@ -18,17 +18,17 @@ const MemberInfoUpdate = () =>{
         setAccount(!account);
     }
 
-    // 휴대폰 State
-    const [phone, setPhone] = useState(true);
+    // // 휴대폰 State
+    // const [phone, setPhone] = useState(true);
     // 휴대폰 모달창 State
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     // 휴대폰 변경 버튼 클릭
     const handlePhoneUpdate =(e)=>{
-        setPhone(!phone);
+        // setPhone(!phone);
         setIsModalOpen(true);
     }
-    // 모달창 닫기
+    // 휴대폰 모달창 닫기
     const closeModal = () => {
         setIsModalOpen(false);
     };
@@ -52,6 +52,7 @@ const MemberInfoUpdate = () =>{
     // 이메일 모달창 State
     const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
 
+    // 이메일 입력 input
     const handleEmail = (e) =>{
         const emailValue = e.target.value;
         setInputEmail(emailValue);
@@ -72,9 +73,48 @@ const MemberInfoUpdate = () =>{
         setIsEmailModalOpen(false);
     };
 
+    // 휴대폰 번호 유효성 검사
+    const isValidPhone = (value) =>{
+        // 정규표현식을 사용하여 휴대폰 번호 유효성 검사
+        const regex = /^010[0-9]{8}$/;
+        return regex.test(value);
+    }
 
+    // 휴대폰 regex
+    const [isPhone, setIsPhone] = useState(false);
+
+    // 폰 다시 등록할때의 State
+    const [inputPhone, setInputPhone] = useState("");
+
+    // 휴대폰 번호 입력input
+    const handlePhoneNum = (e) => {
+        const phoneValue = e.target.value;
+        setInputPhone(phoneValue);
+        console.log(e.target.value);
+
+        const result = isValidPhone(phoneValue);
+        setIsPhone(result);
+    }
+
+    // 휴대폰 번호 변경하기 -> 확인
+    const handlePhoneSubmit = () => {
+        console.log(isPhone);
+        if(isPhone){
+            axios.put("/api/member/mypagePhoneUpdate",{phone:inputPhone}).then((resp)=>{
+                setUserPhone(inputPhone);
+                closeModal();
+            })
+        }else{
+            setInputPhone();
+            alert("휴대폰 번호를 다시 입력해주세요.");
+        }
+        
+    } 
+
+   
     // 사용자의 휴대폰 번호 State
     const [userPhone, setUserPhone] = useState("");
+
     // 사용자의 이메일 State
     const [userEmail, setUserEmail] = useState("");
 
@@ -88,7 +128,7 @@ const MemberInfoUpdate = () =>{
             setUserPhone(resp.data.phone);
             setUserEmail(resp.data.email);
         })
-    },[codeCom])
+    },[codeCom,userPhone])
 
 
     // 이메일 인증하기 버튼 누름
@@ -145,7 +185,6 @@ const MemberInfoUpdate = () =>{
                 <div className={style.inner__title}>회원 정보 수정</div>
                 <div className={style.inner__line}></div>
 
-                {phone && 
                 <>
                     <div className={style.inner}>
                         <div className={style.inner__left}>연결된 소셜 로그인 계정</div>
@@ -155,7 +194,6 @@ const MemberInfoUpdate = () =>{
                         </div>
                     </div>
                 </>
-                }
                 
                 {!account &&
                 <>
@@ -200,30 +238,41 @@ const MemberInfoUpdate = () =>{
                     <div className={style.inner__left}>휴대폰 번호</div>
                     <div className={style.inner__right}>
                         <div className={style.input}>{userPhone}</div>
-                        <PurpleRoundBtn title={phone?"변경하기":"변경취소"} activation={phone} onClick={handlePhoneUpdate}></PurpleRoundBtn>
+                        <PurpleRoundBtn title={"변경하기"} activation={true} onClick={handlePhoneUpdate}></PurpleRoundBtn>
                     </div>
                 </div>
                 </>
                 }
 
                 {/* 휴대폰 번호 변경하기 버튼 누르면 바로 모달창 뜸 */}
-                {!phone && 
+                {isModalOpen && 
                 <>
                     <MypageModal
                     isOpen={isModalOpen}
                     onRequestClose={closeModal}
-                    width={500}
-                    height={160}
+                    width={300}
+                    height={220}
                     >
                         <div>
-                            <div className={style.modalTitle}>휴대폰 번호 변경을 위해서는 본인 인증이 필요합니다.</div>
-                            <div className={style.modalSubTitle}>본인 명의의 새 휴대폰 번호로 인증을 진행해 주세요.</div>
+                            <div className={style.closeBtn}>
+                                <FontAwesomeIcon icon={faXmark} size="lg" onClick={closeModal}/>
+                            </div>
+                            <div className={style.modalTitle}>휴대폰 번호 변경</div>
+                            <div className={style.phoneBox}>
+                                <input type="text" placeholder='휴대폰 번호 입력'
+                                style={{
+                                    borderColor: inputPhone ? (isPhone ? 'black' : 'red') : 'black'
+                                }} 
+                                onChange={handlePhoneNum}
+                                />
+                            </div>
                             <div className={style.modalBtn}>
                                 <PurpleRectangleBtn
                                 title={"확인"}
                                 width={100}
                                 heightPadding={10}
-                                onClick={closeModal}
+                                activation={true}
+                                onClick={handlePhoneSubmit}
                                 ></PurpleRectangleBtn>
                             </div>
                             
@@ -234,7 +283,7 @@ const MemberInfoUpdate = () =>{
                  
 
 
-                 {account && phone &&
+                 {account  &&
                  <>
                 <div className={style.inner}>
                     <div className={style.inner__left}>내 이메일</div>

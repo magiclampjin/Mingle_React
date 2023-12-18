@@ -63,7 +63,6 @@ const PartyAllList = ({selectServiceCategory,setSelectServiceCategory}) => {
             setSelectService(partyContentElement.dataset.id);
             navi("/party/PartyJoin/PartyList",{state:{selectService:partyContentElement.dataset.id}});
         }
-        
     };
 
 
