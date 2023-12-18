@@ -236,7 +236,7 @@ const PartyCreatePage = () =>{
         setLoadingMini(true);
         axios.get("/api/paymentAccount/accountSelect").then(resp=>{
             setAccount(resp.data);
-            if(resp.data != null){
+            if(resp.data !== ""){
                 setAllComplete(true);
             }
             setLoadingMini(false);

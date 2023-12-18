@@ -66,7 +66,7 @@ const PaymentManage = () =>{
     const handleAccountNum = (e) =>{
         console.log(e.target.value);
         // 숫자만 입력 받기
-        const newAccountValue = e.target.value.replace(/[^0-9]/g, '');
+        const newAccountValue = e.target.value.replace(/[^0-9]/g, '').replace(/([\d]{16})([\d]{1,})/g, '$1');
         setAccountNum(newAccountValue);
         // 입력된 계좌 번호 유효성 검사
         const valid = isValidKoreanBankAccountNumber(newAccountValue);
