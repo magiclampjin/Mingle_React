@@ -42,10 +42,14 @@ const PartyList = () => {
    
     return(
         <div className={style.body}>
-            <div className={style.title}>
-                {service.name}<br></br>
-                파티를 찾아드릴게요.
-            </div>
+            {
+            service?
+                <div className={style.title}>
+                    {service.name} {service.plan}<br></br>
+                    파티를 찾아드릴게요.
+                </div>
+            :null
+            }
         </div>
     );
 };
