@@ -16,13 +16,24 @@ const IdCheck = () => {
   useEffect(() => {
     if (user.name !== "" && user.email !== "") {
       axios.post("/api/member/findUserId", user).then((resp) => {
-        console.log(resp.data);
         setId(resp.data);
       });
     } else {
+      alert("잘못된 접근입니다.");
       navi("/member/findInfo/id");
     }
-  });
+  }, []);
+
+  // 로그인하러가기 눌렀을 때
+  const handleLogin = () => {
+    navi("/member/login");
+  };
+
+  // 비밀번호 찾기 눌렀을 때
+  const handleFindPw = () => {
+    navi("/member/findInfo/pw");
+  };
+
   return (
     <div className={style.idChek}>
       <div className={style.title}>아이디 찾기</div>
@@ -45,8 +56,11 @@ const IdCheck = () => {
           width={300}
           heightPadding={10}
           activation={true}
+          onClick={handleLogin}
         ></PurpleRectangleBtn>
-        <div className={style.findpw}>비밀번호 찾기</div>
+        <div className={style.findpw} onClick={handleFindPw}>
+          비밀번호 찾기
+        </div>
       </div>
     </div>
   );

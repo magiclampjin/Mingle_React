@@ -9,11 +9,10 @@ import { useNavigate } from "react-router-dom";
 import { FindIdContext } from "../FindId";
 
 const IdCertification = () => {
-  // const [user, setUser] = useState({ name: "", email: "" });
-  const { user, setUser } = useContext(FindIdContext);
-  const [certificationNum, setCertificationNum] = useState("");
+  const { user, setUser } = useContext(FindIdContext); //사용자 정보
+  const [certificationNum, setCertificationNum] = useState(""); //인증번호
   const [timeSeconds, setTimerSeconds] = useState(180); // 초기 시간 설정 (3분)
-  const [timerStart, setTimerStart] = useState(false);
+  const [timerStart, setTimerStart] = useState(false); // 타이머 시작 여부
   // 입력값 유효성 검사 결과
   const [checkText, setCheckText] = useState({
     name: "",
@@ -21,12 +20,12 @@ const IdCertification = () => {
   });
 
   // 본인인증 조건 검사
-  const [signupConditions, setSignupConditions] = useState({
+  const [findIdConditions, setFindIdConditions] = useState({
     name: false,
     email: false,
   });
-  const [findId, setFindId] = useState(false);
-  const [isLoading, setLoading] = useState(false);
+  const [findId, setFindId] = useState(false); // 아이디 찾기 활성화 여부
+  const [isLoading, setLoading] = useState(false); // 본인 인증 시 로딩바
   const navi = useNavigate();
 
   // user State 값 채우기
@@ -43,7 +42,7 @@ const IdCertification = () => {
 
   // 유효성 검사 결과 텍스트
   const handleCondition = (key, value) => {
-    setSignupConditions((prev) => ({ ...prev, [key]: value }));
+    setFindIdConditions((prev) => ({ ...prev, [key]: value }));
   };
 
   // 타이머 로직
@@ -52,10 +51,10 @@ const IdCertification = () => {
       const minutes = Math.floor(timeSeconds / 60);
       const seconds = timeSeconds % 60;
 
-      // 시간을 2자리 숫자로 표시
-      const formattedTime = `${String(minutes).padStart(2, "0")}:${String(
-        seconds
-      ).padStart(2, "0")}`;
+      // // 시간을 2자리 숫자로 표시
+      // const formattedTime = `${String(minutes).padStart(2, "0")}:${String(
+      //   seconds
+      // ).padStart(2, "0")}`;
 
       if (timerStart) {
         // 시간 업데이트
@@ -128,17 +127,13 @@ const IdCertification = () => {
   // 본인 인증 눌렀을 때
   const handleCertification = () => {
     // 다시 누르면 인증번호 재 발송
-    if (signupConditions.name && signupConditions.email) {
-      // const formData = new FormData();
-      // formData.append("name", user.name);
-      // formData.append("email", user.email);
+    if (findIdConditions.name && findIdConditions.email) {
       setLoading(true);
       axios.post("/api/member/verificationEmail", user).then((resp) => {
-        console.log(resp);
         if (resp.data) {
           // 본인 인증이 성공하고 메일 발송을 마침
-          // 타이머 시간 세팅
           setLoading(false);
+          // 타이머 시간 세팅
           setTimerSeconds(180);
           // 타이머 시작
           setTimerStart(true);
@@ -146,6 +141,7 @@ const IdCertification = () => {
             "인증번호가 발송되었습니다. 메일을 확인해주세요. \n 메일이 도착하지 않을 경우 스팸 메일함을 확인해주세요."
           );
         } else {
+          setLoading(false);
           alert("해당 정보로 회원가입된 기록이 없습니다.");
         }
       });
@@ -168,28 +164,27 @@ const IdCertification = () => {
 
   // 아이디 찾기 눌렀을 때
   const handleFindId = () => {
-    const formData = new FormData();
-    formData.append("code", certificationNum);
-    axios.post("/api/member/certification", formData).then((resp) => {
-      console.log(resp.data);
-      if (resp.data) {
-        // 본인인증 코드가 일치하면
-        navi("/member/findInfo/id/find");
-      } else {
-        alert("본인 인증 코드가 일치하지 않습니다.");
-        // 정보 초기화
-        setUser({ name: "", email: "" });
-        setCertificationNum("");
-        setFindId(false);
-        setTimerStart(false);
-        setTimerSeconds(180);
-      }
-    });
+    if (findId) {
+      const formData = new FormData();
+      formData.append("code", certificationNum);
+      axios.post("/api/member/certification/id", formData).then((resp) => {
+        if (resp.data) {
+          // 본인인증 코드가 일치하면
+          navi("/member/findInfo/id/find");
+        } else {
+          alert("본인 인증 코드가 일치하지 않습니다.");
+          // 정보 초기화
+          setUser({ name: "", email: "" });
+          setCertificationNum("");
+          setFindId(false);
+          setTimerStart(false);
+          setTimerSeconds(180);
+        }
+      });
+    } else {
+      alert("이름과 이메일 정보를 통해 본인 인증을 완료해주세요.");
+    }
   };
-
-  useEffect(() => {
-    console.log(user);
-  }, []);
 
   if (isLoading) {
     return <LoadingSpinner />;

@@ -24,7 +24,7 @@
   color: white;
 }
 .inputBox:not(:last-child) {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 .inputBox input {
   width: 100%;
@@ -57,4 +57,14 @@
   text-decoration: underline;
   color: #5c4dae;
   cursor: pointer;
+}
+.check {
+  text-align: start;
+  height: 25px;
+  color: #ffae6f;
+  font-size: 14px;
+  padding-left: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

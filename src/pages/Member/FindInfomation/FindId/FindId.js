@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import { useState, useEffect, useContext, createContext } from "react";
+import { useState, createContext } from "react";
 
 import IdCertification from "./IdCertification/IdCertification";
 import IdCheck from "./IdCheck/IdCheck";
