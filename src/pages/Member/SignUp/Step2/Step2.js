@@ -49,7 +49,7 @@ const Step2 = () => {
   useEffect(() => {
     if (currentStep !== "step2") {
       alert("잘못된 접근입니다.");
-      navi("/member/login");
+      navi("/member/signup");
     }
   });
 
