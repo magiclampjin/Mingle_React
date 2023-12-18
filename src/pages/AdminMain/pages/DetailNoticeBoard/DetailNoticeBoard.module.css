@@ -1,0 +1,30 @@
+.componentBox {
+    border-radius: 15px;
+    height: 500px;
+    background-color: #ffffff;
+}
+
+.componentBox > a {
+    text-decoration: none;
+}
+
+.componentLine {
+    display: grid;
+    grid-template-columns: 50px 1fr 3fr 1fr 110px;
+    height: 50px;
+}
+
+.componentLine:hover {
+    background-color: #DFE2E640;
+}
+
+.componentLine > button {
+    height: 35px;
+    align-items: center;
+}
+
+.componentLine button:hover {
+    transition: background-color 0.5s ease;
+    background-color: #7B61FF;
+    color: #ffffff;
+}
