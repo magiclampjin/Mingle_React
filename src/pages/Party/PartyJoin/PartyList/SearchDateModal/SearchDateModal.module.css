@@ -1,0 +1,25 @@
+.selectDates{
+    display:flex;
+    justify-content: space-between;
+    margin:30px 0;
+}
+
+.startDate, .endDate{
+    width: 48%;
+    height: 80px;
+    padding:10px 20px;
+    background-color: #73757715;
+    border-radius: 10px;
+}
+
+.dateTitle{
+    font-size: 13px;
+    font-weight: bold;
+    color:#73757799;
+}
+
+.selectDate{
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+}

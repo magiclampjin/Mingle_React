@@ -134,10 +134,6 @@
     margin-top: 100px;
 }
 
-.othersTitle {
-    margin-bottom: 30px;
-}
-
 .left{
     width: 70%;
 }
@@ -163,6 +159,53 @@
     font-size: 25px;
     color:#FFFFFF;
 }
+
+/* 파티 시작일 지정 (날짜 지정 or 오늘 시작) */
+.periodBtns{
+    justify-content: space-between;
+}
+
+.periodBtn{
+    width: fit-content;
+    height: fit-content;
+    padding:8px 15px;
+    box-shadow: 0 0 5px 0 #73757750 ;
+    border-radius: 10px;
+    font-weight: bold;
+    display: flex;
+    font-size: 14px;
+    border: 2px solid transparent;
+}
+
+.periodBtn:hover{
+    cursor: pointer;
+    border: 2px solid #7B61FF;
+}
+
+.periodIcon{
+    margin-right: 5px;
+}
+
+.periodDate{
+    font-size: 18px;
+    min-width: 120px;
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+
+.period {
+    color:#73757790;
+    display: flex;
+    align-items: center;
+}
+
+.period .periodIcon * {
+    color:#73757790;
+}
+
 
 @media (max-width:768px){
     .others{
