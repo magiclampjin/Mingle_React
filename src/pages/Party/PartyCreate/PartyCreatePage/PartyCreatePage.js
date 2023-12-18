@@ -240,7 +240,7 @@ const PartyCreatePage = () =>{
                 serviceId:service.id,
                 startDate:date.toISOString(),
                 monthCount:periodMonth,
-                content:"내용",
+                calculationDate: calculation,
                 loginId:accountInfo.id,
                 loginPw:accountInfo.pw
             }
