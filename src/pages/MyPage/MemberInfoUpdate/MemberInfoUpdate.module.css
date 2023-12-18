@@ -107,6 +107,20 @@
 .closeBtn{
     text-align: right;
 }
+/* phone */
+.phoneBox{
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.phoneBox>input{
+    height: 42px; width: 80%;
+    border-radius: 15px;
+    padding-left: 10px;
+    font-size: 14px;
+    border: 1px solid black;
+}
 
 /* email */
 .emailBox{
