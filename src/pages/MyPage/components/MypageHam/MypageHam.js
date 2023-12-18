@@ -29,7 +29,7 @@ const MypageHam = () =>{
         setIsMenuOpen(!isMenuOpen)
     }
 
-    const navArray = [{'title':'공지사항', 'url':'#'},
+    const navArray = [
                     {'title':'회원 정보 수정' , 'url':'MemberInfoUpdate'},
                     {'title':'결제 수단 관리' , 'url':'PaymentManage'},
                     {'title':'정산 내역 확인' , 'url':'PaymentRecord'},

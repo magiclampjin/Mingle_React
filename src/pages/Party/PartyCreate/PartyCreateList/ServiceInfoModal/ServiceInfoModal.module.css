@@ -43,6 +43,7 @@
     margin-bottom: 20px;
 }
 
-#chkBox{
-    margin-top: 3px;
+.chkBoxInput{
+    margin-top: 1px;
+    margin-right:10px;
 }

@@ -23,8 +23,6 @@ const MyPageSideBarLeft = () =>{
     return(
         <div className={style.sidebarBox}>
             <div className={style.sidebar}>
-
-                <div className={style.sidebar__inner}>공지사항</div>
                 
                 <Link to="MemberInfoUpdate">
                     <div className={style.sidebar__inner}
