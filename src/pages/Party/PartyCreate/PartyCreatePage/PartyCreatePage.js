@@ -12,6 +12,7 @@ import WhiteRectangleBtn from "../../../../components/WhiteRectangleBtn/WhiteRec
 import CalculationSelectBox from "../../../../components/CalculationSelectBox/CalculationSelectBox";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
+import LoadingSpinnerMini from "../../../../components/LoadingSpinnerMini/LoadingSpinnerMini";
 
 const PartyCreatePage = () =>{
     //  공통 사용 -------------------------------------------------
@@ -20,6 +21,7 @@ const PartyCreatePage = () =>{
     const service = location.state.service;
     const navi = useNavigate();
     const [isLoading, setLoading] = useState(false);
+    const [isLoadingMini, setLoadingMini] = useState(false);
 
     // 현재 단계
     const [step, setStep] = useState(1);
@@ -231,8 +233,15 @@ const PartyCreatePage = () =>{
 
     // 등록된 계좌 정보 있는 지 확인
     useEffect(()=>{
+        setLoadingMini(true);
         axios.get("/api/paymentAccount/accountSelect").then(resp=>{
             setAccount(resp.data);
+            if(resp.data != null){
+                setAllComplete(true);
+            }
+            setLoadingMini(false);
+        }).catch(()=>{
+            setLoadingMini(false);
         });
     },[isAllComplete])
 
@@ -363,37 +372,41 @@ const PartyCreatePage = () =>{
                     </>:
                     <>
                         <div className={style.title}>마지막 단계<br></br>결제 계좌와 정산일을 등록해주세요.</div>
-                       
-                        <div className={style.subMenu}>
-                            <div className={style.subTitle}>{account?"결제 정보 확인":"결제 정보 등록"}</div>
-                            {
-                                account?
-                                <>
-                                    <div className={style.accountBox}>
-                                        <div className={style.bank}>{account.bankId}</div>
-                                        <div className={style.accountNumber}>{account.accountNumber}</div>
-                                        <div className={style.accountChkIcon}><FontAwesomeIcon icon={faCheck} /></div>
-                                    </div>
-                                </>
-                                :<WhiteRectangleBtn title="+ 결제 계좌 등록하기" onClick={()=>{alert("구현 예정 기능입니다."); setAllComplete(true);}} width={300} heightPadding={5}/>
+                        {isLoadingMini?<LoadingSpinnerMini width={600} height={400}/>:
+                            <>
+                                <div className={style.subMenu}>
+                                    <div className={style.subTitle}>{account?"결제 정보 확인":"결제 정보 등록"}</div>
+                                    {
+                                        account?
+                                        <>
+                                            <div className={style.accountBox}>
+                                                <div className={style.bank}>{account.bankId}</div>
+                                                <div className={style.accountNumber}>{account.accountNumber}</div>
+                                                <div className={style.accountChkIcon}><FontAwesomeIcon icon={faCheck} /></div>
+                                            </div>
+                                        </>
+                                        :<WhiteRectangleBtn title="+ 결제 계좌 등록하기" onClick={()=>{alert("구현 예정 기능입니다."); setAllComplete(true);}} width={300} heightPadding={5}/>
+                                        
+                                    }
+                                    <div className={`${style.inputNotice}`}><FontAwesomeIcon icon={faTriangleExclamation} size="xs"/><div className={style.inputNoticeTxt}>결제 계좌는 파티장의 귀책 사유 발생시 위약금 부과를 위해 필요하며, 유효성 검증을 위해 1원 시범 결제 후 즉시 취소처리 합니다.</div></div>
+                                </div>
+                            
+                                <div className={style.subMenu}>
+                                    <div className={style.subTitle}>정산일 정보 등록</div>
+                                    <CalculationSelectBox
+                                        setDay={setCalculation}
+                                        day={calculation}
+                                    ></CalculationSelectBox>
+                                    <div className={`${style.inputNotice}`}><FontAwesomeIcon icon={faTriangleExclamation} size="xs"/><div className={style.inputNoticeTxt}>정산일은 파티 요금 적립과 결제가 이루어지는 기준일입니다.</div></div>
+                                </div>
                                 
-                            }
-                            <div className={`${style.inputNotice}`}><FontAwesomeIcon icon={faTriangleExclamation} size="xs"/><div className={style.inputNoticeTxt}>결제 계좌는 파티장의 귀책 사유 발생시 위약금 부과를 위해 필요하며, 유효성 검증을 위해 1원 시범 결제 후 즉시 취소처리 합니다.</div></div>
-                        </div>
-                        <div className={style.subMenu}>
-                            <div className={style.subTitle}>정산일 정보 등록</div>
-                            <CalculationSelectBox
-                                setDay={setCalculation}
-                                day={calculation}
-                            ></CalculationSelectBox>
-                            <div className={`${style.inputNotice}`}><FontAwesomeIcon icon={faTriangleExclamation} size="xs"/><div className={style.inputNoticeTxt}>정산일은 파티 요금 적립과 결제가 이루어지는 기준일입니다.</div></div>
-                        </div>
-                        
-                       
-                        <div className={style.bnts}>
-                            <div className={style.prevBtn}><PurpleRectangleBtn title="이전" activation={true} onClick={handlePrev} width={150} heightPadding={10}/></div>
-                            <div className={style.nextBtn}><PurpleRectangleBtn title="파티 만들기" activation={isAllComplete} onClick={handleComplete} width={150} heightPadding={10}/></div>
-                        </div>
+                            
+                                <div className={style.bnts}>
+                                    <div className={style.prevBtn}><PurpleRectangleBtn title="이전" activation={true} onClick={handlePrev} width={150} heightPadding={10}/></div>
+                                    <div className={style.nextBtn}><PurpleRectangleBtn title="파티 만들기" activation={isAllComplete} onClick={handleComplete} width={150} heightPadding={10}/></div>
+                                </div>
+                            </>
+                        }
                     </>
                 }
             </div>
