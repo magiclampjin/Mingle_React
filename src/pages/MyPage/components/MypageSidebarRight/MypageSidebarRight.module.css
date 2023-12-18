@@ -25,6 +25,10 @@
     background-color: rgb(227,227,227);
 }
 
+.money__inner>button{
+    font-size: 15px;
+}
+
 
 
 @media (max-width:1050px) {
