@@ -235,7 +235,6 @@ const PartyCreatePage = () =>{
             setLoading(true);
             let date = new Date(value);
             date.setHours(date.getHours()+9);
-            console.log(date);
             let partyData = {
                 peopleCount:peopleCnt,
                 serviceId:service.id,
