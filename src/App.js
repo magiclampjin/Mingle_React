@@ -22,10 +22,11 @@ function App() {
   const [selectedMenu, setSelectedMenu] = useState(null);
   const [loginId, setLoginId] = useState("");
   const [loginNick, setLoginNick] = useState("");
+  const [loginRole, setLoginRole] = useState("");
 
   return (
     <LoginContext.Provider
-      value={{ loginId, setLoginId, loginNick, setLoginNick }}
+      value={{ loginId, setLoginId, loginNick, setLoginNick, loginRole, setLoginRole }}
     >
       <MenuContext.Provider value={{ selectedMenu, setSelectedMenu }}>
         <>
