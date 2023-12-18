@@ -17,7 +17,7 @@ const MemberManageBox = () => {
 
     return (
         <div className={style.box}>
-            <div className={style.componentTitle}>신고된 회원 / 불량 회원 박스</div>
+            <div className={style.componentTitle}>신고된 회원 / 불량 회원</div>
             <div className={style.componentBox}>
                 <div className={style.componentSeeMore}>
                     <div></div>
@@ -29,7 +29,7 @@ const MemberManageBox = () => {
                 </div>
                 {report.map((e, i) => {
                     return(
-                        <div className={style.componentLine}>
+                        <div key={i} className={style.componentLine}>
                             <div className={style.componentItem}>{e.id}</div>
                             <div className={style.componentItem}>{e.memberReporterId}</div>
                             <div className={style.componentItem}>{e.content}</div>
