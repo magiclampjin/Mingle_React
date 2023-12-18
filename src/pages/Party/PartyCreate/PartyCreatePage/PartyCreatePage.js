@@ -250,25 +250,38 @@ const PartyCreatePage = () =>{
     const handleComplete = () => {
         if(isAllComplete){
             setLoading(true);
-            let date = new Date(value);
-            date.setHours(date.getHours()+9);
-            let partyData = {
-                peopleCount:peopleCnt,
-                serviceId:service.id,
-                startDate:date.toISOString(),
-                monthCount:periodMonth,
-                calculationDate: calculation,
-                loginId:accountInfo.id,
-                loginPw:accountInfo.pw
-            }
-            axios.post("/api/party", partyData).then(resp=>{
-                setLoading(false);
-                if(window.confirm("파티 등록 성공! 등록된 정보를 확인하시겠어요?")){
-                    navi("/");
+            axios.get("/api/paymentAccount/accountSelect").then(resp=>{
+                if(resp.data !== ""){
+                    let date = new Date(value);
+                    date.setHours(date.getHours()+9);
+                    let partyData = {
+                        peopleCount:peopleCnt,
+                        serviceId:service.id,
+                        startDate:date.toISOString(),
+                        monthCount:periodMonth,
+                        calculationDate: calculation,
+                        loginId:accountInfo.id,
+                        loginPw:accountInfo.pw
+                    }
+                    axios.post("/api/party", partyData).then(resp=>{
+                        setLoading(false);
+                        if(window.confirm("파티 등록 성공! 등록된 정보를 확인하시겠어요?")){
+                            navi("/");
+                        }else{
+                            navi("/");
+                        }
+                    });
                 }else{
-                    navi("/");
+                    alert("결제 수단이 존재하지 않습니다.");
+                    setLoading(false);
+                    setAllComplete(false);
+                    return;
                 }
-            });
+            }).catch(()=>{
+                setLoading(false);
+                alert("문제가 발생했습니다.");
+                return;
+            })      
         }
     }
 
