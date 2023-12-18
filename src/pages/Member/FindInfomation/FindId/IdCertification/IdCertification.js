@@ -1,13 +1,16 @@
 import style from "./IdCertification.module.css";
 import WhiteRoundBtn from "../../../../../components/WhiteRoundBtn/WhiteRoundBtn";
 import PurpleRectangleBtn from "../../../../../components/PurpleRectangleBtn/PurpleRectangleBtn";
+import LoadingSpinner from "../../../../../components/LoadingSpinner/LoadingSpinner";
 import axios from "axios";
 
 import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { FindIdContext } from "../FindId";
 
 const IdCertification = () => {
-  const [user, setUser] = useState({ name: "", email: "" });
+  // const [user, setUser] = useState({ name: "", email: "" });
+  const { user, setUser } = useContext(FindIdContext);
   const [certificationNum, setCertificationNum] = useState("");
   const [timeSeconds, setTimerSeconds] = useState(180); // 초기 시간 설정 (3분)
   const [timerStart, setTimerStart] = useState(false);
@@ -23,6 +26,7 @@ const IdCertification = () => {
     email: false,
   });
   const [findId, setFindId] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const navi = useNavigate();
 
   // user State 값 채우기
@@ -59,6 +63,7 @@ const IdCertification = () => {
         // 인증 시간 초과 시
         if (timeSeconds === 0) {
           setTimerStart(false);
+          setFindId(false);
           alert("인증 시간이 초과되었습니다.");
         }
       }
@@ -127,11 +132,13 @@ const IdCertification = () => {
       // const formData = new FormData();
       // formData.append("name", user.name);
       // formData.append("email", user.email);
-      axios.post("/api/member/findId", user).then((resp) => {
+      setLoading(true);
+      axios.post("/api/member/verificationEmail", user).then((resp) => {
         console.log(resp);
         if (resp.data) {
           // 본인 인증이 성공하고 메일 발송을 마침
           // 타이머 시간 세팅
+          setLoading(false);
           setTimerSeconds(180);
           // 타이머 시작
           setTimerStart(true);
@@ -170,14 +177,24 @@ const IdCertification = () => {
         navi("/member/findInfo/id/find");
       } else {
         alert("본인 인증 코드가 일치하지 않습니다.");
+        // 정보 초기화
         setUser({ name: "", email: "" });
+        setCertificationNum("");
+        setFindId(false);
+        setTimerStart(false);
+        setTimerSeconds(180);
       }
     });
   };
 
   useEffect(() => {
     console.log(user);
-  }, [user]);
+  }, []);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <div className={style.findInfoBox}>
       <div className={style.title}>아이디 찾기</div>
