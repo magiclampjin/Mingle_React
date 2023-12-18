@@ -1,7 +1,30 @@
 .board {
-    padding: 16px;
-    max-width: 1300px;
-    margin-top:100px;
-    margin-bottom:150px;
-    margin:auto;
+    /* 배경, 여백, 그림자 등 전반적인 레이아웃 스타일 */
+    background: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.postHeader {
+    /* 포스트 헤더 스타일 */
+    margin-bottom: 20px;
+}
+
+.postTitle {
+    /* 제목 스타일 */
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.postInfo {
+    /* 저자 정보 등의 스타일 */
+    font-size: 14px;
+    color: gray;
+}
+
+.postContent {
+    /* 포스트 내용 스타일 */
+    font-size: 16px;
 }

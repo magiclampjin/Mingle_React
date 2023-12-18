@@ -9,13 +9,6 @@ import Main from "./pages/Main/Main";
 import Denied from "./components/Denied/Denied";
 import Party from "./pages/Party/PartyMain";
 import Board from "./pages/Board/Board";
-import WritePost from "./pages/Board/WritePost/WritePost";
-import UpdatePost from "./pages/Board/UpdatePost/UpdatePost";
-import Review from "./pages/Board/Review/Review";
-import FreeBoard from "./pages/Board/FreeBoard/FreeBoard";
-import NoticeBoard from "./pages/Board/NoticeBoard/NoticeBoard";
-import Post from "./pages/Board/Post/Post";
-import PopularPosts from "./pages/Board/PopularPosts/PopularPosts";
 import Mypage from "./pages/MyPage/Mypage";
 import AdminMain from "./pages/AdminMain/AdminMain";
 
