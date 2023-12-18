@@ -4,7 +4,7 @@ import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 import axios from "axios";
 
 import { Cookies } from "react-cookie";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
 import { LoginContext } from "../../../App";
 
@@ -15,7 +15,6 @@ const Login = () => {
   const { setLoginId } = useContext(LoginContext);
 
   const navi = useNavigate();
-  // const location = useLocation();
   const cookies = new Cookies();
 
   useEffect(() => {
@@ -53,8 +52,7 @@ const Login = () => {
       axios.post("/api/member/login", formData).then((resp) => {
         if (resp.statusText === "OK") {
           setLoginId(user.id);
-          // 아이디 기억하기를 눌렀다면
-          // 쿠키에 로그인 아이디 저장
+          // 아이디 기억하기를 눌렀다면 쿠키에 로그인 아이디 저장
           const expiresInSeconds = 7 * 24 * 60 * 60; // 7일을 초 단위로 계산
           cookies.set("loginID", user.id, {
             path: "/",
@@ -89,6 +87,10 @@ const Login = () => {
 
   const handleSignup = () => {
     navi("/member/signup");
+  };
+
+  const handleFindInfo = () => {
+    navi("/member/findInfo");
   };
 
   if (isLoading) {
@@ -135,8 +137,7 @@ const Login = () => {
         </div>
         <div className={style.memberMenu}>
           <div onClick={handleSignup}>회원가입</div>
-
-          <div>아이디/비밀번호 찾기</div>
+          <div onClick={handleFindInfo}>아이디/비밀번호 찾기</div>
         </div>
       </div>
       <div>

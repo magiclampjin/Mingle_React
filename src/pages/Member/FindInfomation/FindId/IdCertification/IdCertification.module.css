@@ -1,0 +1,60 @@
+.findInfoBox {
+  margin: 100px auto 150px auto;
+  width: 400px;
+  text-align: center;
+}
+.title {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 50px;
+}
+
+.whiteBtn {
+  background-color: transparent;
+  border: 1px solid #7b61ff;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #7b61ff;
+  font-size: 18px;
+  padding: 10px;
+  width: 400px;
+}
+.whiteBtn:hover {
+  background-color: #7b61ff;
+  color: white;
+}
+.inputBox:not(:last-child) {
+  margin-bottom: 20px;
+}
+.inputBox input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 1px solid #676d7c50;
+  background-color: #7b61ff15;
+  outline: none;
+}
+.emailBox {
+  display: flex;
+  justify-content: space-between;
+}
+.emailBox input {
+  width: calc(100% - 110px);
+}
+.inputTitle {
+  font-size: 12px;
+  text-align: start;
+  margin-left: 10px;
+}
+.timer {
+  font-size: 14px;
+  text-align: start;
+  margin-left: 10px;
+}
+.goLogin {
+  margin-top: 20px;
+  text-decoration: underline;
+  color: #5c4dae;
+  cursor: pointer;
+}
