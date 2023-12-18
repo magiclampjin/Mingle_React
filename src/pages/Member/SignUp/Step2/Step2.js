@@ -423,6 +423,7 @@ const Step2 = () => {
     }
   }, [user.memberRecommenderId]);
 
+  // 유효성 검사 결과 텍스트
   const handleCondition = (key, value) => {
     setSignupConditions((prev) => ({ ...prev, [key]: value }));
   };

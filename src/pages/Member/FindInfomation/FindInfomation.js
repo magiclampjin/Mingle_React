@@ -7,8 +7,8 @@ const FindInfomation = () => {
   return (
     <Routes>
       <Route path="/" element={<FindType />}></Route>
-      <Route path="/id" element={<FindId />}></Route>
-      <Route path="/pw" element={<FindPw />}></Route>
+      <Route path="/id/*" element={<FindId />}></Route>
+      <Route path="/pw/*" element={<FindPw />}></Route>
     </Routes>
   );
 };
