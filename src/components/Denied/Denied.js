@@ -35,6 +35,7 @@ const Denied = () => {
           title={"로그인"}
           width={180}
           heightPadding={20}
+          activation={true}
           onClick={handleLoginPage}
         ></PurpleRectangleBtn>
       </div>

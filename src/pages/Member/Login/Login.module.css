@@ -26,7 +26,7 @@
   background-color: #7b61ff15;
   outline: none;
 }
-input[type="password"] {
+.loginInputBox input[type="password"] {
   margin-top: 15px;
 }
 .loginOption {
@@ -57,8 +57,11 @@ input[type="password"] {
 .memberMenu div:last-child {
   padding-left: 10px;
 }
-input[type="checkbox"] {
+.loginOption input[type="checkbox"] {
   margin-right: 10px;
+}
+.memberMenu {
+  cursor: pointer;
 }
 @media (max-width: 786px) {
   .loginBox {
