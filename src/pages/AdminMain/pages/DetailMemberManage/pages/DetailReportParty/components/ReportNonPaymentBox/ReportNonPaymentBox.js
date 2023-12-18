@@ -56,17 +56,19 @@ const ReportNonPaymentBox = () => {
                     );
                 })}
             </div>
-            <Pagination
-                activePage={page}
-                itemsCountPerPage={reportPerPage}
-                totalItemsCount={report.length}
-                pageRangeDisplayed={10}
-                prevPageText={<FontAwesomeIcon icon={faAngleLeft} />}
-                nextPageText={<FontAwesomeIcon icon={faAngleRight} />}
-                lastPageText={<FontAwesomeIcon icon={faAnglesRight} />}
-                firstPageText={<FontAwesomeIcon icon={faAnglesLeft} />}
-                onChange={handlePageChange}
-            ></Pagination>
+            {report.length > 0 && (
+                <Pagination
+                    activePage={page}
+                    itemsCountPerPage={reportPerPage}
+                    totalItemsCount={report.length}
+                    pageRangeDisplayed={10}
+                    prevPageText={<FontAwesomeIcon icon={faAngleLeft} />}
+                    nextPageText={<FontAwesomeIcon icon={faAngleRight} />}
+                    lastPageText={<FontAwesomeIcon icon={faAnglesRight} />}
+                    firstPageText={<FontAwesomeIcon icon={faAnglesLeft} />}
+                    onChange={handlePageChange}
+                />
+            )}
         </div>
     );
 }

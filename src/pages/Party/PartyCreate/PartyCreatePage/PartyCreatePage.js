@@ -1,9 +1,9 @@
 import style from "./PartyCreatePage.module.css";
 import {useLocation} from "react-router-dom";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faTriangleExclamation, faPlus, faMinus, faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faTriangleExclamation, faPlus, faMinus, faChevronDown, faChevronUp, faCheck } from "@fortawesome/free-solid-svg-icons";
 import PurpleRectangleBtn from "../../../../components/PurpleRectangleBtn/PurpleRectangleBtn";
 import StartDateModal from "./StartDateModal/StartDateModal"
 import moment from "moment";
@@ -11,6 +11,10 @@ import PeriodModal from "./PeriodModal/PeriodModal";
 import WhiteRectangleBtn from "../../../../components/WhiteRectangleBtn/WhiteRectangleBtn";
 import CalculationSelectBox from "../../../../components/CalculationSelectBox/CalculationSelectBox";
 import { useNavigate } from "react-router-dom";
+import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
+import LoadingSpinnerMini from "../../../../components/LoadingSpinnerMini/LoadingSpinnerMini";
+import MypageModal from "../../../MyPage/components/MypageModal/MypageModal";
+import AccountModal from "./AccountModal/AccountModal";
 
 const PartyCreatePage = () =>{
     //  공통 사용 -------------------------------------------------
@@ -18,6 +22,8 @@ const PartyCreatePage = () =>{
     const location = useLocation();
     const service = location.state.service;
     const navi = useNavigate();
+    const [isLoading, setLoading] = useState(false);
+    const [isLoadingMini, setLoadingMini] = useState(false);
 
     // 현재 단계
     const [step, setStep] = useState(1);
@@ -225,30 +231,102 @@ const PartyCreatePage = () =>{
     const [isAllComplete, setAllComplete] = useState(false);
 
     // 결제 계좌 정보
+    const [account, setAccount] = useState();
+
+    // 등록된 계좌 정보 있는 지 확인
+    useEffect(()=>{
+        setLoadingMini(true);
+        axios.get("/api/paymentAccount/accountSelect").then(resp=>{
+            setAccount(resp.data);
+            if(resp.data !== ""){
+                setAllComplete(true);
+            }
+            setLoadingMini(false);
+        }).catch(()=>{
+            setLoadingMini(false);
+        });
+    },[isAllComplete]);
+
+
+
+
+
+    // 등록된 계좌 정보가 없을 경우 계좌 등록
+
+    // 계좌 등록 모달창 열림 / 닫힘
+    const [accountModalIsOpen, setAccountModalIsOpen] = useState(false);
+
+    // 계좌 등록 모달창 열기
+    const openAccountModal = (e) => {
+        const partyContentElement = e.currentTarget;
+        const clickedElement = e.target; 
+       
+        if (clickedElement === partyContentElement || partyContentElement.contains(clickedElement)) {
+            // partyContent 또는 그 자식 요소를 클릭한 경우에만 처리
+            setAccountModalIsOpen(true);
+        }
+    };
+
+    // 계좌 등록 모달창 닫기
+    const closeAccountModal = () => {
+        setAccountModalIsOpen(false);
+    };
+
+
+
+
+
+
+
 
     // 정산일 정보
     const [calculation, setCalculation] = useState(1); 
+
+    // 파티 최종 등록
     const handleComplete = () => {
         if(isAllComplete){
-            let partyData = {
-                peopleCount:peopleCnt,
-                serviceId:service.id,
-                startDate:new Date(value).toISOString(),
-                monthCount:periodMonth,
-                content:"내용",
-                loginId:accountInfo.id,
-                loginPw:accountInfo.pw
-            }
-            axios.post("/api/party", partyData).then(resp=>{
-                if(window.confirm("파티 등록 성공! 등록된 정보를 확인하시겠어요?")){
-                    navi("/");
+            setLoading(true);
+            axios.get("/api/paymentAccount/accountSelect").then(resp=>{
+                // 결제 수단이 존재하는 경우
+                if(resp.data !== ""){
+                    let date = new Date(value);
+                    date.setHours(date.getHours()+9);
+                    let partyData = {
+                        peopleCount:peopleCnt,
+                        serviceId:service.id,
+                        startDate:date.toISOString(),
+                        monthCount:periodMonth,
+                        calculationDate: calculation,
+                        loginId:accountInfo.id,
+                        loginPw:accountInfo.pw
+                    }
+                    axios.post("/api/party", partyData).then(resp=>{
+                        setLoading(false);
+                        if(window.confirm("파티 등록 성공! 등록된 정보를 확인하시겠어요?")){
+                            navi("/");
+                        }else{
+                            navi("/");
+                        }
+                    });
+
+                // 파티 생성 중 결제 수단이 삭제된 경우
                 }else{
-                    navi("/");
+                    alert("결제 수단이 존재하지 않습니다.");
+                    setLoading(false);
+                    setAllComplete(false);
+                    return;
                 }
-            });
+            }).catch(()=>{
+                setLoading(false);
+                alert("문제가 발생했습니다.");
+                return;
+            })      
         }
     }
 
+    if(isLoading){
+        return <LoadingSpinner/>;
+    }
     // -------------------------------------------------------------------------------
 
     return(
@@ -346,26 +424,52 @@ const PartyCreatePage = () =>{
                     </>:
                     <>
                         <div className={style.title}>마지막 단계<br></br>결제 계좌와 정산일을 등록해주세요.</div>
-                       
-                        <div className={style.subMenu}>
-                            <div className={style.subTitle}>결제 정보 등록</div>
-                            <WhiteRectangleBtn title="+ 결제 계좌 등록하기" onClick={()=>{alert("구현 예정 기능입니다."); setAllComplete(true);}} width={300} heightPadding={5}/>
-                            <div className={`${style.inputNotice}`}><FontAwesomeIcon icon={faTriangleExclamation} size="xs"/><div className={style.inputNoticeTxt}>결제 계좌는 파티장의 귀책 사유 발생시 위약금 부과를 위해 필요하며, 유효성 검증을 위해 1원 시범 결제 후 즉시 취소처리 합니다.</div></div>
-                        </div>
-                        <div className={style.subMenu}>
-                            <div className={style.subTitle}>정산일 정보 등록</div>
-                            <CalculationSelectBox
-                                setDay={setCalculation}
-                                day={calculation}
-                            ></CalculationSelectBox>
-                            <div className={`${style.inputNotice}`}><FontAwesomeIcon icon={faTriangleExclamation} size="xs"/><div className={style.inputNoticeTxt}>정산일은 파티 요금 적립과 결제가 이루어지는 기준일입니다.</div></div>
-                        </div>
-                        
-                       
-                        <div className={style.bnts}>
-                            <div className={style.prevBtn}><PurpleRectangleBtn title="이전" activation={true} onClick={handlePrev} width={150} heightPadding={10}/></div>
-                            <div className={style.nextBtn}><PurpleRectangleBtn title="파티 만들기" activation={isAllComplete} onClick={handleComplete} width={150} heightPadding={10}/></div>
-                        </div>
+                        {isLoadingMini?<LoadingSpinnerMini width={600} height={400}/>:
+                            <>
+                                <div className={style.subMenu}>
+                                    <div className={style.subTitle}>{account?"결제 정보 확인":"결제 정보 등록"}</div>
+                                    {
+                                        account?
+                                        <>
+                                            <div className={style.accountBox}>
+                                                <div className={style.bank}>{account.bankId}</div>
+                                                <div className={style.accountNumber}>{account.accountNumber}</div>
+                                                <div className={style.accountChkIcon}><FontAwesomeIcon icon={faCheck} /></div>
+                                            </div>
+                                        </>
+                                        :
+                                        <>
+                                            <WhiteRectangleBtn title="+ 결제 계좌 등록하기" onClick={openAccountModal} width={300} heightPadding={5}/>
+                                            <AccountModal
+                                                isOpen={accountModalIsOpen}
+                                                onRequestClose={closeAccountModal}
+                                                width={500}
+                                                height={270}
+                                                setAllComplete = {setAllComplete}
+                                            >
+                                            </AccountModal>   
+                                        </>
+                                        
+                                    }
+                                    <div className={`${style.inputNotice}`}><FontAwesomeIcon icon={faTriangleExclamation} size="xs"/><div className={style.inputNoticeTxt}>결제 계좌는 파티장의 귀책 사유 발생시 위약금 부과를 위해 필요하며, 유효성 검증을 위해 1원 시범 결제 후 즉시 취소처리 합니다.</div></div>
+                                </div>
+                            
+                                <div className={style.subMenu}>
+                                    <div className={style.subTitle}>정산일 정보 등록</div>
+                                    <CalculationSelectBox
+                                        setDay={setCalculation}
+                                        day={calculation}
+                                    ></CalculationSelectBox>
+                                    <div className={`${style.inputNotice}`}><FontAwesomeIcon icon={faTriangleExclamation} size="xs"/><div className={style.inputNoticeTxt}>정산일은 파티 요금 적립과 결제가 이루어지는 기준일입니다.</div></div>
+                                </div>
+                                
+                            
+                                <div className={style.bnts}>
+                                    <div className={style.prevBtn}><PurpleRectangleBtn title="이전" activation={true} onClick={handlePrev} width={150} heightPadding={10}/></div>
+                                    <div className={style.nextBtn}><PurpleRectangleBtn title="파티 만들기" activation={isAllComplete} onClick={handleComplete} width={150} heightPadding={10}/></div>
+                                </div>
+                            </>
+                        }
                     </>
                 }
             </div>

@@ -1,0 +1,214 @@
+.body{
+    max-width: 700px;
+    margin: auto;
+    padding:20px 24px;
+}
+
+.centerAlign {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.VAlign{
+    display:flex;
+    align-items: center;
+}
+
+.hAlign{
+    display:flex;
+    justify-content: center;
+}
+
+.hAlignEnd{
+    display:flex;
+    justify-content: end;
+}
+
+.dflex{
+    display: flex;
+}
+
+.title, .othersTitle{
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.subTitle{
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+
+.bigTitle{
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.w70{
+    width: 70%;
+}
+
+
+.w30{
+    width: 30%;
+}
+
+.logoImg{
+    width: 100px;
+    height: 100px;
+}
+
+.m35{
+    margin-bottom: 35px;
+}
+
+.colorMainPurple{
+    color:#7B61FF;
+}
+
+.wonIcon{
+    width: 20px;
+    height: 20px;
+    border-radius: 50px;
+    border: 2px solid #676D7C;
+    margin-right: 5px;
+    margin-top: 3px;
+}
+.wonIcon *{
+    color: #676D7C;
+    font-size: 10px;
+}
+
+.price{
+    color: #676D7C;
+    font-size: 15px;
+    font-weight: bold;
+    display: flex;
+    justify-content: end;
+}
+
+.party{
+    border:2px solid transparent;
+    padding: 30px;
+    box-shadow: 0 0 5px 0 #73757750 ;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.partyBottom, .othersExplain{
+    color: #676D7C;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.party:hover{
+    border:2px solid #7B61FF;
+    cursor: pointer;
+}
+
+.period{
+    margin-bottom: 50px;
+}
+
+.empty{
+    padding: 100px 0;
+    background-color: #DFE2E6;
+    border-radius: 10px;
+}
+
+.emptyIcon *{
+    font-size: 40px;
+    color: #676D7C;
+}
+
+.emptyTxt {
+    font-size: 20px;
+    font-weight: 500;
+    color: #676D7C;
+    margin-top: 20px;
+}
+
+.others{
+    margin-top: 100px;
+}
+
+.left{
+    width: 70%;
+}
+
+.right{
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+.othersIcon{
+    background-color: #F9B81399;
+    border-radius: 50px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.othersIcon *{
+    font-size: 25px;
+    color:#FFFFFF;
+}
+
+/* 파티 시작일 지정 (날짜 지정 or 오늘 시작) */
+.periodBtns{
+    justify-content: space-between;
+}
+
+.periodBtn{
+    width: fit-content;
+    height: fit-content;
+    padding:8px 15px;
+    box-shadow: 0 0 5px 0 #73757750 ;
+    border-radius: 10px;
+    font-weight: bold;
+    display: flex;
+    font-size: 14px;
+    border: 2px solid transparent;
+}
+
+.periodBtn:hover{
+    cursor: pointer;
+    border: 2px solid #7B61FF;
+}
+
+.periodIcon{
+    margin-right: 5px;
+}
+
+.periodDate{
+    font-size: 18px;
+    min-width: 120px;
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+
+.period {
+    color:#73757790;
+    display: flex;
+    align-items: center;
+}
+
+.period .periodIcon * {
+    color:#73757790;
+}
+
+
+@media (max-width:768px){
+    .others{
+        margin-top: 80px;
+    }
+}
