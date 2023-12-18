@@ -28,6 +28,51 @@
     background-color: rgb(227,227,227);
 }
 
+.searchBox{
+    width: 100%; height: 36px;
+    background-color: rgb(239, 239, 239);
+    border-radius: 10px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.searchType{
+    padding-right: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    color: rgb(101, 101, 101);
+    font-size: 14px;
+}
+
+/* Modal */
+.modalTitle{
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.modalSubTitle{
+    font-size: 14px;
+    text-align: center;
+    color: rgb(101, 101, 101);
+}
+
+.modalBtn{
+    margin-top:15px;
+    text-align: right;
+}
+
+/* x 버튼 */
+.closeBtn{
+    text-align: right;
+    cursor: pointer;
+}
+
+.modalBtn>button{
+    font-size: 15px;
+}
+
 @media (max-width:786px) {
     .container{
         width: 600px;
