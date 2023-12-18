@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./RenderNewVideo.module.css";
 import OttCard from "../OttCard/OttCard";
 import VideoModal from "../VideoModal/VideoModal";
+import { Link } from "react-router-dom";
 
 const RenderNewVideo = ({ newVideoInfo }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -55,9 +56,11 @@ const RenderNewVideo = ({ newVideoInfo }) => {
                 video={selectedVideo}
             />
             <div className={styles.board__buttonContainer}>
-                <button className={styles.board__button}>
-                    신작소개 가기
-                </button>
+                <Link to={"/board/intro"}>
+                    <button className={styles.board__button}>
+                        신작소개 가기
+                    </button>
+                </Link>
             </div>
         </div>
     );
