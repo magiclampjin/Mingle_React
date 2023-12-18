@@ -20,6 +20,11 @@
     justify-content: center;
 }
 
+.hAlignEnd{
+    display:flex;
+    justify-content: end;
+}
+
 .dflex{
     display: flex;
 }
@@ -27,5 +32,77 @@
 .title{
     font-size: 20px;
     font-weight: bold;
+    /* margin-bottom: 35px; */
+}
+
+
+
+.bigTitle{
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.w70{
+    width: 70%;
+}
+
+
+.w30{
+    width: 30%;
+}
+
+.logoImg{
+    width: 100px;
+    height: 100px;
+}
+
+.m35{
     margin-bottom: 35px;
+}
+
+.colorMainPurple{
+    color:#7B61FF;
+}
+
+.wonIcon{
+    width: 20px;
+    height: 20px;
+    border-radius: 50px;
+    border: 2px solid #676D7C;
+    margin-right: 5px;
+    margin-top: 3px;
+}
+.wonIcon *{
+    color: #676D7C;
+    font-size: 10px;
+}
+
+.price{
+    color: #676D7C;
+    font-size: 15px;
+    font-weight: bold;
+    display: flex;
+    justify-content: end;
+}
+
+.party{
+    border:2px solid transparent;
+    padding: 30px;
+    box-shadow: 0 0 5px 0 #73757750 ;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.partyTop{
+    margin-bottom: 10px;
+}
+
+.partyBottom{
+    color: #676D7C;
+    font-size: 14px;
+}
+
+.party:hover{
+    border:2px solid #7B61FF;
+    cursor: pointer;
 }
