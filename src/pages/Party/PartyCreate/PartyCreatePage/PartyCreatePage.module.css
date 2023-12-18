@@ -1,7 +1,7 @@
 .body{
     max-width: 1200px;
     margin: auto;
-    padding:20px 0px;
+    padding:20px 24px;
 }
 
 .right, .left{
@@ -183,6 +183,11 @@
     }
 }
 
+@media (max-width:600px){
+    .body{
+        max-width: 600px;
+    }
+}
 
 /* 2단계 */
 

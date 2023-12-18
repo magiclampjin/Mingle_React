@@ -7,7 +7,7 @@ import Member from "./pages/Member/Member";
 import Footer from "./components/Footer/Footer";
 import Main from "./pages/Main/Main";
 import Denied from "./components/Denied/Denied";
-import PartyCreate from "./pages/PartyCreate/PartyCreateMain";
+import Party from "./pages/Party/PartyMain";
 import Board from "./pages/Board/Board";
 import WritePost from "./pages/Board/WritePost/WritePost";
 import UpdatePost from "./pages/Board/UpdatePost/UpdatePost";
@@ -41,12 +41,10 @@ function App() {
             <Routes>
               <Route path="/" element={<Main />} />
               <Route path="/member/*" element={<Member />}></Route>
-              <Route path="/party/*" element={<PartyCreate />}></Route>
+              <Route path="/party/*" element={<Party/>}></Route>
               <Route path="/Mypage/*" element={<Mypage />}></Route>
               <Route path="/denied" element={<Denied />}></Route>
-
               <Route path="/admin/*" element={<AdminMain />} />
-
               <Route path="/board" element={<Board />} />
               <Route path="/board/review" element={<Review />} />
               <Route path="/board/popularposts" element={<PopularPosts />} />

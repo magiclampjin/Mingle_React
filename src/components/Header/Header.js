@@ -66,14 +66,19 @@ const Header = () => {
         </Link>
         <div className={style.header__menu}>
           <div className={style.menu__navi}>
-            <div className={style.navi__conf}>나의 파티</div>
-            <div className={style.navi__conf}>
-              <Link to="party">파티 만들기</Link>
+            <div className={style.navi__conf}> 
+              <Link to="party/myParty">나의 파티</Link>
             </div>
-            <div className={style.navi__conf}>파티 찾기</div>
+            <div className={style.navi__conf}>
+              <Link to="party/partycreate">파티 만들기</Link>
+            </div>
+            <div className={style.navi__conf}>
+              <Link to="party/partyJoin">파티 찾기</Link>
+            </div>
             <div className={style.navi__conf}>
               <Link to="board">게시판</Link>
             </div>
+
             <div className={style.navi__conf}>자주 묻는 질문</div>
             {loginId === "" || loginId === null ? (
               <Link to="member/login">
@@ -176,11 +181,15 @@ const Header = () => {
       </div>
 
       <div className={style.menu__naviTabSize}>
-        <div className={style.navi__conf}>나의 파티</div>
         <div className={style.navi__conf}>
-          <Link to="party">파티 만들기</Link>
+          <Link to="party/myParty">나의 파티</Link>
         </div>
-        <div className={style.navi__conf}>파티 찾기</div>
+        <div className={style.navi__conf}>
+          <Link to="party/partycreate">파티 만들기</Link>
+        </div>
+        <div className={style.navi__conf}>
+          <Link to="party/partyJoin">파티 찾기</Link>
+          </div>
         <div className={style.navi__conf}>게시판</div>
         <div className={style.navi__conf}>자주 묻는 질문</div>
       </div>

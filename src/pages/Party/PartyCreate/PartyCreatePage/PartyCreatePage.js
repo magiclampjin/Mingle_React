@@ -1,20 +1,23 @@
 import style from "./PartyCreatePage.module.css";
 import {useLocation} from "react-router-dom";
 import {useState} from "react";
+import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faTriangleExclamation, faPlus, faMinus, faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
-import PurpleRectangleBtn from "../../../components/PurpleRectangleBtn/PurpleRectangleBtn";
+import PurpleRectangleBtn from "../../../../components/PurpleRectangleBtn/PurpleRectangleBtn";
 import StartDateModal from "./StartDateModal/StartDateModal"
 import moment from "moment";
 import PeriodModal from "./PeriodModal/PeriodModal";
-import WhiteRectangleBtn from "../../../components/WhiteRectangleBtn/WhiteRectangleBtn";
-import CalculationSelectBox from "../../../components/CalculationSelectBox/CalculationSelectBox";
+import WhiteRectangleBtn from "../../../../components/WhiteRectangleBtn/WhiteRectangleBtn";
+import CalculationSelectBox from "../../../../components/CalculationSelectBox/CalculationSelectBox";
+import { useNavigate } from "react-router-dom";
 
 const PartyCreatePage = () =>{
     //  공통 사용 -------------------------------------------------
 
     const location = useLocation();
     const service = location.state.service;
+    const navi = useNavigate();
 
     // 현재 단계
     const [step, setStep] = useState(1);
@@ -226,12 +229,24 @@ const PartyCreatePage = () =>{
     // 정산일 정보
     const [calculation, setCalculation] = useState(1); 
     const handleComplete = () => {
-        console.log("진짜 파티 등록만 하면 되.. 힘내");
-    }
-
-    // 정산일 목록 (1 ~ 28일)
-    const openDateList = (e) => {
-
+        if(isAllComplete){
+            let partyData = {
+                peopleCount:peopleCnt,
+                serviceId:service.id,
+                startDate:new Date(value).toISOString(),
+                monthCount:periodMonth,
+                content:"내용",
+                loginId:accountInfo.id,
+                loginPw:accountInfo.pw
+            }
+            axios.post("/api/party", partyData).then(resp=>{
+                if(window.confirm("파티 등록 성공! 등록된 정보를 확인하시겠어요?")){
+                    navi("/");
+                }else{
+                    navi("/");
+                }
+            });
+        }
     }
 
     // -------------------------------------------------------------------------------
@@ -334,7 +349,7 @@ const PartyCreatePage = () =>{
                        
                         <div className={style.subMenu}>
                             <div className={style.subTitle}>결제 정보 등록</div>
-                            <WhiteRectangleBtn title="+ 결제 계좌 등록하기" onClick={()=>{}} width={300} heightPadding={5}/>
+                            <WhiteRectangleBtn title="+ 결제 계좌 등록하기" onClick={()=>{alert("구현 예정 기능입니다."); setAllComplete(true);}} width={300} heightPadding={5}/>
                             <div className={`${style.inputNotice}`}><FontAwesomeIcon icon={faTriangleExclamation} size="xs"/><div className={style.inputNoticeTxt}>결제 계좌는 파티장의 귀책 사유 발생시 위약금 부과를 위해 필요하며, 유효성 검증을 위해 1원 시범 결제 후 즉시 취소처리 합니다.</div></div>
                         </div>
                         <div className={style.subMenu}>
