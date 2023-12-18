@@ -27,6 +27,7 @@
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.20.1",
     "react-scripts": "5.0.1",
+    "react-stompjs": "^0.5.3",
     "reactstrap": "^9.2.1",
     "socketjs-client": "^1.0.2",
     "web-vitals": "^2.1.4"
