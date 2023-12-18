@@ -264,27 +264,25 @@ const PaymentManage = () =>{
                         </div>
                         <div className={style.modalTitle}>결제 계좌를 등록해 주세요.</div>
                         <div className={style.modalSubTitle}>
-                            밍글은 고객님의 계좌 정보를 직접 저장하지 않고,
-                            결제 보안 솔루션을 통해 안전하게 관리하고 있으니 걱정마세요.<br></br>
                             계좌번호 (3자리 - 2자리 - 6자리) 또는 (4자리 - 2자리 - 6자리)
                         </div>
                         
                         <div className={style.cardBox}>
                             <div>
-                            <select id="bankSelect" className={style.bankSelect}
-                            value={selectedBank} 
-                            onChange={handleBankChange}
-                            >
-                                <option value = "선택">선택</option>
-                                {bankList.map((item,index) => {
-                                    return(
-                                        <option key = {item.id} value = {item.id}>
-                                            {item.id}
-                                        </option>
-                                        )
-                                    })
-                                }
-                            </select>
+                                <select id="bankSelect" className={style.bankSelect}
+                                value={selectedBank} 
+                                onChange={handleBankChange}
+                                >
+                                    <option value = "선택">선택</option>
+                                    {bankList.map((item,index) => {
+                                        return(
+                                            <option key = {item.id} value = {item.id}>
+                                                {item.id}
+                                            </option>
+                                            )
+                                        })
+                                    }
+                                </select>
                             </div>
                             <div>
                                 <input type="text" placeholder='계좌 번호 입력'
