@@ -112,10 +112,12 @@ const Header = () => {
                     />
                     <div className={style.proffileModalInfo}>
                       <div>{loginNick}님</div>
-                      <div>
-                        <Link to="/Mypage">마이페이지</Link>
-                        <FontAwesomeIcon icon={faAngleRight} />
-                      </div>
+                      <Link to="/Mypage">
+                        <div>
+                          마이페이지
+                          <FontAwesomeIcon icon={faAngleRight} />
+                        </div>
+                      </Link>
                     </div>
                   </div>
                   <button
@@ -165,10 +167,12 @@ const Header = () => {
                   />
                   <div className={style.proffileModalInfo}>
                     <div>{loginNick}님</div>
+                    <Link to="/Mypage">
                     <div className={style.mypageBtn}>
                       마이페이지
                       <FontAwesomeIcon icon={faAngleRight} />
                     </div>
+                    </Link>
                   </div>
                 </div>
                 <button className={style.transparentBtn} onClick={handleLogout}>

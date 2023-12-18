@@ -1,12 +1,12 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import PurpleRoundBtn from '../../../components/PurpleRoundBtn/PurpleRoundBtn';
 import style from '../../MyPage/MemberInfoUpdate/MemberInfoUpdate.module.css';
-import CustomModal from '../../../components/CustomModal/CustomModal';
 import PurpleRectangleBtn from '../../../components/PurpleRectangleBtn/PurpleRectangleBtn';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faXmark} from "@fortawesome/free-solid-svg-icons";
 import WhiteRectangleBtn from '../../../components/WhiteRectangleBtn/WhiteRectangleBtn';
 import MypageModal from '../components/MypageModal/MypageModal';
+import axios from 'axios';
 
 const MemberInfoUpdate = () =>{
 
@@ -33,10 +33,32 @@ const MemberInfoUpdate = () =>{
         setIsModalOpen(false);
     };
 
-    // 이메일 State
+    // 이메일 유효성 검사
+    const isValidEmail = (value) => {
+        // 이메일 유효성 검사를 위한 정규식
+        const regex = /^[a-z0-9_]+@[a-z]+\.[a-z]{2,3}$/;
+        return regex.test(value);
+    };
+
+    // 이메일 버튼 클릭 State
     const [email,setEmail] = useState(false);
+
+    // 이메일 다시 등록할때의 State
+    const [inputEmail, setInputEmail] = useState("");
+    
+    // 이메일 Regex 결과 State
+    const [isEmail, setIsEmail] = useState(false);
+
     // 이메일 모달창 State
     const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+
+    const handleEmail = (e) =>{
+        const emailValue = e.target.value;
+        setInputEmail(emailValue);
+
+        const result = isValidEmail(emailValue);
+        setIsEmail(result);
+    }
 
     // 이메일 변경 버튼 클릭
     const handleEmailUpdate = () =>{
@@ -49,6 +71,73 @@ const MemberInfoUpdate = () =>{
         setEmail(!email);
         setIsEmailModalOpen(false);
     };
+
+
+    // 사용자의 휴대폰 번호 State
+    const [userPhone, setUserPhone] = useState("");
+    // 사용자의 이메일 State
+    const [userEmail, setUserEmail] = useState("");
+
+    // 인증번호 - 완료버튼 클릭 State
+    const [codeCom,setCodeCom] = useState(false);
+  
+
+    // 서버에서 사용자 기본 정보 불러오기
+    useEffect(()=>{
+        axios.get("/api/member/mypageUserInfo").then((resp)=>{
+            setUserPhone(resp.data.phone);
+            setUserEmail(resp.data.email);
+        })
+    },[codeCom])
+
+
+    // 이메일 인증하기 버튼 누름
+    const handleAuthBtn = () =>{
+        if(inputEmail == ""){
+            alert("이메일을 입력해주세요.");
+            return;
+        }
+        if(!isEmail){
+            // 이메일 제대로 입력 안함
+            alert("이메일 양식을 확인해주세요.");
+            return;
+        }else{
+            alert("인증번호가 발송되었습니다.");
+            // 이메일 제대로 입력함
+            axios.get("/api/member/mypageEmailAuth",{params:{email:inputEmail}}).then((resp)=>{
+                if (resp) {
+                   console.log(resp.data);
+                }
+            })
+          
+        }
+    }
+
+    // 인증번호
+    const [code, setCode] = useState("");
+
+    // 인증번호 입력
+    const handleAuthCode = (e) =>{
+        let code = e.target.value;
+        setCode(code);
+    }
+
+    // 인증번호 완료
+    const handleAuthSubmit = (e)=>{
+        axios.get("/api/member/emailChk",{params:{code:code, email:inputEmail}}).then((resp)=>{
+            console.log(resp.data);
+            if(resp.data){
+                setIsEmailModalOpen(false);
+                alert("변경되었습니다.");
+                setCodeCom(!codeCom);
+            }else{
+                alert("이메일 인증에 실패했습니다.");
+            }
+        });
+
+        
+    }
+   
 
     return(
         <div className={style.container}>
@@ -110,7 +199,7 @@ const MemberInfoUpdate = () =>{
                 <div className={style.inner}>
                     <div className={style.inner__left}>휴대폰 번호</div>
                     <div className={style.inner__right}>
-                        <div className={style.input}>01012344321</div>
+                        <div className={style.input}>{userPhone}</div>
                         <PurpleRoundBtn title={phone?"변경하기":"변경취소"} activation={phone} onClick={handlePhoneUpdate}></PurpleRoundBtn>
                     </div>
                 </div>
@@ -124,7 +213,7 @@ const MemberInfoUpdate = () =>{
                     isOpen={isModalOpen}
                     onRequestClose={closeModal}
                     width={500}
-                    height={150}
+                    height={160}
                     >
                         <div>
                             <div className={style.modalTitle}>휴대폰 번호 변경을 위해서는 본인 인증이 필요합니다.</div>
@@ -150,7 +239,7 @@ const MemberInfoUpdate = () =>{
                 <div className={style.inner}>
                     <div className={style.inner__left}>내 이메일</div>
                     <div className={style.inner__right}>
-                        <div className={style.input}>@naver.com</div>
+                        <div className={style.input}>{userEmail}</div>
                         <PurpleRoundBtn
                         title={"등록하기"}
                         activation={true} 
@@ -180,27 +269,40 @@ const MemberInfoUpdate = () =>{
                         <div className={style.emailBox}>
                             <div className={style.email__inner}>
                                 <div>
-                                    <input type="text" placeholder='이메일 입력' className={style.inputEmail}/>
+                                    <input type="text" 
+                                    placeholder='이메일 입력' 
+                                    className={style.inputEmail}
+                                    onChange={handleEmail}
+                                    style={{
+                                        borderColor: inputEmail ? (isEmail ? 'black' : 'red'):'black'
+                                    }}
+                                    />
                                 </div>
                                 <div>
                                     <WhiteRectangleBtn
                                     title={"인증하기"}
                                     width={80}
                                     heightPadding={13}
+                                    onClick={handleAuthBtn}
                                     ></WhiteRectangleBtn>
                                 </div>
                                
                             </div>
                             <div>
-                                <input type="text" placeholder='인증번호 입력' className={style.inputEmail}/>
+                                <input type="text" 
+                                placeholder='인증번호 입력'
+                                className={style.inputEmail}
+                                onChange={handleAuthCode}
+                                />
                             </div>
 
                             <div className={style.modalBtn}>
-                            <PurpleRectangleBtn
-                            title={"완료"}
-                            width={100}
-                            heightPadding={10}
-                            ></PurpleRectangleBtn>
+                                <PurpleRectangleBtn
+                                title={"완료"}
+                                width={100}
+                                heightPadding={10}
+                                onClick={handleAuthSubmit}
+                                ></PurpleRectangleBtn>
                             </div>
                             
                         </div>
