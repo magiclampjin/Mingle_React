@@ -13,6 +13,8 @@ import CalculationSelectBox from "../../../../components/CalculationSelectBox/Ca
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
 import LoadingSpinnerMini from "../../../../components/LoadingSpinnerMini/LoadingSpinnerMini";
+import MypageModal from "../../../MyPage/components/MypageModal/MypageModal";
+import AccountModal from "./AccountModal/AccountModal";
 
 const PartyCreatePage = () =>{
     //  공통 사용 -------------------------------------------------
@@ -243,14 +245,49 @@ const PartyCreatePage = () =>{
         }).catch(()=>{
             setLoadingMini(false);
         });
-    },[isAllComplete])
+    },[isAllComplete]);
+
+
+
+
+
+    // 등록된 계좌 정보가 없을 경우 계좌 등록
+
+    // 계좌 등록 모달창 열림 / 닫힘
+    const [accountModalIsOpen, setAccountModalIsOpen] = useState(false);
+
+    // 계좌 등록 모달창 열기
+    const openAccountModal = (e) => {
+        const partyContentElement = e.currentTarget;
+        const clickedElement = e.target; 
+       
+        if (clickedElement === partyContentElement || partyContentElement.contains(clickedElement)) {
+            // partyContent 또는 그 자식 요소를 클릭한 경우에만 처리
+            setAccountModalIsOpen(true);
+        }
+    };
+
+    // 계좌 등록 모달창 닫기
+    const closeAccountModal = () => {
+        setAccountModalIsOpen(false);
+    };
+
+
+
+
+
+
+
 
     // 정산일 정보
     const [calculation, setCalculation] = useState(1); 
+
+    // 파티 최종 등록
     const handleComplete = () => {
         if(isAllComplete){
             setLoading(true);
             axios.get("/api/paymentAccount/accountSelect").then(resp=>{
+                // 결제 수단이 존재하는 경우
                 if(resp.data !== ""){
                     let date = new Date(value);
                     date.setHours(date.getHours()+9);
@@ -271,6 +308,8 @@ const PartyCreatePage = () =>{
                             navi("/");
                         }
                     });
+
+                // 파티 생성 중 결제 수단이 삭제된 경우
                 }else{
                     alert("결제 수단이 존재하지 않습니다.");
                     setLoading(false);
@@ -398,7 +437,18 @@ const PartyCreatePage = () =>{
                                                 <div className={style.accountChkIcon}><FontAwesomeIcon icon={faCheck} /></div>
                                             </div>
                                         </>
-                                        :<WhiteRectangleBtn title="+ 결제 계좌 등록하기" onClick={()=>{alert("구현 예정 기능입니다."); setAllComplete(true);}} width={300} heightPadding={5}/>
+                                        :
+                                        <>
+                                            <WhiteRectangleBtn title="+ 결제 계좌 등록하기" onClick={openAccountModal} width={300} heightPadding={5}/>
+                                            <AccountModal
+                                                isOpen={accountModalIsOpen}
+                                                onRequestClose={closeAccountModal}
+                                                width={500}
+                                                height={270}
+                                                setAllComplete = {setAllComplete}
+                                            >
+                                            </AccountModal>   
+                                        </>
                                         
                                     }
                                     <div className={`${style.inputNotice}`}><FontAwesomeIcon icon={faTriangleExclamation} size="xs"/><div className={style.inputNoticeTxt}>결제 계좌는 파티장의 귀책 사유 발생시 위약금 부과를 위해 필요하며, 유효성 검증을 위해 1원 시범 결제 후 즉시 취소처리 합니다.</div></div>
