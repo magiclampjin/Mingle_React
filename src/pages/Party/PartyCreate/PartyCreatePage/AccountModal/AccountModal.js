@@ -14,10 +14,6 @@ const AccountModal = ({ isOpen, onRequestClose, width, height, setAllComplete}) 
 
     const [isLoading, setLoading] = useState(false);
 
-    // if(isLoading){
-    //     return <LoadingSpinnerMini height={10} width={10}/>
-    // }
-
     // 계좌번호 유효성 검사
     const isValidKoreanBankAccountNumber = (value) => {
         // 9~16자리
