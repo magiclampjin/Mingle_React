@@ -64,7 +64,10 @@ const Calculation = () => {
                 <CalculationSelectBox day={day} setDay={setDay}/>
               </div>
               <div className={style.calManageBox__changeCom}>
-                  <PurpleRoundBtn title={"변경완료"} activation={true} onClick={()=>{ DayChangeHandler({day})}}></PurpleRoundBtn>
+                  <PurpleRoundBtn title={"변경완료"} 
+                  activation={true} 
+                  onClick={()=>{ DayChangeHandler({day})}}
+                  ></PurpleRoundBtn>
               </div>
             </div>
             <p className={style.desc}>
@@ -72,9 +75,6 @@ const Calculation = () => {
               신중하게 선택해 주세요.
             </p>
           </div>
-          {/* <div className={style.calendarWrapper}>
-            <MyCalendar />
-          </div> */}
         </div>
       );
 }

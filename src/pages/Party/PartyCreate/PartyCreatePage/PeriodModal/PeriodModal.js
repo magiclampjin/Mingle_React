@@ -1,8 +1,8 @@
 import Modal from "react-modal";
 import { useEffect, useState } from "react";
 import style from "./PeriodModal.module.css";
-import PurpleRectangleBtn from "../../../../components/PurpleRectangleBtn/PurpleRectangleBtn";
-import WhiteRectangleBtn from "../../../../components/WhiteRectangleBtn/WhiteRectangleBtn";
+import PurpleRectangleBtn from "../../../../../components/PurpleRectangleBtn/PurpleRectangleBtn";
+import WhiteRectangleBtn from "../../../../../components/WhiteRectangleBtn/WhiteRectangleBtn";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
 

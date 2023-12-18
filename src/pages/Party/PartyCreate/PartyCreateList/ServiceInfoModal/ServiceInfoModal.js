@@ -2,10 +2,10 @@ import Modal from "react-modal";
 import axios from "axios";
 import style from "./ServiceInfoModal.module.css";
 import { useEffect, useState } from "react";
-import LoadingSpinnerMini from "../../../../components/LoadingSpinnerMini/LoadingSpinnerMini";
+import LoadingSpinnerMini from "../../../../../components/LoadingSpinnerMini/LoadingSpinnerMini";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTriangleExclamation, faCheck } from "@fortawesome/free-solid-svg-icons";
-import PurpleRectangleBtn from "../../../../components/PurpleRectangleBtn/PurpleRectangleBtn"
+import PurpleRectangleBtn from "../../../../../components/PurpleRectangleBtn/PurpleRectangleBtn"
 import { useNavigate } from "react-router-dom";
 
 Modal.setAppElement("#root");
@@ -29,7 +29,21 @@ const ServiceInfoModal = ({ isOpen, onRequestClose, contentLabel, selectService,
     // 요금 안내 확인 후 파티 생성창으로 이동하는 버튼 클릭 (다음 버튼)
     const handleNext = () => {
         if(isChked){
-            navi("/party/PartyCreatePage",{state:{service:service}});
+            // 로그인 여부 판별
+            // axios.get("/api/party/isAuthenticated").then(resp=>{
+            //     if(resp===true){
+            //         // 로그인된 유저일 경우 파티 생성 창으로 이동
+            //         navi("/party/PartyCreatePage",{state:{service:service}});
+            //     }else{
+            //         // 로그인하지않은 유저일 경우 로그인창으로 이동 혹은 현재 페이지 유지
+            //         if(window.confirm("로그인 후 이용 가능한 서비스입니다.\n로그인 화면으로 이동하시겠습니까?")){
+            //             navi("/login");
+            //         }else{
+
+            //         }
+            //     }
+            // })
+            navi("/party/PartyCreate/PartyCreatePage",{state:{service:service}});
         }
     }
 
@@ -94,7 +108,7 @@ const ServiceInfoModal = ({ isOpen, onRequestClose, contentLabel, selectService,
                     </div>
                 </div>
                 <div className={style.chkBox}>
-                    <input type="checkbox" id="chkBox" onChange={handleChange}></input><label htmlFor="chkBox">안내를 확인했어요.</label>
+                    <input type="checkbox" id="chkBox" className={style.chkBoxInput} onChange={handleChange}></input><label htmlFor="chkBox">안내를 확인했어요.</label>
                 </div>
                 <PurpleRectangleBtn title="다음" activation={isChked} onClick={handleNext} width={405} heightPadding={10}/>
             </>):null         
