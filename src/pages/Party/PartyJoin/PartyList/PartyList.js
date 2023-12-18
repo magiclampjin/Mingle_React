@@ -17,9 +17,6 @@ const PartyList = () => {
     const [price, setPrice] = useState();
     const navi = useNavigate();
 
-    const [startDate, setStartDate] = useState();
-    const [endDate, setEndDate] = useState();
-
     // 검색할 파티일자 선택 모달창 열림 / 닫힘
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -31,9 +28,9 @@ const PartyList = () => {
     // 검색 기간
     const [period,setPeriod] = useState({start:currentDate,end:maginot});
 
+    // 서비스 목록 불러오기
     useEffect(()=>{
         setLoading(true);
-
         axios.get(`/api/party/getServiceById/${selectService}`).then(resp=>{
             setService(resp.data);
             setPrice(formatNumber(Math.ceil((resp.data.price)/(resp.data.maxPeopleCount))+1000));
@@ -47,6 +44,21 @@ const PartyList = () => {
             setLoading(false);
         })   
     },[selectService]);
+
+    // 날짜로 검색
+    useEffect(()=>{
+        setLoading(true);
+        let data = {
+            start : period.start.toISOString(),
+            end : period.end.toISOString()
+        }
+        axios.get(`/api/party/getPartyListByStartDate/${selectService}`,{params:data}).then(resp=>{
+            setPartyList(resp.data);
+            setLoading(false);
+        }).catch(()=>{
+            setLoading(false);
+        });
+    },[period]);
     
 
     // 카테고리 불러오기 로딩
@@ -126,25 +138,17 @@ const PartyList = () => {
         const contentElement = e.currentTarget;
         const clickedElement = e.target; 
         
-        setLoading(true);
         if (clickedElement === contentElement || contentElement.contains(clickedElement)) {
+            setLoading(true);
             let now = new Date();
             now.setHours(0,0,0,0);
             now.setHours(now.getHours()+9);
-            let data = {
-                start : now.toISOString(),
-                end : now.toISOString()
-            }
+
             setPeriod({start:now, end:now});
-           
-            axios.get(`/api/party/getPartyListByStartDate/${selectService}`,{params:data}).then(resp=>{
-                setPartyList(resp.data);
-                setLoading(false);
-            }).catch(()=>{
-                setLoading(false);
-            });
         }
     }
+
+    
 
 
 
@@ -178,8 +182,8 @@ const PartyList = () => {
                             <img src={`/assets/serviceLogo/${service.englishName}.png`} alt={`${service.name} 로고 이미지`} className={`${style.logoImg} ${style.VAlign}`}></img>
                         </div>
                     </div>
-                    <div className={`${style.periodBtns} ${style.dflex}`} onClick={handleSetPeriod}>
-                        <div className={`${style.periodBtn} ${style.period}`}>
+                    <div className={`${style.periodBtns} ${style.dflex}`}>
+                        <div className={`${style.periodBtn} ${style.period}`} onClick={handleSetPeriod}>
                             <div className={style.periodIcon}><FontAwesomeIcon icon={faCalendar}/></div>파티 시작일
                             <div className={`${style.periodDate}`}>{getSearchDate()}</div>
                         </div>
@@ -214,11 +218,9 @@ const PartyList = () => {
                             onRequestClose={closeModal}
                             contentLabel="날짜 선택 모달"
                             width={450}
-                            height={700}
-                            startDate={startDate}
-                            setStartDate={setStartDate}
-                            endDate={endDate}
-                            setEndDate={setEndDate}
+                            height={670}
+                            period={period}
+                            setPeriod={setPeriod}
                         >
                         </SearchDateModal>  
                         <div className={`${style.others}`}>
