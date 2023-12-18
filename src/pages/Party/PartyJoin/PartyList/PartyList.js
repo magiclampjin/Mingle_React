@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWonSign } from "@fortawesome/free-solid-svg-icons";
+import { faFaceSadTear } from "@fortawesome/free-regular-svg-icons";
 import axios from "axios";
 import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
 
@@ -98,7 +99,7 @@ const PartyList = () => {
                     <div className={`${style.partyList}`}>
                         <div className={style.subTitle}>파티 검색 결과</div>
                         {
-                            partyList.map((e,i)=>( 
+                            partyList.length>0?partyList.map((e,i)=>( 
                                 <div key={i} className={`${style.party}`} data-id={e.id}>
                                     <div className={`${style.partyTop} ${style.dflex}`}>
                                         <div className={`${style.partyStartDate} ${style.title} ${style.w70}`}>
@@ -110,7 +111,11 @@ const PartyList = () => {
                                         ~ {getEndDate(e.startDate, e.monthCount)} 까지
                                     </div>
                                 </div>
-                            ))
+                            )):
+                            <div className={style.empty}>
+                                <div className={`${style.emptyIcon} ${style.centerAlign}`}><FontAwesomeIcon icon={faFaceSadTear}/></div>
+                                <div className={`${style.emptyTxt} ${style.centerAlign}`}>비어있는 파티가 없어요.</div>
+                            </div>
                         }
                     </div>
                 </>

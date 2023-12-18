@@ -114,3 +114,21 @@
 .period{
     margin-bottom: 50px;
 }
+
+.empty{
+    padding: 100px 0;
+    background-color: #DFE2E6;
+    border-radius: 10px;
+}
+
+.emptyIcon *{
+    font-size: 40px;
+    color: #676D7C;
+}
+
+.emptyTxt {
+    font-size: 20px;
+    font-weight: 500;
+    color: #676D7C;
+    margin-top: 20px;
+}
