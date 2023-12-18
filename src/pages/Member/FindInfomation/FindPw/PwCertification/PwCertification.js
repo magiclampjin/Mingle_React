@@ -206,7 +206,7 @@ const PwCertification = () => {
       axios.post("/api/member/certification/pw", formData).then((resp) => {
         if (resp.data) {
           // 본인인증 코드가 일치하면
-          navi("/member/findInfo/pw/find");
+          navi("/member/findInfo/pw/change");
         } else {
           alert("본인 인증 코드가 일치하지 않습니다.");
           // 정보 초기화

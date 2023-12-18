@@ -51,11 +51,6 @@ const IdCertification = () => {
       const minutes = Math.floor(timeSeconds / 60);
       const seconds = timeSeconds % 60;
 
-      // // 시간을 2자리 숫자로 표시
-      // const formattedTime = `${String(minutes).padStart(2, "0")}:${String(
-      //   seconds
-      // ).padStart(2, "0")}`;
-
       if (timerStart) {
         // 시간 업데이트
         setTimerSeconds((prev) => (prev > 0 ? prev - 1 : 0));

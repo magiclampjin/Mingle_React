@@ -23,8 +23,11 @@
   background-color: #7b61ff;
   color: white;
 }
-.inputBox:not(:last-child) {
+.inputBox {
   margin-bottom: 10px;
+}
+.inputBox:nth-child(4) {
+  margin-bottom: 20px;
 }
 .inputBox input {
   width: 100%;

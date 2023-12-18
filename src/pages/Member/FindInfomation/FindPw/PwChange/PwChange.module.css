@@ -1,4 +1,4 @@
-.findInfoBox {
+.pwChange {
   margin: 100px auto 150px auto;
   width: 400px;
   text-align: center;
@@ -7,26 +7,12 @@
   font-size: 30px;
   font-weight: 700;
   margin-bottom: 50px;
-}
-
-.whiteBtn {
-  background-color: transparent;
-  border: 1px solid #7b61ff;
-  border-radius: 5px;
-  cursor: pointer;
-  color: #7b61ff;
-  font-size: 18px;
-  padding: 10px;
-  width: 400px;
-}
-.whiteBtn:hover {
-  background-color: #7b61ff;
-  color: white;
+  text-align: center;
 }
 .inputBox {
   margin-bottom: 10px;
 }
-.inputBox:nth-child(5) {
+.inputBox:nth-child(3) {
   margin-bottom: 20px;
 }
 .inputBox input {
@@ -38,20 +24,8 @@
   background-color: #7b61ff15;
   outline: none;
 }
-.emailBox {
-  display: flex;
-  justify-content: space-between;
-}
-.emailBox input {
-  width: calc(100% - 110px);
-}
 .inputTitle {
   font-size: 12px;
-  text-align: start;
-  margin-left: 10px;
-}
-.timer {
-  font-size: 14px;
   text-align: start;
   margin-left: 10px;
 }

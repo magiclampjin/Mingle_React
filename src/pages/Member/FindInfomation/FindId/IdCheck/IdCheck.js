@@ -38,16 +38,12 @@ const IdCheck = () => {
     <div className={style.idChek}>
       <div className={style.title}>아이디 찾기</div>
       <div className={style.idCheckBox}>
-        {/* <div> */}
         <div className={style.backCircle}>
           <div className={style.mainCircle}>
             <FontAwesomeIcon icon={faMagnifyingGlass} />
           </div>
         </div>
-        {/* </div> */}
-        {/* <div className={style.icon}>
-        <FontAwesomeIcon icon={faMagnifyingGlass} />
-      </div> */}
+
         <div className={style.id}>
           {user.name}님 아이디는 {id} 입니다.
         </div>

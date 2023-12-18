@@ -16,20 +16,25 @@ const Header = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { loginId, setLoginId } = useContext(LoginContext);
   const { loginNick, setLoginNick } = useContext(LoginContext);
+  // const { setLoading } = useContext(LoginContext);
+  // const { isLogout, setLogout } = useContext(LoginContext);
 
   // const navi = useNavigate();
   const cookies = new Cookies();
 
   useEffect(() => {
+    // setLoading(true);
     axios.get("/api/member/userBasicInfo").then((resp) => {
       const data = resp.data; // axios로 받아온 데이터
       // data가 Map과 유사한 경우
       // Map의 값들 꺼내오기
       if (data.loginID !== undefined) {
         setLoginId(data.loginID);
+        // setLoading(false);
       }
       if (data.loginNick !== undefined) {
         setLoginNick(data.loginNick);
+        // setLoading(false);
       }
     });
   }, [loginId]);
@@ -52,6 +57,7 @@ const Header = () => {
         cookies.remove("loginID", { path: "/" });
       }
       closeModal();
+      // setLogout(true);
       // navi(-1);
     });
   };
@@ -66,7 +72,7 @@ const Header = () => {
         </Link>
         <div className={style.header__menu}>
           <div className={style.menu__navi}>
-            <div className={style.navi__conf}> 
+            <div className={style.navi__conf}>
               <Link to="party/myParty">나의 파티</Link>
             </div>
             <div className={style.navi__conf}>
@@ -168,10 +174,10 @@ const Header = () => {
                   <div className={style.proffileModalInfo}>
                     <div>{loginNick}님</div>
                     <Link to="/Mypage">
-                    <div className={style.mypageBtn}>
-                      마이페이지
-                      <FontAwesomeIcon icon={faAngleRight} />
-                    </div>
+                      <div className={style.mypageBtn}>
+                        마이페이지
+                        <FontAwesomeIcon icon={faAngleRight} />
+                      </div>
                     </Link>
                   </div>
                 </div>
@@ -193,7 +199,7 @@ const Header = () => {
         </div>
         <div className={style.navi__conf}>
           <Link to="party/partyJoin">파티 찾기</Link>
-          </div>
+        </div>
         <div className={style.navi__conf}>게시판</div>
         <div className={style.navi__conf}>자주 묻는 질문</div>
       </div>

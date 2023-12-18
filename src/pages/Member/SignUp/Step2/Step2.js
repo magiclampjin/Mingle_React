@@ -13,9 +13,9 @@ const Step2 = () => {
   const { currentStep, setCurrentStep } = useContext(SignUpInfoContext);
   const { user, setUser } = useContext(SignUpInfoContext);
   const { isNext, setNext } = useContext(SignUpInfoContext);
-  const { chkAll, setChhAll } = useContext(SignUpInfoContext);
-  const { chkUse, setChkUse } = useContext(SignUpInfoContext);
-  const { chkPrivacy, setChkPrivacy } = useContext(SignUpInfoContext);
+  // const { chkAll, setChhAll } = useContext(SignUpInfoContext);
+  // const { chkUse, setChkUse } = useContext(SignUpInfoContext);
+  // const { chkPrivacy, setChkPrivacy } = useContext(SignUpInfoContext);
   // 비밀번호 확인 input value
   const [pwCheckText, setPwCheckText] = useState("");
   // 입력값 유효성 검사 결과
@@ -124,7 +124,9 @@ const Step2 = () => {
 
       // 영문자, 숫자, 밑줄만 입력했을 때 아이디 중복 검사 실행
       if (isValid) {
-        axios.post("/api/member/idDuplicateCheck", user.id).then((resp) => {
+        const formData = new FormData();
+        formData.append("id", user.id);
+        axios.post("/api/member/idDuplicateCheck", formData).then((resp) => {
           if (resp.data) {
             // 중복된 아이디가 있을 때
             setCheckText((prev) => ({
@@ -189,7 +191,7 @@ const Step2 = () => {
             pwCheck: "비밀번호가 일치합니다.",
           }));
           handleCondition("pwCheck", true);
-        } else {
+        } else if (pwCheckText !== "") {
           setCheckText((prev) => ({
             ...prev,
             pwCheck: "비밀번호가 일치하지 않습니다.",
@@ -200,8 +202,7 @@ const Step2 = () => {
         // 비밀번호 형식 불일치
         setCheckText((prev) => ({
           ...prev,
-          password:
-            "비밀번호 형식이 올바르지 않습니다. 8~30자의 영문 대소문자, 숫자 밑 특수문자를 사용하세요.",
+          password: "8~30자의 영문 대소문자, 숫자 밑 특수문자를 사용하세요.",
         }));
         handleCondition("password", false);
 
@@ -365,22 +366,22 @@ const Step2 = () => {
         // 전화번호 형식이 올바를 때
         setCheckText((prev) => ({ ...prev, phone: "" }));
         handleCondition("phone", true);
-        axios
-          .post("/api/member/phoneDuplicateCheck", user.phone)
-          .then((resp) => {
-            if (resp.data) {
-              // 중복된 전화번호가 있을 때
-              setCheckText((prev) => ({
-                ...prev,
-                phone: "중복된 전화번호입니다. 사용하실 수 없습니다.",
-              }));
-              handleCondition("phone", false);
-            } else {
-              // 중복된 전화번호가 없을 때
-              setCheckText((prev) => ({ ...prev, phone: "" }));
-              handleCondition("phone", true);
-            }
-          });
+        const formData = new FormData();
+        formData.append("phone", user.phone);
+        axios.post("/api/member/phoneDuplicateCheck", formData).then((resp) => {
+          if (resp.data) {
+            // 중복된 전화번호가 있을 때
+            setCheckText((prev) => ({
+              ...prev,
+              phone: "중복된 전화번호입니다. 사용하실 수 없습니다.",
+            }));
+            handleCondition("phone", false);
+          } else {
+            // 중복된 전화번호가 없을 때
+            setCheckText((prev) => ({ ...prev, phone: "" }));
+            handleCondition("phone", true);
+          }
+        });
       } else {
         // 전화번호 형식이 올바르지 않을때
         setCheckText((prev) => ({
