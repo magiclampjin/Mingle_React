@@ -15,6 +15,7 @@ const Login = () => {
   const { setLoginId } = useContext(LoginContext);
 
   const navi = useNavigate();
+  // const location = useLocation();
   const cookies = new Cookies();
 
   useEffect(() => {
@@ -46,6 +47,9 @@ const Login = () => {
       formData.append("id", user.id);
       formData.append("pw", user.pw);
       setLoading(true);
+
+      // const location = useLocation();
+
       axios.post("/api/member/login", formData).then((resp) => {
         if (resp.statusText === "OK") {
           setLoginId(user.id);
@@ -61,7 +65,9 @@ const Login = () => {
           });
 
           setUser({ id: "", pw: "" });
+
           navi(-1);
+
           setLoading(false);
         } else if (resp.statusText === "UNAUTHORIZED") {
           alert("아이디 혹은 비밀번호가 일치하지 않습니다.");
@@ -79,6 +85,10 @@ const Login = () => {
     if (event.keyCode === 13) {
       handleLogin();
     }
+  };
+
+  const handleSignup = () => {
+    navi("/member/signup");
   };
 
   if (isLoading) {
@@ -124,9 +134,8 @@ const Login = () => {
           <label htmlFor="saveId">아이디 기억하기</label>
         </div>
         <div className={style.memberMenu}>
-          <Link to="signup">
-            <div>회원가입</div>
-          </Link>
+          <div onClick={handleSignup}>회원가입</div>
+
           <div>아이디/비밀번호 찾기</div>
         </div>
       </div>

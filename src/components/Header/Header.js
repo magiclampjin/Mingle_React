@@ -17,7 +17,7 @@ const Header = () => {
   const { loginId, setLoginId } = useContext(LoginContext);
   const { loginNick, setLoginNick } = useContext(LoginContext);
 
-  const navi = useNavigate();
+  // const navi = useNavigate();
   const cookies = new Cookies();
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const Header = () => {
         setLoginNick(data.loginNick);
       }
     });
-  }, []);
+  }, [loginId]);
 
   // 프로필 모달창 열기
   const openModal = () => {
@@ -46,13 +46,13 @@ const Header = () => {
 
   const handleLogout = () => {
     axios.post("/api/member/logout").then((resp) => {
-      setLoginId(null);
+      setLoginId("");
       // 아이디 기억하기 하지 않으면 쿠키에 저장된 아이디 지우기
       if (!cookies.get("rememberID")) {
         cookies.remove("loginID", { path: "/" });
       }
       closeModal();
-      navi("/");
+      // navi(-1);
     });
   };
 
@@ -67,12 +67,16 @@ const Header = () => {
         <div className={style.header__menu}>
           <div className={style.menu__navi}>
             <div className={style.navi__conf}>나의 파티</div>
-            <div className={style.navi__conf}><Link to="party">파티 만들기</Link></div>
+            <div className={style.navi__conf}>
+              <Link to="party">파티 만들기</Link>
+            </div>
             <div className={style.navi__conf}>파티 찾기</div>
-            <div className={style.navi__conf}><Link to="board">게시판</Link></div>
+            <div className={style.navi__conf}>
+              <Link to="board">게시판</Link>
+            </div>
             <div className={style.navi__conf}>자주 묻는 질문</div>
             {loginId === "" || loginId === null ? (
-              <Link to="login">
+              <Link to="member/login">
                 <PurpleRoundBtn
                   title={"로그인"}
                   activation={true}
@@ -104,9 +108,7 @@ const Header = () => {
                     <div className={style.proffileModalInfo}>
                       <div>{loginNick}님</div>
                       <div>
-                        <Link to="/Mypage">
-                        마이페이지
-                        </Link>
+                        <Link to="/Mypage">마이페이지</Link>
                         <FontAwesomeIcon icon={faAngleRight} />
                       </div>
                     </div>
@@ -127,7 +129,7 @@ const Header = () => {
             <PurpleRoundBtn title={"로그인"} activation={true}></PurpleRoundBtn>
           </Link> */}
           {loginId === "" || loginId === null ? (
-            <Link to="login">
+            <Link to="member/login">
               <PurpleRoundBtn
                 title={"로그인"}
                 activation={true}
@@ -158,7 +160,7 @@ const Header = () => {
                   />
                   <div className={style.proffileModalInfo}>
                     <div>{loginNick}님</div>
-                    <div>
+                    <div className={style.mypageBtn}>
                       마이페이지
                       <FontAwesomeIcon icon={faAngleRight} />
                     </div>
@@ -175,7 +177,9 @@ const Header = () => {
 
       <div className={style.menu__naviTabSize}>
         <div className={style.navi__conf}>나의 파티</div>
-        <div className={style.navi__conf}><Link to="party">파티 만들기</Link></div>
+        <div className={style.navi__conf}>
+          <Link to="party">파티 만들기</Link>
+        </div>
         <div className={style.navi__conf}>파티 찾기</div>
         <div className={style.navi__conf}>게시판</div>
         <div className={style.navi__conf}>자주 묻는 질문</div>
