@@ -56,11 +56,11 @@ const PaymentManage = () =>{
     //     setIsCardValid(valid);
     // }
 
-    // 시작
+    // ---시작
     // 계좌번호 유효성 검사
     const isValidKoreanBankAccountNumber = (value) => {
-        // 3자리 - 2자리 - 6자리 또는 4자리 - 2자리 - 6자리
-        const regex = /^\d{3}-?\d{2}-?\d{6}$|^\d{4}-?\d{2}-?\d{6}$/;
+        // 9~16자리
+        const regex = /^[0-9]{9,16}$/;
         return regex.test(value);
     };
 
@@ -185,14 +185,24 @@ const PaymentManage = () =>{
     // // 유효성 검사 통과했는지?
     // const totalValid = isCardValid && isCardMonth && isCardYear && isBirth && isPassword;
 
+
+   // Regex 검사결과
     const totalValid = isAccount && isBank;
+
+   // 서버로 보낼 데이터
+   const postData = {
+    bankId: selectedBank,
+    accountNumber: accountNum
+   }
 
     const handleSubmit = () =>{
         console.log(totalValid);
         
         if(totalValid){
             // 카드 등록.. 부분..
-            // axios("").
+            console.log("은행 : "+selectedBank);
+            console.log("계좌번호 : "+accountNum);
+            axios.post("/api/paymentAccount/accountInsert",postData)
         }else{
             //alert("카드 등록에 실패했습니다.");
         }
@@ -264,7 +274,7 @@ const PaymentManage = () =>{
                         </div>
                         <div className={style.modalTitle}>결제 계좌를 등록해 주세요.</div>
                         <div className={style.modalSubTitle}>
-                            계좌번호 (3자리 - 2자리 - 6자리) 또는 (4자리 - 2자리 - 6자리)
+                            계좌번호 9~16자리를 입력해주세요.
                         </div>
                         
                         <div className={style.cardBox}>
