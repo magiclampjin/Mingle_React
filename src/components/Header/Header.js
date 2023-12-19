@@ -16,8 +16,7 @@ const Header = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { loginId, setLoginId } = useContext(LoginContext);
   const { loginNick, setLoginNick } = useContext(LoginContext);
-  // const { setLoading } = useContext(LoginContext);
-  // const { isLogout, setLogout } = useContext(LoginContext);
+  const { loginRole, setLoginRole } = useContext(LoginContext);
 
   // const navi = useNavigate();
   const cookies = new Cookies();
@@ -35,6 +34,9 @@ const Header = () => {
       if (data.loginNick !== undefined) {
         setLoginNick(data.loginNick);
         // setLoading(false);
+      }
+      if (data.loginRole !== undefined) {
+        setLoginRole(data.loginRole);
       }
     });
   }, [loginId]);
@@ -126,6 +128,13 @@ const Header = () => {
                       </Link>
                     </div>
                   </div>
+                  {loginRole === "ROLE_ADMIN" && (
+                    <div className={style.profileModalAdminInfo}>
+                      <Link to="/Admin">
+                        <div>관리자</div>
+                      </Link>
+                    </div>
+                  )}
                   <button
                     className={style.transparentBtn}
                     onClick={handleLogout}
@@ -181,6 +190,13 @@ const Header = () => {
                     </Link>
                   </div>
                 </div>
+                {loginRole === "ROLE_ADMIN" && (
+                  <div className={style.profileModalAdminInfo}>
+                    <Link to="/Admin">
+                      <div>관리자</div>
+                    </Link>
+                  </div>
+                )}
                 <button className={style.transparentBtn} onClick={handleLogout}>
                   로그아웃
                 </button>

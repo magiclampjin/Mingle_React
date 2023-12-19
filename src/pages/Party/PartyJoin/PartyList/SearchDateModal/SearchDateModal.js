@@ -2,9 +2,11 @@ import Modal from "react-modal";
 import Calendar from 'react-calendar';
 import moment from 'moment';
 import { useEffect, useState } from "react";
-import style from "./StartDateModal.module.css";
+import style from "../../../PartyCreate/PartyCreatePage/StartDateModal/StartDateModal.module.css";
+import stylePlus from "./SearchDateModal.module.css";
 import 'react-calendar/dist/Calendar.css';
-import './customCalendar.css'
+import '../../../PartyCreate/PartyCreatePage/StartDateModal/customCalendar.css'
+import WhiteRectangleBtn from "../../../../../components/WhiteRectangleBtn/WhiteRectangleBtn";
 
 Modal.setAppElement("#root");
 
@@ -14,26 +16,45 @@ const currentDateTime = new Date();
 const Maginot = new Date();
 Maginot.setMonth(currentDateTime.getMonth()+1);
 
-const StartDateModal = ({ isOpen, onRequestClose, contentLabel, width, height, value, onChange, setPeriodStep}) => {
+const SearchDateModal = ({ isOpen, onRequestClose, contentLabel, width, height, period, setPeriod}) => {
   // 최소 날짜 이전 달로 이동 불가능
   const [isPrev, setPrev] = useState(false);
   // 최대 날짜 이후 달로 이동 불가능
   const [isNext, setNext] = useState(currentDateTime.getMonth() === Maginot.getMonth()?false:true);
+  
+  // 선택일자
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
+
+  useEffect(()=>{
+    setStartDate(period.start);
+    setEndDate(period.end);
+    setNext(currentDateTime.getMonth() === Maginot.getMonth()?false:true);
+    setPrev(false);
+  },[isOpen]);
+
   const setMove = (date) => {
     if(date.getMonth() === currentDateTime.getMonth()) setPrev(false);
     else setPrev(true);
     if(date.getMonth() === Maginot.getMonth()) setNext(false);
     else setNext(true);
   }
-  useEffect(()=>{
-    setNext(currentDateTime.getMonth() === Maginot.getMonth()?false:true);
-    setPrev(false);
-  },[isOpen]);
 
-  useEffect(()=>{
-    onRequestClose(true);
-    if(value!=null) setPeriodStep(2);
-  },[value])
+  const [value, onChange] = useState();
+
+const changeDate = (e) => {
+  let sd = new Date(e[0]);
+  sd.setHours(sd.getHours()+9);
+  let ed = new Date(e[1]);
+  ed.setHours(ed.getHours()+9)
+  setStartDate(sd);
+  setEndDate(ed);
+} 
+
+const setDate = (e) => {
+  setPeriod({start:startDate, end:endDate});
+  onRequestClose(true);
+}
 
 
   return (
@@ -56,12 +77,25 @@ const StartDateModal = ({ isOpen, onRequestClose, contentLabel, width, height, v
         },
       }}
     >
-    <div className={style.title}>파티 시작일 선택</div>
+    <div className={style.title}>원하는 파티 시작일 선택 </div>
     <div className={style.explain}>오늘로부터 한달 이내의 날짜만 선택 가능</div>
+    <div className={stylePlus.selectDates}>
+        <div className={stylePlus.startDate}>
+            <div className={stylePlus.dateTitle}>검색 시작일</div>
+            <div className={stylePlus.selectDate}>{startDate?new Date(startDate).toISOString().slice(0,10):"선택안함"}</div>
+        </div>
+        <div className={stylePlus.endDate}>
+            <div className={stylePlus.dateTitle}>검색 종료일</div>
+            <div className={stylePlus.selectDate}>{endDate?new Date(endDate).toISOString().slice(0,10):"선택안함"}</div>
+        </div>
+    </div>
+
+
     <div className={style.calendar}>
         <Calendar 
           // 뷰 month로 고정 (CSS 에서도 조정함)
           view="month"
+          selectRange={true}
           onViewChange={(view)=>{
             if(view !== "month"){
               setTimeout(()=>{
@@ -75,7 +109,7 @@ const StartDateModal = ({ isOpen, onRequestClose, contentLabel, width, height, v
           
           // 선택 날짜 정보
           value = {value}
-          onChange = {onChange}
+          onChange = {changeDate}
 
           // 오늘부터 한달 사이 날짜만 선택 가능
           tileDisabled={({ date, view }) =>
@@ -100,8 +134,12 @@ const StartDateModal = ({ isOpen, onRequestClose, contentLabel, width, height, v
           //onClickDay={onChange}
         ></Calendar>
     </div>
+    <div className={stylePlus.whiteBtn}>
+      <WhiteRectangleBtn title={"검색"} width={400} heightPadding={5} onClick={setDate}/>
+    </div>
+   
     </Modal>
   );
 };
 
-export default StartDateModal;
+export default SearchDateModal;

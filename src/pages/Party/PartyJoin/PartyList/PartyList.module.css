@@ -22,14 +22,14 @@
 
 .hAlignEnd{
     display:flex;
-    justify-content: end;
+    justify-content: flex-end;
 }
 
 .dflex{
     display: flex;
 }
 
-.title{
+.title, .othersTitle{
     font-size: 20px;
     font-weight: 700;
 }
@@ -86,7 +86,7 @@
     font-size: 15px;
     font-weight: bold;
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
 }
 
 .party{
@@ -97,13 +97,10 @@
     margin-bottom: 30px;
 }
 
-.partyTop{
-    margin-bottom: 10px;
-}
-
-.partyBottom{
+.partyBottom, .othersExplain{
     color: #676D7C;
     font-size: 14px;
+    margin-top: 10px;
 }
 
 .party:hover{
@@ -113,4 +110,105 @@
 
 .period{
     margin-bottom: 50px;
+}
+
+.empty{
+    padding: 100px 0;
+    background-color: #DFE2E6;
+    border-radius: 10px;
+}
+
+.emptyIcon *{
+    font-size: 40px;
+    color: #676D7C;
+}
+
+.emptyTxt {
+    font-size: 20px;
+    font-weight: 500;
+    color: #676D7C;
+    margin-top: 20px;
+}
+
+.others{
+    margin-top: 100px;
+}
+
+.left{
+    width: 70%;
+}
+
+.right{
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.othersIcon{
+    background-color: #F9B81399;
+    border-radius: 50px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.othersIcon *{
+    font-size: 25px;
+    color:#FFFFFF;
+}
+
+/* 파티 시작일 지정 (날짜 지정 or 오늘 시작) */
+.periodBtns{
+    justify-content: space-between;
+}
+
+.periodBtn{
+    width: fit-content;
+    height: fit-content;
+    padding:8px 15px;
+    box-shadow: 0 0 5px 0 #73757750 ;
+    border-radius: 10px;
+    font-weight: bold;
+    display: flex;
+    font-size: 14px;
+    border: 2px solid transparent;
+}
+
+.periodBtn:hover{
+    cursor: pointer;
+    border: 2px solid #7B61FF;
+}
+
+.periodIcon{
+    margin-right: 5px;
+}
+
+.periodDate{
+    font-size: 18px;
+    min-width: 120px;
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+
+.period {
+    color:#73757790;
+    display: flex;
+    align-items: center;
+}
+
+.period .periodIcon * {
+    color:#73757790;
+}
+
+
+@media (max-width:768px){
+    .others{
+        margin-top: 80px;
+    }
 }

@@ -62,6 +62,7 @@
 
 .cardRight{
     display: flex;
+    align-items: center;
 }
 
 
@@ -93,12 +94,12 @@
 .modalTitle{
     font-size: 18px;
     font-weight: 600;
-    text-align: start;
+    text-align: center;
 }
 
 .modalSubTitle{
     font-size: 14px;
-    text-align: start;
+    text-align: center;
     color: rgb(101, 101, 101);
 }
 
@@ -113,6 +114,7 @@
 
 .closeBtn{
     text-align: right;
+    cursor: pointer;
 }
 
 /* card */
@@ -179,6 +181,17 @@
 
 .card>div{
     width: 50%;
+}
+
+/* 삭제모달 */
+.deleteBtnBox{
+    margin-top: 5px;
+    display: flex;
+    justify-content: center;
+}
+
+.deleteBtnBox div:nth-child(1){
+    margin-right: 5px;
 }
 
 @media (max-width:786px) {
