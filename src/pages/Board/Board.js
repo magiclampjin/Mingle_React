@@ -26,7 +26,6 @@ const Board = () => {
                 </div>
                 <Routes>
                     <Route path="/" element={<BoardMain />} />
-                    <Route path="review" element={<Review />} />
                     <Route path="intro" element={<Intro/>}/>
                     <Route path="popularposts" element={<PopularPosts />} />
                     <Route path="freeboard" element={<FreeBoard />} />

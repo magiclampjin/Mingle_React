@@ -11,7 +11,6 @@ const BoardCategories = () => {
         { name: "인기글", path: "/board/popularposts" },
         { name: "자유게시판", path: "/board/freeboard" },
         { name: "공지게시판", path: "/board/noticeboard" },
-        { name: "리뷰", path: "/board/review" },
         { name: "신작 소개", path: "/board/intro" }
     ];
 
