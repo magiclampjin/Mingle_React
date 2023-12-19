@@ -1,0 +1,60 @@
+.body{
+    max-width: 1300px;
+    margin: auto;
+    padding:20px 24px;
+}
+
+.centerAlign {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.VAlign{
+    display:flex;
+    align-items: center;
+}
+
+.hAlign{
+    display:flex;
+    justify-content: center;
+}
+
+.hAlignEnd{
+    display:flex;
+    justify-content: flex-end;
+}
+
+.dflex{
+    display: flex;
+}
+
+.title{
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.subTitle{
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+
+.bigTitle{
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.backIcon{
+    margin-right: 20px;
+}
+
+.backIcon, .backIcon *{
+    font-size: 30px;
+    color:#7B61FF;
+}
+
+.backIcon:hover{
+    cursor: pointer;
+}
