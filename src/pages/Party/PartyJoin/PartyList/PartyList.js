@@ -1,5 +1,5 @@
 import style from "./PartyList.module.css"
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWonSign, faCirclePlus, faMagnifyingGlass, faBolt } from "@fortawesome/free-solid-svg-icons";
@@ -7,6 +7,7 @@ import { faFaceSadTear, faCalendar } from "@fortawesome/free-regular-svg-icons";
 import axios from "axios";
 import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
 import SearchDateModal from "./SearchDateModal/SearchDateModal";
+import {LoginContext} from "../../../../App";
 
 const PartyList = () => {
     const location = useLocation();
@@ -16,6 +17,9 @@ const PartyList = () => {
     const [isLoading, setLoading] = useState(false);
     const [price, setPrice] = useState();
     const navi = useNavigate();
+
+    // 로그인 정보
+    const {loginId} = useContext(LoginContext);
 
     // 검색할 파티일자 선택 모달창 열림 / 닫힘
     const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -107,11 +111,36 @@ const PartyList = () => {
 
     // 파티 만들기 페이지로 이동
     const goCreateParty = (e) =>{
-        const contentElement = e.currentTarget;
-        const clickedElement = e.target; 
-        
-        if (clickedElement === contentElement || contentElement.contains(clickedElement)) {
-            navi("/party/partyCreate");
+        if(loginId){
+            const contentElement = e.currentTarget;
+            const clickedElement = e.target; 
+            
+            if (clickedElement === contentElement || contentElement.contains(clickedElement)) {
+                navi("/party/partyCreate");
+            }
+        }else{
+             // 로그인하지않은 유저일 경우 로그인창으로 이동 혹은 현재 페이지 유지
+            if(window.confirm("로그인 후 이용 가능한 서비스입니다.\n로그인 화면으로 이동하시겠습니까?")){
+                navi("/member/login");
+            }
+        }
+    };
+
+
+    // 파티 매칭 페이지로 이동
+    const goMatchingParty = (e) =>{
+        if(loginId){
+            const contentElement = e.currentTarget;
+            const clickedElement = e.target; 
+            
+            if (clickedElement === contentElement || contentElement.contains(clickedElement)) {
+                // navi("/party/partyCreate");
+            }
+        }else{
+             // 로그인하지않은 유저일 경우 로그인창으로 이동 혹은 현재 페이지 유지
+            if(window.confirm("로그인 후 이용 가능한 서비스입니다.\n로그인 화면으로 이동하시겠습니까?")){
+                navi("/member/login");
+            }
         }
     };
 
@@ -225,7 +254,7 @@ const PartyList = () => {
                         </SearchDateModal>  
                         <div className={`${style.others}`}>
                             <div className={`${style.subTitle}`}>원하는 파티가 없다면</div>
-                            <div className={`${style.party} ${style.dflex}`}>
+                            <div className={`${style.party} ${style.dflex}`} onClick={goMatchingParty}>
                                 <div className={style.left}>
                                     <div className={`${style.title}`}>
                                         파티 매칭하기   
