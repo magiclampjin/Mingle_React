@@ -84,7 +84,7 @@ const RenderReplies = ({ replies, allReplies, onReplyClick, onChildReplyClick })
     );
 };
 
-const Reply = ({ replies }) => {
+const Reply = ({ replies,postId }) => {
 
     const [allReplies, setAllReplies] = useState([]);
 
