@@ -54,6 +54,11 @@ const PartyAttend = () => {
     const [totalPrice, setTotalPrice] = useState(0);
 
     useEffect(()=>{
+        console.log(selectParty);
+        console.log(service);
+
+
+
         // 파티 보증금
         setDeposit(Math.ceil((service.price)/(service.maxPeopleCount))+service.commission*selectParty.monthCount);
 
@@ -81,11 +86,18 @@ const PartyAttend = () => {
         if(nextCal.getDate()===now.getDate()){        
             setFirstMonthFee(Math.ceil((service.price)/(service.maxPeopleCount))+1000);
             setAmount(Math.ceil((service.price)/(service.maxPeopleCount))+service.commission*selectParty.monthCount + Math.ceil((service.price)/(service.maxPeopleCount))+1000);
+
+            // 추후 밍글 머니 추가하면 토탈금액 다시 계산
+            setTotalPrice(Math.ceil((service.price)/(service.maxPeopleCount))+service.commission*selectParty.monthCount + Math.ceil((service.price)/(service.maxPeopleCount))+1000);
         }else{
             const pricePerDay = Math.ceil((((service.price)/(service.maxPeopleCount))+1000)/31);
             setFirstMonthFee(diff*pricePerDay);
-            setAmount(Math.ceil((service.price)/(service.maxPeopleCount))+service.commission*selectParty.monthCount + diff*pricePerDay)
+            setAmount(Math.ceil((service.price)/(service.maxPeopleCount))+service.commission*selectParty.monthCount + diff*pricePerDay);
+
+            // 추후 밍글 머니 추가하면 토탈금액 다시 계산
+            setTotalPrice(Math.ceil((service.price)/(service.maxPeopleCount))+service.commission*selectParty.monthCount + diff*pricePerDay);
         }
+       
     },[monthFee]);
 
     // 숫자를 천 단위로 콤마 찍어주는 함수
@@ -123,7 +135,15 @@ const PartyAttend = () => {
     const handleJoinParty = () => {
         if(isPossible.isAccount&&isPossible.isAgree){
             setLoading(true);
-            axios.post(`/api/party/auth/joinParty/${selectParty.id}`).then(resp=>{
+            const now = new Date();
+            now.setHours(now.getHours()+9);
+
+            const paymentData = {
+                date: now.toISOString(),
+                service_id : service.id,
+                price: totalPrice
+            };
+            axios.post(`/api/party/auth/joinParty/${selectParty.id}`,paymentData).then(resp=>{
                 setLoading(false);
                 if(window.confirm("파티 가입에 성공했습니다.\n가입한 파티 정보를 확인하시겠습니까?")){
                     navi("/");
@@ -304,7 +324,7 @@ const PartyAttend = () => {
                                 <div className={style.rightContent}>- 0원</div>
                             </div>
                             <hr className={style.hrLine}></hr>
-                            <div className={style.content}>
+                            <div className={`${style.content} ${style.totalContent}`}>
                                 <div className={style.leftContent}>최종 결제 금액</div>
                                 <div className={style.rightContent}>
                                     {formatNumber(totalPrice)}원

@@ -236,6 +236,18 @@
     cursor: pointer;
 }
 
+.totalContent *{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.totalContent .leftContent{
+    color:black;
+}
+.totalContent .rightContent{
+    color:#7B61FF;
+}
+
 @media (max-width:850px){
     .allContent{
         display: block;
