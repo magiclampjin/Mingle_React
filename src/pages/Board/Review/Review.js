@@ -5,7 +5,6 @@ const Review = () => {
 
     return(
         <div className={styles.board}> 
-            <BoardCategories></BoardCategories>
             리뷰작성 중입니다.....
         </div>
     );

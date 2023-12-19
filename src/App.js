@@ -9,17 +9,11 @@ import Main from "./pages/Main/Main";
 import Denied from "./components/Denied/Denied";
 import Party from "./pages/Party/PartyMain";
 import Board from "./pages/Board/Board";
-import WritePost from "./pages/Board/WritePost/WritePost";
-import UpdatePost from "./pages/Board/UpdatePost/UpdatePost";
-import Review from "./pages/Board/Review/Review";
-import FreeBoard from "./pages/Board/FreeBoard/FreeBoard";
-import NoticeBoard from "./pages/Board/NoticeBoard/NoticeBoard";
-import Post from "./pages/Board/Post/Post";
-import PopularPosts from "./pages/Board/PopularPosts/PopularPosts";
 import Mypage from "./pages/MyPage/Mypage";
 import AdminMain from "./pages/AdminMain/AdminMain";
+import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
 
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 export const MenuContext = createContext();
@@ -33,7 +27,14 @@ function App() {
 
   return (
     <LoginContext.Provider
-      value={{ loginId, setLoginId, loginNick, setLoginNick, loginRole, setLoginRole }}
+      value={{
+        loginId,
+        setLoginId,
+        loginNick,
+        setLoginNick,
+        loginRole,
+        setLoginRole,
+      }}
     >
       <MenuContext.Provider value={{ selectedMenu, setSelectedMenu }}>
         <>
@@ -42,18 +43,11 @@ function App() {
             <Routes>
               <Route path="/" element={<Main />} />
               <Route path="/member/*" element={<Member />}></Route>
-              <Route path="/party/*" element={<Party/>}></Route>
+              <Route path="/party/*" element={<Party />}></Route>
               <Route path="/Mypage/*" element={<Mypage />}></Route>
               <Route path="/denied" element={<Denied />}></Route>
-              <Route path="/admin/*" element={<AdminMain />} />
-              <Route path="/board" element={<Board />} />
-              <Route path="/board/review" element={<Review />} />
-              <Route path="/board/popularposts" element={<PopularPosts />} />
-              <Route path="/board/freeboard" element={<FreeBoard />} />
-              <Route path="/board/noticeboard" element={<NoticeBoard />} />
-              <Route path="/board/writepost" element={<WritePost />} />
-              <Route path="/board/updatepost" element={<UpdatePost />} />
-              <Route path="/board/post/*" element={<Post />} />
+              <Route path="/admin/*" element={<AdminMain />}/>
+              <Route path="/board/*" element={<Board/>}/>
             </Routes>
             <Footer></Footer>
           </Router>

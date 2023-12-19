@@ -1,0 +1,76 @@
+.ott__card {
+    flex: 0 0 calc(50% - 150px); /* flex-grow: 0, flex-shrink: 0, flex-basis: 계산된 너비 */
+    margin-bottom: 20px; /* 줄 사이의 간격 설정 */
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: black;
+    overflow: hidden; /* 내용 넘침 방지 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+    position: relative;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.ott__title {
+    /* 기존 스타일 유지 */
+    position: absolute; /* 절대 위치 설정 */
+    bottom: 80%; /* 하단에서 10px 떨어진 곳에 위치 */
+    left: 3%; /* 좌측에서 10px 떨어진 곳에 위치 */
+    z-index: 3; /* z-index 설정으로 겹치기 순서 결정 */
+    color: white; /* 제목 글자색 변경 */
+    background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경색 추가 */
+    padding: 5px; /* 패딩 추가 */
+    border-radius: 5px; /* 모서리 둥글게 설정 */
+}
+
+.ott__content {
+    text-align: center;
+    margin-top: auto;
+    white-space: nowrap; /* 텍스트를 줄바꿈 없이 한 줄로 설정 */
+    overflow: hidden; /* 내용이 넘칠 경우 숨김 */
+    text-overflow: ellipsis; /* 넘치는 텍스트를 말줄임표로 표시 */
+    padding: 10px 10px; /* 좌우 패딩 추가 */
+    font-weight: 700;
+    color:white
+}
+
+.ott__image-container {
+    width: 100%; /* 이미지 컨테이너 너비 */
+    flex-grow: 1; /* 이미지 컨테이너가 카드 내에서 남은 공간을 채우도록 함 */
+    display: flex; /* 이미지를 중앙에 정렬하기 위한 flex 설정 */
+    align-items: center; /* 세로 방향 중앙 정렬 */
+    justify-content: center; /* 가로 방향 중앙 정렬 */
+}
+
+.ott__image {
+    width: 100%; /* 이미지 너비 */
+    max-height: 100%; /* 이미지 최대 높이 */
+    object-fit: contain; /* 이미지 비율 유지 */
+}
+
+
+/* Mobile devices */
+@media (max-width: 599px) {
+    .ott__card {
+        flex: 0 0 100%; /* 모바일에서는 카드가 전체 너비를 차지하도록 함 */
+        width: auto; /* 컨테이너의 너비에 맞춤 */
+        height: auto; /* 높이를 콘텐츠에 맞게 조정 */
+        margin-bottom: 10px; /* 줄 사이 간격을 조금 줄임 */
+    }
+}
+
+/* Tablet devices */
+@media (min-width: 600px) and (max-width: 899px) {
+    .ott__card {
+        flex: 0 0 calc(50% - 20px); /* 태블릿에서는 두 개의 카드가 한 줄에 표시 */
+    }
+}
+
+/* Desktop and larger devices */
+@media (min-width: 900px) {
+    .ott__card {
+        flex: 0 0 calc(25% - 20px); /* 데스크톱에서는 네 개의 카드가 한 줄에 표시 */
+    }
+}

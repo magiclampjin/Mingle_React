@@ -1,7 +1,221 @@
 .board {
-    padding: 16px;
-    max-width: 1300px;
-    margin-top:100px;
-    margin-bottom:150px;
-    margin:auto;
+    /* 배경, 여백, 그림자 등 전반적인 레이아웃 스타일 */
+    background: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.post__container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 10px;
+}
+
+.post__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.post__title {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.post__author {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.post__content {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    min-height: 150px;
+    resize: vertical;
+}
+
+.post__file {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.post__file-label {
+    display: inline-block;
+    padding: 10px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    background-color: #fff;
+    color: #000;
+}
+
+.post__file-label:hover {
+    background-color: #eee;
+}
+
+.post__file-input {
+    width: 0;
+    height: 0;
+    padding: 0;
+    margin: 0;
+    opacity: 0;
+}
+
+.post__buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.post__button {
+    width: 150px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: #7b61ff;
+    border : none;
+    border-radius: 4px;
+    margin-left: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    color:white;
+    transition-duration: 0.3s;
+}
+
+
+.post__button--write {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.post__category {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.post__category select {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: #fff;
+    margin-right: 10px;
+}
+
+/* 생략된 기존 스타일 */
+
+.post__content {
+    /* 기존 스타일 유지하되, textarea 스타일이 중복되지 않도록 주의 */
+    min-height: 150px; /* 최소 높이 설정 */
+    /* 기타 스타일 */
+}
+
+/* textarea에 대한 별도의 스타일 클래스가 필요합니다 */
+.post__textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px; /* 테두리 둥글게 */
+    background-color: #fff;
+    min-height: 150px; /* textarea 최소 높이 */
+    resize: vertical; /* 세로 크기 조절 가능 */
+    font-size: 16px; /* 폰트 사이즈 */
+    margin-bottom: 20px; /* 하단 여백 */
+}
+
+/* 파일 선택 라벨과 입력 필드 스타일 */
+.post__file-label {
+    /* 기존 스타일 유지 */
+    margin-right: 10px; /* 라벨과 버튼 사이 간격 */
+    border-radius: 4px; /* 테두리 둥글게 */
+}
+
+.post__file-input {
+    /* 파일 인풋 스타일을 숨김에서 보이도록 변경하고 싶다면: */
+    visibility: visible;
+    position: absolute;
+    width: 100%;
+    cursor: pointer;
+    opacity: 0;
+}
+
+.reactionButtons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.likeButton, .dislikeButton {
+    border: none;
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: 700;
+}
+
+.likeButton:hover, .dislikeButton:hover {
+    background-color: #e0e0e0;
+}
+
+/* 좋아요 버튼 특화 스타일 */
+.likeButton {
+    color: #007bff; /* 파란색 */
+}
+
+/* 싫어요 버튼 특화 스타일 */
+.dislikeButton {
+    color: #dc3545; /* 빨간색 */
+}
+
+.voteCount {
+    border: none;
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    margin: 0 10px;
+    color: black; /* 기본 색상 검은색 */
+    transition: background-color 0.3s ease;
+    font-weight: 700;
+}
+
+.votePositive {
+    color: blue;
+}
+
+.voteNegative {
+    color: red;
+}
+
+/* 미디어 쿼리를 적용하여 화면 크기에 따른 스타일 조정 */
+@media (max-width: 768px) {
+    .post__title {
+        font-size: 18px; /* 모바일에서 제목 폰트 크기 조정 */
+    }
+
+    .post__author {
+        font-size: 14px; /* 모바일에서 작성자 폰트 크기 조정 */
+    }
+
+    .post__textarea {
+        font-size: 14px; /* 모바일에서 본문 폰트 크기 조정 */
+    }
+
+    .post__button {
+        font-size: 16px; /* 모바일에서 버튼 폰트 크기 조정 */
+    }
 }
