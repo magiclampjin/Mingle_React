@@ -64,6 +64,11 @@ const Header = () => {
     });
   };
 
+  // 자주 묻는 질문으로 이동
+  const handleFAQClick = () => {
+    window.location.href = 'https://impossible-log-6dc.notion.site/4ac5ec788ca04f6ab7304dbb71891974?pvs=4';
+  }
+
   return (
     <div className={style.header}>
       <div className={style.header__pcSize}>
@@ -87,7 +92,7 @@ const Header = () => {
               <Link to="board">게시판</Link>
             </div>
 
-            <div className={style.navi__conf}>자주 묻는 질문</div>
+            <div className={style.navi__conf} onClick={handleFAQClick}>자주 묻는 질문</div>
             {loginId === "" || loginId === null ? (
               <Link to="member/login">
                 <PurpleRoundBtn
