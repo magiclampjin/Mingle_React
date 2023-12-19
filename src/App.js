@@ -18,8 +18,9 @@ import Post from "./pages/Board/Post/Post";
 import PopularPosts from "./pages/Board/PopularPosts/PopularPosts";
 import Mypage from "./pages/MyPage/Mypage";
 import AdminMain from "./pages/AdminMain/AdminMain";
+import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
 
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 export const MenuContext = createContext();
@@ -33,7 +34,14 @@ function App() {
 
   return (
     <LoginContext.Provider
-      value={{ loginId, setLoginId, loginNick, setLoginNick, loginRole, setLoginRole }}
+      value={{
+        loginId,
+        setLoginId,
+        loginNick,
+        setLoginNick,
+        loginRole,
+        setLoginRole,
+      }}
     >
       <MenuContext.Provider value={{ selectedMenu, setSelectedMenu }}>
         <>
@@ -42,7 +50,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Main />} />
               <Route path="/member/*" element={<Member />}></Route>
-              <Route path="/party/*" element={<Party/>}></Route>
+              <Route path="/party/*" element={<Party />}></Route>
               <Route path="/Mypage/*" element={<Mypage />}></Route>
               <Route path="/denied" element={<Denied />}></Route>
               <Route path="/admin/*" element={<AdminMain />} />
