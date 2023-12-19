@@ -7,6 +7,7 @@ import PurpleRectangleBtn from '../../../components/PurpleRectangleBtn/PurpleRec
 import axios from 'axios';
 import { selectService } from './../../Party/PartyCreate/PartyCreateList/PartyCreateList';
 import LoadingSpinnerMini from '../../../components/LoadingSpinnerMini/LoadingSpinnerMini';
+import { timeFormatter } from '../components/TimeFormatter/TimeFormatter';
 
 const PaymentRecord = () =>{
 
@@ -74,9 +75,7 @@ const PaymentRecord = () =>{
     useEffect(()=>{
         setLoading(true);
         axios.get("/api/payment").then((resp)=>{
-            console.log(resp.data[0].service.name);
             setPayList(resp.data);
-            // {payList[0].service.name}
             setLoading(false);
             console.log(resp.data);
         }).catch(()=>{
@@ -102,7 +101,6 @@ const PaymentRecord = () =>{
                     <div className={style.contentBox}>
                         {
                             isLoading 
-                            // || !payList.service
                             ?
                             <LoadingSpinnerMini
                             width={600}
@@ -114,7 +112,7 @@ const PaymentRecord = () =>{
                                     <div key={i} className={style.content}>
                                     <div className={style.content__inner}>
                                         <div className={style.inner__left}>
-                                            <div>{item.date}</div>
+                                            <div>{timeFormatter(item.date) }</div>
                                             <div>파티 요금 {item.paymentTypeId}</div>
                                         </div>
                                         <div className={style.inner__right}>
