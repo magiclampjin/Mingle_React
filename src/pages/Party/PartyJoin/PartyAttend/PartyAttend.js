@@ -200,9 +200,9 @@ const PartyAttend = () => {
                                 {
                                 account?
                                     <div className={style.accountBox}>
-                                        <div className={style.accountChkIcon}><FontAwesomeIcon icon={faCheck} /></div>
                                         <div className={style.bank}>{account.bankId}</div>
                                         <div className={style.accountNumber}>{account.accountNumber}</div>
+                                        <div className={style.accountChkIcon}><FontAwesomeIcon icon={faCheck} /></div>
                                     </div>
                                     :
                                     <>  
