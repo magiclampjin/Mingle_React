@@ -300,13 +300,17 @@ const PartyCreatePage = () =>{
                         loginId:accountInfo.id,
                         loginPw:accountInfo.pw
                     }
-                    axios.post("/api/party", partyData).then(resp=>{
+                    axios.post("/api/party/auth", partyData).then(resp=>{
                         setLoading(false);
                         if(window.confirm("파티 등록 성공! 등록된 정보를 확인하시겠어요?")){
                             navi("/");
                         }else{
                             navi("/");
                         }
+                    }).catch(()=>{
+                        setLoading(false);
+                        alert("문제가 발생했습니다.\n로그인 여부를 확인해주세요.");
+                        return;
                     });
 
                 // 파티 생성 중 결제 수단이 삭제된 경우
@@ -318,7 +322,7 @@ const PartyCreatePage = () =>{
                 }
             }).catch(()=>{
                 setLoading(false);
-                alert("문제가 발생했습니다.");
+                alert("문제가 발생했습니다.\n로그인 여부를 확인해주세요.");
                 return;
             })      
         }

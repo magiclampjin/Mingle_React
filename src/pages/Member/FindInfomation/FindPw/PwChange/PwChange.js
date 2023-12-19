@@ -167,7 +167,7 @@ const PwChange = () => {
 
   const handleChangePw = () => {
     if (changePw) {
-      axios.post("/api/member/updatePw", update).then((resp) => {
+      axios.put("/api/member/updatePw", update).then((resp) => {
         if (resp.data) {
           alert("비밀번호 변경이 완료되었습니다.");
           navi("/member/login");
