@@ -12,9 +12,9 @@ const Step3 = () => {
   const { user, setUser } = useContext(SignUpInfoContext);
   const navi = useNavigate();
 
-  const handleAccount = () => {
-    navi("/member/account");
-  };
+  // const handleAccount = () => {
+  //   navi("/member/account");
+  // };
 
   const handleHome = () => {
     navi("/");
@@ -42,9 +42,9 @@ const Step3 = () => {
             입력한 회원 정보는 마이페이지에서 확인 및 수정이 가능합니다.
             <br></br>파티를 이용하시려면 계좌 정보를 등록해주세요.
           </div>
-          <div className={style.accountInfo} onClick={handleAccount}>
+          {/* <div className={style.accountInfo} onClick={handleAccount}>
             계좌 정보 등록하기
-          </div>
+          </div> */}
         </div>
       </div>
       <div className={style.stepBtns}>
