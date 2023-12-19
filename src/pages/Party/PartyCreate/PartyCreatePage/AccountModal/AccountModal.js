@@ -42,10 +42,10 @@ const AccountModal = ({ isOpen, onRequestClose, width, height, setAllComplete}) 
         const newBankValue = e.target.value;
         setSelectedBank(newBankValue);
 
-        if(newBankValue != "선택"){
+        if(newBankValue !== "선택"){
             setIsBank(true);
         }
-        if(newBankValue == "선택"){
+        if(newBankValue === "선택"){
             setIsBank(false);
         }
     };
