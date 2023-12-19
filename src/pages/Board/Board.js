@@ -11,6 +11,7 @@ import WritePost from './WritePost/WritePost';
 import UpdatePost from './UpdatePost/UpdatePost';
 import Post from './Post/Post';
 import FixedMenu from './components/FixedMenu/FixedMenu';
+import Intro from './Intro/Intro';
 
 export const postMenuContext = createContext();
 
@@ -26,12 +27,13 @@ const Board = () => {
                 <Routes>
                     <Route path="/" element={<BoardMain />} />
                     <Route path="review" element={<Review />} />
+                    <Route path="intro" element={<Intro/>}/>
                     <Route path="popularposts" element={<PopularPosts />} />
                     <Route path="freeboard" element={<FreeBoard />} />
                     <Route path="noticeboard" element={<NoticeBoard />} />
                     <Route path="writepost" element={<WritePost />} />
                     <Route path="updatepost/*" element={<UpdatePost />} />
-                    <Route path="post/*" element={<Post />} />
+                    <Route path="/post/:postId" element={<Post />} />
                 </Routes>
                 <FixedMenu />
             </div>
