@@ -72,7 +72,6 @@ const PartyCreateList = ({selectServiceCategory,setSelectServiceCategory}) => {
             setModalIsOpen(true);
             setChked(false);
         }
-        
     };
 
     // 서비스 정보 모달창 닫기
