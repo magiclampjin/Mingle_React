@@ -1,0 +1,58 @@
+.idChek {
+  margin: 100px auto 150px auto;
+}
+.title {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 50px;
+  text-align: center;
+}
+.idCheckBox {
+  width: 600px;
+  margin: auto;
+  text-align: center;
+  background-color: #7b61ff30;
+  border-radius: 30px;
+  padding: 50px;
+}
+.backCircle {
+  position: relative;
+  border-radius: 50%;
+  background-color: #7b61ff50;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 50px auto;
+}
+.mainCircle {
+  position: absolute;
+  border-radius: 50%;
+  background-color: white;
+  width: 60px;
+  height: 60px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mainCircle svg {
+  font-size: 40px;
+}
+/* .icon {
+  margin-bottom: 20px;
+}
+.icon svg {
+  font-size: 50px;
+} */
+.id {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 50px;
+}
+.findpw {
+  margin-top: 20px;
+  text-decoration: underline;
+  color: #5c4dae;
+  cursor: pointer;
+}

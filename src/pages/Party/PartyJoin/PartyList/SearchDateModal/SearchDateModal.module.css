@@ -23,3 +23,17 @@
     font-weight: bold;
     margin-top: 10px;
 }
+
+.whiteBtn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 25px;
+}
+
+.whiteBtn>*:hover{
+    cursor: pointer;
+    background-color: #7b61ff;
+    color:#FFFFFF;
+    transition-duration: 0.3s;
+}

@@ -6,6 +6,7 @@ import style from "../../../PartyCreate/PartyCreatePage/StartDateModal/StartDate
 import stylePlus from "./SearchDateModal.module.css";
 import 'react-calendar/dist/Calendar.css';
 import '../../../PartyCreate/PartyCreatePage/StartDateModal/customCalendar.css'
+import WhiteRectangleBtn from "../../../../../components/WhiteRectangleBtn/WhiteRectangleBtn";
 
 Modal.setAppElement("#root");
 
@@ -15,32 +16,44 @@ const currentDateTime = new Date();
 const Maginot = new Date();
 Maginot.setMonth(currentDateTime.getMonth()+1);
 
-const SearchDateModal = ({ isOpen, onRequestClose, contentLabel, width, height, startDate, setStartDate, endDate, setEndDate}) => {
+const SearchDateModal = ({ isOpen, onRequestClose, contentLabel, width, height, period, setPeriod}) => {
   // 최소 날짜 이전 달로 이동 불가능
   const [isPrev, setPrev] = useState(false);
   // 최대 날짜 이후 달로 이동 불가능
   const [isNext, setNext] = useState(currentDateTime.getMonth() === Maginot.getMonth()?false:true);
+  
+  // 선택일자
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
+
+  useEffect(()=>{
+    setStartDate(period.start);
+    setEndDate(period.end);
+    setNext(currentDateTime.getMonth() === Maginot.getMonth()?false:true);
+    setPrev(false);
+  },[isOpen]);
+
   const setMove = (date) => {
     if(date.getMonth() === currentDateTime.getMonth()) setPrev(false);
     else setPrev(true);
     if(date.getMonth() === Maginot.getMonth()) setNext(false);
     else setNext(true);
   }
-  useEffect(()=>{
-    setNext(currentDateTime.getMonth() === Maginot.getMonth()?false:true);
-    setPrev(false);
-  },[isOpen]);
 
   const [value, onChange] = useState();
 
-//   useEffect(()=>{
-//     onRequestClose(true);
-//     if(value!=null) setPeriodStep(2);
-//   },[value])
-
 const changeDate = (e) => {
-    setStartDate(e[0]);
-    setEndDate(e[1]);
+  let sd = new Date(e[0]);
+  sd.setHours(sd.getHours()+9);
+  let ed = new Date(e[1]);
+  ed.setHours(ed.getHours()+9)
+  setStartDate(sd);
+  setEndDate(ed);
+} 
+
+const setDate = (e) => {
+  setPeriod({start:startDate, end:endDate});
+  onRequestClose(true);
 }
 
 
@@ -121,6 +134,10 @@ const changeDate = (e) => {
           //onClickDay={onChange}
         ></Calendar>
     </div>
+    <div className={stylePlus.whiteBtn}>
+      <WhiteRectangleBtn title={"검색"} width={400} heightPadding={5} onClick={setDate}/>
+    </div>
+   
     </Modal>
   );
 };

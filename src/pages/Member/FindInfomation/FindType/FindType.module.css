@@ -1,0 +1,27 @@
+.findInfoBox {
+  margin: 100px auto 150px auto;
+  width: 300px;
+  text-align: center;
+}
+.title {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 50px;
+}
+.findInfoBox :nth-child(2) {
+  margin-bottom: 20px;
+}
+.whiteBtn {
+  background-color: transparent;
+  border: 1px solid #7b61ff;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #7b61ff;
+  font-size: 18px;
+  padding: 10px;
+  width: 300px;
+}
+.whiteBtn:hover {
+  background-color: #7b61ff;
+  color: white;
+}
