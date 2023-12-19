@@ -1,0 +1,47 @@
+.pwChange {
+  margin: 100px auto 150px auto;
+  width: 400px;
+  text-align: center;
+}
+.title {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 50px;
+  text-align: center;
+}
+.inputBox {
+  margin-bottom: 10px;
+}
+.inputBox:nth-child(3) {
+  margin-bottom: 20px;
+}
+.inputBox input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 1px solid #676d7c50;
+  background-color: #7b61ff15;
+  outline: none;
+}
+.inputTitle {
+  font-size: 12px;
+  text-align: start;
+  margin-left: 10px;
+}
+.goLogin {
+  margin-top: 20px;
+  text-decoration: underline;
+  color: #5c4dae;
+  cursor: pointer;
+}
+.check {
+  text-align: start;
+  height: 25px;
+  color: #ffae6f;
+  font-size: 14px;
+  padding-left: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
