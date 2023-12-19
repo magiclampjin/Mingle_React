@@ -168,7 +168,7 @@
 .inner__left{
     display: flex;
     justify-content: space-between;
-    width: 30%;
+    width: 35%;
 }
 .inner__left>div:nth-child(1){
     font-weight: 600;
@@ -183,7 +183,7 @@
 .inner__right{
     display: flex;
     flex-direction: row-reverse;
-    width: 70%;
+    width: 65%;
     font-weight: 600;
 }
 
@@ -191,9 +191,17 @@
     font-size: 14px;
     font-weight: 600;
     color: rgb(149, 147, 147);
-    margin-left: 70px;
+    margin-left: 95px;
 }
 
+/* 표시할 내역 없을 때 */
+.empty{
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: rgb(101, 101, 101);
+    font-weight: 500;
+}
 
 @media (max-width:786px) {
     .container{

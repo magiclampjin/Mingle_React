@@ -26,26 +26,33 @@ const PaymentRecord = () =>{
         setSearchModalOpen(false);
     }
 
-    // 서비스명 저장하는 State
+    // 셀렉트 박스에서 서비스명 저장하는 State
     const [serviceList, setServiceList] = useState([]);
 
-    // 서비스 명 불러오기
+    // 셀렉트 박스에서 서비스 명 불러오기
     useEffect(()=>{
         axios.get("/api/party/getServiceNameList").then((resp)=>{
-            console.log(resp.data);
             let value = resp.data;
             setServiceList(value);
         })
     },[])
 
+    // 선택한 서비스 저장하는 State
+    const [searchService, setSearchService] = useState("");
+
     // 서비스 셀렉트 박스 변화 함수
     const handleServiceChange = (e) => {
-        console.log(e.target.value);
+        const valueService = e.target.value;
+        setSearchService(valueService);
     }
+
+    // 선택한 결제,적립,인출 저장하는 State
+    const [searchType, setSearchType] = useState("");
 
     // 결제/적립/인출 박스 변화 함수
     const handlePaymentTypeChange = (e)=>{
-        console.log(e.target.value);
+        const valueType = e.target.value;
+        setSearchType(valueType);
     }
 
     // 시작 날짜 입력
@@ -57,6 +64,8 @@ const PaymentRecord = () =>{
         if (inputDate.length <= 8) {
           setStartDate(inputDate.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'));
         }
+
+        console.log(startDate);
     }
 
     // 끝 날짜 입력
@@ -67,9 +76,11 @@ const PaymentRecord = () =>{
         if (inputDate.length <= 8) {
           setEndDate(inputDate.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'));
         }
+        console.log(endDate);
     };
 
-    const [payList,setPayList] = useState([{}]);
+    // 정산 내역 State
+    const [payList,setPayList] = useState([]);
 
     // 정산 내역 불러오기
     useEffect(()=>{
@@ -84,8 +95,55 @@ const PaymentRecord = () =>{
         })
     },[])
 
+    // 숫자를 천 단위로 콤마 찍어주는 함수
+    const formatNumber = (value) => {
+        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    };
+
     // 로딩 State
     const [isLoading, setLoading]=useState(false);
+
+    // 검색 완료
+    const handleSubmit = () => {
+        // if(searchService != "")
+
+        console.log(searchService);
+        console.log(searchType);
+        console.log(startDate);
+        console.log(endDate);
+
+        // axios.get("/api/payment/searchBy",)
+
+        const queryParams = {};
+
+        if (searchService) {
+            queryParams.serviceId  = searchService;
+        }
+    
+        if (searchType) {
+            queryParams.paymentTypeId  = searchType;
+        }
+    
+        if (startDate) {
+            queryParams.start = startDate;
+        }
+    
+        if (endDate) {
+            queryParams.end = endDate;
+        }
+    
+        console.log(queryParams);
+    
+        axios.get("/api/payment/searchBy", { params: queryParams })
+            .then((response) => {
+                // 성공적으로 처리된 경우의 로직
+                console.log(response.data);
+            })
+            .catch((error) => {
+                // 오류 발생 시의 처리 로직
+                console.error(error);
+            });
+    }
 
     return(
         <>
@@ -102,12 +160,9 @@ const PaymentRecord = () =>{
                         {
                             isLoading 
                             ?
-                            <LoadingSpinnerMini
-                            width={600}
-                            height={250}
-                            />
+                            <LoadingSpinnerMini width={600} height={250} />
                             :
-                            payList.map((item,i)=>{
+                            payList.length > 0 ?(payList.map((item,i)=>{
                                 return(
                                     <div key={i} className={style.content}>
                                     <div className={style.content__inner}>
@@ -115,9 +170,11 @@ const PaymentRecord = () =>{
                                             <div>{timeFormatter(item.date) }</div>
                                             <div>파티 요금 {item.paymentTypeId}</div>
                                         </div>
-                                        <div className={style.inner__right}>
+                                        <div className={style.inner__right}
+                                        style={{color: item.paymentTypeId === "적립" ? "#7b61ff" : "black"}}
+                                        >
                                             {item.paymentTypeId == "적립" ? "+" :"-"}
-                                            {item.price}원
+                                            {formatNumber(item.price)}원
                                         </div>
                                     </div>
                                     <div className={style.content__bottom}>
@@ -127,9 +184,11 @@ const PaymentRecord = () =>{
                                 </div>
                                 )
                             })
+                            ) : (
+                                <div className={style.empty}>표시할 내역이 없습니다.</div>
+                            )
                         }
 
-                    
                     </div>
                 </div>
             </div>
@@ -154,10 +213,10 @@ const PaymentRecord = () =>{
                                 // value={serviceList}
                                 onChange={handleServiceChange}
                                 >
-                                    <option value="선택">이용 서비스 전체</option>
+                                    <option value="">이용 서비스 전체</option>
                                         {serviceList.map((item,index)=>{
                                             return(
-                                                <option key={item.name} value={index}>
+                                                <option key={item.name} value={index+1}>
                                                     {item.name}
                                                 </option>
                                             )
@@ -170,7 +229,7 @@ const PaymentRecord = () =>{
                                 <select id="paymentType" className={style.select}
                                 onChange={handlePaymentTypeChange}
                                 >
-                                    <option value="선택">결제/적립/인출 전체</option>
+                                    <option value="">결제/적립/인출 전체</option>
                                     <option value="결제">결제</option>
                                     <option value="적립">적립</option>
                                     <option value="인출">인출</option>
@@ -199,7 +258,7 @@ const PaymentRecord = () =>{
                                 title={"완료"}
                                 width={100}
                                 heightPadding={10}
-                                // onClick={handleSubmit}
+                                onClick={handleSubmit}
                                 activation={true}
                                 ></PurpleRectangleBtn>
                         </div>
