@@ -62,12 +62,22 @@ const PartyAttend = () => {
         now.setHours(0,0,0,0);
         now.setHours(now.getHours()+9);
         let nextCal = new Date(now);
+
         nextCal.setDate(selectParty.calculationDate);
         if(nextCal.getDate()<=now.getDate()){
             nextCal.setMonth(nextCal.getMonth()+1);
         }
-        const diff = (new Date(nextCal).getTime() - new Date(now).getTime())/(1000*60*60*24);
+
+        // 다음 정산일 까지의 일수 구함
+        let diff = (new Date(nextCal).getTime() - new Date(now).getTime())/(1000*60*60*24);
+
+        // 이때, 파티 시작 전이면 파티 요금이 오늘부터가 아닌 파티 시작일부터 측정되어야함.
+        let startDate = new Date(selectParty.startDate);
+        if(now<startDate){
+            diff = (new Date(nextCal).getTime() - new Date(startDate).getTime())/(1000*60*60*24);
+        } 
         setCalDate(diff);
+      
         if(nextCal.getDate()===now.getDate()){        
             setFirstMonthFee(Math.ceil((service.price)/(service.maxPeopleCount))+1000);
             setAmount(Math.ceil((service.price)/(service.maxPeopleCount))+service.commission*selectParty.monthCount + Math.ceil((service.price)/(service.maxPeopleCount))+1000);
@@ -112,7 +122,18 @@ const PartyAttend = () => {
     // 파티 가입하는 함수
     const handleJoinParty = () => {
         if(isPossible.isAccount&&isPossible.isAgree){
-            alert("가입 ㄱ");
+            setLoading(true);
+            axios.post(`/api/party/auth/joinParty/${selectParty.id}`).then(resp=>{
+                setLoading(false);
+                if(window.confirm("파티 가입에 성공했습니다.\n가입한 파티 정보를 확인하시겠습니까?")){
+                    navi("/");
+                }else{
+                    navi("/");
+                }
+            }).catch(()=>{
+                setLoading(false);
+                alert("파티 가입에 실패했습니다.");
+            })
         }
     }
 
@@ -264,7 +285,7 @@ const PartyAttend = () => {
                                 isHovering?
                                 <div className={style.infoPop}>
                                     <div className={style.miniTitle}>첫 달 파티 요금이란?</div>
-                                    <div className={style.miniContent}>파티 시작일로부터 다음 정산일까지의 파티요금이며, 밍글 이용 수수료가 포함되어 있습니다. 첫 달 파티 요금은 파티 시작일에 결제됩니다.</div>
+                                    <div className={style.miniContent}>최초 파티 가입 시 지불하는 파티 요금으로, 파티 시작일 혹은 시작일 이후 가입일로부터 다음 정산일까지의 파티 요금입니다. 밍글 이용 수수료가 포함되어 있습니다.</div>
                                     <hr></hr>
                                     <div className={style.miniContent}> ( 다음 파티 정산일까지 {calDate}일 ) * <br></br> ( 일 파티 요금 약 {formatNumber(Math.ceil((((service.price)/(service.maxPeopleCount))+1000)/31))}원 ) = {formatNumber(firstMonthFee)}원</div>
                                 </div>:null
