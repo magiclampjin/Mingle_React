@@ -59,7 +59,7 @@ const WroteNotice = () => {
             <div className={style.componentBox}>
                 {currentNotices.map((item, i) => {
                     return(
-                        <Link key={i} to="/admin/noticeReadForm" state={{id : item.id}}>
+                        <Link key={i} to={`/board/post/${item.id}`} state={{id : item.id}}>
                             <div className={style.componentLine}>
                                 <div className={parentStyle.componentItem}>{item.id}</div>
                                 <div className={parentStyle.componentItem}>{item.title}</div>

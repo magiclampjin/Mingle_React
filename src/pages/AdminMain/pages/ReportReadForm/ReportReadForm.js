@@ -16,6 +16,7 @@ const ReportReadForm = () => {
     const [reportObj, setReportObj] = useState(null); // 신고 정보
     const [memberId, setMemberId] = useState(null); // 신고 대상자
     const [warningCount, setWarningCount] = useState(0); // 경고 횟수
+    const [postId, setPostId] = useState(null); // 신고 게시물
 
     const navigate = useNavigate();
 
@@ -43,17 +44,19 @@ const ReportReadForm = () => {
             setReportObj(resp.data);
 
             let memberId; // 신고 대상자를 저장하는 변수
+            let postId; // 신고 게시물의 아이디를 저장하는 변수
             if (category === "게시글") {
                 memberId = resp.data.post.member.id;
+                postId = resp.data.postId;
             } else if (category === "댓글") {
                 memberId = resp.data.reply.member.id;
+                postId = resp.data.reply.postId;
             } else if (category.includes("파티")) {
                 memberId = resp.data.memberId;
             }
 
-            console.log(resp.data);
-
             setMemberId(memberId);
+            setPostId(postId);
             setServiceLoading(false);
         }).catch(() => {
             setServiceLoading(false);
@@ -113,7 +116,7 @@ const ReportReadForm = () => {
                         <div className={style.reporterId}>신고자 : {reportObj.report.memberReporterId}</div>
                     </>
                     )}
-                    <Link to="" className={style.moveToPost}>
+                    <Link to={`/board/post/${postId}`} className={style.moveToPost}>
                         {category === "게시글" || category === "댓글" ? "신고 게시물로 이동" : null}
                     </Link>
                     <hr></hr>
