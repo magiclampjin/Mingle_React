@@ -1,7 +1,12 @@
-import { useState,useEffect } from "react";
+import { useState,useEffect,useContext } from "react";
 import styles from "./UpdatePost.module.css";
+import { LoginContext } from "../../../App";
 
 const UpdatePost = () => {
+
+// App.js의 LoginContext 사용
+    const {loginId} = useContext(LoginContext);
+
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [files, setFiles] = useState([]);
