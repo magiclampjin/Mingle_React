@@ -258,7 +258,7 @@ const PartyList = () => {
                         </div>
                     </div>
                 </>
-            :null
+            :<LoadingSpinner/>
             }
         </div>
     );
