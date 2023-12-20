@@ -364,7 +364,7 @@ const PartyAttend = () => {
                                 isHovering?
                                 <div className={style.infoPop}>
                                     <div className={style.miniTitle}>첫 달 파티 요금이란?</div>
-                                    <div className={style.miniContent}>최초 파티 가입 시 지불하는 파티 요금으로, 파티 시작일 혹은 시작일 이후 가입일로부터 다음 정산일까지의 파티 요금입니다. 밍글 이용 수수료가 포함되어 있습니다.</div>
+                                    <div className={style.miniContent}>최초 파티 가입 시 지불하는 파티 요금으로, 파티 시작일 혹은 시작일 이후 가입일로부터 다음 정산일까지의 파티 요금입니다. 밍글 이용 수수료가 포함되어 있습니다. 파티 시작일 이전일 경우, 파티 시작일에 결제됩니다.</div>
                                     <hr></hr>
                                     <div className={style.miniContent}> ( 다음 파티 정산일까지 {calDate}일 ) * <br></br> ( 일 파티 요금 약 {formatNumber(Math.ceil((((service.price)/(service.maxPeopleCount))+1000)/31))}원 ) = {formatNumber(firstMonthFee)}원</div>
                                 </div>:null
