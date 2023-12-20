@@ -133,7 +133,7 @@ const PartyJoinInfoModal = ({isOpen, onRequestClose, contentLabel, width, height
                 </div>
 
                 <div className={style.joinBtn}>
-                    <WhiteRectangleBtn title={"파티 가입"} onClick={handleJoin} width={380} activation={true} heightPadding={10}/>
+                    <WhiteRectangleBtn title={"파티 가입"} onClick={handleJoin} width={100} activation={true} heightPadding={10}/>
                 </div>
             </div>
             :<></>
