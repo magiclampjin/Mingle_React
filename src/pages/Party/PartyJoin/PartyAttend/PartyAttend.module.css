@@ -105,6 +105,149 @@
     width: 100% !important;
 }
 
+.joinBtn>*:hover{
+    background-color: #7B61FF;
+    color:#fff;
+    transition-duration: 0.3s;
+}
+
+.joinBtnNone>*{
+    width: 100% !important;
+    color: #73757790;
+    background-color: #00000020;
+    border:1px solid transparent
+}
+
+
+
+.grayBox{
+    margin-top: 20px;
+    background-color: #73757710;
+    padding:2px 15px;
+    border-radius: 10px;
+}
+.grayBox .leftContent{
+    font-size: 14px;
+    font-weight: bold;
+    color:black;
+}
+
+.grayBox .rightContent{
+    color: #FFAE6F;
+}
+
+.questionIcon{
+    cursor: pointer;
+    margin-left: 10px;
+    margin-top: 2px;
+    width: 12px;
+    height: 12px;
+    padding: 3px;
+    background-color: #73757730;
+    border-radius: 50px;
+}
+.questionIcon * {
+    color : #43485199;
+    display: flex;
+    align-items: center;
+}
+
+
+.partyAmount{
+    position:relative;
+}
+
+.infoPop{
+    width: 250px;
+    position:absolute;
+    top:50;
+    left:50;
+    background-color: #fff;
+    box-shadow: 0 0 5px 0 #73757750;
+    border-radius: 10px;
+    padding:20px;
+}
+
+.miniTitle{
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.miniContent{
+    font-size: 14px;
+}
+
+.hrLine{
+    z-index: -1;
+    position: relative;
+}
+
+.agreeContent{
+    display: flex;
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+.agreeContent, .agreeContent *:hover{
+    cursor: pointer;
+}
+.chkBox{
+    margin-top: 2px;
+    margin-right: 8px;
+}
+
+/* 결제 수단 정보 */
+
+.accountBox{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 52px;
+    font-size: 14px;
+    border-radius: 13px;
+    background-color: rgb(246, 246, 246);
+    padding: 5px 30px;
+}
+
+.bank{
+    font-weight: 600;
+    width: 35%;
+}
+
+.accountNumber{
+    width: 65%;
+}
+
+.accountChkIcon{
+    width:10%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.accountBtn{
+    width: 100%;
+}
+.accountBtn>*{
+    width: 100% !important;
+}
+
+.accountBtn:hover{
+    cursor: pointer;
+}
+
+.totalContent *{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.totalContent .leftContent{
+    color:black;
+}
+.totalContent .rightContent{
+    color:#7B61FF;
+}
+
 @media (max-width:850px){
     .allContent{
         display: block;

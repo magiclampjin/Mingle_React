@@ -75,14 +75,17 @@ const AccountModal = ({ isOpen, onRequestClose, width, height, setAllComplete}) 
             axios.post("/api/paymentAccount/accountInsert",postData).then((resp)=>{
                 onRequestClose();
                 setLoading(false);
+                if(setAllComplete.isAccount!==undefined)
+                    setAllComplete(prev=>({...prev,isAccount:true}));
+                else
+                    setAllComplete(true);
+                
                 alert("결제 수단 등록에 성공했습니다.");
-                setAllComplete(true);
                
             }).catch(()=>{
                 onRequestClose();
                 setLoading(false);
                 alert("결제 수단 등록에 실패했습니다.");
-               
             })
         }else{
             onRequestClose();

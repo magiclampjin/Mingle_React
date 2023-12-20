@@ -69,7 +69,7 @@ const PartyJoinInfoModal = ({isOpen, onRequestClose, contentLabel, width, height
         axios.get("/api/member/isAuthenticated").then(resp=>{
             if(resp.data){
                 // 로그인된 유저일 경우 파티 가입 창으로 이동
-                navi("/party/partyJoin/partyAttend",{state:{selectParty:selectParty}});
+                navi("/party/partyJoin/partyAttend",{state:{selectParty:selectParty, service:service}});
             }else{
                 // 로그인하지않은 유저일 경우 로그인창으로 이동 혹은 현재 페이지 유지
                 if(window.confirm("로그인 후 이용 가능한 서비스입니다.\n로그인 화면으로 이동하시겠습니까?")){
