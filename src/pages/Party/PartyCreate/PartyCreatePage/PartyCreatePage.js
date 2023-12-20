@@ -86,11 +86,15 @@ const PartyCreatePage = () =>{
 
     // 입력한 아이디 state에 저장
     const handleChangeId = (e) => {
+
+        // 한글, 특수문자 입력 제한 (_, ., @는 허용 -> 이메일 아이디 대비)
+        const regResult = e.target.value.replace(/[^a-zA-Z0-9_@.]/g,'');
+
         setChecked((prev)=>({...prev,id:true}))
         setAccountInfo((prev)=>{
-            if(e.target.value!==""){setChecked((prev)=>{ if(isChked.pw){setGoNext(true)} return {...prev,id:true};})}
+            if(regResult!==""){setChecked((prev)=>{ if(isChked.pw){setGoNext(true)} return {...prev,id:true};})}
             else setChecked((prev)=>{ setGoNext(false); return {...prev,id:false}});
-            return {...prev,id:e.target.value}
+            return {...prev,id:regResult}
         });
     }
 
@@ -300,13 +304,17 @@ const PartyCreatePage = () =>{
                         loginId:accountInfo.id,
                         loginPw:accountInfo.pw
                     }
-                    axios.post("/api/party", partyData).then(resp=>{
+                    axios.post("/api/party/auth", partyData).then(resp=>{
                         setLoading(false);
                         if(window.confirm("파티 등록 성공! 등록된 정보를 확인하시겠어요?")){
                             navi("/");
                         }else{
                             navi("/");
                         }
+                    }).catch(()=>{
+                        setLoading(false);
+                        alert("문제가 발생했습니다.\n로그인 여부를 확인해주세요.");
+                        return;
                     });
 
                 // 파티 생성 중 결제 수단이 삭제된 경우
@@ -318,7 +326,7 @@ const PartyCreatePage = () =>{
                 }
             }).catch(()=>{
                 setLoading(false);
-                alert("문제가 발생했습니다.");
+                alert("문제가 발생했습니다.\n로그인 여부를 확인해주세요.");
                 return;
             })      
         }

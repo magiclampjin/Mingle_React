@@ -1,5 +1,5 @@
 import style from "./PartyList.module.css"
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWonSign, faCirclePlus, faMagnifyingGlass, faBolt } from "@fortawesome/free-solid-svg-icons";
@@ -7,6 +7,8 @@ import { faFaceSadTear, faCalendar } from "@fortawesome/free-regular-svg-icons";
 import axios from "axios";
 import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
 import SearchDateModal from "./SearchDateModal/SearchDateModal";
+import {LoginContext} from "../../../../App";
+import PartyJoinInfoModal from "./PartyJoinInfoModal/PartyJoinInfoModal";
 
 const PartyList = () => {
     const location = useLocation();
@@ -16,9 +18,18 @@ const PartyList = () => {
     const [isLoading, setLoading] = useState(false);
     const [price, setPrice] = useState();
     const navi = useNavigate();
+    
+    // 선택한 파티
+    const [selectParty, setSelectParty] = useState();
+
+    // 로그인 정보
+    const {loginId} = useContext(LoginContext);
 
     // 검색할 파티일자 선택 모달창 열림 / 닫힘
     const [modalIsOpen, setModalIsOpen] = useState(false);
+
+    // 파티 가입 모달창 열림 / 닫힘
+    const [joinModalIsOpen, setJoinModalIsOpen] = useState(false);
 
     // 최소 날짜 (오늘)
     const currentDate = new Date();
@@ -107,11 +118,36 @@ const PartyList = () => {
 
     // 파티 만들기 페이지로 이동
     const goCreateParty = (e) =>{
-        const contentElement = e.currentTarget;
-        const clickedElement = e.target; 
-        
-        if (clickedElement === contentElement || contentElement.contains(clickedElement)) {
-            navi("/party/partyCreate");
+        if(loginId){
+            const contentElement = e.currentTarget;
+            const clickedElement = e.target; 
+            
+            if (clickedElement === contentElement || contentElement.contains(clickedElement)) {
+                navi("/party/partyCreate");
+            }
+        }else{
+             // 로그인하지않은 유저일 경우 로그인창으로 이동 혹은 현재 페이지 유지
+            if(window.confirm("로그인 후 이용 가능한 서비스입니다.\n로그인 화면으로 이동하시겠습니까?")){
+                navi("/member/login");
+            }
+        }
+    };
+
+
+    // 파티 매칭 페이지로 이동
+    const goMatchingParty = (e) =>{
+        if(loginId){
+            const contentElement = e.currentTarget;
+            const clickedElement = e.target; 
+            
+            if (clickedElement === contentElement || contentElement.contains(clickedElement)) {
+                // navi("/party/partyCreate");
+            }
+        }else{
+             // 로그인하지않은 유저일 경우 로그인창으로 이동 혹은 현재 페이지 유지
+            if(window.confirm("로그인 후 이용 가능한 서비스입니다.\n로그인 화면으로 이동하시겠습니까?")){
+                navi("/member/login");
+            }
         }
     };
 
@@ -148,11 +184,8 @@ const PartyList = () => {
         }
     }
 
-    
 
-
-
-    // 검색할 파티 기간 설정
+    // 검색할 파티 기간 설정 (모달창 열기)
     const handleSetPeriod = (e) => {
         const contentElement = e.currentTarget;
         const clickedElement = e.target; 
@@ -165,6 +198,23 @@ const PartyList = () => {
     // 파티 시작일 모달창 닫기
     const closeModal = () => {
         setModalIsOpen(false);
+    };
+
+
+    // 파티 가입 모달창 열기
+    const handleJoinModal = (e) => {
+        const contentElement = e.currentTarget;
+        const clickedElement = e.target; 
+        
+        if (clickedElement === contentElement || contentElement.contains(clickedElement)) {
+            setJoinModalIsOpen(true);
+            setSelectParty(partyList[contentElement.dataset.id])
+        }
+    }
+
+    // 파티 가입 모달창 닫기
+    const closeJoinModal = () => {
+        setJoinModalIsOpen(false);
     };
 
 
@@ -194,7 +244,7 @@ const PartyList = () => {
                         {
                             // 가입 가능한 파티가 있는 경우
                             partyList.length>0?partyList.map((e,i)=>( 
-                                <div key={i} className={`${style.party}`} data-id={e.id}>
+                                <div key={i} className={`${style.party}`} data-id={i} onClick={handleJoinModal}>
                                     <div className={`${style.partyTop} ${style.dflex}`}>
                                         <div className={`${style.partyStartDate} ${style.title} ${style.w70}`}>
                                             {getStartDate(e.startDate)}<span className={style.colorMainPurple}> {e.monthCount}개월</span> 파티
@@ -223,9 +273,22 @@ const PartyList = () => {
                             setPeriod={setPeriod}
                         >
                         </SearchDateModal>  
+                        
+                        <PartyJoinInfoModal
+                            isOpen={joinModalIsOpen}
+                            onRequestClose={closeJoinModal}
+                            contentLabel="파티 가입 모달"
+                            width={500}
+                            height={670}
+                            service={service}
+                            selectParty={selectParty}
+                        >
+                        </PartyJoinInfoModal>
+
+
                         <div className={`${style.others}`}>
                             <div className={`${style.subTitle}`}>원하는 파티가 없다면</div>
-                            <div className={`${style.party} ${style.dflex}`}>
+                            <div className={`${style.party} ${style.dflex}`} onClick={goMatchingParty}>
                                 <div className={style.left}>
                                     <div className={`${style.title}`}>
                                         파티 매칭하기   

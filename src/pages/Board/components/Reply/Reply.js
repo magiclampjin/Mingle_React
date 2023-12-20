@@ -166,6 +166,7 @@ const Reply = ({ replies,postId }) => {
                 totalItemsCount={flattenReplies(replies).length}
                 pageRangeDisplayed={5}
                 onChange={handlePageChange}
+                
             />
             <div className={styles.replyForm}>
                 <textarea

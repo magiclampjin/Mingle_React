@@ -1,9 +1,8 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import styles from './Board.module.css'
 import BoardCategories from './components/BoardCategory/BoardCategories';
 import BoardMain from "./BoardMain/BoardMain";
-import Review from './Review/Review';
 import PopularPosts from './PopularPosts/PopularPosts';
 import FreeBoard from './FreeBoard/FreeBoard';
 import NoticeBoard from './NoticeBoard/NoticeBoard';
@@ -12,10 +11,19 @@ import UpdatePost from './UpdatePost/UpdatePost';
 import Post from './Post/Post';
 import FixedMenu from './components/FixedMenu/FixedMenu';
 import Intro from './Intro/Intro';
+import { LoginContext } from '../../App';
 
 export const postMenuContext = createContext();
 
 const Board = () => {
+    const {loginId} = useContext(LoginContext);
+    // const navigate = useNavigate();
+
+    // useEffect(() => {
+    //     if (!loginId) {
+    //         navigate('/denied');
+    //     }
+    // }, [loginId, navigate]); // 의존성 배열에 loginId와 navigate를 넣어줍니다.
 
     const [menu, setMenu] = useState("");
     return (
@@ -26,7 +34,6 @@ const Board = () => {
                 </div>
                 <Routes>
                     <Route path="/" element={<BoardMain />} />
-                    <Route path="review" element={<Review />} />
                     <Route path="intro" element={<Intro/>}/>
                     <Route path="popularposts" element={<PopularPosts />} />
                     <Route path="freeboard" element={<FreeBoard />} />

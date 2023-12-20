@@ -104,7 +104,7 @@
 }
 
 .party:hover{
-    border:2px solid #7B61FF;
+    border:2px solid #7B61FF50;
     cursor: pointer;
 }
 
@@ -179,7 +179,7 @@
 
 .periodBtn:hover{
     cursor: pointer;
-    border: 2px solid #7B61FF;
+    border: 2px solid #7B61FF50;
 }
 
 .periodIcon{

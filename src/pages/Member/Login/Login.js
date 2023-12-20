@@ -17,6 +17,14 @@ const Login = () => {
   const navi = useNavigate();
   const cookies = new Cookies();
 
+  // 카카오 로그인 인증 키 및 redirectUrl
+  const CLIENT_ID = process.env.REACT_APP_REST_API_KEY;
+  const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URL;
+  // 카카오 인증 url
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
+  // 구글 클라이언트 id
+  const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
   useEffect(() => {
     // 아이디 기억하기를 했다면 쿠키에 있는 아이디 출력하기
     let cookieRememeberId = cookies.get("rememberID");
@@ -25,6 +33,7 @@ const Login = () => {
       setUser({ id: cookieLoginId, pw: "" });
       setRememberId(cookieRememeberId);
     }
+    console.log(REDIRECT_URI);
   }, []);
 
   // user State 값 채우기
@@ -52,6 +61,7 @@ const Login = () => {
       axios
         .post("/api/member/login", formData)
         .then((resp) => {
+          console.log(resp);
           console.log(resp.statusText);
           if (resp.statusText === "OK") {
             setLoginId(user.id);
@@ -77,7 +87,15 @@ const Login = () => {
           // 에러 핸들링
           console.error("Error during login:", error);
           alert("아이디 혹은 비밀번호가 일치하지 않습니다.");
-          setUser({ id: "", pw: "" });
+          let cookieRememeberId = cookies.get("rememberID");
+          let cookieLoginId = cookies.get("loginID");
+          if (cookieRememeberId) {
+            setUser({ id: cookieLoginId, pw: "" });
+            setRememberId(cookieRememeberId);
+          } else {
+            setUser({ id: "", pw: "" });
+          }
+
           setLoading(false);
           // navi("/denied");
         });
@@ -93,12 +111,21 @@ const Login = () => {
     }
   };
 
+  // 회원가입
   const handleSignup = () => {
     navi("/member/signup");
   };
 
+  // 아이디 비밀번호 찾기
   const handleFindInfo = () => {
     navi("/member/findInfo");
+  };
+
+  // 카카오 로그인
+  const handleKakaoLogin = () => {
+    console.log("d");
+    window.location.href = KAKAO_AUTH_URL;
+    // window.location.href = "/oauth2/authorization/kakao";
   };
 
   if (isLoading) {
@@ -156,6 +183,16 @@ const Login = () => {
           onClick={handleLogin}
           activation={true}
         ></PurpleRectangleBtn>
+      </div>
+      <div>
+        {/* <a href={KAKAO_AUTH_URL} className={style.kakaobtn} target="_blanck"> */}
+        <img
+          src="/assets/loginBtns/kakao.png"
+          className={style.socialLoginbtn}
+          onClick={handleKakaoLogin}
+        />
+        {/* </a> */}
+        <a href="/login/oauth2/code/google">구글 로그인</a>
       </div>
     </div>
   );
