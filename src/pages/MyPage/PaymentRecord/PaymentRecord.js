@@ -130,9 +130,6 @@ const PaymentRecord = () =>{
     // 로딩 State
     const [isLoading, setLoading]=useState(false);
 
-    // 검색 결과를 저장하는 State
-    const [searchResult, setSearchResult] = useState([]);
-
     // 검색 완료
     const handleSubmit = () => {
 
