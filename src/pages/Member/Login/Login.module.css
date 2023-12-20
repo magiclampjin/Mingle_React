@@ -63,11 +63,13 @@
 .memberMenu {
   cursor: pointer;
 }
-.kakaobtn {
-  width: 400px;
+.socialLoginbtn {
+  /* width: 250px; */
+  height: 60px;
   margin-top: 10px;
   cursor: pointer;
 }
+
 @media (max-width: 786px) {
   .loginBox {
     margin: 100px auto 100px auto;
