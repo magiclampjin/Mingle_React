@@ -7,6 +7,7 @@ import Reply from "../components/Reply/Reply";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
+import ReadOnlyQuill from "../../../components/QuillEditor/ReadOnlyQuill";
 
 const Post = () => {
 
@@ -70,7 +71,7 @@ const Post = () => {
                         <p className={styles.post__author}>{post.member.nickname}</p>
                     </div>
                     <div className={styles.post__content}>
-                        {post.content}
+                        <ReadOnlyQuill content={post.content}></ReadOnlyQuill>
                     </div>
                     {/* 좋아요와 싫어요 버튼 */}
                     <div className={styles.reactionButtons}>
