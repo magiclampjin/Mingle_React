@@ -3,7 +3,7 @@
 }
 
 .title{
-    font-size: 23px;
+    font-size: 20px;
     font-weight: 700;
     margin-bottom: 50px;
 }
@@ -60,4 +60,8 @@
     background-color: #7B61FF;
     color:#ffffff;
     transition-duration: 0.3s;
+}
+
+.joinBtn>*{
+    width: 100% !important;
 }
