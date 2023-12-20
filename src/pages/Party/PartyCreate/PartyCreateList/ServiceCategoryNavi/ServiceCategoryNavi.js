@@ -1,14 +1,19 @@
 import style from "./ServiceCategoryNavi.module.css"
 import axios from "axios";
 
-const ServiceCategoryNavi = ({id,isSelected,setSelectServiceCategory, service, setService, setServiceListLoading}) => {
+const ServiceCategoryNavi = ({id,isSelected,setSelectServiceCategory, setJoinService, setService, setServiceListLoading}) => {
 
     const handleSelectCategory = (e) => {
         setServiceListLoading(true);
         setSelectServiceCategory(e.target.innerText);
 
         axios.get(`/api/party/getService/${e.target.innerText}`).then(resp=>{
-            setService(Array.isArray(resp.data)? resp.data : []);
+            setService(Array.isArray(resp.data.list)? resp.data.list : []);
+            let joinArr = Array.isArray(resp.data.joinList)?resp.data.joinList : [];
+            if(joinArr.length>0){
+                joinArr.sort();
+                setJoinService(joinArr);
+            }
             setServiceListLoading(false);
         }).catch(()=>{
             setServiceListLoading(false);

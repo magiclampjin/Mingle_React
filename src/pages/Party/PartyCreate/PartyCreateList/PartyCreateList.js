@@ -20,6 +20,13 @@ const PartyCreateList = ({selectServiceCategory,setSelectServiceCategory}) => {
     const [service, setService] = useState([]);
     // 서비스 카테고리 목록 불러오기 로딩 여부
     const [isCategoryLoading, setCategoryLoading] = useState(false);
+
+    // 가입된 서비스 목록
+    const [joinService, setJoinService] = useState([]);
+    let jsId = 0;
+     // 가입 가능 여부 (이미 가입했을 경우 fasle)
+    let joinPossible = true;
+    
     // 서비스 목록 불러오기 로딩 여부
     const [isServiceListLoading, setServiceListLoading]= useState(false);
 
@@ -44,7 +51,12 @@ const PartyCreateList = ({selectServiceCategory,setSelectServiceCategory}) => {
             setServiceCategory(Array.isArray(resp.data) ? resp.data : []);
 
             axios.get(`/api/party/getService/${selectServiceCategory}`).then(resp=>{
-                setService(Array.isArray(resp.data)? resp.data : []);
+                setService(Array.isArray(resp.data.list)? resp.data.list : []);
+                let joinArr = Array.isArray(resp.data.joinList)?resp.data.joinList : [];
+                if(joinArr.length>0){
+                    joinArr.sort();
+                    setJoinService(joinArr);
+                }
                 setCategoryLoading(false);
             }).catch(()=>{
                 setCategoryLoading(false);
@@ -72,7 +84,6 @@ const PartyCreateList = ({selectServiceCategory,setSelectServiceCategory}) => {
             setModalIsOpen(true);
             setChked(false);
         }
-        
     };
 
     // 서비스 정보 모달창 닫기
@@ -89,10 +100,10 @@ const PartyCreateList = ({selectServiceCategory,setSelectServiceCategory}) => {
 
           
                 <div className={`${style.partyCategoryList} ${style.centerAlign}`}>
-                    <ServiceCategoryNavi id="전체" isSelected={selectServiceCategory==="전체"} isServiceListLoading={isServiceListLoading} setServiceListLoading={setServiceListLoading} selectServiceCategory={selectServiceCategory} setSelectServiceCategory={setSelectServiceCategory} service={service} setService={setService}/>
+                    <ServiceCategoryNavi id="전체" isSelected={selectServiceCategory==="전체"} isServiceListLoading={isServiceListLoading} setServiceListLoading={setServiceListLoading} selectServiceCategory={selectServiceCategory} setSelectServiceCategory={setSelectServiceCategory} setService={setService} setJoinService={setJoinService}/>
                     {
                         serviceCategory.map((e,i)=>(
-                            <ServiceCategoryNavi key={i} id={e.id} isSelected={selectServiceCategory===e.id} isServiceListLoading={isServiceListLoading} setServiceListLoading={setServiceListLoading} selectServiceCategory={selectServiceCategory} setSelectServiceCategory={setSelectServiceCategory} service={service} setService={setService}/>
+                            <ServiceCategoryNavi key={i} id={e.id} isSelected={selectServiceCategory===e.id} isServiceListLoading={isServiceListLoading} setServiceListLoading={setServiceListLoading} selectServiceCategory={selectServiceCategory} setSelectServiceCategory={setSelectServiceCategory} setService={setService} setJoinService={setJoinService}/>
                         ))
                     }
                 </div>
@@ -103,10 +114,13 @@ const PartyCreateList = ({selectServiceCategory,setSelectServiceCategory}) => {
                         isServiceListLoading ? (
                             <LoadingSpinnerMini height={260} width={100}/>
                         ) :(
-                            service.map((e,i)=>{                         
+                            service.map((e,i)=>{    
+                                if(e.id === joinService[jsId]){
+                                    joinPossible=false; jsId++;
+                                }else joinPossible=true; 
                                 return(
                                     <>
-                                        <div key={i} data-id={e.id} className={`${style.partyContent}`} onClick={openModal}>
+                                        <div key={i} data-id={e.id} className={joinPossible?`${style.partyContent}`:`${style.partyContent} ${style.cantSelectContent}`} onClick={joinPossible?openModal:null}>
                                             <div className={`${style.partyContent__img} ${style.centerAlign}`}><img src={`/assets/serviceLogo/${e.englishName}.png`} alt={`${e.name} 로고 이미지`}></img></div>
                                             <div className={`${style.partyContent__name} ${style.centerAlign}`}>{e.name}</div>
                                             <div className={`${style.partyContent__txt} ${style.centerAlign}`}>매달 적립!</div>
@@ -115,6 +129,7 @@ const PartyCreateList = ({selectServiceCategory,setSelectServiceCategory}) => {
                                                 <div className={`${style.hotTag} ${style.centerAlign}`}><FontAwesomeIcon icon={faStar} size="1x"/><div className={`${style.hatTagTxt}`}>HOT</div></div>
                                             </div>
                                         </div>
+                                        
                                     </>
                                 ); 
                             })  

@@ -1,0 +1,63 @@
+.body{
+    padding: 10px 15px;
+}
+
+.title{
+    font-size: 23px;
+    font-weight: 700;
+    margin-bottom: 50px;
+}
+
+.subTitle{
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    margin-top: 50px;
+}
+
+.colorMainPurple{
+    color:#7B61FF;
+}
+
+.serviceName, .servicePeriod{
+    background-color: #DFE2E680;
+    width: 100%;
+    height: 55px; 
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding:10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.contentCover{
+    width: 100%;
+    padding-top:10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.leftContent{
+    font-size: 14px;
+}
+
+.rightContent{
+    font-weight: 700;
+}
+
+.colorGray{
+    color: #43485199;
+    font-size: 14px;
+}
+
+.joinBtn{
+    margin-top:30px;
+}
+
+.joinBtn>*:hover{
+    background-color: #7B61FF;
+    color:#ffffff;
+    transition-duration: 0.3s;
+}
