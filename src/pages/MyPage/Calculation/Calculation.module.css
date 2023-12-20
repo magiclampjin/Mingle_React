@@ -66,18 +66,11 @@
     white-space: pre-line;
   }
 
-  /* 달력 */
-  .calendarWrapper{
-    width: 90%;
-    margin:0 20px;
-  }
+ 
+.calManageBox__changeCom>button{
+  font-size: 14px;
+}
 
-
-  /* @media (max-width:786px) {
-    .calManage{
-        width: 500px;
-    }
-} */
 
 @media (max-width:786px) {
   .calManage{
