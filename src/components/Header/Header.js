@@ -39,7 +39,7 @@ const Header = () => {
         setLoginRole(data.loginRole);
       }
     });
-  }, [loginId]);
+  }, [loginId, modalIsOpen]);
 
   // 프로필 모달창 열기
   const openModal = () => {

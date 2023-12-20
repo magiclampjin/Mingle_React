@@ -67,6 +67,11 @@
     padding:20px 10px;
     border-radius: 10px;
     margin-bottom: 25px;
+    border:2px solid transparent;
+}
+
+.partyContent:hover{
+    border:2px solid #6A57D750;
 }
 
 .partyList{
@@ -130,4 +135,20 @@
 
 .hatTagTxt{
     margin-left: 2px;
+}
+
+
+/* 이미 가입한 서비스는 가입 불가 */
+.cantSelectContent{
+    background-color: #73757750;
+    opacity: 0.5;
+}
+
+.cantSelectContent:hover{
+    cursor:no-drop;
+    border:2px solid transparent;
+}
+
+.cantSelectContent img{
+    opacity: 0.5;
 }

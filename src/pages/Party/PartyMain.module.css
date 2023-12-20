@@ -1,0 +1,9 @@
+.margin{
+    margin: 100px 0 150px 0;
+}
+
+@media (max-width:786px){
+    .margin{
+        margin: 100px 0 100px 0;
+    }
+}
