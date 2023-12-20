@@ -227,13 +227,18 @@ const MemberInfoUpdate = () =>{
 
     // 탈퇴버튼 누름
     const handleMemberOutSubmit = (e) =>{
-        axios.get("/api/member/mypageMemberOut",{params:{password:inputPw}}).then((resp)=>{
-            alert(resp.data);
-            <Navigate to="/"></Navigate>
-            closeMemberOutModal();
-        }).catch(()=>{
-            alert("탈퇴에 실패했습니다.");
-        })
+        if(isPw){
+            axios.get("/api/member/mypageMemberOut",{params:{password:inputPw}}).then((resp)=>{
+                alert(resp.data);
+                <Navigate to="/"></Navigate>
+                closeMemberOutModal();
+            }).catch(()=>{
+                alert("탈퇴에 실패했습니다.");
+            })
+        }else{
+            alert("비밀번호 형식을 확인해주세요.");
+        }
+        
     }
    
 
