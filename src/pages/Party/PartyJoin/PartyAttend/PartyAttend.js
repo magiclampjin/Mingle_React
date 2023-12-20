@@ -77,7 +77,10 @@ const PartyAttend = () => {
     const [usedMingleMoney, setUsedMingleMoney] = useState(0);
     // 보유한 밍글 머니
     const [mingleMoney, setMingleMoney] = useState(0);
+    // 파티장이 받게될 금액
+    const [managerReceiveMoney, setManagerReceiveMoney] = useState(0);
 
+    // 파티 금액 계산
     useEffect(()=>{
         // 파티 보증금
         setDeposit(Math.ceil((service.price)/(service.maxPeopleCount))+service.commission*selectParty.monthCount);
@@ -108,11 +111,15 @@ const PartyAttend = () => {
             setFirstMonthFee(Math.ceil((service.price)/(service.maxPeopleCount))+1000);
             amountPrice = Math.ceil((service.price)/(service.maxPeopleCount))+service.commission*selectParty.monthCount + Math.ceil((service.price)/(service.maxPeopleCount))+1000;
             setAmount(amountPrice);
+            // 파티장이 받게 될 금액
+            setManagerReceiveMoney(Math.ceil((service.price)/(service.maxPeopleCount))-service.commission);
         }else{
             const pricePerDay = Math.ceil((((service.price)/(service.maxPeopleCount))+1000)/31);
             setFirstMonthFee(diff*pricePerDay);
             amountPrice = Math.ceil((service.price)/(service.maxPeopleCount))+service.commission*selectParty.monthCount + diff*pricePerDay;
             setAmount(amountPrice);
+             // 파티장이 받게 될 금액
+             setManagerReceiveMoney(Math.ceil((((service.price)/(service.maxPeopleCount))-service.commission)/31)*diff);
         }
 
         // 현재 밍글 머니 잔액 불러오기
@@ -192,7 +199,9 @@ const PartyAttend = () => {
                                 date: new Date().toISOString(),
                                 serviceId : service.id,
                                 price: amount,
-                                usedMingleMoney:usedMingleMoney
+                                usedMingleMoney:usedMingleMoney,
+                                // 사용하지 않는 속성 활용해 필요한 값 보내기
+                                partyRegistrationId:managerReceiveMoney
                             };
                             
                             axios.post(`/api/party/auth/joinParty/${selectParty.id}`,paymentData).then(resp=>{
@@ -212,7 +221,7 @@ const PartyAttend = () => {
                         alert("파티 가입에 실패했습니다. 로그인 여부를 확인해주세요.");
                     })
                 }
-                
+
                 // 나중에 파티 시작일이 되면 결제
                 else{
                     axios.post(`/api/party/auth/joinParty/${selectParty.id}`).then(resp=>{
