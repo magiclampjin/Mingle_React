@@ -96,6 +96,10 @@
     margin-top: 50px;
 }
 
+.justContent{
+    font-size: 15px;
+}
+
 
 .leftAllContent, .rightAllContent{
     width: 48%;
@@ -118,14 +122,17 @@
     border:1px solid transparent
 }
 
-
-
 .grayBox{
     margin-top: 20px;
     background-color: #73757710;
     padding:2px 15px;
     border-radius: 10px;
 }
+.mingleMoneyBox{
+    background-color: transparent;
+    margin-top: 5px;
+}
+
 .grayBox .leftContent{
     font-size: 14px;
     font-weight: bold;
@@ -206,7 +213,7 @@
     height: 52px;
     font-size: 14px;
     border-radius: 13px;
-    background-color: rgb(246, 246, 246);
+    background-color: #73757710;
     padding: 5px 30px;
 }
 

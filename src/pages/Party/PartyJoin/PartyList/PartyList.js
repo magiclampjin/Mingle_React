@@ -278,7 +278,7 @@ const PartyList = () => {
                             isOpen={joinModalIsOpen}
                             onRequestClose={closeJoinModal}
                             contentLabel="파티 가입 모달"
-                            width={450}
+                            width={500}
                             height={670}
                             service={service}
                             selectParty={selectParty}

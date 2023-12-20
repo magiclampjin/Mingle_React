@@ -52,13 +52,12 @@ const PartyAttend = () => {
     const [amount, setAmount] = useState(0);
     // 최종 결제 금액
     const [totalPrice, setTotalPrice] = useState(0);
+    // 사용할 밍글 머니
+    const [usedMingleMoney, setUsedMingleMoney] = useState(0);
+    // 보유한 밍글 머니
+    const [mingleMoney, setMingleMoney] = useState(0);
 
     useEffect(()=>{
-        console.log(selectParty);
-        console.log(service);
-
-
-
         // 파티 보증금
         setDeposit(Math.ceil((service.price)/(service.maxPeopleCount))+service.commission*selectParty.monthCount);
 
@@ -83,20 +82,35 @@ const PartyAttend = () => {
         } 
         setCalDate(diff);
       
+        let amountPrice;
         if(nextCal.getDate()===now.getDate()){        
             setFirstMonthFee(Math.ceil((service.price)/(service.maxPeopleCount))+1000);
-            setAmount(Math.ceil((service.price)/(service.maxPeopleCount))+service.commission*selectParty.monthCount + Math.ceil((service.price)/(service.maxPeopleCount))+1000);
-
-            // 추후 밍글 머니 추가하면 토탈금액 다시 계산
-            setTotalPrice(Math.ceil((service.price)/(service.maxPeopleCount))+service.commission*selectParty.monthCount + Math.ceil((service.price)/(service.maxPeopleCount))+1000);
+            amountPrice = Math.ceil((service.price)/(service.maxPeopleCount))+service.commission*selectParty.monthCount + Math.ceil((service.price)/(service.maxPeopleCount))+1000;
+            setAmount(amountPrice);
         }else{
             const pricePerDay = Math.ceil((((service.price)/(service.maxPeopleCount))+1000)/31);
             setFirstMonthFee(diff*pricePerDay);
-            setAmount(Math.ceil((service.price)/(service.maxPeopleCount))+service.commission*selectParty.monthCount + diff*pricePerDay);
-
-            // 추후 밍글 머니 추가하면 토탈금액 다시 계산
-            setTotalPrice(Math.ceil((service.price)/(service.maxPeopleCount))+service.commission*selectParty.monthCount + diff*pricePerDay);
+            amountPrice = Math.ceil((service.price)/(service.maxPeopleCount))+service.commission*selectParty.monthCount + diff*pricePerDay;
+            setAmount(amountPrice);
         }
+
+        // 현재 밍글 머니 잔액 불러오기
+        axios.get("/api/member/getMingleMoney").then(resp=>{
+            setMingleMoney(resp.data);
+            // 결제 금액보다 밍글 머니 잔액이 더 많거나 같은 경우
+            if(resp.data>=amountPrice){
+                setUsedMingleMoney(amountPrice);
+                setTotalPrice(0);
+
+            // 결제 금액보다 밍글 머니 잔액이 더 적은 경우
+            }else{
+                setUsedMingleMoney(resp.data)
+                setTotalPrice(amountPrice-resp.data);
+            }
+        }).catch(()=>{
+            alert("문제가 발생했습니다. 로그인 여부를 확인해주세요.");
+        })    
+
        
     },[monthFee]);
 
@@ -135,25 +149,48 @@ const PartyAttend = () => {
     const handleJoinParty = () => {
         if(isPossible.isAccount&&isPossible.isAgree){
             setLoading(true);
-            const now = new Date();
-            now.setHours(now.getHours()+9);
 
-            const paymentData = {
-                date: now.toISOString(),
-                service_id : service.id,
-                price: totalPrice
-            };
-            axios.post(`/api/party/auth/joinParty/${selectParty.id}`,paymentData).then(resp=>{
-                setLoading(false);
-                if(window.confirm("파티 가입에 성공했습니다.\n가입한 파티 정보를 확인하시겠습니까?")){
-                    navi("/");
-                }else{
-                    navi("/");
+            // 결제수단이 여전히 존재하는 지 다시 한번 검사
+            axios.get("/api/paymentAccount/accountSelect").then(resp=>{
+                setAccount(resp.data);
+                if(resp.data !== ""){
+                    setPossible(prev=>({...prev,isAccount:true}));
                 }
+
+                // 현재 밍글 머니 잔액 불러오기
+                axios.get("/api/member/getMingleMoney").then(resp=>{
+                    if(resp.data!==mingleMoney){
+                        setMingleMoney(resp.data);
+                        setLoading(false);
+                        alert("밍글 머니 잔액이 달라져 다시 계산합니다.");
+                    }else{
+                        const paymentData = {
+                            date: new Date().toISOString(),
+                            serviceId : service.id,
+                            price: amount,
+                            usedMingleMoney:usedMingleMoney
+                        };
+                        
+                        axios.post(`/api/party/auth/joinParty/${selectParty.id}`,paymentData).then(resp=>{
+                            setLoading(false);
+                            if(window.confirm("파티 가입에 성공했습니다.\n가입한 파티 정보를 확인하시겠습니까?")){
+                                navi("/");
+                            }else{
+                                navi("/");
+                            }
+                        }).catch(()=>{
+                            setLoading(false);
+                            alert("파티 가입에 실패했습니다.");
+                        })
+                    }
+                }).catch(()=>{
+                    setLoading(false);
+                    alert("파티 가입에 실패했습니다. 로그인 여부를 확인해주세요.");
+                })             
             }).catch(()=>{
                 setLoading(false);
-                alert("파티 가입에 실패했습니다.");
-            })
+            });
+
         }
     }
 
@@ -184,16 +221,26 @@ const PartyAttend = () => {
         setAccountModalIsOpen(false);
     };
 
-    // 등록된 계좌 정보 있는 지 확인
+    // 모달창 열 때마다 검사
     useEffect(()=>{
         if(!accountModalIsOpen){
             setLoading(true);
+
+            // 등록된 계좌 정보 있는 지 확인
             axios.get("/api/paymentAccount/accountSelect").then(resp=>{
                 setAccount(resp.data);
                 if(resp.data !== ""){
                     setPossible(prev=>({...prev,isAccount:true}));
                 }
-                setLoading(false);
+
+                // 현재 밍글 머니 잔액 불러오기
+                axios.get("/api/member/getMingleMoney").then(resp=>{
+                    setMingleMoney(resp.data);
+                    setLoading(false);
+                }).catch(()=>{
+                    setLoading(false);
+                    alert("문제가 발생했습니다. 로그인 여부를 확인해주세요.");
+                })             
             }).catch(()=>{
                 setLoading(false);
             });
@@ -235,7 +282,7 @@ const PartyAttend = () => {
                         </div>
                     </div>
                     <div className={`${style.contentBox}`}>
-                        <div className={style.subTitle}>결제수단</div>
+                        <div className={`${style.subTitle}`}>결제수단</div>
                         <div className={style.contents}>
                             <div className={style.content}>
                                 {
@@ -261,9 +308,12 @@ const PartyAttend = () => {
                                     </>    
                                 }
                             </div>
-                            <div className={style.content}>
-                                <div className={style.leftContent}>밍글 머니 우선 사용 (0원 보유)</div>
-                                <div className={style.rightContent}>켜짐</div>
+                            <hr></hr>
+                            <div className={`${style.grayBox} ${style.mingleMoneyBox}`}>
+                                <div className={style.content}>
+                                    <div className={style.leftContent}>보유한 밍글 머니</div>
+                                    <div className={style.rightContent}>{formatNumber(mingleMoney)}원</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -320,8 +370,8 @@ const PartyAttend = () => {
                                 <div className={style.rightContent}>{formatNumber(amount)}원</div>
                             </div>
                             <div className={style.content}>
-                                <div className={style.leftContent}>밍글 머니 결제</div>
-                                <div className={style.rightContent}>- 0원</div>
+                                <div className={style.leftContent}>밍글 머니 우선적용</div>
+                                <div className={style.rightContent}>- {formatNumber(usedMingleMoney)}원</div>
                             </div>
                             <hr className={style.hrLine}></hr>
                             <div className={`${style.content} ${style.totalContent}`}>
@@ -342,8 +392,6 @@ const PartyAttend = () => {
                     <div className={isPossible.isAccount&&isPossible.isAgree?`${style.joinBtn}`:`${style.joinBtnNone}`}>
                         <WhiteRectangleBtn width={450} heightPadding={10} title={"결제하고 파티 시작"} onClick={handleJoinParty}/>    
                     </div>
-                    
-                   
                 </div>           
             </div>
         </div>

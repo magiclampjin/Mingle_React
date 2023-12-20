@@ -61,3 +61,7 @@
     color:#ffffff;
     transition-duration: 0.3s;
 }
+
+.joinBtn>*{
+    width: 100% !important;
+}
