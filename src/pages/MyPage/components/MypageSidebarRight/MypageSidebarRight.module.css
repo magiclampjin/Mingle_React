@@ -17,10 +17,12 @@
 
 .money__inner:nth-child(2){
     justify-content:flex-end;
+    margin-top: 10px;
 }
 
 .money__inner:nth-child(3){
-    margin: 20px 0px;
+    margin-top: 10px;
+    margin-bottom: 20px;
     height: 1px;
     background-color: rgb(227,227,227);
 }
