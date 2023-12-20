@@ -202,7 +202,7 @@ const Step2 = () => {
         // 비밀번호 형식 불일치
         setCheckText((prev) => ({
           ...prev,
-          password: "8~30자의 영문 대소문자, 숫자 밑 특수문자를 사용하세요.",
+          password: "8~30자의 영문 대소문자, 숫자 및 특수문자를 사용하세요.",
         }));
         handleCondition("password", false);
 

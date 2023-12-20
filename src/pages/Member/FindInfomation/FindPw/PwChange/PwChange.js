@@ -35,6 +35,8 @@ const PwChange = () => {
     // 비밀번호를 변경할 id 설정
     if (user.id !== "") {
       setUpdate((prev) => ({ ...prev, id: user.id }));
+    } else {
+      navi("/");
     }
   }, []);
 
@@ -184,6 +186,13 @@ const PwChange = () => {
     navi("/member/login");
   };
 
+  // 엔터키로 로그인 감지
+  const handleKeyPress = (event) => {
+    if (event.keyCode === 13) {
+      handleLogin();
+    }
+  };
+
   return (
     <div className={style.pwChange}>
       <div className={style.title}>비밀번호 변경하기</div>
@@ -193,6 +202,7 @@ const PwChange = () => {
           type="password"
           placeholder="8~30자의 영문 대소문자, 숫자 및 특수문자를 사용하세요."
           onChange={handleChange}
+          onKeyDown={handleKeyPress}
           name="password"
           value={update.password}
         />
@@ -209,6 +219,7 @@ const PwChange = () => {
           type="password"
           placeholder="비밀번호를 확인해주세요."
           onChange={handleChange}
+          onKeyDown={handleKeyPress}
           name="pwCheck"
           value={pwCheckText}
         />
