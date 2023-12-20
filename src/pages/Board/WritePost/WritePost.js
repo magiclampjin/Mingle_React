@@ -43,13 +43,14 @@ const WritePost = () => {
 
     // 파일 추가 핸들러
     const handleFileChange = (event) => {
+        
         const newFiles = event.target.files;
         if (newFiles) {
             const updatedFilesArray = Array.from(newFiles);
             const updatedFileNamesArray = updatedFilesArray.map(file => file.name);
 
             // 파일과 파일 이름 상태 업데이트
-            setSubmitData({ ...submitData, files: [...submitData.files, ...updatedFilesArray] });
+            setSubmitData(prev=>({ ...prev, files: [...newFiles] }));
             setFileNames([...fileNames, ...updatedFileNamesArray]);
         }
     };
@@ -87,7 +88,9 @@ const WritePost = () => {
         formData.append("viewCount", submitData.viewCount ? submitData.viewCount.toString() : "0"); // Long 타입으로 변환
         formData.append("reviewGrade", submitData.reviewGrade ? submitData.reviewGrade.toString() : "0"); // Long 타입으로 변환
 
-        // 파일 처리 로직 ...
+        submitData.files.forEach((file) => {
+            formData.append('files', file);
+          });
 
         axios.post("/api/post", formData).then(resp => {
             console.log(resp);
@@ -119,6 +122,11 @@ const WritePost = () => {
         const fileNamesList = submitData.files.map(file => file.name);
         setFileNames(fileNamesList);
     }, [submitData.files]);
+
+    useEffect(() => {
+        console.log(submitData.files);
+    }, [submitData.files]);
+      
 
     return (
         <div className={styles.board}>
