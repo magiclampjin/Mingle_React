@@ -36,6 +36,12 @@ const PartyAttend = () => {
         const result = Object.values(arr).every(item=>item);
         setPossible(prev=>({...prev,isAgree:result}));
     }
+
+    // 전체동의 클릭
+    const handelAllAgree = (e) => {
+        setAgree({1:true,2:true,3:true,4:true,5:true});
+        setPossible(prev=>({...prev,isAgree:true}));
+    }
     
     // 첫달 요금 안내 popup hover
     const [isHovering, setHovering] = useState(false);
@@ -321,25 +327,28 @@ const PartyAttend = () => {
                         <div className={style.subTitle}>파티 가입 필수 동의</div>
                         <div className={style.contents}>
                             <div className={style.agreeContent}>
-                                <div className={style.chkBox}><input type="checkbox" id="chk1" name="1" onChange={handleAgree}></input></div>
+                                <div className={style.chkBox}><input type="checkbox" id="chk1" name="1" onChange={handleAgree} checked={agree[1]}></input></div>
                                 <label htmlFor="chk1"><div className={style.leftContent}>파티 시작일({selectParty.startDate.slice(0,10)})에 {formatNumber(totalPrice)}원이 등록된 계좌를 통해 결제되는 것을 동의합니다.</div></label>                       
                             </div>
                             <div className={style.agreeContent}>
-                                <div className={style.chkBox}><input type="checkbox" id="chk2" name="2" onChange={handleAgree}></input></div>
+                                <div className={style.chkBox}><input type="checkbox" id="chk2" name="2" onChange={handleAgree} checked={agree[2]}></input></div>
                                 <label htmlFor="chk2"><div className={style.leftContent}>파티 가입 시 지불하는 파티 보증금 {formatNumber(deposit)}원은 파티가 끝나면 100% 환급되며, 파티 중도 탈퇴 시 환급되지 않는 것을 동의합니다.</div></label>                       
                             </div>
                             <div className={style.agreeContent}>
-                                <div className={style.chkBox}><input type="checkbox" id="chk3" name="3" onChange={handleAgree}></input></div>
+                                <div className={style.chkBox}><input type="checkbox" id="chk3" name="3" onChange={handleAgree} checked={agree[3]}></input></div>
                                 <label htmlFor="chk3"><div className={style.leftContent}>다음 정산일({selectParty.calculationDate}일) 부터는 밍글 수수료가 포함된 {formatNumber(monthFee)}원의 파티 요금이 결제되는 것을 동의합니다.</div></label>                       
                             </div>
                             <div className={style.agreeContent}>
-                                <div className={style.chkBox}><input type="checkbox" id="chk4" name="4" onChange={handleAgree}></input></div>
+                                <div className={style.chkBox}><input type="checkbox" id="chk4" name="4" onChange={handleAgree} checked={agree[4]}></input></div>
                                 <label htmlFor="chk4"><div className={style.leftContent}>{service.name} 이용 시 프로필 닉네임을 밍글 닉네임으로 설정해야 합니다.</div></label>                       
                             </div>
                             <div className={style.agreeContent}>
-                                <div className={style.chkBox}><input type="checkbox" id="chk5" name="5" onChange={handleAgree}></input></div>
+                                <div className={style.chkBox}><input type="checkbox" id="chk5" name="5" onChange={handleAgree} checked={agree[5]}></input></div>
                                 <label htmlFor="chk5"><div className={style.leftContent}>파티 가입 조건 및 서비스 이용약관을 확인했으며, 이에 동의합니다.</div></label>                       
                             </div>               
+                        </div>
+                        <div className={style.allAgree}>
+                            <WhiteRectangleBtn title={"전체 동의"} heightPadding={5} onClick={handelAllAgree}/>
                         </div>
                     </div>
                 </div>

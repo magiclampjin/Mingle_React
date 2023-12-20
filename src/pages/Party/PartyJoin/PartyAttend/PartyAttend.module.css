@@ -255,6 +255,20 @@
     color:#7B61FF;
 }
 
+
+.allAgree{
+    margin-top: 30px;
+}
+.allAgree>button{
+    width: 100% !important;
+}
+.allAgree>button:hover{
+    color:#fff;
+    background-color: #7B61FF;
+    transition-duration: 0.3s;
+}
+
+
 @media (max-width:850px){
     .allContent{
         display: block;
