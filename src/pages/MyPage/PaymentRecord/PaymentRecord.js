@@ -23,6 +23,8 @@ const PaymentRecord = () =>{
     const handleSearchModalClose = () =>{
         setStartDate("");
         setEndDate("");
+        setSearchService("전체");
+        setSearchType("전체");
         setSearchModalOpen(false);
     }
 
@@ -38,20 +40,22 @@ const PaymentRecord = () =>{
     },[])
 
     // 선택한 서비스 저장하는 State
-    const [searchService, setSearchService] = useState("");
+    const [searchService, setSearchService] = useState("전체");
 
     // 서비스 셀렉트 박스 변화 함수
     const handleServiceChange = (e) => {
         const valueService = e.target.value;
+        console.log(valueService);
         setSearchService(valueService);
     }
 
     // 선택한 결제,적립,인출 저장하는 State
-    const [searchType, setSearchType] = useState("");
+    const [searchType, setSearchType] = useState("전체");
 
     // 결제/적립/인출 박스 변화 함수
     const handlePaymentTypeChange = (e)=>{
         const valueType = e.target.value;
+        console.log(valueType);
         setSearchType(valueType);
     }
 
@@ -84,15 +88,38 @@ const PaymentRecord = () =>{
 
     // 정산 내역 불러오기
     useEffect(()=>{
+        // setLoading(true);
+        // axios.get("/api/payment").then((resp)=>{
+        //     setPayList(resp.data);
+        //     setLoading(false);
+        //     console.log(resp.data);
+        // }).catch(()=>{
+        //     setLoading(false);
+        //     alert("문제가 발생했습니다.");
+        // })
+
         setLoading(true);
-        axios.get("/api/payment").then((resp)=>{
+        const queryParams = {};
+
+        if (searchService) { queryParams.serviceId  = searchService; }
+        if (searchType) { queryParams.paymentTypeId  = searchType;  }
+        if (startDate) { queryParams.start = startDate; }
+        if (endDate) {  queryParams.end = endDate; }
+
+        axios.get("/api/payment/searchBy", { params: queryParams })
+        .then((resp) => {
+            // 성공적으로 처리된 경우의 로직
+            console.log(resp.data);
             setPayList(resp.data);
             setLoading(false);
-            console.log(resp.data);
-        }).catch(()=>{
-            setLoading(false);
-            alert("문제가 발생했습니다.");
         })
+        .catch((error) => {
+            // 오류 발생 시의 처리 로직
+            console.error(error);
+            setLoading(false);
+            alert("검색에 실패했습니다.");
+        });
+
     },[])
 
     // 숫자를 천 단위로 콤마 찍어주는 함수
@@ -103,46 +130,36 @@ const PaymentRecord = () =>{
     // 로딩 State
     const [isLoading, setLoading]=useState(false);
 
+    // 검색 결과를 저장하는 State
+    const [searchResult, setSearchResult] = useState([]);
+
     // 검색 완료
     const handleSubmit = () => {
-        // if(searchService != "")
 
         console.log(searchService);
         console.log(searchType);
         console.log(startDate);
         console.log(endDate);
 
-        // axios.get("/api/payment/searchBy",)
-
         const queryParams = {};
 
-        if (searchService) {
-            queryParams.serviceId  = searchService;
-        }
-    
-        if (searchType) {
-            queryParams.paymentTypeId  = searchType;
-        }
-    
-        if (startDate) {
-            queryParams.start = startDate;
-        }
-    
-        if (endDate) {
-            queryParams.end = endDate;
-        }
-    
-        console.log(queryParams);
+        if (searchService) { queryParams.serviceId  = searchService; }
+        if (searchType) { queryParams.paymentTypeId  = searchType;  }
+        if (startDate) { queryParams.start = startDate; }
+        if (endDate) {  queryParams.end = endDate; }
     
         axios.get("/api/payment/searchBy", { params: queryParams })
-            .then((response) => {
-                // 성공적으로 처리된 경우의 로직
-                console.log(response.data);
-            })
-            .catch((error) => {
-                // 오류 발생 시의 처리 로직
-                console.error(error);
-            });
+        .then((resp) => {
+            // 성공적으로 처리된 경우의 로직
+            console.log(resp.data);
+            setPayList(resp.data);
+            handleSearchModalClose();
+        })
+        .catch((error) => {
+            // 오류 발생 시의 처리 로직
+            console.error(error);
+            alert("검색에 실패했습니다.");
+        });
     }
 
     return(
@@ -213,7 +230,7 @@ const PaymentRecord = () =>{
                                 // value={serviceList}
                                 onChange={handleServiceChange}
                                 >
-                                    <option value="">이용 서비스 전체</option>
+                                    <option value="전체">이용 서비스 전체</option>
                                         {serviceList.map((item,index)=>{
                                             return(
                                                 <option key={item.name} value={index+1}>
@@ -229,7 +246,7 @@ const PaymentRecord = () =>{
                                 <select id="paymentType" className={style.select}
                                 onChange={handlePaymentTypeChange}
                                 >
-                                    <option value="">결제/적립/인출 전체</option>
+                                    <option value="전체">결제/적립/인출 전체</option>
                                     <option value="결제">결제</option>
                                     <option value="적립">적립</option>
                                     <option value="인출">인출</option>
