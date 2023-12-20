@@ -7,16 +7,19 @@ import Reply from "../components/Reply/Reply";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
+import ReadOnlyQuill from "../../../components/QuillEditor/ReadOnlyQuill";
+import { useNavigate } from "react-router-dom";
 
 const Post = () => {
 
     const { postId } = useParams();
     const { loginId } = useContext(LoginContext);
     const [post, setPost] = useState(null);
-    console.log(postId)
     // 좋아요와 싫어요 상태
     const [vote, setVote] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
+
+    const navigate = useNavigate();
 
     // 좋아요 클릭 핸들러
     const handleLike = () => {
@@ -29,6 +32,22 @@ const Post = () => {
         setVote(vote - 1);
         // 서버에 업데이트 요청 보낼 예정
     };
+
+    const handleDelete = () => {
+        const userResponse = window.confirm("정말 게시글을 삭제하시겠습니까?");
+        if(userResponse){
+            axios.delete("api/post").then(resp =>{
+                navigate("/board");
+            }).catch(error => {
+                alert("게시글 삭제에 실패했습니다.");
+                console.error("error : " + error);
+            })
+        }else{
+            return;
+        }
+    }
+
+
 
     useEffect(() => {
         setIsLoading(true);
@@ -70,7 +89,7 @@ const Post = () => {
                         <p className={styles.post__author}>{post.member.nickname}</p>
                     </div>
                     <div className={styles.post__content}>
-                        {post.content}
+                        <ReadOnlyQuill content={post.content}></ReadOnlyQuill>
                     </div>
                     {/* 좋아요와 싫어요 버튼 */}
                     <div className={styles.reactionButtons}>
@@ -90,6 +109,9 @@ const Post = () => {
                 </div>
 
             )}
+            <button onClick={handleDelete} className={styles.dislikeButton}>
+                게시글 삭제하기
+            </button>
 
         </div>
     );
