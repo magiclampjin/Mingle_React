@@ -19,6 +19,21 @@ const PartyAttend = () => {
     const selectParty = location.state.selectParty;
     const service = location.state.service;
 
+    
+    // 파티 시작일 경과 여부
+    const [isStartParty,setStartParty] = useState(false);
+    useEffect(()=>{
+        let now = new Date();
+        now.setHours(0,0,0,0);
+        now.setHours(now.getHours()+9);
+
+        // 파티 이미 시작
+        if(now>=new Date(selectParty.startDate)){
+            setStartParty(true);
+        }
+
+    },[selectParty.startDate]);
+
     // 파티 가입 가능 여부
     const [isPossible, setPossible] = useState({isAccount:false, isAgree:false});
 
@@ -163,36 +178,56 @@ const PartyAttend = () => {
                     setPossible(prev=>({...prev,isAccount:true}));
                 }
 
-                // 현재 밍글 머니 잔액 불러오기
-                axios.get("/api/member/getMingleMoney").then(resp=>{
-                    if(resp.data!==mingleMoney){
-                        setMingleMoney(resp.data);
+
+                // 이미 시작된 파티이므로 지금 결제 
+                if(isStartParty){
+                     // 현재 밍글 머니 잔액 불러오기
+                    axios.get("/api/member/getMingleMoney").then(resp=>{
+                        if(resp.data!==mingleMoney){
+                            setMingleMoney(resp.data);
+                            setLoading(false);
+                            alert("밍글 머니 잔액이 달라져 다시 계산합니다.");
+                        }else{
+                            const paymentData = {
+                                date: new Date().toISOString(),
+                                serviceId : service.id,
+                                price: amount,
+                                usedMingleMoney:usedMingleMoney
+                            };
+                            
+                            axios.post(`/api/party/auth/joinParty/${selectParty.id}`,paymentData).then(resp=>{
+                                setLoading(false);
+                                if(window.confirm("파티 가입에 성공했습니다.\n가입한 파티 정보를 확인하시겠습니까?")){
+                                    navi("/");
+                                }else{
+                                    navi("/");
+                                }
+                            }).catch(()=>{
+                                setLoading(false);
+                                alert("파티 가입에 실패했습니다.");
+                            })
+                        }
+                    }).catch(()=>{
                         setLoading(false);
-                        alert("밍글 머니 잔액이 달라져 다시 계산합니다.");
-                    }else{
-                        const paymentData = {
-                            date: new Date().toISOString(),
-                            serviceId : service.id,
-                            price: amount,
-                            usedMingleMoney:usedMingleMoney
-                        };
-                        
-                        axios.post(`/api/party/auth/joinParty/${selectParty.id}`,paymentData).then(resp=>{
-                            setLoading(false);
-                            if(window.confirm("파티 가입에 성공했습니다.\n가입한 파티 정보를 확인하시겠습니까?")){
-                                navi("/");
-                            }else{
-                                navi("/");
-                            }
-                        }).catch(()=>{
-                            setLoading(false);
-                            alert("파티 가입에 실패했습니다.");
-                        })
-                    }
-                }).catch(()=>{
-                    setLoading(false);
-                    alert("파티 가입에 실패했습니다. 로그인 여부를 확인해주세요.");
-                })             
+                        alert("파티 가입에 실패했습니다. 로그인 여부를 확인해주세요.");
+                    })
+                }
+                
+                // 나중에 파티 시작일이 되면 결제
+                else{
+                    axios.post(`/api/party/auth/joinParty/${selectParty.id}`).then(resp=>{
+                        setLoading(false);
+                        if(window.confirm("파티 가입에 성공했습니다.\n가입한 파티 정보를 확인하시겠습니까?")){
+                            navi("/");
+                        }else{
+                            navi("/");
+                        }
+                    }).catch(()=>{
+                        setLoading(false);
+                        alert("파티 가입에 실패했습니다.");
+                    })
+                }
+                  
             }).catch(()=>{
                 setLoading(false);
             });
@@ -364,7 +399,7 @@ const PartyAttend = () => {
                                 isHovering?
                                 <div className={style.infoPop}>
                                     <div className={style.miniTitle}>첫 달 파티 요금이란?</div>
-                                    <div className={style.miniContent}>최초 파티 가입 시 지불하는 파티 요금으로, 파티 시작일 혹은 시작일 이후 가입일로부터 다음 정산일까지의 파티 요금입니다. 밍글 이용 수수료가 포함되어 있습니다. 파티 시작일 이전일 경우, 파티 시작일에 결제됩니다.</div>
+                                    <div className={style.miniContent}>최초 파티 가입 시 지불하는 파티 요금으로, 파티 시작일 혹은 시작일 이후 가입일로부터 다음 정산일까지의 파티 요금입니다. 파티 시작일 이전일 경우, 파티 시작일에 결제되며, 밍글 이용 수수료가 포함되어 있습니다.</div>
                                     <hr></hr>
                                     <div className={style.miniContent}> ( 다음 파티 정산일까지 {calDate}일 ) * <br></br> ( 일 파티 요금 약 {formatNumber(Math.ceil((((service.price)/(service.maxPeopleCount))+1000)/31))}원 ) = {formatNumber(firstMonthFee)}원</div>
                                 </div>:null
@@ -399,7 +434,7 @@ const PartyAttend = () => {
                         </div>
                     </div>
                     <div className={isPossible.isAccount&&isPossible.isAgree?`${style.joinBtn}`:`${style.joinBtnNone}`}>
-                        <WhiteRectangleBtn width={450} heightPadding={10} title={"결제하고 파티 시작"} onClick={handleJoinParty}/>    
+                        <WhiteRectangleBtn width={450} heightPadding={10} title={isStartParty?"결제하고 파티 시작":"파티 가입 완료"} onClick={handleJoinParty}/>    
                     </div>
                 </div>           
             </div>
