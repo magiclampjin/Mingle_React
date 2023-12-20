@@ -7,9 +7,9 @@ import MypageMain from './MypageMain/MypageMain';
 import MemberInfoUpdate from './MemberInfoUpdate/MemberInfoUpdate';
 import PaymentManage from './PaymentManage/PaymentManage';
 import PaymentRecord from './PaymentRecord/PaymentRecord';
-import { createContext,useContext,useState } from 'react';
+import { createContext, useContext,useState } from 'react';
 import MypageHam from './components/MypageHam/MypageHam';
-import { LoginContext } from '../../App';
+import { LoginContext, ModalContext } from '../../App';
 import axios from 'axios';
 
 // sidebar에서 사용하는 컨텍스트
@@ -17,12 +17,16 @@ export const mypageMenuContext = createContext();
 
 const Mypage= () => {
 
+    // 로그인 컨텍스트
     const { loginId ,setLoginId } = useContext(LoginContext);
+
+    // 모달 컨텍스트
+    const [modalIsOpen, setModalIsOpen] = useState(false);
 
     // sidebar로 넘겨주는 State
     const [menu, setMenu] = useState("");
 
-    // 드롭다운 메뉴 State
+    // 드롭다운 메뉴 State (닫힘 :false, 열림: true)
     const [dropDown, setDropDown] = useState(true);
 
     // on,off
@@ -44,17 +48,18 @@ const Mypage= () => {
                 
             ):(
                 <>
-                <mypageMenuContext.Provider value={{menu,setMenu}}>
+                <mypageMenuContext.Provider value={{menu,setMenu, modalIsOpen, setModalIsOpen}}>
                     <div className={style.container}>
                         <div className={style.dropDownNavi} onClick={ondropDownHandle}>
                             <MypageHam></MypageHam>
                         </div>
-                        {dropDown && 
-                        <div className={style.container__inner}>
+                        <div className={`${style.container__inner} ${!dropDown ? style.hidden : ''}`}>
                             <div >
                                 <MyPageSideBarLeft></MyPageSideBarLeft>
                             </div>
+                            
                             <div>
+                            
                                 <Routes>
                                     <Route path="/" element={<MypageMain/>}></Route>
                                     <Route path="Calculation" element={<Calculation/>}></Route>
@@ -67,7 +72,7 @@ const Mypage= () => {
                                 <MypageSidebarRight></MypageSidebarRight>
                             </div>
                         </div>
-                        }
+                        
                     
                     </div>
                 </mypageMenuContext.Provider>

@@ -2,23 +2,25 @@
 import axios from 'axios';
 import WhiteRectangleBtn from '../../../../components/WhiteRectangleBtn/WhiteRectangleBtn';
 import style from '../MypageSidebarRight/MypageSidebarRight.module.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const MypageSidebarRight = () =>{
 
     // 밍글머니 State
     const [mingleMoney, setMingleMoney] = useState("");
 
-    axios.get("/api/member/getMingleMoney").then((resp) => {
-        // 성공적으로 처리된 경우의 로직
-        console.log(resp.data);
-        setMingleMoney(resp.data);
+    useEffect(()=>{
+        axios.get("/api/member/getMingleMoney").then((resp) => {
+            // 성공적으로 처리된 경우의 로직
+            setMingleMoney(resp.data);
+        })
+        .catch((error) => {
+            // 오류 발생 시의 처리 로직
+            console.error(error);
+            alert("밍글머니를 불러오는데 실패했습니다.");
+        });
     })
-    .catch((error) => {
-        // 오류 발생 시의 처리 로직
-        console.error(error);
-        alert("밍글머니를 불러오는데 실패했습니다.");
-    });
+   
 
     // 숫자를 천 단위로 콤마 찍어주는 함수
     const formatNumber = (value) => {

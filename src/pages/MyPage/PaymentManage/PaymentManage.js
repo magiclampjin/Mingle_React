@@ -243,10 +243,14 @@ const PaymentManage = () =>{
     // 모달에서 삭제버튼 눌렀을 때에
     const handleCardDelete = () =>{
         axios.delete("/api/paymentAccount/accountDelete").then((resp)=>{
-
+            setIsDeleteModalOpen(!isDeleteModalOpen);
+            alert(resp.data);
+            window.location.reload();
+        }).catch(()=>{
+            alert("삭제에 실패했습니다.");
         })
-        setIsDeleteModalOpen(!isDeleteModalOpen);
-        window.location.reload();
+
+        
     }
 
     // 계좌 수정 모달창 State
