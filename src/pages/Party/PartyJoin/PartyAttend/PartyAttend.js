@@ -61,6 +61,9 @@ const PartyAttend = () => {
     // 첫달 요금 안내 popup hover
     const [isHovering, setHovering] = useState(false);
 
+    // 밍글 머니 우선 적용 안내 popup hover
+    const [isMMHovering, setMMHovering] = useState(false);
+
     // 매달 내야하는 요금
     const [monthFee, setMonthFee] = useState(Math.ceil((service.price)/(service.maxPeopleCount))+1000);
     // 첫달 파티 요금
@@ -412,7 +415,7 @@ const PartyAttend = () => {
                                     <hr></hr>
                                     <div className={style.miniContent}> ( 다음 파티 정산일까지 {calDate}일 ) * <br></br> ( 일 파티 요금 약 {formatNumber(Math.ceil((((service.price)/(service.maxPeopleCount))+1000)/31))}원 ) = {formatNumber(firstMonthFee)}원</div>
                                 </div>:null
-                            }
+                            } 
                             <div className={style.content}>
                                 <div className={style.leftContent}>파티 보증금(100% 환급)</div>
                                 <div className={style.rightContent}>{formatNumber(deposit)}원</div>
@@ -423,8 +426,15 @@ const PartyAttend = () => {
                                 <div className={style.rightContent}>{formatNumber(amount)}원</div>
                             </div>
                             <div className={style.content}>
-                                <div className={style.leftContent}>밍글 머니 우선적용</div>
+                                <div className={`${style.leftContent} ${style.centerAlign}`}>밍글 머니 우선적용<FontAwesomeIcon onMouseOver={()=>{setMMHovering(true)}} onMouseOut={()=>{setMMHovering(false)}} icon={faQuestion} className={`${style.questionIcon} ${style.centerAlign}`}/></div>
                                 <div className={style.rightContent}>- {formatNumber(usedMingleMoney)}원</div>
+                                {
+                                    isMMHovering?
+                                    <div className={`${style.infoPop} ${style.mmInfoPop}`}>
+                                        <div className={style.miniTitle}>밍글 머니 우선적용?</div>
+                                        <div className={style.miniContent}>파티 시작일에 결제 시, 밍글 머니 잔액에 변동이 생기면 우선적용 금액이 달라질 수 있으며, 자세한 정보는 마이페이지 내 정산내역확인에서 확인이 가능합니다.</div>
+                                    </div>:null
+                                }
                             </div>
                             <hr className={style.hrLine}></hr>
                             <div className={`${style.content} ${style.totalContent}`}>
@@ -433,6 +443,7 @@ const PartyAttend = () => {
                                     {formatNumber(totalPrice)}원
                                 </div>
                             </div>
+                           
                         </div>
 
                         <div className={style.grayBox}>
