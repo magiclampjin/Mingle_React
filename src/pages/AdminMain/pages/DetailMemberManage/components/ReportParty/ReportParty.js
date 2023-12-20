@@ -4,14 +4,21 @@ import {Link} from 'react-router-dom';
 import axios from "axios";
 
 import WhiteRoundBtn from '../../../../../../components/WhiteRoundBtn/WhiteRoundBtn'
+import LoadingSpinnerMini from '../../../.././../../components/LoadingSpinnerMini/LoadingSpinnerMini';
 
 const ReportParty = () => {
 
     const [report, setReport] = useState([{}]);
+    const [isServiceLoading, setServiceLoading] = useState(false);
 
     useEffect(() => {
+        setServiceLoading(true);
+
         axios.get("/api/admin/reportPartyList").then(resp => {
             setReport(resp.data);
+            setServiceLoading(false);
+        }).catch(() => {
+            setServiceLoading(false);
         });
     }, []);
 
@@ -20,6 +27,10 @@ const ReportParty = () => {
         <div className={style.box}>
             <div className={style.componentTitle}>파티 신고</div>
             <div className={style.componentBox}>
+            {isServiceLoading ? (
+                <LoadingSpinnerMini height={350} />
+            ) : (
+                <>
                 <div className={style.componentSeeMore}>
                     <div></div>
                     <div className={style.componentSeeMoreBtn}>
@@ -38,6 +49,8 @@ const ReportParty = () => {
                         </div>
                     );
                 })}
+                </>
+            )}
             </div>
         </div>
         </>

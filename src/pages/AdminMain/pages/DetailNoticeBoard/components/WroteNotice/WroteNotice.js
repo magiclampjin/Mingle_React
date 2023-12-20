@@ -14,14 +14,21 @@ import Pagination from "react-js-pagination";
 import "../../../../../../components/Pagination/Pagination.css";
 import "../../../../../../components/WhiteRoundBtn/WhiteRoundBtn"
 import WhiteRoundBtn from "../../../../../../components/WhiteRoundBtn/WhiteRoundBtn";
+import LoadingSpinnerMini from '../../../../../../components/LoadingSpinnerMini/LoadingSpinnerMini';
 
 const WroteNotice = () => {
 
     const [notice, setNotice] = useState([{}]);
+    const [isServiceLoading, setServiceLoading] = useState(false);
 
     useEffect(() => {
+        setServiceLoading(true);
+
         axios.get("/api/admin/unfixedMoticeBoardList").then(resp => {
             setNotice(resp.data);
+            setServiceLoading(false);
+        }).catch(() => {
+            setServiceLoading(false);
         });
     }, []);
 
@@ -57,6 +64,10 @@ const WroteNotice = () => {
         <div className={parentStyle.box}>
             <div className={parentStyle.componentTitle}>작성한 공지글</div>
             <div className={style.componentBox}>
+            {isServiceLoading ? (
+                <LoadingSpinnerMini height={500} />
+            ) : (
+                <>
                 {currentNotices.map((item, i) => {
                     return(
                         <Link key={i} to={`/board/post/${item.id}`} state={{id : item.id}}>
@@ -72,6 +83,8 @@ const WroteNotice = () => {
                         </Link>
                     );
                 })}
+                </>
+            )}
             </div>
             {notice.length > 0 && (
                 <Pagination
