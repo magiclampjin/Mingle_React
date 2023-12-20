@@ -22,6 +22,7 @@ const AdminIndex = () => {
             setAuthority(resp.data);
             setServiceLoading(false);
         }).catch(() => {
+            setAuthority(false); // 로그인하지 않은 사용자가 접근했을 때 false로 돌려보냄
             setServiceLoading(false);
         })
     }, []);
@@ -47,24 +48,6 @@ const AdminIndex = () => {
                 </>
             )}
         </>
-        // isServiceLoading ? (
-        //     <LoadingSpinner />
-        // ) : (
-        //     <>
-        //     {console.log(authority)}
-        //     authority ? (
-        //         <div className={style.background}>
-        //         <div className={style.body}>
-        //             <MemberManageBox />
-        //             <NoticeBoardBox />
-        //             <StatisticsBox />
-        //         </div>
-        //         </div>
-        //     ) : (
-        //         <Navigate to="/denied" />
-        //     )
-        //     </>
-        // )
     );
 }
 
