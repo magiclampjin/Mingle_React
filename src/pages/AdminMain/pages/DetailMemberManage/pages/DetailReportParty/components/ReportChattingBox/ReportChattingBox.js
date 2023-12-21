@@ -12,15 +12,22 @@ import {
   } from "@fortawesome/free-solid-svg-icons";
 import Pagination from "react-js-pagination";
 import "../../../../../../../../components/Pagination/Pagination.css"
+import LoadingSpinnerMini from '../../../../../../../../components/LoadingSpinnerMini/LoadingSpinnerMini';
 
 const ReportChattingBox = () => {
 
     const [report, setReport] = useState([{}]);
     const category = "채팅";
+    const [isServiceLoading, setServiceLoading] = useState(false);
 
     useEffect(() => {
+        setServiceLoading(true);
+
         axios.get(`/api/admin/reportPartyCategoryList/${category}`).then(resp => {
             setReport(resp.data);
+            setServiceLoading(false);
+        }).catch(() => {
+            setServiceLoading(false);
         });
     }, []);
 
@@ -43,6 +50,10 @@ const ReportChattingBox = () => {
         <div className={parentStyle.box}>
             <div className={parentStyle.componentTitle}>파티 채팅 신고</div>
             <div className={style.componentBox}>
+            {isServiceLoading ? (
+                <LoadingSpinnerMini height={500} />
+            ) : (
+                <>
                 {currentReports.map((e, i) => {
                     return(
                         <Link key={i} to="/admin/ReportReadForm" state={{id : e.id, category : `파티 ${category}`}}>
@@ -55,6 +66,8 @@ const ReportChattingBox = () => {
                         </Link>
                     );
                 })}
+                </>
+            )}
             </div>
             {report.length > 0 && (
                 <Pagination
