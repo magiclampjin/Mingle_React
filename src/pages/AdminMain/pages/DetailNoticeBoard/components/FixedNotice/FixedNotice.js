@@ -14,14 +14,27 @@ import Pagination from "react-js-pagination";
 import "../../../../../../components/Pagination/Pagination.css";
 import "../../../../../../components/WhiteRoundBtn/WhiteRoundBtn"
 import WhiteRoundBtn from "../../../../../../components/WhiteRoundBtn/WhiteRoundBtn";
+import LoadingSpinnerMini from '../../../../../../components/LoadingSpinnerMini/LoadingSpinnerMini';
+
+// html 태그를 제거하는 함수 (공지글 내용 출력)
+const removeHtmlTags = (html) => {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || "";
+}
 
 const FixedNotice = () => {
 
     const [notice, setNotice] = useState([{}]);
+    const [isServiceLoading, setServiceLoading] = useState(false);
 
     useEffect(() => {
+        setServiceLoading(true);
+
         axios.get("/api/admin/fixedNoticeBoardList").then(resp => {
             setNotice(resp.data);
+            setServiceLoading(false);
+        }).catch(() => {
+            setServiceLoading(false);
         });
     }, []);
 
@@ -57,13 +70,17 @@ const FixedNotice = () => {
         <div className={parentStyle.box}>
             <div className={parentStyle.componentTitle}>고정 중인 공지글</div>
             <div className={style.componentBox}>
+            {isServiceLoading ? (
+                <LoadingSpinnerMini height={500} />
+            ) : (
+                <>
                 {currentNotices.map((item, i) => {
                     return(
-                        <Link key={i} to="/admin/noticeReadForm" state={{id : item.id}}>
+                        <Link key={i} to={`/board/post/${item.id}`} state={{id : item.id}}>
                             <div className={style.componentLine}>
                                 <div className={parentStyle.componentItem}>{item.id}</div>
                                 <div className={parentStyle.componentItem}>{item.title}</div>
-                                <div className={parentStyle.componentItem}>{item.content}</div>
+                                <div className={parentStyle.componentItem}>{removeHtmlTags(item.content)}</div>
                                 <div className={parentStyle.componentItem}>{item.writeDate ? new Date(item.writeDate).toLocaleString('en-US', { timeZone: 'Asia/Seoul' }) : null}</div>
                                 <div className={parentStyle.componentItem} onClick={(e) => handleUnfix(e, item.id)}>
                                     <WhiteRoundBtn title={"고정 해제"} activation={true}></WhiteRoundBtn>
@@ -72,6 +89,8 @@ const FixedNotice = () => {
                         </Link>
                     );
                 })}
+                </>
+            )}
             </div>
             {notice.length > 0 && (
                 <Pagination

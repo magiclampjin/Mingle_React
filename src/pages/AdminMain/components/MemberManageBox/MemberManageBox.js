@@ -4,14 +4,21 @@ import {Link} from 'react-router-dom';
 import axios from "axios";
 
 import WhiteRoundBtn from '../../../../components/WhiteRoundBtn/WhiteRoundBtn';
+import LoadingSpinnerMini from '../../../../components/LoadingSpinnerMini/LoadingSpinnerMini';
 
 const MemberManageBox = () => {
 
     const [report, setReport] = useState([{}]);
+    const [isServiceLoading, setServiceLoading] = useState(false);
 
     useEffect(() => {
+        setServiceLoading(true);
+
         axios.get("/api/admin/reportList").then(resp => {
             setReport(resp.data);
+            setServiceLoading(false);
+        }).catch(() => {
+            setServiceLoading(false);
         });
     }, []);
 
@@ -19,6 +26,10 @@ const MemberManageBox = () => {
         <div className={style.box}>
             <div className={style.componentTitle}>신고된 회원 / 불량 회원</div>
             <div className={style.componentBox}>
+            {isServiceLoading ? (
+                <LoadingSpinnerMini height={350} />
+            ) : (
+                <>
                 <div className={style.componentSeeMore}>
                     <div></div>
                     <div className={style.componentSeeMoreBtn}>
@@ -37,6 +48,8 @@ const MemberManageBox = () => {
                         </div>
                     );
                 })}
+                </>
+            )}
             </div>
         </div>
     );
