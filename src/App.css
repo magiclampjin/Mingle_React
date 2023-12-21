@@ -11,3 +11,19 @@
 input[type="checkbox"] {
   accent-color: #7b61ff;
 }
+
+.ql-container {
+  box-sizing: border-box;
+  font-family: "Gowun Batang";
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: #565759;
+  min-height: 30rem;
+  margin: 0px;
+  position: relative;
+}
+@media screen and (max-width: 600px) {
+  .ql-container {
+    font-size: 1.125rem;
+  }
+}
