@@ -16,6 +16,12 @@ import "../../../../../../components/WhiteRoundBtn/WhiteRoundBtn"
 import WhiteRoundBtn from "../../../../../../components/WhiteRoundBtn/WhiteRoundBtn";
 import LoadingSpinnerMini from '../../../../../../components/LoadingSpinnerMini/LoadingSpinnerMini';
 
+// html 태그를 제거하는 함수 (공지글 내용 출력)
+const removeHtmlTags = (html) => {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || "";
+}
+
 const WroteNotice = () => {
 
     const [notice, setNotice] = useState([{}]);
@@ -74,7 +80,7 @@ const WroteNotice = () => {
                             <div className={style.componentLine}>
                                 <div className={parentStyle.componentItem}>{item.id}</div>
                                 <div className={parentStyle.componentItem}>{item.title}</div>
-                                <div className={parentStyle.componentItem}>{item.content}</div>
+                                <div className={parentStyle.componentItem}>{removeHtmlTags(item.content)}</div>
                                 <div className={parentStyle.componentItem}>{item.writeDate ? new Date(item.writeDate).toLocaleString('en-US', { timeZone: 'Asia/Seoul' }) : null}</div>
                                 <div className={parentStyle.componentItem} onClick={(e) => handleFix(e, item.id)}>
                                     <WhiteRoundBtn title={"고정 등록"} activation={true}></WhiteRoundBtn>
