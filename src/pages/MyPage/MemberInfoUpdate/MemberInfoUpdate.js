@@ -8,10 +8,11 @@ import WhiteRectangleBtn from '../../../components/WhiteRectangleBtn/WhiteRectan
 import MypageModal from '../components/MypageModal/MypageModal';
 import axios from 'axios';
 import LoadingSpinnerMini from '../../../components/LoadingSpinnerMini/LoadingSpinnerMini';
-import GrayRectangleBtn from '../../../components/GrayRectangleBtn/GrayRectangleBtn';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const MemberInfoUpdate = () =>{
+
+    const navi = useNavigate();
 
     // 로딩 State
     const [isLoading, setLoading]=useState(false);
@@ -225,20 +226,28 @@ const MemberInfoUpdate = () =>{
         setIsPw(result);
     }
 
+
     // 탈퇴버튼 누름
     const handleMemberOutSubmit = (e) =>{
         if(isPw){
             axios.get("/api/member/mypageMemberOut",{params:{password:inputPw}}).then((resp)=>{
                 alert(resp.data);
-                <Navigate to="/"></Navigate>
                 closeMemberOutModal();
-            }).catch(()=>{
+                moveHome();
+            })
+            .catch(()=>{
                 alert("탈퇴에 실패했습니다.");
             })
         }else{
             alert("비밀번호 형식을 확인해주세요.");
         }
         
+    }
+
+    // 홈으로 이동
+    const moveHome=()=>{
+        navi("/");
+        window.location.reload();
     }
    
 

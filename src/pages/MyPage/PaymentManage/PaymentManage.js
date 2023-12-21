@@ -100,7 +100,7 @@ const PaymentManage = () =>{
    useEffect(()=>{
         // 은행 정보 불러오기
         setLoading(true);
-       axios.get("/api/member/bankList").then((resp)=>{
+       axios.get("/api/paymentAccount/selectBankList").then((resp)=>{
             // console.log(resp.data);
             setBankList(resp.data);
             setLoading(false);

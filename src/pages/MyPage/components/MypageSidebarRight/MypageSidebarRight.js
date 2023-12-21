@@ -3,6 +3,9 @@ import axios from 'axios';
 import WhiteRectangleBtn from '../../../../components/WhiteRectangleBtn/WhiteRectangleBtn';
 import style from '../MypageSidebarRight/MypageSidebarRight.module.css';
 import { useEffect, useState } from 'react';
+import MypageModal from '../MypageModal/MypageModal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 const MypageSidebarRight = () =>{
 
@@ -31,6 +34,19 @@ const MypageSidebarRight = () =>{
         fontSize : '14px'
     };
 
+    // 인출 모달 상태
+    const [withdrawModalOpen, setWithdrawModalOpen] = useState(false);
+
+    // 인출하기 버튼
+    const handleWithdrawModalOpen = () => {
+        setWithdrawModalOpen(true);
+    }
+
+    // 닫기
+    const handleModalClose = () =>{
+        setWithdrawModalOpen(false);
+    }
+
     return(
         <div className={style.moneyBox}>
             <div>
@@ -43,10 +59,39 @@ const MypageSidebarRight = () =>{
                     width={170} 
                     heightPadding={10} 
                     title={"인출하기"}
+                    onClick={handleWithdrawModalOpen}
                     ></WhiteRectangleBtn>
                 </div>
             </div>
+
+            {withdrawModalOpen && 
+            <MypageModal
+                isOpen={withdrawModalOpen}
+                onRequestClose={handleModalClose}
+                width={500}
+                height={400}
+            >
+                <div>
+                        <div className={style.closeBtn}>
+                            <FontAwesomeIcon icon={faXmark} size="lg" onClick={handleModalClose}/>
+                        </div>
+                        <div className={style.modalTitle}>인출하기</div>
+                        <div className={style.modalSubTitle}>
+                            밍글 머니 잔액
+                        </div>
+                        <div>
+                            <div className={style.modalMoneyBox}>
+                                {formatNumber(mingleMoney)} 원
+                            </div>
+                        </div>
+                </div>
+            </MypageModal>
+             }
+
+
         </div>
+
+        
 
     );
 }

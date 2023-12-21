@@ -31,6 +31,43 @@
     font-size: 15px;
 }
 
+/* modal */
+/* Modal */
+.modalTitle{
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.modalSubTitle{
+    font-size: 14px;
+    text-align: left;
+    color: #434851;
+    font-weight: 500;
+    padding-left: 10px;
+}
+
+.modalBtn{
+    margin-top:15px;
+    text-align: right;
+}
+/* x 버튼 */
+.closeBtn{
+    text-align: right;
+    cursor: pointer;
+}
+
+.modalMoneyBox{
+    margin-top: 10px;
+    width: 100%;
+    height: 52px;
+    font-weight: 500;
+    background-color: #DFE2E680;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+}
 
 
 @media (max-width:1050px) {

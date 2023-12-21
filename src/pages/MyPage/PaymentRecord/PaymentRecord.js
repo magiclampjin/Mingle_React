@@ -27,6 +27,7 @@ const PaymentRecord = () =>{
     }
 
     // 검색 모달 닫기
+    // 내역 초기화
     const handleSearchModalClose = () =>{
         setStartDate("");
         setEndDate("");
@@ -215,7 +216,7 @@ const PaymentRecord = () =>{
                                         </div>
                                         <div className={style.content__bottom}>
                                             <div>{item.service!=undefined?item.service.name:""}</div>
-                                            <div>사용된 밍글 머니 -{item.usedMingleMoney}원</div>
+                                            <div>사용된 밍글 머니 {item.usedMingleMoney}원</div>
                                         </div>
                                     </div>
                                 )

@@ -184,7 +184,7 @@ const Header = () => {
                   <div className={style.proffileModalInfo}>
                     <div>{loginNick}님</div>
                       <Link to="/Mypage">
-                        <div className={style.mypageBtn}>
+                        <div className={style.mypageBtn} onClick={closeModal}>
                           마이페이지
                           <FontAwesomeIcon icon={faAngleRight} />
                         </div>
