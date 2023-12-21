@@ -199,7 +199,7 @@ const PwCertification = () => {
   }, [certificationNum]);
 
   // 비밀번호 변경 눌렀을 때
-  const handleFindId = () => {
+  const handleChangePw = () => {
     if (findPw) {
       const formData = new FormData();
       formData.append("code", certificationNum);
@@ -219,6 +219,13 @@ const PwCertification = () => {
       });
     } else {
       alert("아이디, 이름, 이메일 정보를 통해 본인 인증을 완료해주세요.");
+    }
+  };
+
+  // 엔터키로 인증코드 입력 감지
+  const handleKeyPress = (event) => {
+    if (event.keyCode === 13) {
+      handleChangePw();
     }
   };
 
@@ -274,6 +281,7 @@ const PwCertification = () => {
           type="text"
           placeholder="인증번호를 입력해주세요."
           onChange={handleCertificaton}
+          onKeyDown={handleKeyPress}
           value={certificationNum}
         />
         <div className={style.timer}>{`${String(
@@ -285,7 +293,7 @@ const PwCertification = () => {
         width={400}
         heightPadding={10}
         activation={findPw}
-        onClick={handleFindId}
+        onClick={handleChangePw}
       ></PurpleRectangleBtn>
       <div className={style.goLogin} onClick={handleLogin}>
         로그인 하러가기
