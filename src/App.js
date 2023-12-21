@@ -19,15 +19,11 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 export const MenuContext = createContext();
 export const LoginContext = createContext();
 
-export const ModalContext = createContext();
-
 function App() {
   const [selectedMenu, setSelectedMenu] = useState(null);
   const [loginId, setLoginId] = useState("");
   const [loginNick, setLoginNick] = useState("");
   const [loginRole, setLoginRole] = useState("");
-
-  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   return (
     <LoginContext.Provider
@@ -40,7 +36,7 @@ function App() {
         setLoginRole,
       }}
     >
-      <MenuContext.Provider value={{ selectedMenu, setSelectedMenu, modalIsOpen, setModalIsOpen }}>
+      <MenuContext.Provider value={{ selectedMenu, setSelectedMenu}}>
         <>
           <Router>
             <Header></Header>
