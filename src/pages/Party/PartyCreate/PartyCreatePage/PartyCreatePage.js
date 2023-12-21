@@ -86,11 +86,15 @@ const PartyCreatePage = () =>{
 
     // 입력한 아이디 state에 저장
     const handleChangeId = (e) => {
+
+        // 한글, 특수문자 입력 제한 (_, ., @는 허용 -> 이메일 아이디 대비)
+        const regResult = e.target.value.replace(/[^a-zA-Z0-9_@.]/g,'');
+
         setChecked((prev)=>({...prev,id:true}))
         setAccountInfo((prev)=>{
-            if(e.target.value!==""){setChecked((prev)=>{ if(isChked.pw){setGoNext(true)} return {...prev,id:true};})}
+            if(regResult!==""){setChecked((prev)=>{ if(isChked.pw){setGoNext(true)} return {...prev,id:true};})}
             else setChecked((prev)=>{ setGoNext(false); return {...prev,id:false}});
-            return {...prev,id:e.target.value}
+            return {...prev,id:regResult}
         });
     }
 

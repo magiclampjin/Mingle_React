@@ -1,0 +1,114 @@
+.render{
+    padding : 10px;
+    margin-top : 20px;
+    margin-bottom : 20px;
+    border-radius: 10px;
+}
+
+.board__title {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    color: #5D5C61;
+    font-weight: bold;
+    font-size: 20px;
+    text-align: center;
+}
+
+.board__container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+}
+
+.post__item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: none;
+    border-radius: 4px;
+    transition-duration: 0.5s;
+    background-color: white;
+    border: 1px solid #7b61ff20;
+}
+
+.post__item:hover{
+    background-color: #7b61ff50;
+}
+
+.post__item-rownum {
+    flex: 1;
+    font-weight: bold;
+    color:#7b61ff;
+}
+
+.post__item-title {
+    flex: 3;
+    font-weight: bold;
+}
+
+/* 기본 폰트 사이즈 */
+.post__item-nickname {
+    flex: 1;
+    text-align: center;
+}
+
+/* 중간 크기의 화면 (가령 태블릿) */
+@media (max-width: 768px) {
+    .post__item-nickname {
+        font-size: 14px; /* 폰트 사이즈를 조금 줄임 */
+    }
+    .post__item-date {
+        font-size: 14px;
+    }
+}
+
+/* 작은 화면 (가령 모바일) */
+@media (max-width: 576px) {
+    .post__item-nickname {
+        font-size: 12px; /* 폰트 사이즈를 더 줄임 */
+    }
+    .post__item-date {
+        font-size: 10px;
+    }
+}
+
+.post__item-date {
+    flex: 1;
+    text-align: center;
+}
+
+.post__item-viewcount {
+    flex: 1;
+    text-align: center;
+}
+
+/* 마지막 post 항목의 하단 테두리를 제거합니다. */
+.post__item:last-child {
+    border-bottom: 1px solid #7b61ff20;
+}
+
+
+.board__buttonContainer {
+    text-align: center;
+}
+
+.board__button {
+    width: 150px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: #7b61ff;
+    border : none;
+    border-radius: 10px;
+    margin-left: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    color:white;
+}
+
+
+/* 게시글이 없을 때의 메시지 스타일 */
+.no__posts {
+    text-align: center;
+    color: #888;
+    margin: 20px 0;
+}
