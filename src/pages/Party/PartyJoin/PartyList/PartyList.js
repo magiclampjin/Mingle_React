@@ -9,18 +9,18 @@ import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner
 import SearchDateModal from "./SearchDateModal/SearchDateModal";
 import {LoginContext} from "../../../../App";
 import PartyJoinInfoModal from "./PartyJoinInfoModal/PartyJoinInfoModal";
+import { JoinPartyContext } from "../PartyJoinMain";
 
 const PartyList = () => {
     const location = useLocation();
     const selectService = location.state.selectService;
     const [partyList, setPartyList] = useState();
-    const [service, setService] = useState();
     const [isLoading, setLoading] = useState(false);
     const [price, setPrice] = useState();
     const navi = useNavigate();
     
     // 선택한 파티
-    const [selectParty, setSelectParty] = useState();
+    const { setSelectParty, service, setService } = useContext(JoinPartyContext);
 
     // 로그인 정보
     const {loginId} = useContext(LoginContext);
@@ -280,8 +280,6 @@ const PartyList = () => {
                             contentLabel="파티 가입 모달"
                             width={500}
                             height={670}
-                            service={service}
-                            selectParty={selectParty}
                         >
                         </PartyJoinInfoModal>
 

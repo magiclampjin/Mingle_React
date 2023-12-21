@@ -12,15 +12,21 @@ import {
   } from "@fortawesome/free-solid-svg-icons";
 import Pagination from "react-js-pagination";
 import "../../../../../../components/Pagination/Pagination.css"
+import LoadingSpinnerMini from '../../../.././../../components/LoadingSpinnerMini/LoadingSpinnerMini';
 
 const ReportReply = () => {
 
     const [report, setReport] = useState([{}]);
+    const [isServiceLoading, setServiceLoading] = useState(false);
 
     useEffect(() => {
+        setServiceLoading(true);
+
         axios.get("/api/admin/reportReplyList").then(resp => {
             setReport(resp.data);
-            console.log("data : " + resp.data);
+            setServiceLoading(false);
+        }).catch(() => {
+            setServiceLoading(false);
         });
     }, []);
 
@@ -44,6 +50,10 @@ const ReportReply = () => {
         <div className={parentStyle.box}>
             <div className={parentStyle.componentTitle}>댓글 신고</div>
             <div className={style.componentBox}>
+            {isServiceLoading ? (
+                <LoadingSpinnerMini height={500} />
+            ) : (
+                <>
                 {currentReports.map((e, i) => {
                     return(
                         <Link key={i} to="/admin/ReportReadForm" state={{id : e.id, category : "댓글"}}>
@@ -56,6 +66,8 @@ const ReportReply = () => {
                         </Link>
                     );
                 })}
+                </>
+            )}
             </div>
             {report.length > 0 && (
                 <Pagination

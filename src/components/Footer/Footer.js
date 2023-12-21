@@ -1,6 +1,11 @@
 import style from "./Footer.module.css";
 
 const Footer = () => {
+  // 자주 묻는 질문으로 이동
+  const handleFAQClick = () => {
+    window.location.href = 'https://impossible-log-6dc.notion.site/4ac5ec788ca04f6ab7304dbb71891974?pvs=4';
+  }
+
   return (
     <div className={style.footer}>
       <div className={style.footer__guide}>
@@ -12,7 +17,7 @@ const Footer = () => {
             <div className={style.navi__conf}>1:1 문의하기</div>
             <div className={style.navi__conf}>개인정보처리방침</div>
             <div className={style.navi__conf}>서비스 이용약관</div>
-            <div className={style.navi__conf}>FQA</div>
+            <div className={style.navi__conf} onClick={handleFAQClick}>FAQ</div>
           </div>
           <div className={style.footer__info}>
             <div className={style.info__conf}>
