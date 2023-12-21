@@ -49,7 +49,7 @@ const Post = () => {
     }
 
     const handleUpdate = () => {
-
+        alert("관련모달 작업 중...")
     }
 
 

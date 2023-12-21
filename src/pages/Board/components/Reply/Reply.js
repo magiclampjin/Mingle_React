@@ -120,8 +120,8 @@ const Reply = ({ replies, postId }) => {
         writeDate: null,
         postId: "",
         memberId: "",
-        replyParentId: 0,
-        replyAdoptiveParentId: 0,
+        replyParentId: "",
+        replyAdoptiveParentId: "",
     })
 
 
@@ -188,16 +188,32 @@ const Reply = ({ replies, postId }) => {
             ...prev,
             postId: postId,
             memberId: loginId,
+            content : newReply,
             replyParentId: selectedParentReply,
             replyAdoptiveParentId: selectedAdoptiveParentReply
         }));
     }, [loginId, postId, selectedParentReply, selectedAdoptiveParentReply]);
 
     const handleSubmitReply = () => {
-        // 댓글 제출 로직
-        console.log("Submitting reply:", newReply);
-        // 여기에 댓글을 서버로 보내는 코드 추가
-        setNewReply(""); // 입력 필드 초기화
+        const now = new Date();
+        const formData = new FormData();
+        formData.append("content",submitReply.content);
+        formData.append("writeDate", now.toISOString());
+        formData.append("postId", submitReply.postId);
+        formData.append("memberId",submitReply.memberId);
+        formData.append("replyParentId",submitReply.replyParentId);
+        formData.append("replyAdoptiveParentId",submitReply.replyAdoptiveParentId);
+
+        alert("타입관련 설정 중..");
+
+        // axios.post("/api/reply",formData).then(resp =>{
+        //     console.log(resp.data);
+        //     setNewReply(""); // 입력 필드 초기화
+        // }).catch(error => {
+        //     console.log("error : " + error);
+        //     setNewReply(""); // 입력 필드 초기화
+        // })
+       
     };
 
     return (
