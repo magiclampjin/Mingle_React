@@ -1,6 +1,6 @@
 import style from "./PartyCreatePage.module.css";
 import {useLocation} from "react-router-dom";
-import {useState, useEffect} from "react";
+import {useState, useEffect, useContext} from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faTriangleExclamation, faPlus, faMinus, faChevronDown, faChevronUp, faCheck } from "@fortawesome/free-solid-svg-icons";
@@ -13,14 +13,21 @@ import CalculationSelectBox from "../../../../components/CalculationSelectBox/Ca
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
 import LoadingSpinnerMini from "../../../../components/LoadingSpinnerMini/LoadingSpinnerMini";
-import MypageModal from "../../../MyPage/components/MypageModal/MypageModal";
 import AccountModal from "./AccountModal/AccountModal";
+import { CreatePartyContext } from "../PartyCreateMain";
 
 const PartyCreatePage = () =>{
     //  공통 사용 -------------------------------------------------
 
-    const location = useLocation();
-    const service = location.state.service;
+    const {service, setService} = useContext(CreatePartyContext);
+    //뒤로가기 버튼을 통해서 들어오거나 주소를 통해서 들어왔다면 돌려보내기
+    useEffect(() => {
+        if (service === null) {
+            alert("잘못된 접근입니다.");
+            navi("/");
+        }
+    });
+
     const navi = useNavigate();
     const [isLoading, setLoading] = useState(false);
     const [isLoadingMini, setLoadingMini] = useState(false);
@@ -130,10 +137,16 @@ const PartyCreatePage = () =>{
 
     // 2단계 -------------------------------------------------------------------------
     // 파티원 명수
-    const [peopleCnt, setPeopleCnt] = useState(service.maxPeopleCount-1);
+    useEffect(()=>{
+        if(service){
+            setPeopleCnt(service.maxPeopleCount-1);
+            setUpdatePeopleCnt({minus:(service.maxPeopleCount-1)!==1, plus:false});
+        }
+    });
+    const [peopleCnt, setPeopleCnt] = useState(0);
     
     // 파티원 명수 버튼 클릭할 수 있는지
-    const [isUpdatePeopleCnt, setUpdatePeopleCnt] = useState({minus:(service.maxPeopleCount-1)!==1, plus:false})
+    const [isUpdatePeopleCnt, setUpdatePeopleCnt] = useState()
 
     // 파티원 명수 조절
     const handleUpdatePeopleCnt = (e) => {
@@ -306,6 +319,7 @@ const PartyCreatePage = () =>{
                     }
                     axios.post("/api/party/auth", partyData).then(resp=>{
                         setLoading(false);
+                        setService(null);
                         if(window.confirm("파티 등록 성공! 등록된 정보를 확인하시겠어요?")){
                             navi("/");
                         }else{
@@ -346,7 +360,7 @@ const PartyCreatePage = () =>{
             </div>
             <div className={style.right}>
                 {
-                    step===1?(
+                    step===1 && service?(
                         <>
                             <div className={style.title}>{service.name} {service.plan}의<br></br>로그인 정보를 입력해주세요.</div>
                             <div className={style.inputTags}>
@@ -362,7 +376,7 @@ const PartyCreatePage = () =>{
                             <div className={style.goService}><a href={service.url} target="_blank" rel="noopener noreferrer">{service.name} 바로가기</a></div>
                             <div className={style.nextBtn}><PurpleRectangleBtn title="다음" activation={isGoNext} onClick={handleNext} width={150} heightPadding={10}/></div>
                         </>
-                    ):step===2?
+                    ):step===2 && service?
                     <>
                         <div className={style.title}>몇 명의 파티원을<br></br>모집하실 건가요?</div>
                         <div className={style.peopleCntCover}>
@@ -378,7 +392,7 @@ const PartyCreatePage = () =>{
                             <div className={style.prevBtn}><PurpleRectangleBtn title="이전" activation={true} onClick={handlePrev} width={150} heightPadding={10}/></div>
                             <div className={style.nextBtn}><PurpleRectangleBtn title="다음" activation={isGoNext} onClick={handleNext} width={150} heightPadding={10}/></div>
                         </div>
-                    </>:step===3?
+                    </>:step===3 && service?
                     <>
                         <div className={style.title}>파티 기간을<br></br>설정해 주세요.</div>
                         <div className={`${style.partyDateCover}`}>
@@ -479,6 +493,7 @@ const PartyCreatePage = () =>{
                             </>
                         }
                     </>
+                    
                 }
             </div>
         </div>
