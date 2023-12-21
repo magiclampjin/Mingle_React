@@ -2,10 +2,10 @@ import style from "./Header.module.css";
 import PurpleRoundBtn from "../PurpleRoundBtn/PurpleRoundBtn";
 import ProfileModal from "./ProfileModal/ProfileModal";
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link, unstable_HistoryRouter, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faBell } from "@fortawesome/free-solid-svg-icons";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, createContext } from "react";
 import { MenuContext } from "../../App";
 import { LoginContext } from "../../App";
 import axios from "axios";
@@ -125,12 +125,13 @@ const Header = () => {
                     />
                     <div className={style.proffileModalInfo}>
                       <div>{loginNick}님</div>
-                      <Link to="/Mypage">
-                        <div>
-                          마이페이지
-                          <FontAwesomeIcon icon={faAngleRight} />
-                        </div>
-                      </Link>
+                    
+                        <Link to="/Mypage">
+                          <div>
+                            마이페이지
+                            <FontAwesomeIcon icon={faAngleRight} />
+                          </div>
+                        </Link>
                     </div>
                   </div>
                   {loginRole === "ROLE_ADMIN" && (
@@ -187,12 +188,13 @@ const Header = () => {
                   />
                   <div className={style.proffileModalInfo}>
                     <div>{loginNick}님</div>
-                    <Link to="/Mypage">
-                      <div className={style.mypageBtn}>
-                        마이페이지
-                        <FontAwesomeIcon icon={faAngleRight} />
-                      </div>
-                    </Link>
+                      <Link to="/Mypage">
+                        <div className={style.mypageBtn} onClick={closeModal}>
+                          마이페이지
+                          <FontAwesomeIcon icon={faAngleRight} />
+                        </div>
+                      </Link>
+                    
                   </div>
                 </div>
                 {loginRole === "ROLE_ADMIN" && (

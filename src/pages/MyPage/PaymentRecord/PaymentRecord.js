@@ -2,12 +2,19 @@ import { useEffect, useState } from 'react';
 import style from '../../MyPage/PaymentRecord/PaymentRecord.module.css';
 import MypageModal from '../components/MypageModal/MypageModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faXmark} from "@fortawesome/free-solid-svg-icons";
+import {
+    faXmark,
+    faAngleLeft,
+    faAnglesLeft,
+    faAngleRight,
+    faAnglesRight,
+} from "@fortawesome/free-solid-svg-icons";
 import PurpleRectangleBtn from '../../../components/PurpleRectangleBtn/PurpleRectangleBtn';
 import axios from 'axios';
 import { selectService } from './../../Party/PartyCreate/PartyCreateList/PartyCreateList';
 import LoadingSpinnerMini from '../../../components/LoadingSpinnerMini/LoadingSpinnerMini';
 import { timeFormatter } from '../components/TimeFormatter/TimeFormatter';
+import Pagination from 'react-js-pagination';
 
 const PaymentRecord = () =>{
 
@@ -20,6 +27,7 @@ const PaymentRecord = () =>{
     }
 
     // 검색 모달 닫기
+    // 내역 초기화
     const handleSearchModalClose = () =>{
         setStartDate("");
         setEndDate("");
@@ -159,6 +167,21 @@ const PaymentRecord = () =>{
         });
     }
 
+    // 페이지네이션
+    const [currentLists, setCurrentLists] = useState(payList);
+    const [page, setPage] = useState(1);
+    const payListPerPage = 5; // 페이지 당 유저 출력 수
+    const indexOfLastPage = page * payListPerPage;
+    const indexOfFirstPage = indexOfLastPage - payListPerPage;
+
+    const handlePageChange = (page) => {
+        setPage(page);
+    };
+
+    useEffect(() => {
+        setCurrentLists(payList.slice(indexOfFirstPage, indexOfLastPage));
+    }, [payList, page]);
+
     return(
         <>
             <div className={style.container}>
@@ -176,26 +199,26 @@ const PaymentRecord = () =>{
                             ?
                             <LoadingSpinnerMini width={600} height={250} />
                             :
-                            payList.length > 0 ?(payList.map((item,i)=>{
+                            payList.length > 0 ?(currentLists.map((item,i)=>{
                                 return(
                                     <div key={i} className={style.content}>
-                                    <div className={style.content__inner}>
-                                        <div className={style.inner__left}>
-                                            <div>{timeFormatter(item.date) }</div>
-                                            <div>파티 요금 {item.paymentTypeId}</div>
+                                        <div className={style.content__inner}>
+                                            <div className={style.inner__left}>
+                                                <div>{timeFormatter(item.date) }</div>
+                                                <div>파티 요금 {item.paymentTypeId}</div>
+                                            </div>
+                                            <div className={style.inner__right}
+                                            style={{color: item.paymentTypeId === "적립" ? "#7b61ff" : "black"}}
+                                            >
+                                                {item.paymentTypeId == "적립" ? "+" :"-"}
+                                                {formatNumber(item.price)}원
+                                            </div>
                                         </div>
-                                        <div className={style.inner__right}
-                                        style={{color: item.paymentTypeId === "적립" ? "#7b61ff" : "black"}}
-                                        >
-                                            {item.paymentTypeId == "적립" ? "+" :"-"}
-                                            {formatNumber(item.price)}원
+                                        <div className={style.content__bottom}>
+                                            <div>{item.service!=undefined?item.service.name:""}</div>
+                                            <div>사용된 밍글 머니 {item.usedMingleMoney}원</div>
                                         </div>
                                     </div>
-                                    <div className={style.content__bottom}>
-                                        <div>{item.service!=undefined?item.service.name:""}</div>
-                                        <div>머니 잔액 13521원</div>
-                                    </div>
-                                </div>
                                 )
                             })
                             ) : (
@@ -203,6 +226,21 @@ const PaymentRecord = () =>{
                             )
                         }
 
+                    </div>
+                    <div>
+                        {payList.length > 0 && (
+                            <Pagination
+                                activePage={page}
+                                itemsCountPerPage={payListPerPage}
+                                totalItemsCount={payList.length}
+                                pageRangeDisplayed={5}
+                                prevPageText={<FontAwesomeIcon icon={faAngleLeft} />}
+                                nextPageText={<FontAwesomeIcon icon={faAngleRight} />}
+                                lastPageText={<FontAwesomeIcon icon={faAnglesRight} />}
+                                firstPageText={<FontAwesomeIcon icon={faAnglesLeft} />}
+                                onChange={handlePageChange}
+                            />
+                        )}
                     </div>
                 </div>
             </div>

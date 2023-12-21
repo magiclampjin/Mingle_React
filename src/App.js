@@ -36,7 +36,7 @@ function App() {
         setLoginRole,
       }}
     >
-      <MenuContext.Provider value={{ selectedMenu, setSelectedMenu }}>
+      <MenuContext.Provider value={{ selectedMenu, setSelectedMenu}}>
         <>
           <Router>
             <Header></Header>
