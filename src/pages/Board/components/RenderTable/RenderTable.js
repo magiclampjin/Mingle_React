@@ -2,7 +2,7 @@ import styles from "./RenderTable.module.css"
 import { timeFormatter } from "../../../../components/TimeFormatter/TimeFormatter";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faThumbsUp, faClock } from "@fortawesome/free-solid-svg-icons";
 
 const RenderTable = ({ posts, title }) => {
 
@@ -12,6 +12,8 @@ const RenderTable = ({ posts, title }) => {
         { name: "공지게시판", path: "/board/noticeboard" },
         { name: "리뷰", path: "/board/review" }
     ];
+
+    console.log(posts);
 
     // title에 해당하는 카테고리의 경로를 찾습니다.
     const categoryPath = categories.find(category => category.name === title)?.path;
@@ -26,8 +28,9 @@ const RenderTable = ({ posts, title }) => {
                             <div className={styles[`post__item-rownum`]}>{post.rownum}</div>
                             <div className={styles[`post__item-title`]}>{post.title}</div>
                             <div className={styles[`post__item-nickname`]}>{post.memberNickname}</div>
-                            <div className={styles[`post__item-date`]}>{timeFormatter(post.writeDate)}</div>
+                            <div className={styles[`post__item-date`]}><FontAwesomeIcon icon={faClock} />{` ${timeFormatter(post.writeDate)}`}</div>
                             <div className={styles[`post__item-viewcount`]}><FontAwesomeIcon icon={faEye} />{` ${post.viewCount}`}</div>
+                            <div className={styles[`post__item-totalvotes`]}><FontAwesomeIcon icon={faThumbsUp} />{` ${post.totalVotes}`}</div>
                         </div>
                     </Link>
 

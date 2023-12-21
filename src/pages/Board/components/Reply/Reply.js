@@ -21,6 +21,18 @@ const flattenReplies = (replies) => {
     }, []);
 };
 
+const SelectedReplyInfo = ({ selectedReply }) => {
+    if (!selectedReply) return null;
+
+    return (
+        <div className={styles.selectedReplyContainer}>
+            <p>작성자: {selectedReply.member.nickname}</p>
+            <p>내용: {selectedReply.content}</p>
+            <p>작성 시간: {formatTime(selectedReply.writeDate)}</p>
+        </div>
+    );
+};
+
 const RenderReplies = ({ replies, allReplies, onReplyClick, onChildReplyClick }) => {
     // 부모 댓글의 닉네임을 찾는 함수
     const findParentNicknameById = (parentId) => {
@@ -69,6 +81,7 @@ const RenderReplies = ({ replies, allReplies, onReplyClick, onChildReplyClick })
                         {/* 대댓글 목록 */}
                         {reply.childrenReplies && reply.childrenReplies.length > 0 && (
                             <div className={styles.childReplies}>
+                                {/* 대댓글 리스트 렌더링 */}
                                 <RenderReplies
                                     replies={reply.childrenReplies}
                                     allReplies={allReplies}
@@ -84,7 +97,9 @@ const RenderReplies = ({ replies, allReplies, onReplyClick, onChildReplyClick })
     );
 };
 
-const Reply = ({ replies,postId }) => {
+const Reply = ({ replies, postId }) => {
+
+    const { loginId } = useContext(LoginContext);
 
     const [allReplies, setAllReplies] = useState([]);
 
@@ -99,13 +114,17 @@ const Reply = ({ replies,postId }) => {
     const repliesPerPage = 7; // 페이지당 댓글 수
     const [currentReplies, setCurrentReplies] = useState([]); // 현재 페이지에 표시할 댓글들
 
-    // 페이지가 변경될 때마다 실행될 useEffect
-    useEffect(() => {
-        const flattenedReplies = flattenReplies(replies); // 모든 댓글 평탄화
-        const indexOfLastReply = currentPage * repliesPerPage; // 현재 페이지의 마지막 댓글 인덱스
-        const indexOfFirstReply = indexOfLastReply - repliesPerPage; // 현재 페이지의 첫 댓글 인덱스
-        setCurrentReplies(flattenedReplies.slice(indexOfFirstReply, indexOfLastReply));
-    }, [replies, currentPage]);
+    const [submitReply, setSubmitReply] = useState({
+        id: null,
+        content: "",
+        writeDate: null,
+        postId: "",
+        memberId: "",
+        replyParentId: 0,
+        replyAdoptiveParentId: 0,
+    })
+
+
 
     // 페이지 변경 핸들러
     const handlePageChange = (pageNumber) => {
@@ -128,12 +147,7 @@ const Reply = ({ replies,postId }) => {
         setSelectedAdoptiveParentReply(replyId);
     };
 
-    const submitReply = () => {
-        // 댓글 제출 로직
-        console.log("Submitting reply:", newReply);
-        // 여기에 댓글을 서버로 보내는 코드 추가
-        setNewReply(""); // 입력 필드 초기화
-    };
+
 
     // replies prop이 변경될 때마다 allReplies를 업데이트합니다.
     useEffect(() => {
@@ -141,33 +155,78 @@ const Reply = ({ replies,postId }) => {
         setAllReplies(flattenedReplies);
     }, [replies]);
 
-    // 현재 페이지나 allReplies 상태가 변경될 때마다 currentReplies를 업데이트합니다.
+    // 페이지가 변경될 때마다 실행될 useEffect
+    useEffect(() => {
+        const flattenedReplies = flattenReplies(replies); // 모든 댓글 평탄화
+        const indexOfLastReply = currentPage * repliesPerPage; // 현재 페이지의 마지막 댓글 인덱스
+        const indexOfFirstReply = indexOfLastReply - repliesPerPage; // 현재 페이지의 첫 댓글 인덱스
+        setCurrentReplies(flattenedReplies.slice(indexOfFirstReply, indexOfLastReply));
+    }, [replies, currentPage]);
+
+    // 현재 페이지나 allReplies 상태가 변경될 때마다 currentReplies를 업데이트
     useEffect(() => {
         const indexOfLastReply = currentPage * repliesPerPage;
         const indexOfFirstReply = indexOfLastReply - repliesPerPage;
         setCurrentReplies(allReplies.slice(indexOfFirstReply, indexOfLastReply));
     }, [currentPage, allReplies]);
 
+    useEffect(() => {
+        // 외부 클릭 이벤트를 감지하여 선택된 댓글 해제
+        const handleOutsideClick = (event) => {
+            if (event.target.closest(`.${styles.replyItem}`) === null) {
+                setSelectedParentReply(null);
+            }
+        };
 
+        document.addEventListener('click', handleOutsideClick);
+        return () => document.removeEventListener('click', handleOutsideClick);
+    }, []);
+
+    // 페이지 렌더링이 끝나고 난 뒤 loginId, postId 상태를 마운팅. 또한 선택된 Reply의 변경을 감지하여 세팅
+    useEffect(() => {
+        setSubmitReply(prev => ({
+            ...prev,
+            postId: postId,
+            memberId: loginId,
+            replyParentId: selectedParentReply,
+            replyAdoptiveParentId: selectedAdoptiveParentReply
+        }));
+    }, [loginId, postId, selectedParentReply, selectedAdoptiveParentReply]);
+
+    const handleSubmitReply = () => {
+        // 댓글 제출 로직
+        console.log("Submitting reply:", newReply);
+        // 여기에 댓글을 서버로 보내는 코드 추가
+        setNewReply(""); // 입력 필드 초기화
+    };
 
     return (
         <div className={styles.reply__section}>
-            댓글
-            <RenderReplies
-                replies={currentReplies}
-                allReplies={allReplies}
-                onReplyClick={handleReplyClick}
-                onChildReplyClick={handleChildReplyClick} />
+            <SelectedReplyInfo></SelectedReplyInfo>
+            <hr />
+            {allReplies.length > 0 ? (
+                <>
+                    <RenderReplies
+                        replies={currentReplies}
+                        allReplies={allReplies}
+                        onReplyClick={handleReplyClick}
+                        onChildReplyClick={handleChildReplyClick}
+                    />
 
-            {/* 페이지네이션 */}
-            <Pagination
-                activePage={currentPage}
-                itemsCountPerPage={repliesPerPage}
-                totalItemsCount={flattenReplies(replies).length}
-                pageRangeDisplayed={5}
-                onChange={handlePageChange}
-                
-            />
+                    {/* 페이지네이션 */}
+                    <Pagination
+                        activePage={currentPage}
+                        itemsCountPerPage={repliesPerPage}
+                        totalItemsCount={flattenReplies(replies).length}
+                        pageRangeDisplayed={5}
+                        onChange={handlePageChange}
+                    />
+
+                </>
+            ) : (
+                <div className={styles.noReplies}>댓글이 없습니다</div>
+            )}
+            <hr />
             <div className={styles.replyForm}>
                 <textarea
                     className={styles.replyInput}
@@ -175,10 +234,11 @@ const Reply = ({ replies,postId }) => {
                     onChange={handleReplyChange}
                     placeholder="댓글을 작성하세요"
                 />
-                <button onClick={submitReply} className={styles.replyButton}>댓글 작성</button>
+                <button onClick={handleSubmitReply} className={styles.replyButton}>댓글 작성</button>
             </div>
         </div>
     );
+
 };
 
 export default Reply;

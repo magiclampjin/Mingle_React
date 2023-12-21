@@ -5,15 +5,16 @@ import { useState, useEffect, useContext } from "react";
 import { LoginContext } from "../../../App";
 import Reply from "../components/Reply/Reply";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
+import { faThumbsUp, faThumbsDown, faEye, faClock } from '@fortawesome/free-solid-svg-icons';
 import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 import ReadOnlyQuill from "../../../components/QuillEditor/ReadOnlyQuill";
 import { useNavigate } from "react-router-dom";
+import { timeFormatter } from "../../../components/TimeFormatter/TimeFormatter";
 
 const Post = () => {
 
     const { postId } = useParams();
-    const { loginId } = useContext(LoginContext);
+    const { loginId, loginRole } = useContext(LoginContext);
     const [post, setPost] = useState(null);
     // 좋아요와 싫어요 상태
     const [vote, setVote] = useState(0);
@@ -35,16 +36,20 @@ const Post = () => {
 
     const handleDelete = () => {
         const userResponse = window.confirm("정말 게시글을 삭제하시겠습니까?");
-        if(userResponse){
-            axios.delete("api/post").then(resp =>{
+        if (userResponse) {
+            axios.delete(`/api/post/${postId}`).then(resp => {
                 navigate("/board");
             }).catch(error => {
                 alert("게시글 삭제에 실패했습니다.");
                 console.error("error : " + error);
             })
-        }else{
+        } else {
             return;
         }
+    }
+
+    const handleUpdate = () => {
+
     }
 
 
@@ -85,8 +90,16 @@ const Post = () => {
             {post && (
                 <div className={styles.post__container}>
                     <h1 className={styles.post__title}>{post.title}</h1>
+                    <hr />
                     <div className={styles.post__header}>
-                        <p className={styles.post__author}>{post.member.nickname}</p>
+                        <p className={styles.post__author}>작성자 : {post.member.nickname}</p>
+                    </div>
+                    <hr />
+                    <div className={styles.infoDiv}>
+                        <FontAwesomeIcon icon={faClock} className={styles.infoIcon} />
+                        <span className={styles.infoText}>{`등록시간 : ${timeFormatter(post.writeDate)}`}</span> &nbsp;
+                        <FontAwesomeIcon icon={faEye} className={styles.infoIcon} />
+                        <span className={styles.infoText}>{`조회수 : ${post.viewCount}`}</span>
                     </div>
                     <div className={styles.post__content}>
                         <ReadOnlyQuill content={post.content}></ReadOnlyQuill>
@@ -109,9 +122,21 @@ const Post = () => {
                 </div>
 
             )}
-            <button onClick={handleDelete} className={styles.dislikeButton}>
-                게시글 삭제하기
-            </button>
+
+            {
+                post && (post.member.id === loginId || loginRole === "ROLE_ADMIN") && (
+                    <div className={styles.buttonDiv}>
+                        <button onClick={handleDelete} className={styles.deleteButton}>
+                            게시글 삭제하기
+                        </button>
+                        <button onClick={handleUpdate} className={styles.updateButton}>
+                            게시글 수정하기
+                        </button>
+                    </div>
+                )
+            }
+
+
 
         </div>
     );

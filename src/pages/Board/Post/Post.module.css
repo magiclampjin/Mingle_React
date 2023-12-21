@@ -3,7 +3,7 @@
     background: white;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
+    border-radius: 5px;
 }
 
 .post__container {
@@ -12,14 +12,13 @@
     padding: 20px;
     border: 1px solid #ccc;
     background-color: #fff;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 
 .post__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
 }
 
 .post__title {
@@ -40,6 +39,7 @@
     background-color: #fff;
     min-height: 150px;
     resize: vertical;
+    border-radius: 4px;
 }
 
 .post__file {
@@ -81,7 +81,7 @@
     padding-bottom: 10px;
     background-color: #7b61ff;
     border : none;
-    border-radius: 4px;
+    border-radius: 5px;
     margin-left: 10px;
     cursor: pointer;
     font-size: 18px;
@@ -104,7 +104,7 @@
 .post__category select {
     padding: 5px 10px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 5px;
     font-size: 16px;
     background-color: #fff;
     margin-right: 10px;
@@ -123,7 +123,7 @@
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 4px; /* 테두리 둥글게 */
+    border-radius: 5px; /* 테두리 둥글게 */
     background-color: #fff;
     min-height: 150px; /* textarea 최소 높이 */
     resize: vertical; /* 세로 크기 조절 가능 */
@@ -135,7 +135,7 @@
 .post__file-label {
     /* 기존 스타일 유지 */
     margin-right: 10px; /* 라벨과 버튼 사이 간격 */
-    border-radius: 4px; /* 테두리 둥글게 */
+    border-radius: 5px; /* 테두리 둥글게 */
 }
 
 .post__file-input {
@@ -179,6 +179,24 @@
     color: #dc3545; /* 빨간색 */
 }
 
+.buttonDiv{
+    display:flex;
+    justify-content: center;
+    padding-top: 20px;
+}
+
+.deleteButton,.updateButton{
+    border: none;
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: 700;
+}
+
 .voteCount {
     border: none;
     background-color: #f0f0f0;
@@ -199,6 +217,23 @@
 
 .voteNegative {
     color: red;
+}
+
+.infoIcon {
+    margin-right: 5px;
+}
+
+.infoText {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.infoDiv {
+    padding:10px;
+    text-align: right;
+    margin-bottom: 10px;
+    background-color: #ddd;
+    border-radius: 5px;
 }
 
 /* 미디어 쿼리를 적용하여 화면 크기에 따른 스타일 조정 */

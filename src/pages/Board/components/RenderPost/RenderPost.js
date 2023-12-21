@@ -2,7 +2,7 @@ import styles from "./RenderPost.module.css"
 import { timeFormatter } from "../../../../components/TimeFormatter/TimeFormatter";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faThumbsUp,faClock } from "@fortawesome/free-solid-svg-icons";
 import Pagination from "react-js-pagination";
 import { useState } from "react";
 
@@ -33,8 +33,9 @@ const RenderPost = ({ posts, title }) => {
                             <div className={styles[`post__item-rownum`]}>{post.rownum}</div>
                             <div className={styles[`post__item-title`]}>{post.title}</div>
                             <div className={styles[`post__item-nickname`]}>{post.memberNickname}</div>
-                            <div className={styles[`post__item-date`]}>{timeFormatter(post.writeDate)}</div>
+                            <div className={styles[`post__item-date`]}><FontAwesomeIcon icon={faClock} />{` ${timeFormatter(post.writeDate)}`}</div>
                             <div className={styles[`post__item-viewcount`]}><FontAwesomeIcon icon={faEye} />{` ${post.viewCount}`}</div>
+                            <div className={styles[`post__item-totalvotes`]}><FontAwesomeIcon icon={faThumbsUp} />{` ${post.totalVotes}`}</div>
                         </div>
                     </Link>
                 ))}

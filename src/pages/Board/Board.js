@@ -21,9 +21,9 @@ const Board = () => {
 
     // useEffect(() => {
     //     if (!loginId) {
-    //         navigate('/denied');
+    //         navigate('/');
     //     }
-    // }, [loginId, navigate]); // 의존성 배열에 loginId와 navigate를 넣어줍니다.
+    // }, [loginId, navigate]); // 의존성 배열에 loginId와 navigate 삽입
 
     const [menu, setMenu] = useState("");
     return (
