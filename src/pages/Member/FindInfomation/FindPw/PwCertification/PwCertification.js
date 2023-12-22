@@ -12,7 +12,7 @@ const PwCertification = () => {
   const { user, setUser } = useContext(FindPwContext); //사용자 정보
   const { findPw, setFindPw } = useContext(FindPwContext); // 비밀번호 찾기 활성화 여부
   const [certificationNum, setCertificationNum] = useState(""); // 인증번호
-  const [timeSeconds, setTimerSeconds] = useState(15); // 초기 시간 설정 (3분)
+  const [timeSeconds, setTimerSeconds] = useState(180); // 초기 시간 설정 (3분)
   const [timerStart, setTimerStart] = useState(false); // 타이머 시작 여부
   // 입력값 유효성 검사 결과
   const [checkText, setCheckText] = useState({
@@ -172,7 +172,7 @@ const PwCertification = () => {
           // 본인 인증이 성공하고 메일 발송을 마침
           setLoading(false);
           // 타이머 시간 세팅
-          setTimerSeconds(15);
+          setTimerSeconds(180);
           // 타이머 시작
           setTimerStart(true);
           alert(
@@ -216,7 +216,7 @@ const PwCertification = () => {
           setCertificationNum("");
           setFindPw(false);
           setTimerStart(false);
-          setTimerSeconds(15);
+          setTimerSeconds(180);
         }
       });
     } else if (!timerStart) {
