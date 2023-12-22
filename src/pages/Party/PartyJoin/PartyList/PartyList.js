@@ -243,7 +243,7 @@ const PartyList = () => {
                         <div className={style.subTitle}>파티 검색 결과</div>
                         {
                             // 가입 가능한 파티가 있는 경우
-                            partyList.length>0?partyList.map((e,i)=>( 
+                            partyList?partyList.map((e,i)=>( 
                                 <div key={i} className={`${style.party}`} data-id={i} onClick={handleJoinModal}>
                                     <div className={`${style.partyTop} ${style.dflex}`}>
                                         <div className={`${style.partyStartDate} ${style.title} ${style.w70}`}>
