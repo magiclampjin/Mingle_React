@@ -66,8 +66,9 @@ const Header = () => {
 
   // 자주 묻는 질문으로 이동
   const handleFAQClick = () => {
-    window.location.href = 'https://impossible-log-6dc.notion.site/4ac5ec788ca04f6ab7304dbb71891974?pvs=4';
-  }
+    window.location.href =
+      "https://impossible-log-6dc.notion.site/4ac5ec788ca04f6ab7304dbb71891974?pvs=4";
+  };
 
   return (
     <div className={style.header}>
@@ -92,7 +93,9 @@ const Header = () => {
               <Link to="board">게시판</Link>
             </div>
 
-            <div className={style.navi__conf} onClick={handleFAQClick}>자주 묻는 질문</div>
+            <div className={style.navi__conf} onClick={handleFAQClick}>
+              자주 묻는 질문
+            </div>
             {loginId === "" || loginId === null ? (
               <Link to="member/login">
                 <PurpleRoundBtn
@@ -125,13 +128,13 @@ const Header = () => {
                     />
                     <div className={style.proffileModalInfo}>
                       <div>{loginNick}님</div>
-                    
-                        <Link to="/Mypage">
-                          <div>
-                            마이페이지
-                            <FontAwesomeIcon icon={faAngleRight} />
-                          </div>
-                        </Link>
+
+                      <Link to="/Mypage">
+                        <div>
+                          마이페이지
+                          <FontAwesomeIcon icon={faAngleRight} />
+                        </div>
+                      </Link>
                     </div>
                   </div>
                   {loginRole === "ROLE_ADMIN" && (
@@ -188,13 +191,12 @@ const Header = () => {
                   />
                   <div className={style.proffileModalInfo}>
                     <div>{loginNick}님</div>
-                      <Link to="/Mypage">
-                        <div className={style.mypageBtn} onClick={closeModal}>
-                          마이페이지
-                          <FontAwesomeIcon icon={faAngleRight} />
-                        </div>
-                      </Link>
-                    
+                    <Link to="/Mypage">
+                      <div className={style.mypageBtn} onClick={closeModal}>
+                        마이페이지
+                        <FontAwesomeIcon icon={faAngleRight} />
+                      </div>
+                    </Link>
                   </div>
                 </div>
                 {loginRole === "ROLE_ADMIN" && (

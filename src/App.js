@@ -36,7 +36,7 @@ function App() {
         setLoginRole,
       }}
     >
-      <MenuContext.Provider value={{ selectedMenu, setSelectedMenu}}>
+      <MenuContext.Provider value={{ selectedMenu, setSelectedMenu }}>
         <>
           <Router>
             <Header></Header>
@@ -46,8 +46,8 @@ function App() {
               <Route path="/party/*" element={<Party />}></Route>
               <Route path="/Mypage/*" element={<Mypage />}></Route>
               <Route path="/denied" element={<Denied />}></Route>
-              <Route path="/admin/*" element={<AdminMain />}/>
-              <Route path="/board/*" element={<Board/>}/>
+              <Route path="/admin/*" element={<AdminMain />} />
+              <Route path="/board/*" element={<Board />} />
             </Routes>
             <Footer></Footer>
           </Router>

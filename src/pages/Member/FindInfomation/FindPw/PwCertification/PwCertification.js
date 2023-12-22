@@ -10,8 +10,9 @@ import { FindPwContext } from "../FindPw";
 
 const PwCertification = () => {
   const { user, setUser } = useContext(FindPwContext); //사용자 정보
+  const { findPw, setFindPw } = useContext(FindPwContext); // 비밀번호 찾기 활성화 여부
   const [certificationNum, setCertificationNum] = useState(""); // 인증번호
-  const [timeSeconds, setTimerSeconds] = useState(180); // 초기 시간 설정 (3분)
+  const [timeSeconds, setTimerSeconds] = useState(15); // 초기 시간 설정 (3분)
   const [timerStart, setTimerStart] = useState(false); // 타이머 시작 여부
   // 입력값 유효성 검사 결과
   const [checkText, setCheckText] = useState({
@@ -25,7 +26,7 @@ const PwCertification = () => {
     name: false,
     email: false,
   });
-  const [findPw, setFindPw] = useState(false); // 비밀번호 찾기 활성화 여부
+  // const [findPw, setFindPw] = useState(false); // 비밀번호 찾기 활성화 여부
   const [isLoading, setLoading] = useState(false); // 본인 인증 시 로딩바
   const navi = useNavigate();
 
@@ -67,6 +68,7 @@ const PwCertification = () => {
         // 인증 시간 초과 시
         if (timeSeconds === 0) {
           setTimerStart(false);
+          setFindPw(false);
           alert("인증 시간이 초과되었습니다.");
         }
       }
@@ -170,7 +172,7 @@ const PwCertification = () => {
           // 본인 인증이 성공하고 메일 발송을 마침
           setLoading(false);
           // 타이머 시간 세팅
-          setTimerSeconds(180);
+          setTimerSeconds(15);
           // 타이머 시작
           setTimerStart(true);
           alert(
@@ -200,7 +202,7 @@ const PwCertification = () => {
 
   // 비밀번호 변경 눌렀을 때
   const handleChangePw = () => {
-    if (findPw) {
+    if (findPw && timerStart) {
       const formData = new FormData();
       formData.append("code", certificationNum);
       axios.post("/api/member/certification/pw", formData).then((resp) => {
@@ -210,13 +212,15 @@ const PwCertification = () => {
         } else {
           alert("본인 인증 코드가 일치하지 않습니다.");
           // 정보 초기화
-          setUser({ name: "", email: "" });
+          // setUser({ name: "", email: "" });
           setCertificationNum("");
           setFindPw(false);
           setTimerStart(false);
-          setTimerSeconds(180);
+          setTimerSeconds(15);
         }
       });
+    } else if (!timerStart) {
+      alert("인증 시간이 초과되었습니다.");
     } else {
       alert("아이디, 이름, 이메일 정보를 통해 본인 인증을 완료해주세요.");
     }
