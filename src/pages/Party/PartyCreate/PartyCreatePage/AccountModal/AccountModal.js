@@ -56,7 +56,7 @@ const AccountModal = ({ isOpen, onRequestClose, width, height, setAllComplete}) 
     useEffect(()=>{
         // 은행 정보 불러오기
         setLoading(true);
-        axios.get("/api/member/bankList").then((resp)=>{
+        axios.get("/api/paymentAccount/selectBankList").then((resp)=>{
             setBankList(resp.data);
             setLoading(false);
         }).catch(()=>{

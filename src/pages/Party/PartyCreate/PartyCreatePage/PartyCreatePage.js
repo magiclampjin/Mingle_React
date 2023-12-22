@@ -142,7 +142,7 @@ const PartyCreatePage = () =>{
             setPeopleCnt(service.maxPeopleCount-1);
             setUpdatePeopleCnt({minus:(service.maxPeopleCount-1)!==1, plus:false});
         }
-    });
+    },[]);
     const [peopleCnt, setPeopleCnt] = useState(0);
     
     // 파티원 명수 버튼 클릭할 수 있는지
@@ -321,7 +321,7 @@ const PartyCreatePage = () =>{
                         setLoading(false);
                         setService(null);
                         if(window.confirm("파티 등록 성공! 등록된 정보를 확인하시겠어요?")){
-                            navi("/");
+                            navi("/party/myParty");
                         }else{
                             navi("/");
                         }
