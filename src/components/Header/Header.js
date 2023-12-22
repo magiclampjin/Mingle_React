@@ -26,10 +26,17 @@ const Header = () => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
+      console.log(scrollPosition.current);
+      console.log(currentScrollY);
       // 현재 스크롤 위치가 특정 위치보다 아래로 10px 내려갔을 때 이벤트 실행
-      // 스크롤을 한번만 내려도 헤더가 안보이기 때문에 10px로 설정함
+      // 스크롤을 한번만 내려도 헤더가 안보이기 때문에 10px로 설정함 ( 현재 모니터에서 기준으로 한번 스크롤시 99px까지 내려감 -> 10px만 움직여도 사라지게 하는것이 자연스럽다고 판단함 )
       // 다른 사양의 모니터에서도 확인이 필요
-      if (currentScrollY > scrollPosition.current + 10) {
+      // 아래 방향으로 내려갈 때 최 상단 위치보다 10px 아래로 내려갔을 때만 이벤트 실행 (감지 범위를 10~20으로 설정)
+      if (
+        currentScrollY > scrollPosition.current &&
+        currentScrollY > 10 &&
+        currentScrollY < 20
+      ) {
         console.log("Scroll Event 발생!");
         // 모달을 닫는 로직 추가
         setModalIsOpen(false);
@@ -44,23 +51,33 @@ const Header = () => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [scrollPosition]);
 
   // useEffect(() => {
-  //   window.addEventListener("scroll", scrollEvent);
-  //   return () => window.removeEventListener("scroll", scrollEvent);
+  //   const handleWheel = (event) => {
+  //     const currentScrollY = window.scrollY;
+
+  //     // 마우스 휠로 스크롤을 아래로 내렸을 때 최 상단 위치보다 10px 아래로 내려갔을 때만 이벤트 실행
+  //     if (
+  //       event.deltaY > 0 &&
+  //       currentScrollY > scrollPosition.current &&
+  //       currentScrollY > 10
+  //     ) {
+  //       console.log("Scroll Event 발생!");
+  //       // 모달을 닫는 로직 추가
+  //       setModalIsOpen(false);
+  //     }
+
+  //     // 현재 스크롤 위치를 업데이트
+  //     scrollPosition.current = currentScrollY;
+  //   };
+
+  //   window.addEventListener("wheel", handleWheel);
+
+  //   return () => {
+  //     window.removeEventListener("wheel", handleWheel);
+  //   };
   // }, []);
-
-  // const scrollEvent = () => {
-  //   console.log("scroll Event 발생!");
-  //   // if (!boxRef.current) return;
-
-  //   // const box2Height = 150;
-  //   // const box3OffsetTop = boxRef.current.offsetTop;
-  //   // const scrollThreshold = box3OffsetTop - box2Height;
-
-  //   // window.scrollY > scrollThreshold ? setScroll(true) : setScroll(false);
-  // };
 
   useEffect(() => {
     // setLoading(true);
