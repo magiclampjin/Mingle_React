@@ -32,7 +32,6 @@
 }
 
 /* modal */
-/* Modal */
 .modalTitle{
     font-size: 18px;
     font-weight: 600;
@@ -40,11 +39,13 @@
 }
 
 .modalSubTitle{
-    font-size: 14px;
+    font-size: 15px;
     text-align: left;
     color: #434851;
     font-weight: 500;
     padding-left: 10px;
+    margin-top: 10px;
+    font-weight: 600;
 }
 
 .modalBtn{
@@ -58,7 +59,6 @@
 }
 
 .modalMoneyBox{
-    margin-top: 10px;
     width: 100%;
     height: 52px;
     font-weight: 500;
@@ -67,8 +67,103 @@
     display: flex;
     align-items: center;
     padding-left: 20px;
+    margin-top: 10px;
 }
 
+.modalMoneyBox>div:nth-child(1){
+    margin-right: 5px;
+}
+
+.inputBox{
+    width: 100%; height: 52px;
+    margin-top: 10px;
+}
+
+.inputBox>input{
+    width: 100%; height: 100%;
+    border-radius: 15px;
+    border: 1px solid #737577;
+    padding-left: 10px;
+    font-size: 14px;
+}
+
+.allMoney{
+    width: 30%;
+    background-color: #8787D040;
+    padding: 5px;
+    border-radius: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+    display: flex; align-items: center; text-align: center; justify-content: center;
+    color: #6A57D7;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* 카드 등록 안됨 */
+.inner{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+
+}
+.inner__left{
+    font-size: 14px;
+    color: rgb(101,101,101);
+}
+
+.inner__right>button{
+    font-size: 14px;
+}
+
+/* 카드 등록되었을 때 */
+.inner__card{
+    justify-content: space-between;
+}
+.cardLeft{
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 5px;
+    font-size: 14px;
+}
+.cardRight{
+    width: 100%; height: 52px;
+    border-radius: 13px;
+    background-color: #DFE2E680;
+    padding: 5px 13px;
+}
+
+.cardRight__inner{
+    display: flex;
+}
+
+.cardRight>div:nth-child(1){
+    margin-right: 5px;
+}
+
+.cardRight>div>button{
+    border: 1px solid #7b61ff;
+    border-radius: 15px;
+    background-color: transparent;
+    color: #7b61ff;
+    height: 40px; width: 100px;
+    font-size: 14px;
+}
+
+.bankName,.bankAccount{
+    font-weight: 600;
+    margin-right: 10px;
+    font-size: 15px;
+}
+
+.bankUserName{
+    font-size: 13px;
+}
+
+/* 계좌 감싼 */
+.accountBox{
+    margin-top: 40px;
+}
 
 @media (max-width:1050px) {
     .moneyBox{

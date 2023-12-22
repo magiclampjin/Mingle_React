@@ -47,6 +47,12 @@
     font-weight: 500;
     color: rgb(101, 101, 101);
     font-size: 14px;
+    display: flex;
+}
+.searchType>div:nth-child(1){
+    margin-right: 5px;
+    display: flex;
+    align-items: center;
 }
 
 /* Modal */

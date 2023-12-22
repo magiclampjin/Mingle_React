@@ -8,10 +8,10 @@ import {
     faAnglesLeft,
     faAngleRight,
     faAnglesRight,
+    faArrowDownWideShort
 } from "@fortawesome/free-solid-svg-icons";
 import PurpleRectangleBtn from '../../../components/PurpleRectangleBtn/PurpleRectangleBtn';
 import axios from 'axios';
-import { selectService } from './../../Party/PartyCreate/PartyCreateList/PartyCreateList';
 import LoadingSpinnerMini from '../../../components/LoadingSpinnerMini/LoadingSpinnerMini';
 import { timeFormatter } from '../components/TimeFormatter/TimeFormatter';
 import Pagination from 'react-js-pagination';
@@ -190,7 +190,12 @@ const PaymentRecord = () =>{
                     <div className={style.inner__line}></div>
                     <div className={style.searchBox} onClick={handleSearchModalOpen}>
                         <div className={style.searchType} >
-                            검색 타입
+                            <div>
+                               검색 타입 
+                            </div>
+                            <div>
+                                 <FontAwesomeIcon icon={faArrowDownWideShort} />
+                            </div>
                         </div>
                     </div>
                     <div className={style.contentBox}>

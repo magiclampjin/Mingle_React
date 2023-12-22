@@ -265,6 +265,8 @@ const PaymentManage = () =>{
     const closeUpdateModal = () =>{
         setIsUpdateModalOpen(!isUpdateModalOpen);
     }
+
+    const handleUpdateReject = () => {}
     
     // 수정모달의 제출
     const handleUpdateSubmit = () => {
@@ -389,17 +391,13 @@ const PaymentManage = () =>{
                                 </div>
 
                                 <div className={style.modalBtn}>
-                                    {totalValid &&
-                                    <>
-                                        <PurpleRectangleBtn
-                                        title={"완료"}
-                                        width={150}
-                                        heightPadding={10}
-                                        onClick={handleSubmit}
-                                        activation={true}
-                                        ></PurpleRectangleBtn>
-                                    </>
-                                    }
+                                    <PurpleRectangleBtn
+                                    title={"완료"}
+                                    width={150}
+                                    heightPadding={10}
+                                    onClick={totalValid ? handleUpdateSubmit : handleUpdateReject}
+                                    activation={totalValid}
+                                    ></PurpleRectangleBtn>
                                 </div>
                             </div>
                         </MypageModal>
@@ -477,17 +475,13 @@ const PaymentManage = () =>{
                                 </div>
 
                                 <div className={style.modalBtn}>
-                                    {totalValid &&
-                                    <>
                                         <PurpleRectangleBtn
                                         title={"완료"}
                                         width={150}
                                         heightPadding={10}
-                                        onClick={handleUpdateSubmit}
-                                        activation={true}
+                                        onClick={totalValid ? handleUpdateSubmit : handleUpdateReject}
+                                        activation={totalValid}
                                         ></PurpleRectangleBtn>
-                                    </>
-                                    }
                                 </div>
                             </div>
                         </MypageModal>
