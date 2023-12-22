@@ -53,32 +53,6 @@ const Header = () => {
     };
   }, [scrollPosition]);
 
-  // useEffect(() => {
-  //   const handleWheel = (event) => {
-  //     const currentScrollY = window.scrollY;
-
-  //     // 마우스 휠로 스크롤을 아래로 내렸을 때 최 상단 위치보다 10px 아래로 내려갔을 때만 이벤트 실행
-  //     if (
-  //       event.deltaY > 0 &&
-  //       currentScrollY > scrollPosition.current &&
-  //       currentScrollY > 10
-  //     ) {
-  //       console.log("Scroll Event 발생!");
-  //       // 모달을 닫는 로직 추가
-  //       setModalIsOpen(false);
-  //     }
-
-  //     // 현재 스크롤 위치를 업데이트
-  //     scrollPosition.current = currentScrollY;
-  //   };
-
-  //   window.addEventListener("wheel", handleWheel);
-
-  //   return () => {
-  //     window.removeEventListener("wheel", handleWheel);
-  //   };
-  // }, []);
-
   useEffect(() => {
     // setLoading(true);
     axios.get("/api/member/userBasicInfo").then((resp) => {
