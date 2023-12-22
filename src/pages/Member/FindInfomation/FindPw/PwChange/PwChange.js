@@ -186,10 +186,10 @@ const PwChange = () => {
     navi("/member/login");
   };
 
-  // 엔터키로 로그인 감지
+  // 엔터키로 비밀번호 변경하기 감지
   const handleKeyPress = (event) => {
     if (event.keyCode === 13) {
-      handleLogin();
+      handleChangePw();
     }
   };
 

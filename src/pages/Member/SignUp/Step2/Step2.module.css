@@ -59,49 +59,80 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.myInfo__line:nth-child(4) .signup__inputBox,
-.myInfo__line:last-child .signup__inputBox {
+.emailRightBox .signup__inputBox {
   display: flex;
-  margin-bottom: 25px;
+  width: 100%;
   align-items: center;
 }
-.myInfo__line:nth-child(4) .signup__inputBox input,
-.myInfo__line:last-child .signup__inputBox input {
-  width: 200px;
+.myInfo__line:last-child .signup__inputBox {
+  display: flex;
+  align-items: center;
 }
-.myInfo__line:nth-child(4) .signup__chk button,
+.emailRightBox .signup__inputBox input,
+.myInfo__line:last-child .signup__inputBox input {
+  width: calc(100% - 105px);
+}
+.emailRightBox .signup__chk button,
 .myInfo__line:last-child .signup__chk button {
   margin: 0 10px;
 }
 
-.myInfo__line:nth-child(4) .signup__chk,
+.emailRightBox .signup__chk,
 .myInfo__line:last-child .signup__chk {
   height: 40px;
   display: flex;
   align-items: center;
 }
+.emailRightBox .signup__chk > div {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.emailRightBox {
+  width: calc(100% - 120px);
+  overflow: hidden;
+  /* margin-bottom: 25px; */
+}
+.pullEmailCheck {
+  height: 25px;
+  font-size: 14px;
+  padding-left: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.miniEmailCheck {
+  display: none;
+}
 @media (max-width: 786px) {
   .stepBtns button {
     width: 150px !important;
   }
-  .myInfo__line:nth-child(4) .signup__inputBox input,
+  .emailRightBox .signup__inputBox input,
   .myInfo__line:last-child .signup__inputBox input {
     width: 100%;
   }
-  .myInfo__line:nth-child(4) .signup__inputBox,
+  .emailRightBox .signup__inputBox,
   .myInfo__line:last-child .signup__inputBox {
     display: block;
     margin-bottom: 0;
     align-items: center;
   }
 
-  .myInfo__line:nth-child(4) .signup__chk,
+  .emailRightBox .signup__chk,
   .myInfo__line:last-child .signup__chk {
     padding: 0 10px 0 0;
   }
 
-  .myInfo__line:nth-child(4) .signup__chk button,
+  .emailRightBox .signup__chk button,
   .myInfo__line:last-child .signup__chk button {
     margin: 0 10px 0 0;
+  }
+
+  .pullEmailCheck {
+    display: none;
+  }
+  .miniEmailCheck {
+    display: block;
   }
 }

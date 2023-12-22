@@ -181,6 +181,13 @@ const IdCertification = () => {
     }
   };
 
+  // 엔터키로 인증완료 감지
+  const handleKeyPress = (event) => {
+    if (event.keyCode === 13) {
+      handleFindId();
+    }
+  };
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -222,6 +229,7 @@ const IdCertification = () => {
           type="text"
           placeholder="인증번호를 입력해주세요."
           onChange={handleCertificaton}
+          onKeyDown={handleKeyPress}
           value={certificationNum}
         />
         <div className={style.timer}>{`${String(
