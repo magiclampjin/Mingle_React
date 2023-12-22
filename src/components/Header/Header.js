@@ -5,7 +5,7 @@ import ProfileModal from "./ProfileModal/ProfileModal";
 import { Link, unstable_HistoryRouter, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faBell } from "@fortawesome/free-solid-svg-icons";
-import { useState, useContext, useEffect, createContext } from "react";
+import { useState, useContext, useEffect, createContext, useRef } from "react";
 import { MenuContext } from "../../App";
 import { LoginContext } from "../../App";
 import axios from "axios";
@@ -17,9 +17,50 @@ const Header = () => {
   const { loginId, setLoginId } = useContext(LoginContext);
   const { loginNick, setLoginNick } = useContext(LoginContext);
   const { loginRole, setLoginRole } = useContext(LoginContext);
+  const scrollPosition = useRef(0);
 
   // const navi = useNavigate();
   const cookies = new Cookies();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      // 현재 스크롤 위치가 특정 위치보다 아래로 10px 내려갔을 때 이벤트 실행
+      // 스크롤을 한번만 내려도 헤더가 안보이기 때문에 10px로 설정함
+      // 다른 사양의 모니터에서도 확인이 필요
+      if (currentScrollY > scrollPosition.current + 10) {
+        console.log("Scroll Event 발생!");
+        // 모달을 닫는 로직 추가
+        setModalIsOpen(false);
+      }
+
+      // 현재 스크롤 위치를 업데이트
+      scrollPosition.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  // useEffect(() => {
+  //   window.addEventListener("scroll", scrollEvent);
+  //   return () => window.removeEventListener("scroll", scrollEvent);
+  // }, []);
+
+  // const scrollEvent = () => {
+  //   console.log("scroll Event 발생!");
+  //   // if (!boxRef.current) return;
+
+  //   // const box2Height = 150;
+  //   // const box3OffsetTop = boxRef.current.offsetTop;
+  //   // const scrollThreshold = box3OffsetTop - box2Height;
+
+  //   // window.scrollY > scrollThreshold ? setScroll(true) : setScroll(false);
+  // };
 
   useEffect(() => {
     // setLoading(true);
