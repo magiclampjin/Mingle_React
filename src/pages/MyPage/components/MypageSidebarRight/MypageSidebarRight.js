@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 import WhiteRectangleBtn from '../../../../components/WhiteRectangleBtn/WhiteRectangleBtn';
 import style from '../MypageSidebarRight/MypageSidebarRight.module.css';
@@ -7,12 +6,10 @@ import MypageModal from '../MypageModal/MypageModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
     faXmark, 
-    faCoins,
-    faCheck
+    faCoins
  } from "@fortawesome/free-solid-svg-icons";
 import PurpleRectangleBtn from '../../../../components/PurpleRectangleBtn/PurpleRectangleBtn';
 import { LoginContext } from '../../../../App';
-import PurpleRoundBtn from '../../../../components/PurpleRoundBtn/PurpleRoundBtn';
 
 const MypageSidebarRight = () =>{
 
@@ -58,6 +55,7 @@ const MypageSidebarRight = () =>{
     const handleModalClose = () =>{
         setWithdrawModalOpen(false);
         setAllMoney(false);
+        setIsAccount(false);
         setInputMoney("");
     }
 
@@ -76,7 +74,12 @@ const MypageSidebarRight = () =>{
     const [allMoney, setAllMoney] = useState(false);
     // 전액 인출
     const handleAllMoney = () =>{
-        setAllMoney(true);
+        if(mingleMoney === 0){
+            setAllMoney(false);
+            alert("0원은 인출 불가능합니다.");
+        }else{
+            setAllMoney(true);
+        }
     }
 
     // 사용자가 입력한 돈 State
@@ -87,21 +90,150 @@ const MypageSidebarRight = () =>{
     const handleInputMoney = (e) =>{
         const money = e.target.value;
         console.log(e.target.value);
-        setInputMoney(money);
-        
+
+        // 만약 첫 번째 문자가 0이면 빈 문자열로 설정
+        const sanitizedMoney = money.length > 0 && money[0] === '0' ? '' : money;
+    
+        setInputMoney(sanitizedMoney.replace(/\D/g, ''));
+
     } 
 
     // 모달에서 인출하기 버튼 눌렀을 때
     const handleSubmit = () =>{
-        // // 가지고 있는 돈보다 많게 입력하면
-        if(inputMoney > mingleMoney){
-            alert("인출이 불가능합니다.");
+         // 가지고 있는 돈보다 많게 입력하면
+        if(inputMoney > mingleMoney || inputMoney === ''){
+            alert("현재 밍글 머니 잔액보다 많은 금액은 인출이 불가능합니다.");
         }else{
             alert("인출되었습니다.");
             // 가지고 있는 돈보다 적으면 인출 가능
-            // axios.get("")
+            axios.get("/api/payment/withdrawMingleMoney", {params:{money:inputMoney}}).then((resp)=>{
+                console.log(resp.data); 
+                window.location.reload();
+            }).catch(()=>{
+                alert("인출에 실패했습니다.");
+            })
         }
     } 
+
+    // 버튼 false
+    const handleSubmitReject = () =>{
+        alert("인출 계좌를 등록해주세요.");
+    }
+
+    // 계좌 등록 State
+    const [accountReg,setAccountReg] = useState(false);
+
+    const handleAccountReg = () =>{
+        setAccountNum("");
+        setSelectedBank("");
+        setIsAccount(false);
+        setAccountReg(!accountReg);
+    }
+
+    // 계좌번호 유효성 검사
+    const isValidKoreanBankAccountNumber = (value) => {
+        // 9~16자리
+        const regex = /^[0-9]{9,16}$/;
+        return regex.test(value);
+    };
+    
+    // 계좌번호 입력받는 State
+    const [accountNum, setAccountNum] = useState("");
+    const [isAccount,setIsAccount] = useState(false);
+
+    // 계좌번호 입력
+    const handleAccountNum = (e) =>{
+        console.log(e.target.value);
+        // 숫자만 입력 받기
+        const newAccountValue = e.target.value.replace(/[^0-9]/g, '').replace(/([\d]{16})([\d]{1,})/g, '$1');
+        setAccountNum(newAccountValue);
+        // 입력된 계좌 번호 유효성 검사
+        const valid = isValidKoreanBankAccountNumber(newAccountValue);
+        setIsAccount(valid);
+    }
+
+    // 은행 State
+    const [selectedBank, setSelectedBank] = useState('');
+    const [isBank, setIsBank] = useState(false);
+        
+    const handleBankChange = (e) => {
+        console.log(e.target.value);
+        const newBankValue = e.target.value;
+        setSelectedBank(newBankValue);
+
+        if(newBankValue != "선택"){
+            setIsBank(true);
+        }
+        if(newBankValue == "선택"){
+            setIsBank(false);
+        }
+    };
+
+
+       // 은행 목록
+    const [bankList, setBankList] = useState([]);
+
+    useEffect(()=>{
+            // 은행 정보 불러오기
+        axios.get("/api/paymentAccount/selectBankList").then((resp)=>{
+            // console.log(resp.data);
+            setBankList(resp.data);
+        }).catch(()=>{
+            alert("은행 정보를 불러오는 데 실패했습니다.");
+        })
+    },[])
+
+
+    // 서버로 보낼 데이터
+   const postData = {
+    bankId: selectedBank,
+    accountNumber: accountNum
+   }
+
+   // 카드 등록 완료 버튼
+    const handleAccountSubmit = () =>{
+        
+        if(isAccount){
+            // 카드 등록
+            console.log("은행 : "+selectedBank);
+            console.log("계좌번호 : "+accountNum);
+            axios.post("/api/paymentAccount/accountInsert",postData).then((resp)=>{
+                alert("등록이 완료되었습니다.")
+            }).catch(()=>{
+                alert("카드 등록에 실패했습니다.");
+            })
+            window.location.reload();
+        }else{
+            alert("카드 등록에 실패했습니다.");
+        }
+
+    }
+
+    const handleAccountReject = () =>{}
+
+    // 계좌 변경 State
+    const [accountChg,setAccountChg] = useState(false);
+
+    // 변경하기 클릭
+    const handleAccountChg = () =>{
+        setAccountChg(!accountChg);
+    }
+
+      // 수정모달의 제출
+      const handleUpdateSubmit = () => {
+        
+        if(isAccount){
+            // 카드 등록
+            axios.put("/api/paymentAccount/accountUpdate",postData).then((resp)=>{
+                alert("계좌가 변경되었습니다.");
+                window.location.reload();
+            }).catch(()=>{
+                alert("계좌 변경을 실패했습니다.");
+            })
+        }else{
+            alert("계좌 등록에 실패했습니다.");
+        }
+    }
 
     return(
         <div className={style.moneyBox}>
@@ -124,8 +256,8 @@ const MypageSidebarRight = () =>{
             <MypageModal
                 isOpen={withdrawModalOpen}
                 onRequestClose={handleModalClose}
-                width={500}
-                height={600}
+                width={550}
+                height={accountReg || accountChg ? 650 :550}
             >
                 <div>
                         <div className={style.closeBtn}>
@@ -146,7 +278,7 @@ const MypageSidebarRight = () =>{
                                 <div className={style.modalSubTitle}>인출할 밍글 머니를 입력해주세요. </div>
                                 <div className={style.inputBox}>
                                     <input type="text" placeholder='금액 입력(원)' 
-                                    value={allMoney?formatNumber(mingleMoney):inputMoney}
+                                    value={allMoney?mingleMoney:inputMoney}
                                     onChange={handleInputMoney}
                                     />
                                 </div>
@@ -162,18 +294,65 @@ const MypageSidebarRight = () =>{
                                     {account == "" ? 
                                     // 계좌 등록 안됨
                                     <div className={style.inner}>
-                                        <div className={style.inner__left}>등록된 결제 수단이 없어요.</div>
-                                        <div className={style.inner__right}>
-                                            <PurpleRoundBtn title={"계좌 등록"} activation={true} 
-                                            // onClick={handleCardInsert}
-                                            >
-                                            </PurpleRoundBtn>
+                                        <div className={style.cardLeft}
+                                        onClick={handleAccountReg}
+                                        >
+                                            계좌 등록
                                         </div>
+                                        <div className={`${style.cardRight} ${style.noneAccount}`}>
+                                            등록된 계좌가 없습니다. 계좌를 먼저 등록해주세요.
+                                        </div>
+                                    <div>
+                                    {accountReg && 
+                                        <>
+                                            <div className={style.cardBox}>
+                                                <div>
+                                                    <select id="bankSelect" className={style.bankSelect}
+                                                    value={selectedBank} 
+                                                    onChange={handleBankChange}
+                                                    >
+                                                    <option value = "선택">선택</option>
+                                                    {bankList.map((item,index) => {
+                                                        return(
+                                                            <option key = {item.id} value = {item.id}>
+                                                                {item.id}
+                                                            </option>
+                                                            )
+                                                        })
+                                                    }
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <input type="text" placeholder='계좌 번호 입력'
+                                                    style={{
+                                                        borderColor: accountNum ? (isAccount ? 'black' : 'red') : 'black'
+                                                    }} 
+                                                    onChange={handleAccountNum}
+                                                    value={accountNum}
+                                                    />
+                                                </div>
+                                                <div className={`${style.modalBtn} ${style.accountSubmit}`}>
+                                                    <PurpleRectangleBtn
+                                                    title={"완료"}
+                                                    width={50}
+                                                    heightPadding={10}
+                                                    onClick={isAccount ? handleAccountSubmit : handleAccountReject}
+                                                    activation={isAccount}
+                                                    ></PurpleRectangleBtn>
+                                                </div>
+                                            </div>
+                                            
+                                        </>
+                                    }
+                                        
                                     </div>
+                                </div>
                                     :
                                     // 계좌 등록됨
                                     <div className={style.inner__card}>
-                                        <div className={style.cardLeft}>
+                                        <div className={style.cardLeft}
+                                        onClick={handleAccountChg}
+                                        >
                                             변경하기
                                         </div>
                                         <div className={style.cardRight}>
@@ -189,6 +368,47 @@ const MypageSidebarRight = () =>{
                                                 </div>
                                             </div>
                                         </div>
+                                        {accountChg && 
+                                        <>
+                                            <div className={style.cardBox}>
+                                                <div>
+                                                    <select id="bankSelect" className={style.bankSelect}
+                                                    value={selectedBank} 
+                                                    onChange={handleBankChange}
+                                                    >
+                                                    <option value = "선택">선택</option>
+                                                    {bankList.map((item,index) => {
+                                                        return(
+                                                            <option key = {item.id} value = {item.id}>
+                                                                {item.id}
+                                                            </option>
+                                                            )
+                                                        })
+                                                    }
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <input type="text" placeholder='계좌 번호 입력'
+                                                    style={{
+                                                        borderColor: accountNum ? (isAccount ? 'black' : 'red') : 'black'
+                                                    }} 
+                                                    onChange={handleAccountNum}
+                                                    value={accountNum}
+                                                    />
+                                                </div>
+                                                <div className={`${style.modalBtn} ${style.accountSubmit}`}>
+                                                    <PurpleRectangleBtn
+                                                    title={"완료"}
+                                                    width={50}
+                                                    heightPadding={10}
+                                                    onClick={isAccount ? handleUpdateSubmit : handleAccountReject}
+                                                    activation={isAccount}
+                                                    ></PurpleRectangleBtn>
+                                                </div>
+                                            </div>
+                                            
+                                        </>
+                                    }
                                     </div>
                                     }
                                 </div>
@@ -197,8 +417,8 @@ const MypageSidebarRight = () =>{
                                     title={"인출하기"}
                                     width={100}
                                     heightPadding={10}
-                                    onClick={handleSubmit}
-                                    activation={true}
+                                    onClick={account ? handleSubmit : handleSubmitReject}
+                                    activation={inputMoney ? true : false}
                                     ></PurpleRectangleBtn>
                                 </div>
                             </div>

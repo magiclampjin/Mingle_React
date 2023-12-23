@@ -100,8 +100,8 @@ const MemberInfoUpdate = () =>{
     // 휴대폰 번호 입력input
     const handlePhoneNum = (e) => {
         const phoneValue = e.target.value;
-        setInputPhone(phoneValue);
-        console.log(e.target.value);
+        setInputPhone(phoneValue.replace(/\D/g, '').substring(0, 11));
+        console.log(inputPhone);
 
         const result = isValidPhone(phoneValue);
         setIsPhone(result);
@@ -349,6 +349,7 @@ const MemberInfoUpdate = () =>{
                             <div className={style.modalTitle}>휴대폰 번호 변경</div>
                             <div className={style.phoneBox}>
                                 <input type="text" placeholder='휴대폰 번호 입력'
+                                value={inputPhone}
                                 style={{
                                     borderColor: inputPhone ? (isPhone ? 'black' : 'red') : 'black'
                                 }} 

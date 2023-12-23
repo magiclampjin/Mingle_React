@@ -48,9 +48,14 @@
     font-weight: 600;
 }
 
+
 .modalBtn{
-    margin-top:15px;
+    margin-top:5px;
+    margin-left: 5px;
     text-align: right;
+}
+.modalBtn button{
+    font-size: 15px;
 }
 /* x 버튼 */
 .closeBtn{
@@ -102,17 +107,39 @@
 
 /* 카드 등록 안됨 */
 .inner{
-    display: flex;
-    justify-content: space-between;
     margin-bottom: 20px;
 
 }
-.inner__left{
-    font-size: 14px;
-    color: rgb(101,101,101);
+
+.cardBox{
+    padding-top: 10px;
+    display: flex;
+}
+.cardBox>div:nth-child(1){
+    width: 30%;
+    margin-right: 5px;
 }
 
-.inner__right>button{
+
+.cardBox>div:nth-child(2){
+    width: 70%;
+}
+
+.bankSelect{
+    width: 100%;
+    height: 85%;
+    border-radius: 20px;
+    font-size: 14px;
+    padding-left: 10%;
+}
+
+.cardBox>div:nth-child(2)>input{
+    width: 100%;
+    height: 50px;
+    padding-left: 10px;
+    border-radius: 20px;
+    border: 1px solid #737577 !important;
+    margin-bottom: 10px;
     font-size: 14px;
 }
 
@@ -125,12 +152,21 @@
     justify-content: flex-end;
     margin-right: 5px;
     font-size: 14px;
+    cursor: pointer;
+    margin-bottom: 5px;
 }
 .cardRight{
     width: 100%; height: 52px;
+    
     border-radius: 13px;
     background-color: #DFE2E680;
     padding: 5px 13px;
+    margin-bottom: 10px;
+}
+
+.noneAccount{
+   display: flex; align-items: center;
+   font-size: 15px; font-weight: 500;
 }
 
 .cardRight__inner{

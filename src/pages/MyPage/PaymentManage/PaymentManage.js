@@ -277,10 +277,14 @@ const PaymentManage = () =>{
             console.log("계좌번호 : "+accountNum);
             axios.put("/api/paymentAccount/accountUpdate",postData).then((resp)=>{
                 closeUpdateModal();
+                window.location.reload();
+                alert("계좌가 변경되었습니다.");
+            }).catch(()=>{
+                alert("계좌 변경을 실패했습니다.");
             })
-            window.location.reload();
+            
         }else{
-            alert("카드 등록에 실패했습니다.");
+            alert("계좌 등록에 실패했습니다.");
         }
     }
 
