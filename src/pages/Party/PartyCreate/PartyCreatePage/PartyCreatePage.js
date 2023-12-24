@@ -105,7 +105,7 @@ const PartyCreatePage = () =>{
     const handleChangeId = (e) => {
 
         // 한글, 특수문자 입력 제한 (_, ., @는 허용 -> 이메일 아이디 대비)
-        const regResult = e.target.value.replace(/[^a-zA-Z0-9_@.]/g,'');
+        const regResult = e.target.value.replace(/[^a-zA-Z0-9_@.]/g,'').replace(/([\s\S]{300})([\s\S]{1,})/g, '$1');
         setAccountInfo(prev=>({...prev,id:regResult}));
         const inputId = {loginId:regResult};
       
@@ -128,6 +128,8 @@ const PartyCreatePage = () =>{
     const handleChangePW = (e) => {
         const {name, value} = e.target;
         setChecked((prev)=>({...prev,pw:false}))
+        const regResult = value.replace(/[=<>]/g,"").replace(/([\s\S]{300})([\s\S]{1,})/g, '$1');
+        console.log(regResult);
         setAccountInfo((prev)=>{
             
             // 비밀번호 일치여부 검사
@@ -137,7 +139,7 @@ const PartyCreatePage = () =>{
             else {setSame(false); setGoNext(false);};
 
             // 입력한 비밀번호 state에 저장
-            return {...prev,[name]:value}
+            return {...prev,[name]:regResult}
         });
     };
 
