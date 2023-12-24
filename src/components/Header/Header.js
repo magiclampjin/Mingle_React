@@ -26,8 +26,6 @@ const Header = () => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
-      console.log(scrollPosition.current);
-      console.log(currentScrollY);
       // 현재 스크롤 위치가 특정 위치보다 아래로 10px 내려갔을 때 이벤트 실행
       // 스크롤을 한번만 내려도 헤더가 안보이기 때문에 10px로 설정함 ( 현재 모니터에서 기준으로 한번 스크롤시 99px까지 내려감 -> 10px만 움직여도 사라지게 하는것이 자연스럽다고 판단함 )
       // 다른 사양의 모니터에서도 확인이 필요
@@ -37,7 +35,6 @@ const Header = () => {
         currentScrollY > 10 &&
         currentScrollY < 20
       ) {
-        console.log("Scroll Event 발생!");
         // 모달을 닫는 로직 추가
         setModalIsOpen(false);
       }
