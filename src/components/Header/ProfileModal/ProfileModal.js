@@ -33,12 +33,14 @@ const ProfileModal = ({ isOpen, onRequestClose, contentLabel, children }) => {
       contentLabel={contentLabel}
       style={{
         overlay: {
+          // position: "relative",
           backgroundColor: "rgba(0, 0, 0, 0.0)",
           maxWidth: 1300 + "px",
           margin: "auto",
         },
         content: {
           top: topPosition,
+          // position: "absolute",
           left: "auto",
           right: "16px",
           bottom: "auto",
