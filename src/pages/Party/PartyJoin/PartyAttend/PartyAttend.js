@@ -219,7 +219,7 @@ const PartyAttend = () => {
                                 setLoading(false);
                                 setSelectParty(null);
                                 if(window.confirm("파티 가입에 성공했습니다.\n가입한 파티 정보를 확인하시겠습니까?")){
-                                    navi("/");
+                                    navi("/party/myParty");
                                 }else{
                                     navi("/");
                                 }

@@ -8,9 +8,13 @@ import WhiteRectangleBtn from '../../../components/WhiteRectangleBtn/WhiteRectan
 import MypageModal from '../components/MypageModal/MypageModal';
 import WhiteRoundBtn from '../../../components/WhiteRoundBtn/WhiteRoundBtn';
 import axios from 'axios';
+import LoadingSpinnerMini from '../../../components/LoadingSpinnerMini/LoadingSpinnerMini';
 
 
 const PaymentManage = () =>{
+
+     // 로딩 State
+     const [isLoading, setLoading]=useState(false);
 
     // 계좌 State
     const [card,setCard] = useState(false);
@@ -95,9 +99,14 @@ const PaymentManage = () =>{
 
    useEffect(()=>{
         // 은행 정보 불러오기
-       axios.get("/api/member/bankList").then((resp)=>{
+        setLoading(true);
+       axios.get("/api/paymentAccount/selectBankList").then((resp)=>{
             // console.log(resp.data);
             setBankList(resp.data);
+            setLoading(false);
+       }).catch(()=>{
+            alert("은행 정보를 불러오는 데 실패했습니다.");
+            setLoading(false);
        })
    },[])
 
@@ -234,10 +243,14 @@ const PaymentManage = () =>{
     // 모달에서 삭제버튼 눌렀을 때에
     const handleCardDelete = () =>{
         axios.delete("/api/paymentAccount/accountDelete").then((resp)=>{
-
+            setIsDeleteModalOpen(!isDeleteModalOpen);
+            alert(resp.data);
+            window.location.reload();
+        }).catch(()=>{
+            alert("삭제에 실패했습니다.");
         })
-        setIsDeleteModalOpen(!isDeleteModalOpen);
-        window.location.reload();
+
+        
     }
 
     // 계좌 수정 모달창 State
@@ -252,6 +265,8 @@ const PaymentManage = () =>{
     const closeUpdateModal = () =>{
         setIsUpdateModalOpen(!isUpdateModalOpen);
     }
+
+    const handleUpdateReject = () => {}
     
     // 수정모달의 제출
     const handleUpdateSubmit = () => {
@@ -262,10 +277,14 @@ const PaymentManage = () =>{
             console.log("계좌번호 : "+accountNum);
             axios.put("/api/paymentAccount/accountUpdate",postData).then((resp)=>{
                 closeUpdateModal();
+                window.location.reload();
+                alert("계좌가 변경되었습니다.");
+            }).catch(()=>{
+                alert("계좌 변경을 실패했습니다.");
             })
-            window.location.reload();
+            
         }else{
-            alert("카드 등록에 실패했습니다.");
+            alert("계좌 등록에 실패했습니다.");
         }
     }
 
@@ -276,45 +295,53 @@ const PaymentManage = () =>{
 
                     <div className={style.inner__title}>결제 수단 관리</div>
                     <div className={style.inner__line}></div>
-
-                    {account == "" ? 
-                        // {/* 계좌 등록 안됨 */}
-                        <div className={style.inner}>
-                            <div className={style.inner__left}>등록된 결제 수단이 없어요.</div>
-                            <div className={style.inner__right}>
-                                <PurpleRoundBtn title={"계좌 등록"} activation={true} onClick={handleCardInsert}></PurpleRoundBtn>
-                            </div>
-                        </div>
+                    {isLoading
+                    ?
+                    <LoadingSpinnerMini width={600} height={160}/>
                     :
-                    // {/* 계좌 등록됨 */}
-                    <div className={style.inner__card}>
-                        <div className={style.cardLeft}>
-                            <div className={`${style.flex}`}>
-                                <div className={style.bankName}>{account.bankId}</div>
-                                <div className={style.bankAccount}>{account.accountNumber}</div>
+                        <>
+                             {account == "" ? 
+                            // {/* 계좌 등록 안됨 */}
+                            <div className={style.inner}>
+                                <div className={style.inner__left}>등록된 결제 수단이 없어요.</div>
+                                <div className={style.inner__right}>
+                                    <PurpleRoundBtn title={"계좌 등록"} activation={true} onClick={handleCardInsert}></PurpleRoundBtn>
+                                </div>
                             </div>
-                            <div>
-                                <FontAwesomeIcon icon={faCheck} />
+                            :
+                            // {/* 계좌 등록됨 */}
+                            <div className={style.inner__card}>
+                                <div className={style.cardLeft}>
+                                    <div className={`${style.flex}`}>
+                                        <div className={style.bankName}>{account.bankId}</div>
+                                        <div className={style.bankAccount}>{account.accountNumber}</div>
+                                    </div>
+                                    <div>
+                                        <FontAwesomeIcon icon={faCheck} />
+                                    </div>
+                                </div>
+                                <div className={style.cardRight}>
+                                    <div>
+                                        <button type='button'
+                                        onClick={handleCardUpdate}
+                                        >
+                                            수정
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <button type='button'
+                                        onClick={handleDelModalOpen}
+                                        >
+                                            삭제
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div className={style.cardRight}>
-                            <div>
-                                <button type='button'
-                                 onClick={handleCardUpdate}
-                                >
-                                    수정
-                                </button>
-                            </div>
-                            <div>
-                                <button type='button'
-                                onClick={handleDelModalOpen}
-                                >
-                                    삭제
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                        }
+                        </>
                     }
+
+                   
                     
 
                     
@@ -368,17 +395,13 @@ const PaymentManage = () =>{
                                 </div>
 
                                 <div className={style.modalBtn}>
-                                    {totalValid &&
-                                    <>
-                                        <PurpleRectangleBtn
-                                        title={"완료"}
-                                        width={150}
-                                        heightPadding={10}
-                                        onClick={handleSubmit}
-                                        activation={true}
-                                        ></PurpleRectangleBtn>
-                                    </>
-                                    }
+                                    <PurpleRectangleBtn
+                                    title={"완료"}
+                                    width={150}
+                                    heightPadding={10}
+                                    onClick={totalValid ? handleUpdateSubmit : handleUpdateReject}
+                                    activation={totalValid}
+                                    ></PurpleRectangleBtn>
                                 </div>
                             </div>
                         </MypageModal>
@@ -456,17 +479,13 @@ const PaymentManage = () =>{
                                 </div>
 
                                 <div className={style.modalBtn}>
-                                    {totalValid &&
-                                    <>
                                         <PurpleRectangleBtn
                                         title={"완료"}
                                         width={150}
                                         heightPadding={10}
-                                        onClick={handleUpdateSubmit}
-                                        activation={true}
+                                        onClick={totalValid ? handleUpdateSubmit : handleUpdateReject}
+                                        activation={totalValid}
                                         ></PurpleRectangleBtn>
-                                    </>
-                                    }
                                 </div>
                             </div>
                         </MypageModal>
