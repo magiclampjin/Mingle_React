@@ -3,11 +3,33 @@
     cursor: pointer;
     max-width: 300px;
     width: 100%;
-    border-radius: 10px;
+    border:0;
+    outline: none;
     padding: 0px 18px;
     height: 50px;
     margin-right: 20px;
     appearance: none;
     font-size: 14px;
+    border-radius: 10px;
+    background-color: transparent;
+    color:#676D7C;
+    font-weight: bold;
 }
 
+.selectBoxCover{
+    border: 1px solid #DFE2E6;
+    border-radius: 10px;
+    width: 300px;
+    position:relative;
+}
+
+.chevronIcon{
+    position:absolute;
+    right: 10px;
+    top:35%;
+    z-index: -1;
+}
+
+.chevronIcon *{
+    color: #676D7C99;
+}
