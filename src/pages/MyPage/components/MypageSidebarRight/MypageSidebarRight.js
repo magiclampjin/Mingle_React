@@ -23,6 +23,7 @@ const MypageSidebarRight = () =>{
         if(loginId !== ""){
             axios.get("/api/member/getMingleMoney").then((resp) => {
                 // 성공적으로 처리된 경우의 로직
+                console.log("밍글머니 "+resp.data);
                 setMingleMoney(resp.data);
             })
             .catch((error) => {
@@ -88,6 +89,7 @@ const MypageSidebarRight = () =>{
 
     // 사용자가 입력한 돈
     const handleInputMoney = (e) =>{
+        setAllMoney(false);
         const money = e.target.value;
         console.log(e.target.value);
 
@@ -108,7 +110,8 @@ const MypageSidebarRight = () =>{
             // 가지고 있는 돈보다 적으면 인출 가능
             axios.get("/api/payment/withdrawMingleMoney", {params:{money:inputMoney}}).then((resp)=>{
                 console.log(resp.data); 
-                window.location.reload();
+                handleModalClose();
+                // window.location.reload();
             }).catch(()=>{
                 alert("인출에 실패했습니다.");
             })
@@ -190,21 +193,21 @@ const MypageSidebarRight = () =>{
     accountNumber: accountNum
    }
 
-   // 카드 등록 완료 버튼
+   // 계좌 등록 완료 버튼
     const handleAccountSubmit = () =>{
         
         if(isAccount){
-            // 카드 등록
+            // 계좌 등록
             console.log("은행 : "+selectedBank);
             console.log("계좌번호 : "+accountNum);
             axios.post("/api/paymentAccount/accountInsert",postData).then((resp)=>{
                 alert("등록이 완료되었습니다.")
             }).catch(()=>{
-                alert("카드 등록에 실패했습니다.");
+                alert("계좌 등록에 실패했습니다.");
             })
             window.location.reload();
         }else{
-            alert("카드 등록에 실패했습니다.");
+            alert("계좌 등록에 실패했습니다.");
         }
 
     }
@@ -223,7 +226,7 @@ const MypageSidebarRight = () =>{
       const handleUpdateSubmit = () => {
         
         if(isAccount){
-            // 카드 등록
+            // 계좌 등록
             axios.put("/api/paymentAccount/accountUpdate",postData).then((resp)=>{
                 alert("계좌가 변경되었습니다.");
                 window.location.reload();
