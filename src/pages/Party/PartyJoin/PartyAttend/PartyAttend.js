@@ -1,38 +1,44 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import style from "./PartyAttend.module.css";
 import { faCircleArrowLeft, faQuestion, faCheck } from "@fortawesome/free-solid-svg-icons";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import WhiteRectangleBtn from "../../../../components/WhiteRectangleBtn/WhiteRectangleBtn";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import AccountModal from "../../PartyCreate/PartyCreatePage/AccountModal/AccountModal";
 import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
+import { JoinPartyContext } from "../PartyJoinMain";
 
 const PartyAttend = () => {
     // 이전으로 돌아가기
     const navi = useNavigate();
     const handleBack = () => {
         navi(-1);
-    }
+    } 
+    const { selectParty, setSelectParty, service } = useContext(JoinPartyContext);
 
-    const location = useLocation();
-    const selectParty = location.state.selectParty;
-    const service = location.state.service;
-
+    //뒤로가기 버튼을 통해서 들어오거나 주소를 통해서 들어왔다면 돌려보내기
+    useEffect(() => {
+        if (selectParty === null || service === null) {
+            alert("잘못된 접근입니다.");
+            navi("/");
+        }
+    });
     
     // 파티 시작일 경과 여부
     const [isStartParty,setStartParty] = useState(false);
     useEffect(()=>{
-        let now = new Date();
-        now.setHours(0,0,0,0);
-        now.setHours(now.getHours()+9);
+        if(selectParty!==null){
+             let now = new Date();
+            now.setHours(0,0,0,0);
+            now.setHours(now.getHours()+9);
 
-        // 파티 이미 시작
-        if(now>=new Date(selectParty.startDate)){
-            setStartParty(true);
+            // 파티 이미 시작
+            if(now>=new Date(selectParty.startDate)){
+                setStartParty(true);
+            }
         }
-
-    },[selectParty.startDate]);
+    },[selectParty]);
 
     // 파티 가입 가능 여부
     const [isPossible, setPossible] = useState({isAccount:false, isAgree:false});
@@ -65,7 +71,7 @@ const PartyAttend = () => {
     const [isMMHovering, setMMHovering] = useState(false);
 
     // 매달 내야하는 요금
-    const [monthFee, setMonthFee] = useState(Math.ceil((service.price)/(service.maxPeopleCount))+1000);
+    const [monthFee, setMonthFee] = useState(0);
     // 첫달 파티 요금
     const [firstMonthFee, setFirstMonthFee] = useState(0);
     // 다음 정산일 까지의 날짜
@@ -85,63 +91,65 @@ const PartyAttend = () => {
 
     // 파티 금액 계산
     useEffect(()=>{
-        // 파티 보증금
-        setDeposit(Math.ceil((service.price)/(service.maxPeopleCount))+service.commission*selectParty.monthCount);
+        if(selectParty!==null){
+            setMonthFee(Math.ceil((service.price)/(service.maxPeopleCount))+1000);
+            // 파티 보증금
+            setDeposit(Math.ceil((service.price)/(service.maxPeopleCount))+service.commission*selectParty.monthCount);
 
-        // 다음 정산일까지 남은 날짜 계산해서 하루 가격에 곱해줌 ( 첫 달 결제 금액 )
-        let now = new Date();
-        now.setHours(0,0,0,0);
-        now.setHours(now.getHours()+9);
-        let nextCal = new Date(now);
+            // 다음 정산일까지 남은 날짜 계산해서 하루 가격에 곱해줌 ( 첫 달 결제 금액 )
+            let now = new Date();
+            now.setHours(0,0,0,0);
+            now.setHours(now.getHours()+9);
+            let nextCal = new Date(now);
 
-        nextCal.setDate(selectParty.calculationDate);
-        if(nextCal.getDate()<=now.getDate()){
-            nextCal.setMonth(nextCal.getMonth()+1);
-        }
-
-        // 다음 정산일 까지의 일수 구함
-        let diff = (new Date(nextCal).getTime() - new Date(now).getTime())/(1000*60*60*24);
-
-        // 이때, 파티 시작 전이면 파티 요금이 오늘부터가 아닌 파티 시작일부터 측정되어야함.
-        let startDate = new Date(selectParty.startDate);
-        if(now<startDate){
-            diff = (new Date(nextCal).getTime() - new Date(startDate).getTime())/(1000*60*60*24);
-        } 
-        setCalDate(diff);
-      
-        let amountPrice;
-        if(nextCal.getDate()===now.getDate()){        
-            setFirstMonthFee(Math.ceil((service.price)/(service.maxPeopleCount))+1000);
-            amountPrice = Math.ceil((service.price)/(service.maxPeopleCount))+service.commission*selectParty.monthCount + Math.ceil((service.price)/(service.maxPeopleCount))+1000;
-            setAmount(amountPrice);
-            // 파티장이 받게 될 금액
-            setManagerReceiveMoney(Math.ceil((service.price)/(service.maxPeopleCount))-service.commission);
-        }else{
-            const pricePerDay = Math.ceil((((service.price)/(service.maxPeopleCount))+1000)/31);
-            setFirstMonthFee(diff*pricePerDay);
-            amountPrice = Math.ceil((service.price)/(service.maxPeopleCount))+service.commission*selectParty.monthCount + diff*pricePerDay;
-            setAmount(amountPrice);
-             // 파티장이 받게 될 금액
-             setManagerReceiveMoney(Math.ceil((((service.price)/(service.maxPeopleCount))-service.commission)/31)*diff);
-        }
-
-        // 현재 밍글 머니 잔액 불러오기
-        axios.get("/api/member/getMingleMoney").then(resp=>{
-            setMingleMoney(resp.data);
-            // 결제 금액보다 밍글 머니 잔액이 더 많거나 같은 경우
-            if(resp.data>=amountPrice){
-                setUsedMingleMoney(amountPrice);
-                setTotalPrice(0);
-
-            // 결제 금액보다 밍글 머니 잔액이 더 적은 경우
-            }else{
-                setUsedMingleMoney(resp.data)
-                setTotalPrice(amountPrice-resp.data);
+            nextCal.setDate(selectParty.calculationDate);
+            if(nextCal.getDate()<=now.getDate()){
+                nextCal.setMonth(nextCal.getMonth()+1);
             }
-        }).catch(()=>{
-            alert("문제가 발생했습니다. 로그인 여부를 확인해주세요.");
-        })    
 
+            // 다음 정산일 까지의 일수 구함
+            let diff = (new Date(nextCal).getTime() - new Date(now).getTime())/(1000*60*60*24);
+
+            // 이때, 파티 시작 전이면 파티 요금이 오늘부터가 아닌 파티 시작일부터 측정되어야함.
+            let startDate = new Date(selectParty.startDate);
+            if(now<startDate){
+                diff = (new Date(nextCal).getTime() - new Date(startDate).getTime())/(1000*60*60*24);
+            } 
+            setCalDate(diff);
+        
+            let amountPrice;
+            if(nextCal.getDate()===now.getDate()){        
+                setFirstMonthFee(Math.ceil((service.price)/(service.maxPeopleCount))+1000);
+                amountPrice = Math.ceil((service.price)/(service.maxPeopleCount))+service.commission*selectParty.monthCount + Math.ceil((service.price)/(service.maxPeopleCount))+1000;
+                setAmount(amountPrice);
+                // 파티장이 받게 될 금액
+                setManagerReceiveMoney(Math.ceil((service.price)/(service.maxPeopleCount))-service.commission);
+            }else{
+                const pricePerDay = Math.ceil((((service.price)/(service.maxPeopleCount))+1000)/31);
+                setFirstMonthFee(diff*pricePerDay);
+                amountPrice = Math.ceil((service.price)/(service.maxPeopleCount))+service.commission*selectParty.monthCount + diff*pricePerDay;
+                setAmount(amountPrice);
+                // 파티장이 받게 될 금액
+                setManagerReceiveMoney(Math.ceil((((service.price)/(service.maxPeopleCount))-service.commission)/31)*diff);
+            }
+
+            // 현재 밍글 머니 잔액 불러오기
+            axios.get("/api/member/getMingleMoney").then(resp=>{
+                setMingleMoney(resp.data);
+                // 결제 금액보다 밍글 머니 잔액이 더 많거나 같은 경우
+                if(resp.data>=amountPrice){
+                    setUsedMingleMoney(amountPrice);
+                    setTotalPrice(0);
+
+                // 결제 금액보다 밍글 머니 잔액이 더 적은 경우
+                }else{
+                    setUsedMingleMoney(resp.data)
+                    setTotalPrice(amountPrice-resp.data);
+                }
+            }).catch(()=>{
+                alert("문제가 발생했습니다. 로그인 여부를 확인해주세요.");
+            })    
+        }
        
     },[monthFee]);
 
@@ -209,8 +217,9 @@ const PartyAttend = () => {
                             
                             axios.post(`/api/party/auth/joinParty/${selectParty.id}`,paymentData).then(resp=>{
                                 setLoading(false);
+                                setSelectParty(null);
                                 if(window.confirm("파티 가입에 성공했습니다.\n가입한 파티 정보를 확인하시겠습니까?")){
-                                    navi("/");
+                                    navi("/party/myParty");
                                 }else{
                                     navi("/");
                                 }
@@ -304,7 +313,13 @@ const PartyAttend = () => {
         return <LoadingSpinner/>;
     }
 
+    if(selectParty === null){
+        return <LoadingSpinner/>;
+    }
+
     return(
+        <>{selectParty===null || service===null?<LoadingSpinner/>
+        :
         <div className={style.body}>
             <div className={`${style.VAlign} ${style.mb50}`}>
                 <FontAwesomeIcon icon={faCircleArrowLeft} onClick={handleBack} className={style.backIcon}/> 
@@ -459,6 +474,7 @@ const PartyAttend = () => {
                 </div>           
             </div>
         </div>
+        }</>
     );
 }
 

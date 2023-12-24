@@ -3,12 +3,23 @@ import PurpleRoundBtn from '../../../components/PurpleRoundBtn/PurpleRoundBtn';
 import style from '../../MyPage/MemberInfoUpdate/MemberInfoUpdate.module.css';
 import PurpleRectangleBtn from '../../../components/PurpleRectangleBtn/PurpleRectangleBtn';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faXmark} from "@fortawesome/free-solid-svg-icons";
+import {faL, faXmark} from "@fortawesome/free-solid-svg-icons";
 import WhiteRectangleBtn from '../../../components/WhiteRectangleBtn/WhiteRectangleBtn';
 import MypageModal from '../components/MypageModal/MypageModal';
 import axios from 'axios';
+import LoadingSpinnerMini from '../../../components/LoadingSpinnerMini/LoadingSpinnerMini';
+import { useNavigate } from 'react-router-dom';
+import { LoginContext } from '../../../App';
 
 const MemberInfoUpdate = () =>{
+    
+    // 로그인 컨텍스트
+    const { loginId ,setLoginId } = useContext(LoginContext);
+
+    const navi = useNavigate();
+
+    // 로딩 State
+    const [isLoading, setLoading]=useState(false);
 
     // 로그인 계정 State
     const [account, setAccount] = useState(true);
@@ -89,8 +100,8 @@ const MemberInfoUpdate = () =>{
     // 휴대폰 번호 입력input
     const handlePhoneNum = (e) => {
         const phoneValue = e.target.value;
-        setInputPhone(phoneValue);
-        console.log(e.target.value);
+        setInputPhone(phoneValue.replace(/\D/g, '').substring(0, 11));
+        console.log(inputPhone);
 
         const result = isValidPhone(phoneValue);
         setIsPhone(result);
@@ -124,9 +135,14 @@ const MemberInfoUpdate = () =>{
 
     // 서버에서 사용자 기본 정보 불러오기
     useEffect(()=>{
+        setLoading(true);
         axios.get("/api/member/mypageUserInfo").then((resp)=>{
             setUserPhone(resp.data.phone);
             setUserEmail(resp.data.email);
+            setLoading(false);
+        }).catch(()=>{
+            alert("정보를 불러오지 못했습니다.");
+            setLoading(false);
         })
     },[codeCom,userPhone])
 
@@ -177,23 +193,96 @@ const MemberInfoUpdate = () =>{
 
         
     }
+
+    // 멤버 탈퇴 모달 State
+    const [memberOutModal, setMemberOutModal] = useState(false);
+
+    // 멤버 탈퇴 버튼 클릭 하면 모달 띄우기
+    const HandleMemberOutModal = () => {
+        setMemberOutModal(!memberOutModal);
+    }
+
+    // 탈퇴모달 닫기
+    const closeMemberOutModal = () =>{
+        setMemberOutModal(!memberOutModal);
+    }
+
+    const isValidPw = (value) =>{
+        // 정규식 : 특수문자 1개, 대문자 1개, 소문자 1개가 모두 포함된 8~30글자
+        let regexPw = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,30}$/;
+
+        return regexPw.test(value);
+    }
+
+    // 비밀번호 Regex 결과 State
+    const [isPw, setIsPw] = useState(false);
+
+    // 비밀번호 State
+    const [inputPw, setInputPw] = useState("");
+
+    // 비밀번호 input 입력
+    const handlePwChange = (e) => {
+        const pwValue = e.target.value;
+        setInputPw(pwValue);
+
+        const result = isValidPw(pwValue);
+        setIsPw(result);
+    }
+
+
+    // 탈퇴버튼 누름
+    const handleMemberOutSubmit = (e) =>{
+        if(isPw){
+            axios.get("/api/member/mypageMemberOut",{params:{password:inputPw}}).then((resp)=>{
+              
+                console.log(resp.data);
+                if(resp.data === 1){
+                    alert("탈퇴가 완료되었습니다.")
+                    moveHome();
+                }else if(resp.data === 2){
+                    alert("비밀번호가 일치하지 않습니다.");
+                }else if(resp.data === 3){
+                    alert("가입한 파티가 있으면 탈퇴가 불가능합니다.");
+                }
+                closeMemberOutModal();
+            })
+            .catch(()=>{
+                alert("탈퇴에 실패했습니다.");
+            })
+        }else{
+            alert("비밀번호 형식을 확인해주세요.");
+        }
+        
+    }
+
+    // 홈으로 이동
+    const moveHome=()=>{
+        navi("/");
+        setLoginId("");
+    }
    
 
     return(
         <div className={style.container}>
+           
             <div className={style.container__inner}>
                 <div className={style.inner__title}>회원 정보 수정</div>
                 <div className={style.inner__line}></div>
-
+                {isLoading
+                ?
+                <LoadingSpinnerMini width={600} height={160}/>
+                :
                 <>
-                    <div className={style.inner}>
-                        <div className={style.inner__left}>연결된 소셜 로그인 계정</div>
-                        <div className={style.inner__right}>
-                            <div className={style.input}>네이버</div>
-                            <PurpleRoundBtn title={account?"변경하기":"변경취소"} activation={account} onClick={handleAccUpdate}></PurpleRoundBtn>
+
+                    <>
+                        <div className={style.inner}>
+                            <div className={style.inner__left}>연결된 소셜 로그인 계정</div>
+                            <div className={style.inner__right}>
+                                <div className={style.input}>네이버</div>
+                                <PurpleRoundBtn title={account?"변경하기":"변경취소"} activation={account} onClick={handleAccUpdate}></PurpleRoundBtn>
+                            </div>
                         </div>
-                    </div>
-                </>
+                    </>
                 
                 {!account &&
                 <>
@@ -260,6 +349,7 @@ const MemberInfoUpdate = () =>{
                             <div className={style.modalTitle}>휴대폰 번호 변경</div>
                             <div className={style.phoneBox}>
                                 <input type="text" placeholder='휴대폰 번호 입력'
+                                value={inputPhone}
                                 style={{
                                     borderColor: inputPhone ? (isPhone ? 'black' : 'red') : 'black'
                                 }} 
@@ -350,6 +440,7 @@ const MemberInfoUpdate = () =>{
                                 title={"완료"}
                                 width={100}
                                 heightPadding={10}
+                                activation={true}
                                 onClick={handleAuthSubmit}
                                 ></PurpleRectangleBtn>
                             </div>
@@ -359,9 +450,67 @@ const MemberInfoUpdate = () =>{
                 </MypageModal>
                </>
                }
-               
+
+               {account && 
+               <div className={style.inner}>
+                    <div className={style.inner__left}></div>
+                    <div className={`${style.inner__right} ${style.memberOut}`}
+                    onClick={HandleMemberOutModal}
+                    >
+                        탈퇴하기
+                    </div>
+                </div>
+                } 
                 
+                {/* 멤버탈퇴 모달 */}
+                {memberOutModal && 
+                    <MypageModal
+                    isOpen={memberOutModal}
+                    onRequestClose={closeMemberOutModal}
+                    width={450}
+                    height={260}
+                    >
+                        <div>
+                            <div className={style.closeBtn}>
+                                <FontAwesomeIcon icon={faXmark} size="lg" onClick={closeMemberOutModal}/>
+                            </div>
+                            <div className={style.modalTitle}>탈퇴하시겠습니까?</div>
+                            <div className={style.modalSubTitle}>정확한 본인확인을 위해 비밀번호를 입력해 주세요.</div>
+                            <div className={style.emailBox}>
+                                <input className={style.inputPw}
+                                    type="password"
+                                    name="password"
+                                    placeholder="8~30자의 영문 대소문자, 숫자 및 특수문자"
+                                    style={{borderColor: inputPw ? (isPw ? "black" : "red" ) : "black"}}
+                                    onChange={handlePwChange}
+                                />
+                                <div className={`${style.modalBtn} ${style.btnBox}`}>
+                                    <PurpleRectangleBtn
+                                    title={"취소"}
+                                    width={100}
+                                    heightPadding={10}
+                                    activation={false}
+                                    onClick={closeMemberOutModal}
+                                    ></PurpleRectangleBtn>
+
+                                    <PurpleRectangleBtn
+                                    title={"탈퇴"}
+                                    width={100}
+                                    heightPadding={10}
+                                    activation={true}
+                                    onClick={handleMemberOutSubmit}
+                                    ></PurpleRectangleBtn>
+                                </div>
+                            </div>
+                            
+                        </div>
+                         
+                    </MypageModal>
+                }
+                    
                 
+               </>
+            }
             </div>
         </div>
     );

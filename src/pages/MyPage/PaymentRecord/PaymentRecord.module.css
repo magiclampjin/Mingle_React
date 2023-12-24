@@ -47,6 +47,12 @@
     font-weight: 500;
     color: rgb(101, 101, 101);
     font-size: 14px;
+    display: flex;
+}
+.searchType>div:nth-child(1){
+    margin-right: 5px;
+    display: flex;
+    align-items: center;
 }
 
 /* Modal */
@@ -167,7 +173,7 @@
 
 .inner__left{
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     width: 35%;
 }
 .inner__left>div:nth-child(1){
@@ -178,6 +184,7 @@
 }
 .inner__left>div:nth-child(2){
     font-weight: 600;
+    margin-left: 37px;
 }
 
 .inner__right{

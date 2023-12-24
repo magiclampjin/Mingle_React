@@ -44,7 +44,7 @@ const MypageMain = () =>{
             <img src={profileUrl} className={style.profileImage} alt="" />
             <div className={style.nickname}>{loginNick}</div>
 
-            <label 
+            {/* <label 
             htmlFor="image"
              className={style.updateIcon}
             >
@@ -56,7 +56,7 @@ const MypageMain = () =>{
             type="file" 
             accept="image/*"
             onChange={OnUploadImage}
-            className={style.imgInput}/>
+            className={style.imgInput}/> */}
 
             <div className={style.profileBackBottom}></div>
         </div>

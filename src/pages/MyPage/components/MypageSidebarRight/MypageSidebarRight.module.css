@@ -17,10 +17,12 @@
 
 .money__inner:nth-child(2){
     justify-content:flex-end;
+    margin-top: 10px;
 }
 
 .money__inner:nth-child(3){
-    margin: 20px 0px;
+    margin-top: 10px;
+    margin-bottom: 20px;
     height: 1px;
     background-color: rgb(227,227,227);
 }
@@ -29,7 +31,175 @@
     font-size: 15px;
 }
 
+/* modal */
+.modalTitle{
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+}
 
+.modalSubTitle{
+    font-size: 15px;
+    text-align: left;
+    color: #434851;
+    font-weight: 500;
+    padding-left: 10px;
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+
+.modalBtn{
+    margin-top:5px;
+    margin-left: 5px;
+    text-align: right;
+}
+.modalBtn button{
+    font-size: 15px;
+}
+/* x 버튼 */
+.closeBtn{
+    text-align: right;
+    cursor: pointer;
+}
+
+.modalMoneyBox{
+    width: 100%;
+    height: 52px;
+    font-weight: 500;
+    background-color: #DFE2E680;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    margin-top: 10px;
+}
+
+.modalMoneyBox>div:nth-child(1){
+    margin-right: 5px;
+}
+
+.inputBox{
+    width: 100%; height: 52px;
+    margin-top: 10px;
+}
+
+.inputBox>input{
+    width: 100%; height: 100%;
+    border-radius: 15px;
+    border: 1px solid #737577;
+    padding-left: 10px;
+    font-size: 14px;
+}
+
+.allMoney{
+    width: 30%;
+    background-color: #8787D040;
+    padding: 5px;
+    border-radius: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+    display: flex; align-items: center; text-align: center; justify-content: center;
+    color: #6A57D7;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* 카드 등록 안됨 */
+.inner{
+    margin-bottom: 20px;
+
+}
+
+.cardBox{
+    padding-top: 10px;
+    display: flex;
+}
+.cardBox>div:nth-child(1){
+    width: 30%;
+    margin-right: 5px;
+}
+
+
+.cardBox>div:nth-child(2){
+    width: 70%;
+}
+
+.bankSelect{
+    width: 100%;
+    height: 85%;
+    border-radius: 20px;
+    font-size: 14px;
+    padding-left: 10%;
+}
+
+.cardBox>div:nth-child(2)>input{
+    width: 100%;
+    height: 50px;
+    padding-left: 10px;
+    border-radius: 20px;
+    border: 1px solid #737577 !important;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+/* 카드 등록되었을 때 */
+.inner__card{
+    justify-content: space-between;
+}
+.cardLeft{
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+.cardRight{
+    width: 100%; height: 52px;
+    
+    border-radius: 13px;
+    background-color: #DFE2E680;
+    padding: 5px 13px;
+    margin-bottom: 10px;
+}
+
+.noneAccount{
+   display: flex; align-items: center;
+   font-size: 15px; font-weight: 500;
+}
+
+.cardRight__inner{
+    display: flex;
+}
+
+.cardRight>div:nth-child(1){
+    margin-right: 5px;
+}
+
+.cardRight>div>button{
+    border: 1px solid #7b61ff;
+    border-radius: 15px;
+    background-color: transparent;
+    color: #7b61ff;
+    height: 40px; width: 100px;
+    font-size: 14px;
+}
+
+.bankName,.bankAccount{
+    font-weight: 600;
+    margin-right: 10px;
+    font-size: 15px;
+}
+
+.bankUserName{
+    font-size: 13px;
+}
+
+/* 계좌 감싼 */
+.accountBox{
+    margin-top: 40px;
+}
 
 @media (max-width:1050px) {
     .moneyBox{

@@ -1,12 +1,13 @@
 import Modal from "react-modal";
 import axios from "axios";
 import style from "./ServiceInfoModal.module.css";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import LoadingSpinnerMini from "../../../../../components/LoadingSpinnerMini/LoadingSpinnerMini";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTriangleExclamation, faCheck } from "@fortawesome/free-solid-svg-icons";
 import PurpleRectangleBtn from "../../../../../components/PurpleRectangleBtn/PurpleRectangleBtn"
 import { useNavigate } from "react-router-dom";
+import { CreatePartyContext } from "../../PartyCreateMain";
 
 Modal.setAppElement("#root");
 
@@ -15,7 +16,7 @@ const ServiceInfoModal = ({ isOpen, onRequestClose, contentLabel, selectService,
     // 선택한 서비스 정보 불러오기 로딩
     const [isServiceLoading, setServiceLoading] = useState(false);
     // 선택한 서비스 정보
-    const [service, setService] = useState({});
+    const {service, setService} = useContext(CreatePartyContext);
     
   
     // 요금 안내 확인용 chkBox 체크 여부
@@ -33,7 +34,7 @@ const ServiceInfoModal = ({ isOpen, onRequestClose, contentLabel, selectService,
             axios.get("/api/member/isAuthenticated").then(resp=>{
                 if(resp.data){
                     // 로그인된 유저일 경우 파티 생성 창으로 이동
-                    navi("/party/PartyCreate/PartyCreatePage",{state:{service:service}});
+                    navi("/party/PartyCreate/PartyCreatePage");
                 }else{
                     // 로그인하지않은 유저일 경우 로그인창으로 이동 혹은 현재 페이지 유지
                     if(window.confirm("로그인 후 이용 가능한 서비스입니다.\n로그인 화면으로 이동하시겠습니까?")){
@@ -84,7 +85,7 @@ const ServiceInfoModal = ({ isOpen, onRequestClose, contentLabel, selectService,
         {
             isServiceLoading ?
             <LoadingSpinnerMini height={380} width={400}/>
-            : service.name ? (
+            : service ? (
             <>
                 <div className={style.title}>요금 안내</div>
                 <div className={style.servicePriceInfo}>
