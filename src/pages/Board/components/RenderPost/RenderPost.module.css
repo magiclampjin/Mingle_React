@@ -44,6 +44,9 @@
 .post__item-title {
     flex: 4;
     font-weight: bold;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 /* 기본 폰트 사이즈 */

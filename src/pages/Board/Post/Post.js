@@ -24,14 +24,36 @@ const Post = () => {
 
     // 좋아요 클릭 핸들러
     const handleLike = () => {
-        setVote(vote + 1);
-        // 서버에 업데이트 요청 보낼 예정... 
+        axios.post(`/api/post/${postId}/like`, null, {
+            params: { memberId: loginId }
+        })
+            .then(response => {
+                if (response.data !== -1) {
+                    setVote(response.data); // 서버에서 반환한 총 추천 수로 업데이트
+                } else {
+                    
+                }
+            })
+            .catch(error => {
+                alert("해당 게시글에 이미 투표를 완료하셨습니다.");
+            });
     };
 
     // 싫어요 클릭 핸들러
     const handleDislike = () => {
-        setVote(vote - 1);
-        // 서버에 업데이트 요청 보낼 예정
+        axios.post(`/api/post/${postId}/dislike`, null, {
+            params: { memberId: loginId }
+        })
+            .then(response => {
+                if (response.data !== -1) {
+                    setVote(response.data); // 서버에서 반환한 총 추천 수로 업데이트
+                } else {
+                    alert("해당 게시글에 이미 투표를 완료하셨습니다.")
+                }
+            })
+            .catch(error => {
+                alert("해당 게시글에 이미 투표를 완료하셨습니다.");
+            });
     };
 
     const handleDelete = () => {
@@ -52,20 +74,40 @@ const Post = () => {
         alert("관련모달 작업 중...")
     }
 
-
-
     useEffect(() => {
         setIsLoading(true);
-        axios.get(`/api/post/${postId}`).then(resp => {
-            console.log(resp.data);
-            setPost(resp.data); // 데이터를 post 상태에 저장
-            setIsLoading(false);
+
+        const viewedPosts = sessionStorage.getItem('viewedPosts') ? JSON.parse(sessionStorage.getItem('viewedPosts')) : [];
+
+        const fetchPostData = axios.get(`/api/post/${postId}`);
+        const fetchVoteCount = axios.get(`/api/post/likes/${postId}`);
+
+        Promise.all([fetchPostData, fetchVoteCount]).then(responses => {
+            const [postDataResponse, voteCountResponse] = responses;
+
+            console.log(voteCountResponse.data);
+
+            setPost(postDataResponse.data);
+            setVote(voteCountResponse.data);
+
+            if (!viewedPosts.includes(postId)) {
+                axios.put(`/api/post/updateViewCount/${postId}`).then(resp => {
+                    console.log("조회수 증가 완료");
+                    viewedPosts.push(postId);
+                    sessionStorage.setItem('viewedPosts', JSON.stringify(viewedPosts));
+                }).catch(error => {
+                    console.error("error", error);
+                });
+            }
+
         }).catch(error => {
             console.error("error", error);
+        }).finally(() => {
             setIsLoading(false);
         });
 
-    }, [postId])
+    }, [postId, loginId]);
+
 
     let voteClass = '';
     if (vote > 0) {

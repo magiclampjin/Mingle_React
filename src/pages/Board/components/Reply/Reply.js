@@ -120,8 +120,8 @@ const Reply = ({ replies, postId }) => {
         writeDate: null,
         postId: "",
         memberId: "",
-        replyParentId: "",
-        replyAdoptiveParentId: "",
+        replyParentId: 0,
+        replyAdoptiveParentId: 0,
     })
 
 
@@ -201,18 +201,16 @@ const Reply = ({ replies, postId }) => {
         formData.append("writeDate", now.toISOString());
         formData.append("postId", submitReply.postId);
         formData.append("memberId",submitReply.memberId);
-        formData.append("replyParentId",submitReply.replyParentId);
-        formData.append("replyAdoptiveParentId",submitReply.replyAdoptiveParentId);
+        formData.append("replyParentId",submitReply.replyParentId ? submitReply.replyParentId.toString() : "0");
+        formData.append("replyAdoptiveParentId",submitReply.replyAdoptiveParentId ? submitReply.replyParentId.toString() : "0");
 
-        alert("타입관련 설정 중..");
-
-        // axios.post("/api/reply",formData).then(resp =>{
-        //     console.log(resp.data);
-        //     setNewReply(""); // 입력 필드 초기화
-        // }).catch(error => {
-        //     console.log("error : " + error);
-        //     setNewReply(""); // 입력 필드 초기화
-        // })
+        axios.post("/api/reply",formData).then(resp =>{
+            console.log(resp.data);
+            setNewReply(""); // 입력 필드 초기화
+        }).catch(error => {
+            console.log("error : " + error);
+            setNewReply(""); // 입력 필드 초기화
+        })
        
     };
 

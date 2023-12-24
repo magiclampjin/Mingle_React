@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import styles from './Board.module.css'
 import BoardCategories from './components/BoardCategory/BoardCategories';
 import BoardMain from "./BoardMain/BoardMain";
@@ -16,16 +16,20 @@ import { LoginContext } from '../../App';
 export const postMenuContext = createContext();
 
 const Board = () => {
-    const {loginId} = useContext(LoginContext);
-    // const navigate = useNavigate();
+    const { loginId } = useContext(LoginContext);
+
+    const location = useLocation(); // 현재 위치 정보 가져오기
+    const navigate = useNavigate();
 
     // useEffect(() => {
     //     if (!loginId) {
+    //         alert("접근권한이 없습니다. 로그인을 해주시길 바랍니다.")
     //         navigate('/');
     //     }
-    // }, [loginId, navigate]); // 의존성 배열에 loginId와 navigate 삽입
+    // }, [loginId, navigate]);
 
     const [menu, setMenu] = useState("");
+
     return (
         <postMenuContext.Provider value={{ menu, setMenu }}>
             <div className={styles.container}>
@@ -34,7 +38,7 @@ const Board = () => {
                 </div>
                 <Routes>
                     <Route path="/" element={<BoardMain />} />
-                    <Route path="intro" element={<Intro/>}/>
+                    <Route path="intro" element={<Intro />} />
                     <Route path="popularposts" element={<PopularPosts />} />
                     <Route path="freeboard" element={<FreeBoard />} />
                     <Route path="noticeboard" element={<NoticeBoard />} />
@@ -42,11 +46,11 @@ const Board = () => {
                     <Route path="updatepost/*" element={<UpdatePost />} />
                     <Route path="/post/:postId" element={<Post />} />
                 </Routes>
-                <FixedMenu />
+                {location.pathname !== '/board/writepost' && <FixedMenu />}
             </div>
         </postMenuContext.Provider>
-
     );
 };
+
 
 export default Board;
