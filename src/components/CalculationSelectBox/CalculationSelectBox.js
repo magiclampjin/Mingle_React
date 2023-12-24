@@ -1,15 +1,17 @@
 import style from './CalculationSelectBox.module.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { useState } from 'react';
 
 const CalculationSelectBox = ({ day, setDay }) => {
+
+    const [isFocus, setFocus] = useState(false);
 
     // select 핸들
     const handleSelect = (e) => {
         // 함수형 업데이트로 업데이트된 select값 확인
-        setDay((prev) => {
-            return e.target.value;
-        });
+        setDay(e.target.value);
+        setFocus(false);
     }
 
     // 일 배열
@@ -23,7 +25,7 @@ const CalculationSelectBox = ({ day, setDay }) => {
     // 배열 요소 map으로 출력
     return (
         <div className={style.selectBoxCover}>
-            <select name="" id="" className={style.selectBox} onChange={handleSelect} value={day}>
+            <select name="" id="" className={style.selectBox} onChange={handleSelect} onFocus={()=>{setFocus(true);}} value={day}>
                 {dayList.map((item) => {
                     return (
                         <option key={item} value={item}>
@@ -32,7 +34,7 @@ const CalculationSelectBox = ({ day, setDay }) => {
                     )
                 })}
             </select>
-            <FontAwesomeIcon icon={faChevronDown} className={style.chevronIcon}/>
+            <FontAwesomeIcon icon={isFocus?faChevronUp:faChevronDown} className={style.chevronIcon}/>
         </div>
        
 

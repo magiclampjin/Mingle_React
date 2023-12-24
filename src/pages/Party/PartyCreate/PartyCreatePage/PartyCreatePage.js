@@ -2,7 +2,7 @@ import style from "./PartyCreatePage.module.css";
 import {useState, useEffect, useContext} from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faTriangleExclamation, faPlus, faMinus, faChevronDown, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faTriangleExclamation, faPlus, faMinus, faChevronDown, faCheck, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import PurpleRectangleBtn from "../../../../components/PurpleRectangleBtn/PurpleRectangleBtn";
 import StartDateModal from "./StartDateModal/StartDateModal"
 import moment from "moment";
@@ -410,7 +410,7 @@ const PartyCreatePage = () =>{
                                     <div className={`${style.periodTitle}`}>시작일</div>
                                     <div className={`${style.periodTxt}`}>{value ? moment(value).format("YYYY-MM-DD"):`선택`}</div>
                                 </div>
-                                <div className={`${style.periodIcon} ${style.centerAlign}`}><FontAwesomeIcon icon={faChevronDown}/></div>
+                                <div className={`${style.periodIcon} ${style.centerAlign}`}><FontAwesomeIcon icon={modalIsOpen?faChevronUp:faChevronDown}/></div>
                             </div>
                             <StartDateModal
                                 isOpen={modalIsOpen}
@@ -431,7 +431,7 @@ const PartyCreatePage = () =>{
                                             <div className={`${style.periodTitle}`}>파티 기간</div>
                                             <div className={`${style.periodTxt}`}>{periodMonth ? periodMonth+"개월":`선택`}</div>
                                         </div>
-                                        <div className={`${style.periodIcon} ${style.centerAlign}`}><FontAwesomeIcon icon={faChevronDown}/></div>
+                                        <div className={`${style.periodIcon} ${style.centerAlign}`}><FontAwesomeIcon icon={periodModalIsOpen?faChevronUp:faChevronDown}/></div>
                                     </div>
                                     <PeriodModal
                                         isOpen={periodModalIsOpen}
