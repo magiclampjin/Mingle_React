@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import style from '../../MyPage/PaymentRecord/PaymentRecord.module.css';
 import MypageModal from '../components/MypageModal/MypageModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,15 +8,19 @@ import {
     faAnglesLeft,
     faAngleRight,
     faAnglesRight,
+    faArrowDownWideShort
 } from "@fortawesome/free-solid-svg-icons";
 import PurpleRectangleBtn from '../../../components/PurpleRectangleBtn/PurpleRectangleBtn';
 import axios from 'axios';
-import { selectService } from './../../Party/PartyCreate/PartyCreateList/PartyCreateList';
 import LoadingSpinnerMini from '../../../components/LoadingSpinnerMini/LoadingSpinnerMini';
 import { timeFormatter } from '../components/TimeFormatter/TimeFormatter';
 import Pagination from 'react-js-pagination';
+import { LoginContext } from '../../../App';
 
 const PaymentRecord = () =>{
+
+     // 로그인 컨텍스트
+     const { loginId ,setLoginId } = useContext(LoginContext);
 
     // 검색 모달 상태
     const [searchModalOpen, setSearchModalOpen] = useState(false);
@@ -106,27 +110,29 @@ const PaymentRecord = () =>{
         //     alert("문제가 발생했습니다.");
         // })
 
-        setLoading(true);
-        const queryParams = {};
+        if(loginId !== ""){
+            setLoading(true);
+            const queryParams = {};
 
-        if (searchService) { queryParams.serviceId  = searchService; }
-        if (searchType) { queryParams.paymentTypeId  = searchType;  }
-        if (startDate) { queryParams.start = startDate; }
-        if (endDate) {  queryParams.end = endDate; }
+            if (searchService) { queryParams.serviceId  = searchService; }
+            if (searchType) { queryParams.paymentTypeId  = searchType;  }
+            if (startDate) { queryParams.start = startDate; }
+            if (endDate) {  queryParams.end = endDate; }
 
-        axios.get("/api/payment/searchBy", { params: queryParams })
-        .then((resp) => {
-            // 성공적으로 처리된 경우의 로직
-            console.log(resp.data);
-            setPayList(resp.data);
-            setLoading(false);
-        })
-        .catch((error) => {
-            // 오류 발생 시의 처리 로직
-            console.error(error);
-            setLoading(false);
-            alert("검색에 실패했습니다.");
-        });
+            axios.get("/api/payment/searchBy", { params: queryParams })
+            .then((resp) => {
+                // 성공적으로 처리된 경우의 로직
+                console.log(resp.data);
+                setPayList(resp.data);
+                setLoading(false);
+            })
+            .catch((error) => {
+                // 오류 발생 시의 처리 로직
+                console.error(error);
+                setLoading(false);
+                alert("검색에 실패했습니다.");
+            });
+        }
 
     },[])
 
@@ -190,7 +196,12 @@ const PaymentRecord = () =>{
                     <div className={style.inner__line}></div>
                     <div className={style.searchBox} onClick={handleSearchModalOpen}>
                         <div className={style.searchType} >
-                            검색 타입
+                            <div>
+                               검색 타입 
+                            </div>
+                            <div>
+                                 <FontAwesomeIcon icon={faArrowDownWideShort} />
+                            </div>
                         </div>
                     </div>
                     <div className={style.contentBox}>
@@ -205,7 +216,9 @@ const PaymentRecord = () =>{
                                         <div className={style.content__inner}>
                                             <div className={style.inner__left}>
                                                 <div>{timeFormatter(item.date) }</div>
-                                                <div>파티 요금 {item.paymentTypeId}</div>
+                                                <div>
+                                                    {item.paymentTypeId === "인출"? "인출": "파티 요금 " + item.paymentTypeId} 
+                                                </div>
                                             </div>
                                             <div className={style.inner__right}
                                             style={{color: item.paymentTypeId === "적립" ? "#7b61ff" : "black"}}

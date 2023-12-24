@@ -265,6 +265,8 @@ const PaymentManage = () =>{
     const closeUpdateModal = () =>{
         setIsUpdateModalOpen(!isUpdateModalOpen);
     }
+
+    const handleUpdateReject = () => {}
     
     // 수정모달의 제출
     const handleUpdateSubmit = () => {
@@ -275,10 +277,14 @@ const PaymentManage = () =>{
             console.log("계좌번호 : "+accountNum);
             axios.put("/api/paymentAccount/accountUpdate",postData).then((resp)=>{
                 closeUpdateModal();
+                window.location.reload();
+                alert("계좌가 변경되었습니다.");
+            }).catch(()=>{
+                alert("계좌 변경을 실패했습니다.");
             })
-            window.location.reload();
+            
         }else{
-            alert("카드 등록에 실패했습니다.");
+            alert("계좌 등록에 실패했습니다.");
         }
     }
 
@@ -389,17 +395,13 @@ const PaymentManage = () =>{
                                 </div>
 
                                 <div className={style.modalBtn}>
-                                    {totalValid &&
-                                    <>
-                                        <PurpleRectangleBtn
-                                        title={"완료"}
-                                        width={150}
-                                        heightPadding={10}
-                                        onClick={handleSubmit}
-                                        activation={true}
-                                        ></PurpleRectangleBtn>
-                                    </>
-                                    }
+                                    <PurpleRectangleBtn
+                                    title={"완료"}
+                                    width={150}
+                                    heightPadding={10}
+                                    onClick={totalValid ? handleUpdateSubmit : handleUpdateReject}
+                                    activation={totalValid}
+                                    ></PurpleRectangleBtn>
                                 </div>
                             </div>
                         </MypageModal>
@@ -477,17 +479,13 @@ const PaymentManage = () =>{
                                 </div>
 
                                 <div className={style.modalBtn}>
-                                    {totalValid &&
-                                    <>
                                         <PurpleRectangleBtn
                                         title={"완료"}
                                         width={150}
                                         heightPadding={10}
-                                        onClick={handleUpdateSubmit}
-                                        activation={true}
+                                        onClick={totalValid ? handleUpdateSubmit : handleUpdateReject}
+                                        activation={totalValid}
                                         ></PurpleRectangleBtn>
-                                    </>
-                                    }
                                 </div>
                             </div>
                         </MypageModal>
