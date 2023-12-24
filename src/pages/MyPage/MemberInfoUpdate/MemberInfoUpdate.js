@@ -9,8 +9,12 @@ import MypageModal from '../components/MypageModal/MypageModal';
 import axios from 'axios';
 import LoadingSpinnerMini from '../../../components/LoadingSpinnerMini/LoadingSpinnerMini';
 import { useNavigate } from 'react-router-dom';
+import { LoginContext } from '../../../App';
 
 const MemberInfoUpdate = () =>{
+    
+    // 로그인 컨텍스트
+    const { loginId ,setLoginId } = useContext(LoginContext);
 
     const navi = useNavigate();
 
@@ -96,8 +100,8 @@ const MemberInfoUpdate = () =>{
     // 휴대폰 번호 입력input
     const handlePhoneNum = (e) => {
         const phoneValue = e.target.value;
-        setInputPhone(phoneValue);
-        console.log(e.target.value);
+        setInputPhone(phoneValue.replace(/\D/g, '').substring(0, 11));
+        console.log(inputPhone);
 
         const result = isValidPhone(phoneValue);
         setIsPhone(result);
@@ -218,7 +222,6 @@ const MemberInfoUpdate = () =>{
 
     // 비밀번호 input 입력
     const handlePwChange = (e) => {
-        console.log(e.target.value);
         const pwValue = e.target.value;
         setInputPw(pwValue);
 
@@ -231,9 +234,17 @@ const MemberInfoUpdate = () =>{
     const handleMemberOutSubmit = (e) =>{
         if(isPw){
             axios.get("/api/member/mypageMemberOut",{params:{password:inputPw}}).then((resp)=>{
-                alert(resp.data);
+              
+                console.log(resp.data);
+                if(resp.data === 1){
+                    alert("탈퇴가 완료되었습니다.")
+                    moveHome();
+                }else if(resp.data === 2){
+                    alert("비밀번호가 일치하지 않습니다.");
+                }else if(resp.data === 3){
+                    alert("가입한 파티가 있으면 탈퇴가 불가능합니다.");
+                }
                 closeMemberOutModal();
-                moveHome();
             })
             .catch(()=>{
                 alert("탈퇴에 실패했습니다.");
@@ -247,15 +258,13 @@ const MemberInfoUpdate = () =>{
     // 홈으로 이동
     const moveHome=()=>{
         navi("/");
-        window.location.reload();
+        setLoginId("");
     }
    
 
     return(
         <div className={style.container}>
            
-
-            
             <div className={style.container__inner}>
                 <div className={style.inner__title}>회원 정보 수정</div>
                 <div className={style.inner__line}></div>
@@ -265,15 +274,15 @@ const MemberInfoUpdate = () =>{
                 :
                 <>
 
-                <>
-                    <div className={style.inner}>
-                        <div className={style.inner__left}>연결된 소셜 로그인 계정</div>
-                        <div className={style.inner__right}>
-                            <div className={style.input}>네이버</div>
-                            <PurpleRoundBtn title={account?"변경하기":"변경취소"} activation={account} onClick={handleAccUpdate}></PurpleRoundBtn>
+                    <>
+                        <div className={style.inner}>
+                            <div className={style.inner__left}>연결된 소셜 로그인 계정</div>
+                            <div className={style.inner__right}>
+                                <div className={style.input}>네이버</div>
+                                <PurpleRoundBtn title={account?"변경하기":"변경취소"} activation={account} onClick={handleAccUpdate}></PurpleRoundBtn>
+                            </div>
                         </div>
-                    </div>
-                </>
+                    </>
                 
                 {!account &&
                 <>
@@ -340,6 +349,7 @@ const MemberInfoUpdate = () =>{
                             <div className={style.modalTitle}>휴대폰 번호 변경</div>
                             <div className={style.phoneBox}>
                                 <input type="text" placeholder='휴대폰 번호 입력'
+                                value={inputPhone}
                                 style={{
                                     borderColor: inputPhone ? (isPhone ? 'black' : 'red') : 'black'
                                 }} 

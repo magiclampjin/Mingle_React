@@ -371,7 +371,7 @@ const PartyCreatePage = () =>{
                             <div className={style.pwCheck}>
                                 {`${isSame===false && accountInfo.pwConfirm !=="" && accountInfo.pw!=="" ? "비밀번호가 일치하지 않습니다.":""}`}
                             </div>
-                            <div className={`${style.inputNotice}`}><FontAwesomeIcon icon={faTriangleExclamation} size="xs"/><div className={style.inputNoticeTxt}>입력하신 계정은 유효성 검증에 사용되며, 파티를 만들고 난 뒤 정보를 변경할 수 없으니 주의해주세요.</div></div>
+                            <div className={`${style.inputNotice}`}><FontAwesomeIcon icon={faTriangleExclamation} size="xs"/><div className={style.inputNoticeTxt}>입력하신 계정은 파티를 만들고 난 뒤 정보를 변경할 수 없으니 주의해주세요.</div></div>
                             
                             <div className={style.goService}><a href={service.url} target="_blank" rel="noopener noreferrer">{service.name} 바로가기</a></div>
                             <div className={style.nextBtn}><PurpleRectangleBtn title="다음" activation={isGoNext} onClick={handleNext} width={150} heightPadding={10}/></div>
@@ -473,7 +473,7 @@ const PartyCreatePage = () =>{
                                         </>
                                         
                                     }
-                                    <div className={`${style.inputNotice}`}><FontAwesomeIcon icon={faTriangleExclamation} size="xs"/><div className={style.inputNoticeTxt}>결제 계좌는 파티장의 귀책 사유 발생시 위약금 부과를 위해 필요하며, 유효성 검증을 위해 1원 시범 결제 후 즉시 취소처리 합니다.</div></div>
+                                    <div className={`${style.inputNotice}`}><FontAwesomeIcon icon={faTriangleExclamation} size="xs"/><div className={style.inputNoticeTxt}>결제 계좌는 파티장의 귀책 사유 발생시 위약금 부과를 위해 필요합니다.</div></div>
                                 </div>
                             
                                 <div className={style.subMenu}>
