@@ -16,11 +16,15 @@ const Denied = () => {
   useEffect(() => {
     axios.get("/api/member/isAuthenticated").then((resp) => {
       setAuthenticate(resp.data);
+
+      if(resp.data){
+        navi(-1);
+      }
     });
   }, []);
 
   // useEffect(()=>{
-  //   if(authenticate){
+  //   if(loginId){
   //     navi(-1);
   //   }
   // },[loginId]);

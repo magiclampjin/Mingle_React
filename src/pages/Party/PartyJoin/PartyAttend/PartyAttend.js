@@ -29,8 +29,7 @@ const PartyAttend = () => {
     //뒤로가기 버튼을 통해서 들어오거나 주소를 통해서 들어왔다면 돌려보내기
     useEffect(() => {
         if (selectParty === null || service === null) {
-            alert("잘못된 접근입니다.");
-            navi("/party/PartyJoin/PartyList");
+            navi("/party/PartyJoin");
         }
     });
     

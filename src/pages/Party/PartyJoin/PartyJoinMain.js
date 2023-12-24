@@ -10,13 +10,17 @@ const PartyCreateMain = () => {
     const [selectServiceCategory,setSelectServiceCategory] = useState("전체");
     const [selectParty, setSelectParty] = useState(null);
     const [service, setService] = useState(null);
+    // 선택한 서비스 종류
+    const [selectService, setSelectService] = useState("");
     return (
         <JoinPartyContext.Provider
             value={{
                 selectParty,
                 setSelectParty,
                 service,
-                setService
+                setService,
+                selectService,
+                setSelectService
             }}
         >
             <Routes>
