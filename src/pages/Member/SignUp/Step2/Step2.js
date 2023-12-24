@@ -7,7 +7,7 @@ import axios from "axios";
 
 import { SignUpInfoContext } from "../SignUp";
 import { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Step2 = () => {
   const { currentStep, setCurrentStep } = useContext(SignUpInfoContext);
@@ -48,6 +48,10 @@ const Step2 = () => {
   });
   const [isLoading, setLoading] = useState(false); // 닉네임 로딩 상태
   const navi = useNavigate();
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   // 뒤로가기 버튼을 통해서 들어오거나 주소를 통해서 들어왔다면 돌려보내기
   useEffect(() => {
@@ -120,16 +124,23 @@ const Step2 = () => {
 
     // 다음 단계 조건이 충족되면
     if (!isNext) {
-      alert("회원가입 필수 내용을 모두 입력해주세요.");
+      if (!signupConditions.memberRecommenderId) {
+        alert("존재하지 않는 추천인은 입력이 불가능합니다.");
+      } else if (!signupConditions.mycode) {
+        alert("본인 인증을 진행해주세요.");
+      } else {
+        alert("회원가입 필수 내용을 모두 입력해주세요.");
+      }
+
       return false;
     } else {
       setLoading(true);
       // 'YYYYMMDD' 형식의 문자열을 'YYYY-MM-DD' 날짜형식으로 변환
-      const formattedBirth = `${user.birth.substring(
-        0,
-        4
-      )}-${user.birth.substring(4, 6)}-${user.birth.substring(6, 8)}`;
-      const birthToSend = new Date(formattedBirth).toISOString();
+      // const formattedBirth = `${user.birth.substring(
+      //   0,
+      //   4
+      // )}-${user.birth.substring(4, 6)}-${user.birth.substring(6, 8)}`;
+      const birthToSend = new Date(user.birth).toISOString();
 
       axios
         .post("/api/member/insertMember", { ...user, birth: birthToSend })
@@ -335,7 +346,8 @@ const Step2 = () => {
   useEffect(() => {
     if (user.birth !== "") {
       // 정규식 : 1900~2000대에 태어났으며 1~12월생, 01~31일생
-      let regexBirth = /^(19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])$/;
+      let regexBirth =
+        /^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/;
       let resultBirth = regexBirth.test(user.birth);
       // 생년월일 형식이 올바를 때
       if (resultBirth) {
@@ -345,8 +357,7 @@ const Step2 = () => {
         // 생년월일 형식이 올바르지 않을때
         setCheckText((prev) => ({
           ...prev,
-          birth:
-            "생년월일 형식이 올바르지 않습니다. 숫자만 8글자 입력해주세요.",
+          birth: "생년월일 형식이 올바르지 않습니다.",
         }));
         handleCondition("birth", false);
       }
@@ -497,7 +508,8 @@ const Step2 = () => {
       signupConditions.email &&
       signupConditions.mycode &&
       signupConditions.phone &&
-      signupConditions.nickname
+      signupConditions.nickname &&
+      signupConditions.memberRecommenderId
     ) {
       setNext(true);
     } else {
@@ -636,7 +648,7 @@ const Step2 = () => {
             </div>
             <div className={style.signup__inputBox}>
               <input
-                type="text"
+                type="date"
                 id="birthInput"
                 name="birth"
                 placeholder="생년월일 8자를 입력해주세요. ex)20000101"
