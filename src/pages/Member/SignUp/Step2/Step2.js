@@ -59,7 +59,7 @@ const Step2 = () => {
       alert("잘못된 접근입니다.");
       navi("/member/signup");
     }
-  });
+  }, []);
 
   // 글씨 색 변경 css
   const colorStyle = (check) => {
@@ -451,25 +451,25 @@ const Step2 = () => {
   // 추천인 아이디 존재하는지 검사
   useEffect(() => {
     if (user.memberRecommenderId !== "") {
-      axios
-        .post("/api/member/idDuplicateCheck", user.memberRecommenderId)
-        .then((resp) => {
-          if (resp.data) {
-            // 추천인 아이디 있을 때
-            setCheckText((prev) => ({
-              ...prev,
-              memberRecommenderId: "",
-            }));
-            handleCondition("memberRecommenderId", true);
-          } else {
-            // 추천인 아이디가 없을 때
-            setCheckText((prev) => ({
-              ...prev,
-              memberRecommenderId: "존재하지 않는 추천인입니다.",
-            }));
-            handleCondition("memberRecommenderId", false);
-          }
-        });
+      const formDtat = new FormData();
+      formDtat.append("id", user.memberRecommenderId);
+      axios.post("/api/member/idDuplicateCheck", formDtat).then((resp) => {
+        if (resp.data) {
+          // 추천인 아이디 있을 때
+          setCheckText((prev) => ({
+            ...prev,
+            memberRecommenderId: "",
+          }));
+          handleCondition("memberRecommenderId", true);
+        } else {
+          // 추천인 아이디가 없을 때
+          setCheckText((prev) => ({
+            ...prev,
+            memberRecommenderId: "존재하지 않는 추천인입니다.",
+          }));
+          handleCondition("memberRecommenderId", false);
+        }
+      });
     } else {
       setCheckText((prev) => ({ ...prev, memberRecommenderId: "" }));
       handleCondition("memberRecommenderId", true);

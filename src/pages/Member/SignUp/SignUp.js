@@ -15,6 +15,7 @@ const SignUp = () => {
   const { loginId } = useContext(LoginContext);
   // 현재 회원가입 단계
   const [currentStep, setCurrentStep] = useState("step1");
+  const [nextStep, setNextStep] = useState("step2");
   const [isNext, setNext] = useState(false); // 다음 단계로 넘어갈 수 있는지 확인
   const [chkAll, setChhAll] = useState(false); // 1단계 약관 모두 동의
   const [chkUse, setChkUse] = useState(false); // 1단계 이용약관 동의
@@ -69,6 +70,8 @@ const SignUp = () => {
         setChkUse,
         chkPrivacy,
         setChkPrivacy,
+        nextStep,
+        setNextStep,
       }}
     >
       <div className={style.signupBox}>

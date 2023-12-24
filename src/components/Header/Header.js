@@ -23,32 +23,30 @@ const Header = () => {
   const cookies = new Cookies();
 
   useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
+    if (modalIsOpen) {
+      const handleScroll = () => {
+        const currentScrollY = window.scrollY;
 
-      // 현재 스크롤 위치가 특정 위치보다 아래로 10px 내려갔을 때 이벤트 실행
-      // 스크롤을 한번만 내려도 헤더가 안보이기 때문에 10px로 설정함 ( 현재 모니터에서 기준으로 한번 스크롤시 99px까지 내려감 -> 10px만 움직여도 사라지게 하는것이 자연스럽다고 판단함 )
-      // 다른 사양의 모니터에서도 확인이 필요
-      // 아래 방향으로 내려갈 때 최 상단 위치보다 10px 아래로 내려갔을 때만 이벤트 실행 (감지 범위를 10~20으로 설정)
-      if (
-        currentScrollY > scrollPosition.current &&
-        currentScrollY > 10 &&
-        currentScrollY < 20
-      ) {
-        // 모달을 닫는 로직 추가
-        setModalIsOpen(false);
-      }
+        // 현재 스크롤 위치가 특정 위치보다 아래로 10px 내려갔을 때 이벤트 실행
+        // 스크롤을 한번만 내려도 헤더가 안보이기 때문에 10px로 설정함 ( 현재 모니터에서 기준으로 한번 스크롤시 99px까지 내려감 -> 10px만 움직여도 사라지게 하는것이 자연스럽다고 판단함 )
+        // 다른 사양의 모니터에서도 확인이 필요
+        // 아래 방향으로 내려갈 때 최 상단 위치보다 10px 아래로 내려갔을 때만 이벤트 실행 (감지 범위를 10~20으로 설정)
+        if (currentScrollY > scrollPosition.current && currentScrollY > 10) {
+          // 모달을 닫는 로직 추가
+          setModalIsOpen(false);
+        }
 
-      // 현재 스크롤 위치를 업데이트
-      scrollPosition.current = currentScrollY;
-    };
+        // 현재 스크롤 위치를 업데이트
+        scrollPosition.current = currentScrollY;
+      };
 
-    window.addEventListener("scroll", handleScroll);
+      window.addEventListener("scroll", handleScroll);
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [scrollPosition]);
+      return () => {
+        window.removeEventListener("scroll", handleScroll);
+      };
+    }
+  }, [scrollPosition, modalIsOpen]);
 
   useEffect(() => {
     // setLoading(true);
