@@ -11,7 +11,6 @@ const CalculationSelectBox = ({ day, setDay }) => {
     const handleSelect = (e) => {
         // 함수형 업데이트로 업데이트된 select값 확인
         setDay(e.target.value);
-        setFocus(false);
     }
 
     // 일 배열
@@ -25,7 +24,7 @@ const CalculationSelectBox = ({ day, setDay }) => {
     // 배열 요소 map으로 출력
     return (
         <div className={style.selectBoxCover}>
-            <select name="" id="" className={style.selectBox} onChange={handleSelect} onFocus={()=>{setFocus(true);}} value={day}>
+            <select name="" id="" className={style.selectBox} onChange={handleSelect} onClick={()=>{setFocus(!isFocus);}} value={day}>
                 {dayList.map((item) => {
                     return (
                         <option key={item} value={item}>

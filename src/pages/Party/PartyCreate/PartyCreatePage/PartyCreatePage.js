@@ -55,7 +55,6 @@ const PartyCreatePage = () =>{
                     if(prev+1 !== 2) setGoNext(false);
                     return prev+1;
                 });
-           
         }
     }
 
@@ -87,6 +86,8 @@ const PartyCreatePage = () =>{
 
     // 1단계 ----------------------------------------------------
 
+    // 아이디 중복 여부
+    const [isDup, setDup] = useState(false);
     // 비밀번호 보기 여부
     const [isView,setView] = useState(false);
     // 비밀번호 일치 여부
@@ -106,12 +107,22 @@ const PartyCreatePage = () =>{
         // 한글, 특수문자 입력 제한 (_, ., @는 허용 -> 이메일 아이디 대비)
         const regResult = e.target.value.replace(/[^a-zA-Z0-9_@.]/g,'');
 
-        setChecked((prev)=>({...prev,id:true}))
-        setAccountInfo((prev)=>{
-            if(regResult!==""){setChecked((prev)=>{ if(isChked.pw){setGoNext(true)} return {...prev,id:true};})}
-            else setChecked((prev)=>{ setGoNext(false); return {...prev,id:false}});
-            return {...prev,id:regResult}
+        const inputId = {loginId:regResult};
+        setAccountInfo(prev=>({...prev,id:regResult}));
+        axios.get(`/api/party/idDupChk/${service.id}`,{params:inputId}).then((resp)=>{
+            console.log(resp.data);
+            if(resp.data){
+                setDup(false);
+                setChecked((prev)=>({...prev,id:true}));
+                if(regResult!==""){setChecked((prev)=>{ if(isChked.pw){setGoNext(true)} return {...prev,id:true};})}
+                else setChecked((prev)=>{ setGoNext(false); return {...prev,id:false}});
+            }else{
+                setDup(true);
+                setChecked((prev)=>{ setGoNext(false); return {...prev,id:false}});
+            }
         });
+
+       
     }
 
     // 비밀번호 or 비밀번호 확인 입력
@@ -374,6 +385,9 @@ const PartyCreatePage = () =>{
                             <div className={style.title}>{service.name} {service.plan}의<br></br>로그인 정보를 입력해주세요.</div>
                             <div className={style.inputTags}>
                                 <div className={style.inputTag}><div className={style.inputCover}><div className={`${accountInfo.id===""?`${style.inputTitle} ${style.inputTitleHidden}`:`${style.inputTitle}`}`}>아이디</div><input type="text"  className={`${accountInfo.id===""?null:`${style.hasContent}`}`} name="id" placeholder="아이디" onChange={handleChangeId} value={accountInfo.id}></input></div></div>
+                                <div className={style.dupResult}>
+                                    {`${isDup===false && accountInfo.id!=="" ? "이미 등록된 아이디 입니다.":""}`}
+                                </div>
                                 <div className={style.inputTag}><div className={style.inputCover}><div className={`${accountInfo.pw===""?`${style.inputTitle} ${style.inputTitleHidden}`:`${style.inputTitle}`}`}>비밀번호</div><input type={`${isView?"text":"password"}`} className={`${accountInfo.pw===""?null:`${style.hasContent}`}`} name="pw" placeholder="비밀번호" onChange={handleChangePW} value={accountInfo.pw}></input></div><div className={`${style.iconCover} ${style.centerAlign}`}><FontAwesomeIcon icon={faEye} size="sm" className={`${isView?`${style.eyeIconActive} ${style.eyeIcon}`:`${style.eyeIcon}`}`} onClick={handleView} data-name="pw"/></div></div>
                                 <div className={style.inputTag}><div className={style.inputCover}><div className={`${accountInfo.pwConfirm===""?`${style.inputTitle} ${style.inputTitleHidden}`:`${style.inputTitle}`}`}>비밀번호 확인</div><input type={`${isView?"text":"password"}`} className={`${accountInfo.pwConfirm===""?null:`${style.hasContent}`}`} name="pwConfirm" placeholder="비밀번호 확인" onChange={handleChangePW} value={accountInfo.pwConfirm}></input></div><div className={`${style.iconCover} ${style.centerAlign}`}><FontAwesomeIcon icon={faEye} size="sm" className={`${isView?`${style.eyeIconActive} ${style.eyeIcon}`:`${style.eyeIcon}`}`} onClick={handleView} data-name="pwConfirm"/></div></div>
                             </div>
