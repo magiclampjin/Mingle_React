@@ -8,6 +8,7 @@ import axios from "axios";
 import AccountModal from "../../PartyCreate/PartyCreatePage/AccountModal/AccountModal";
 import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
 import { JoinPartyContext } from "../PartyJoinMain";
+import { LoginContext } from "../../../../App";
 
 const PartyAttend = () => {
     // 이전으로 돌아가기
@@ -17,11 +18,19 @@ const PartyAttend = () => {
     } 
     const { selectParty, setSelectParty, service } = useContext(JoinPartyContext);
 
+    // 로그인하지 않았다면 접근권한 페이지로 이동
+    const {loginId} = useContext(LoginContext);
+    useEffect(()=>{
+        if(loginId===""){
+           navi("/denied");
+        }
+    },[loginId]);
+
     //뒤로가기 버튼을 통해서 들어오거나 주소를 통해서 들어왔다면 돌려보내기
     useEffect(() => {
         if (selectParty === null || service === null) {
             alert("잘못된 접근입니다.");
-            navi("/");
+            navi("/party/PartyJoin/PartyList");
         }
     });
     
