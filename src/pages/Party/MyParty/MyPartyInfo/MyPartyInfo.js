@@ -23,6 +23,20 @@ const MyPartyInfo = () =>{
         }
     }
 
+    // 종료일 계산하는 함수
+    const getEndDate = (date, period) => {
+        let endDate = new Date(date);
+        endDate.setMonth(endDate.getMonth()+period);
+        return endDate.toISOString().slice(0,10);
+    }
+
+     // 숫자를 천 단위로 콤마 찍어주는 함수
+     const formatNumber = (value) => {
+        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    };
+
+
+
     useEffect(()=>{
         setLoading(true);
         axios.get(`/api/party/getPartyInfo/${selectParty}`).then(resp=>{
@@ -46,9 +60,9 @@ const MyPartyInfo = () =>{
                 <>
                     <div className={style.guide}>
                         <div className={style.header}>
-                            <img src={`/assets/serviceLogo/${partyInfo.englishName}.png`} alt={`${partyInfo.name} 로고 이미지`} className={`${partyInfo.logoImg} ${style.VAlign}`}></img>
+                            <img src={`/assets/serviceLogo/${partyInfo.englishName}.png`} alt={`${partyInfo.name} 로고 이미지`} className={`${style.logoImg} ${style.VAlign}`}></img>
                             <div className={style.name}>{partyInfo.name} {partyInfo.plan}</div>
-                            <div className={`${style.serviceName} ${style.centerAlign}`}>
+                            <div className={`${style.tags} ${style.centerAlign}`}>
                                 <div className={style.tag}>{isStart(partyInfo.startDate)===1?"진행":"예정"}</div>
                                 {partyInfo.partyManager?<div className={style.tag}>방장</div>:null}
                             </div>
@@ -58,22 +72,29 @@ const MyPartyInfo = () =>{
                                 <div className={style.leftInfo}>
                                     <div className={style.subTitle}>파티 정보</div>
                                     <div className={style.grayTitle}>파티 기간</div>
-                                    <div className={style.period}>기간</div>
+                                    <div className={style.subContent}>{partyInfo.startDate.slice(0,10)} <span className={style.br}>~</span> {getEndDate(partyInfo.startDate, partyInfo.monthCount)}</div>
+                                    <div className={style.grayTitle}>정산일</div>
+                                    <div className={style.subContent}>매달 {partyInfo.calculationDate}일</div>
+                                    <div className={style.grayTitle}>정산 금액</div>
+                                    <div className={style.subContent}>매달 {formatNumber(Math.ceil((partyInfo.price)/(partyInfo.maxPeopleCount))+1000)}원</div>
                                 </div>
                                 <div className={style.leftInfo}>
-                                    <div className={style.subTitle}>정산일 정보</div>
-                                    <div className={style.period}>매달 n일</div>
+                                    <div className={style.subTitle}>파티 계정 정보</div>
+                                    <div className={style.grayTitle}>아이디</div>
+                                    <div className={style.subContent}>{isStart(partyInfo.startDate)===1?partyInfo.loginId:"파티가 시작되면 공개됩니다."}</div>
+                                    <div className={style.grayTitle}>비밀번호</div>
+                                    <div className={style.subContent}>{isStart(partyInfo.startDate)===1?partyInfo.loginPw:"파티가 시작되면 공개됩니다."}</div>
                                 </div>
                             </div>
                             <div className={style.right}>
                                 <div className={style.partyInfo}>
                                     <div className={style.infoContent}>
                                         <div className={style.infoTitle}>아이디</div>
-                                        <div className={style.infoContent}>sdfsdf</div>
+                                        <div className={style.infoSubContent}>{isStart(partyInfo.startDate)===1?partyInfo.loginId:"파티가 시작되면 공개됩니다."}</div>
                                     </div>
                                     <div className={style.infoContent}>
                                         <div className={style.infoTitle}>비밀번호</div>
-                                        <div className={style.infoContent}>sdfsdf</div>
+                                        <div className={style.infoSubContent}>{isStart(partyInfo.startDate)===1?partyInfo.loginPw:"파티가 시작되면 공개됩니다."}</div>
                                     </div>
                                 </div>
                             </div>
