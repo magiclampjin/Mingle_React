@@ -10,11 +10,21 @@ import ServiceInfoModal from "../Party/PartyCreate/PartyCreateList/ServiceInfoMo
 import axios from "axios";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
+import { faRightToBracket, faWonSign } from "@fortawesome/free-solid-svg-icons";
+import { faFaceSadTear } from "@fortawesome/free-regular-svg-icons";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { LoginContext } from "../../App";
 
 const Main = () => {
+  const { loginId } = useContext(LoginContext);
+
+  // 무한 롤링 애니메이션 설정
+  const [animate, setAnimate] = useState(true);
+  const onStop = () => setAnimate(false); // 멈춤
+  const onRun = () => setAnimate(true); // 재생
+
+  const getServiceId = "전체";
   // 서비스 목록
   const [service, setService] = useState([]);
   // 가입된 서비스 목록
@@ -29,6 +39,16 @@ const Main = () => {
   // 요금 안내 확인용 chkBox
   const [isChked, setChked] = useState(false);
 
+  // 파티 목록
+  const [partyList, setPartyList] = useState(null);
+  // 최소 날짜 (오늘)
+  const currentDate = new Date();
+  // 최대 날짜 (한달 후)
+  const maginot = new Date();
+  maginot.setMonth(currentDate.getMonth() + 1);
+  // 검색 기간
+  const [period, setPeriod] = useState({ start: currentDate, end: maginot });
+
   // 최신 비디오 목록
   const [newVideoInfo, setNewVideoInfo] = useState(null);
 
@@ -37,8 +57,9 @@ const Main = () => {
   // 컴포넌트가 마운트될 때 데이터 로드
   useEffect(() => {
     // 전체 이용할 수 있는 서비스 목록 불러오기
+    // 로그인 아이디가 있을 때 추가로 만들 수 있는 서비스가 있다면 파티 만들기
     axios
-      .get("/api/party/getServiceMainPage")
+      .get("/api/party/getService/" + getServiceId)
       .then((resp) => {
         console.log(resp.data);
         setService(Array.isArray(resp.data.list) ? resp.data.list : []);
@@ -52,6 +73,21 @@ const Main = () => {
       })
       .catch(() => {
         setService([]);
+      });
+  }, [loginId]);
+  useEffect(() => {
+    // 오늘부터 1달동안의 가입가능한 파티 불러오기
+    let data = {
+      start: period.start.toISOString(),
+      end: period.end.toISOString(),
+    };
+    // 파티 목록 불러오기
+    axios
+      .get("/api/party/getPartyListForMain", { params: data })
+      .then((resp) => {
+        console.log(resp.data);
+        console.log(partyList);
+        setPartyList(resp.data);
       });
     // 최신 비디오 목록 불러오기
     axios
@@ -100,11 +136,76 @@ const Main = () => {
     setChked(false);
   };
 
-  const [animate, setAnimate] = useState(true);
-  const onStop = () => setAnimate(false);
-  const onRun = () => setAnimate(true);
+  // 숫자를 천 단위로 콤마 찍어주는 함수
+  const formatNumber = (value) => {
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
 
-  if (newVideoInfo === null || service.length === 0) {
+  // 시작일까지 남은 날짜 계산하는 함수
+  const getStartDate = (value) => {
+    let now = new Date();
+    now.setHours(0, 0, 0, 0);
+    now.setHours(now.getHours() + 9);
+    const diff =
+      (new Date(value).getTime() - now.getTime()) / (1000 * 60 * 60 * 24);
+    if (diff === 0) {
+      return (
+        <>
+          <span className={style.colorMainPurple}>오늘</span> 시작되는
+        </>
+      );
+    } else if (diff < 0) {
+      return (
+        <>
+          <span className={style.colorMainPurple}>현재</span> 진행중인
+        </>
+      );
+    } else {
+      return (
+        <>
+          <span className={style.colorMainPurple}>{diff}일 후</span> 시작되는
+        </>
+      );
+    }
+  };
+
+  // 종료일 계산하는 함수
+  const getEndDate = (date, period) => {
+    let endDate = new Date(date);
+    endDate.setMonth(endDate.getMonth() + period);
+    return endDate.toISOString().slice(0, 10);
+  };
+
+  // 파티 만들기 페이지로 이동
+  const goCreateParty = (e) => {
+    if (loginId) {
+      const contentElement = e.currentTarget;
+      const clickedElement = e.target;
+
+      if (
+        clickedElement === contentElement ||
+        contentElement.contains(clickedElement)
+      ) {
+        navi("/party/partyCreate");
+      }
+    } else {
+      // 로그인하지않은 유저일 경우 로그인창으로 이동 혹은 현재 페이지 유지
+      if (
+        window.confirm(
+          "로그인 후 이용 가능한 서비스입니다.\n로그인 화면으로 이동하시겠습니까?"
+        )
+      ) {
+        navi("/member/login");
+      }
+    }
+  };
+
+  // 파티 찾기 페이지로 이동
+  const handleSearchParty = () => {
+    navi("/party/partyJoin");
+  };
+
+  if (newVideoInfo === null || service.length === 0 /*|| partyList === null*/) {
     return <LoadingSpinner />;
   }
 
@@ -136,7 +237,7 @@ const Main = () => {
                     alt={`${e.name} 로고 이미지`}
                   />
                 </div>
-                {joinPossible ? (
+                {joinPossible && loginId !== "" ? (
                   <div
                     className={style.partyCreate}
                     data-id={e.id}
@@ -200,6 +301,80 @@ const Main = () => {
         isChked={isChked}
         setChked={setChked}
       ></ServiceInfoModal> */}
+
+      <div className={style.partyCardList}>
+        <div className={style.sectionTitle}>참여 가능한 파티</div>
+        <div className={style.partySection}>
+          {partyList !== null ? (
+            // console.log(partyList);
+            partyList.map((e, i) => {
+              return (
+                <div key={i} className={style.party} data-id={i}>
+                  <div className={style.partyLeft}>
+                    <div className={style.partyTop}>
+                      <div className={style.partyStartDate}>
+                        {getStartDate(e.startDate)}
+                        <span className={style.monthCount}>
+                          {e.monthCount}개월
+                        </span>
+                        파티
+                      </div>
+                      <div className={style.partyPrice}>
+                        <div className={style.wonIcon}>
+                          <FontAwesomeIcon icon={faWonSign} />
+                        </div>
+                        <div>
+                          월
+                          {formatNumber(
+                            Math.ceil(e.price / e.maxPeopleCount) + 1000
+                          )}
+                          원
+                        </div>
+                      </div>
+                    </div>
+                    <div className={style.partyBottom}>
+                      ~ {getEndDate(e.startDate, e.monthCount)}까지
+                    </div>
+                  </div>
+                  <div className={style.partyRight}>
+                    <img
+                      src={`/assets/serviceLogo/${e.englishName}.png`}
+                      alt={`${e.name} 로고 이미지`}
+                    />
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <div className={style.empty}>
+              <div className={`${style.emptyIcon} ${style.centerAlign}`}>
+                <FontAwesomeIcon icon={faFaceSadTear} />
+              </div>
+              <div className={`${style.emptyTxt} ${style.centerAlign}`}>
+                비어있는 파티가 없어요.
+              </div>
+            </div>
+          )}
+        </div>
+        <div className={style.partyBtns}>
+          {partyList !== null ? (
+            <PurpleRectangleBtn
+              title={"파티 더보기"}
+              activation={true}
+              width={150}
+              heightPadding={10}
+              onClick={handleSearchParty}
+            ></PurpleRectangleBtn>
+          ) : (
+            <PurpleRectangleBtn
+              title={"파티 만들기"}
+              activation={true}
+              width={150}
+              heightPadding={10}
+            ></PurpleRectangleBtn>
+          )}
+        </div>
+      </div>
       <div className={style.newVideoInfo}>
         <RenderNewVideo newVideoInfo={newVideoInfo} />
       </div>

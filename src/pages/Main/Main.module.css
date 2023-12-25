@@ -2,12 +2,19 @@
   background-color: lightblue;
 }
 .rollingSlide,
-.newVideoInfo {
+.newVideoInfo,
+.partyCardList {
   max-width: 1300px;
   margin: auto;
 }
+.newVideoInfo > div {
+  padding: 0;
+}
 .newVideoInfo p {
   text-align: start !important;
+}
+.newVideoInfo button {
+  border-radius: 5px !important;
 }
 .rollingSlide {
   display: flex;
@@ -114,9 +121,116 @@
   animation-play-state: paused;
 }
 
+.period {
+  margin-bottom: 50px;
+}
+
+.partyCardList {
+  margin-top: 50px;
+}
+.sectionTitle {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  color: #5d5c61;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.empty {
+  padding: 100px 0;
+  background-color: #dfe2e6;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.emptyIcon * {
+  font-size: 40px;
+  color: #676d7c;
+}
+
+.emptyTxt {
+  font-size: 20px;
+  font-weight: 500;
+  color: #676d7c;
+  margin-top: 20px;
+}
+.partySection {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  /* justify-content: space-around; */
+  /* gap: 20px; */
+}
+
+.party {
+  flex-basis: calc(50% - 20px);
+  margin-bottom: 20px;
+  width: 200px;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  padding: 30px;
+  box-shadow: 0 0 5px 0 #73757750;
+}
+.party:hover {
+  border: 2px solid #7b61ff50;
+  cursor: pointer;
+}
+.partyRight img {
+  width: 80px;
+  height: 80px;
+}
+.colorMainPurple,
+.monthCount {
+  color: #7b61ff;
+}
+.partyStartDate {
+  font-size: 20px;
+  font-weight: 700;
+}
+.partyPrice {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+.partyPrice div {
+  color: #676d7c;
+  font-size: 15px;
+  font-weight: bold;
+}
+.wonIcon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50px;
+  border: 2px solid #676d7c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 5px;
+}
+.wonIcon * {
+  color: #676d7c;
+  font-size: 10px;
+}
+.partyBottom {
+  color: #676d7c;
+  font-size: 14px;
+  margin-top: 10px;
+}
+/* .party:nth-child(odd) {
+  margin-right: 20px;
+} */
+.partyBtns {
+  text-align: end;
+}
+
 @media (max-width: 786px) {
   .rollingSlide,
-  .newVideoInfo {
+  .newVideoInfo,
+  .partyCardList {
     max-width: 700px;
   }
 }
