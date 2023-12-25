@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { myPartyContext } from "../MyPartyMain";
 import axios from "axios";
-import style from "./MyPartyInfo.css";
+import style from "./MyPartyInfo.module.css";
 import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
 
 const MyPartyInfo = () =>{
