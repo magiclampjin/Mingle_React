@@ -17,14 +17,14 @@ const Login = () => {
   const navi = useNavigate();
   const cookies = new Cookies();
 
-  // 카카오 로그인 인증 키 및 redirectUrl
-  const CLIENT_ID = process.env.REACT_APP_REST_API_KEY;
-  const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URL;
-  // 카카오 인증 url
-  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+  // // 카카오 로그인 인증 키 및 redirectUrl
+  // const CLIENT_ID = process.env.REACT_APP_REST_API_KEY;
+  // const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URL;
+  // // 카카오 인증 url
+  // const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
-  // 구글 클라이언트 id
-  const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+  // // 구글 클라이언트 id
+  // const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
   useEffect(() => {
     // 아이디 기억하기를 했다면 쿠키에 있는 아이디 출력하기
     let cookieRememeberId = cookies.get("rememberID");
@@ -33,7 +33,7 @@ const Login = () => {
       setUser({ id: cookieLoginId, pw: "" });
       setRememberId(cookieRememeberId);
     }
-    console.log(REDIRECT_URI);
+    // console.log(REDIRECT_URI);
   }, []);
 
   // user State 값 채우기
@@ -121,12 +121,12 @@ const Login = () => {
     navi("/member/findInfo");
   };
 
-  // 카카오 로그인
-  const handleKakaoLogin = () => {
-    console.log("d");
-    window.location.href = KAKAO_AUTH_URL;
-    // window.location.href = "/oauth2/authorization/kakao";
-  };
+  // // 카카오 로그인
+  // const handleKakaoLogin = () => {
+  //   console.log("d");
+  //   window.location.href = KAKAO_AUTH_URL;
+  //   // window.location.href = "/oauth2/authorization/kakao";
+  // };
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -184,16 +184,16 @@ const Login = () => {
           activation={true}
         ></PurpleRectangleBtn>
       </div>
-      <div>
-        {/* <a href={KAKAO_AUTH_URL} className={style.kakaobtn} target="_blanck"> */}
+      {/* <div>
+       
         <img
           src="/assets/loginBtns/kakao.png"
           className={style.socialLoginbtn}
           onClick={handleKakaoLogin}
         />
-        {/* </a> */}
+        
         <a href="/login/oauth2/code/google">구글 로그인</a>
-      </div>
+      </div> */}
     </div>
   );
 };

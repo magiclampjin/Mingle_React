@@ -1,0 +1,142 @@
+
+.guide{
+    max-width: 1300px;
+    margin: auto;
+    padding:20px 24px;
+}
+
+.centerAlign {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.VAlign{
+    display:flex;
+    align-items: center;
+}
+
+.hAlign{
+    display:flex;
+    justify-content: center;
+}
+
+.dflex{
+    display: flex;
+}
+
+.title{
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 50px;    
+}
+
+.header{
+    box-shadow: 0 0 5px 0 #73757750 ;
+    background-color: #8787D030;
+    border-radius: 15px;
+    position:relative;
+    padding: 45px 10px 20px 10px;
+}
+
+.logoImg{
+    width: 80px;
+    height: 80px;
+    position:absolute;
+    top:calc(-50% + 20px);
+}
+
+.name{
+    font-size: 18px;
+    text-align: center;
+    font-weight: bold;
+}
+
+
+.tags{
+    margin-top: 10px;
+}
+.tag{
+    background-color: #6A57D799;
+    padding:5px 10px;
+    width: fit-content;
+    border-radius: 10px;
+    color:white;
+    font-size: 15px;
+    font-weight: normal;
+    margin-left: 10px;
+}
+
+.tag:first-child{
+    margin-left: 0px;
+}
+
+
+
+.body{
+    display: flex;
+    margin-top: 30px;
+}
+.left{
+    width: 30%;
+}
+.right{
+    width: 70%;
+    margin-left: 30px;
+    height: 443px;
+}
+.partyInfo{
+    height: 100%;
+}
+.leftInfo, .partyInfo{
+    box-shadow: 0 0 5px 0 #73757750 ;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.grayTitle{
+    margin-top: 15px;
+}
+.subTitle, .subContent, .infoTitle{
+    font-weight: 700;
+}
+
+.grayTitle{
+    color: #737577;
+    font-weight: 500;
+}
+
+.subContent, .grayTitle, .infoSubContent{
+    font-size: 14px;
+}
+
+.infoContent{
+    margin-bottom: 20px;
+}
+
+.infoContent:last-child{
+    margin-bottom: 0;
+}
+
+
+@media (max-width: 850px){
+    .br{
+        display: block;
+    }
+    .right{
+        height: 485px;
+    }
+}  
+
+@media (max-width: 768px){
+    .guide{
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 600px){
+    .guide{
+        margin: 0;
+    }
+}

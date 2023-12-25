@@ -1,55 +1,72 @@
+<<<<<<< HEAD
 import { createContext, useContext, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import styles from './Board.module.css'
 import BoardCategories from './components/BoardCategory/BoardCategories';
+=======
+import { createContext, useContext, useEffect, useState } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useNavigate,
+} from "react-router-dom";
+import styles from "./Board.module.css";
+import BoardCategories from "./components/BoardCategory/BoardCategories";
+>>>>>>> c8c40952e9562c0abcb1d3007e840051dfb9ca9a
 import BoardMain from "./BoardMain/BoardMain";
-import PopularPosts from './PopularPosts/PopularPosts';
-import FreeBoard from './FreeBoard/FreeBoard';
-import NoticeBoard from './NoticeBoard/NoticeBoard';
-import WritePost from './WritePost/WritePost';
-import UpdatePost from './UpdatePost/UpdatePost';
-import Post from './Post/Post';
-import FixedMenu from './components/FixedMenu/FixedMenu';
-import Intro from './Intro/Intro';
-import { LoginContext } from '../../App';
+import PopularPosts from "./PopularPosts/PopularPosts";
+import FreeBoard from "./FreeBoard/FreeBoard";
+import NoticeBoard from "./NoticeBoard/NoticeBoard";
+import WritePost from "./WritePost/WritePost";
+import UpdatePost from "./UpdatePost/UpdatePost";
+import Post from "./Post/Post";
+import FixedMenu from "./components/FixedMenu/FixedMenu";
+import Intro from "./Intro/Intro";
+import { LoginContext } from "../../App";
+import { MenuContext } from "../../App";
 
 export const postMenuContext = createContext();
 
 const Board = () => {
-    const { loginId } = useContext(LoginContext);
+    
+  const { loginId } = useContext(LoginContext);
+  const { setSelectedMenu } = useContext(MenuContext);
+  const location = useLocation(); // 현재 위치 정보 가져오기
 
-    const location = useLocation(); // 현재 위치 정보 가져오기
-    const navigate = useNavigate();
+  useEffect(() => {
+    setSelectedMenu("게시판");
+  }, []);
+  // const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     if (!loginId) {
-    //         alert("접근권한이 없습니다. 로그인을 해주시길 바랍니다.")
-    //         navigate('/');
-    //     }
-    // }, [loginId, navigate]);
+  // useEffect(() => {
+  //     if (!loginId) {
+  //         navigate('/denied');
+  //     }
+  // }, [loginId, navigate]); 
 
-    const [menu, setMenu] = useState("");
+  const [menu, setMenu] = useState("");
+  return (
+    <postMenuContext.Provider value={{ menu, setMenu }}>
+      <div className={styles.container}>
+        <div>
+          <BoardCategories />
+        </div>
+        <Routes>
+          <Route path="/" element={<BoardMain />} />
+          <Route path="intro" element={<Intro />} />
+          <Route path="popularposts" element={<PopularPosts />} />
+          <Route path="freeboard" element={<FreeBoard />} />
+          <Route path="noticeboard" element={<NoticeBoard />} />
+          <Route path="writepost" element={<WritePost />} />
+          <Route path="updatepost/*" element={<UpdatePost />} />
+          <Route path="/post/:postId" element={<Post />} />
+        </Routes>
+        {location.pathname !== '/board/writepost' && <FixedMenu />}
+      </div>
+    </postMenuContext.Provider>
+  );
 
-    return (
-        <postMenuContext.Provider value={{ menu, setMenu }}>
-            <div className={styles.container}>
-                <div>
-                    <BoardCategories />
-                </div>
-                <Routes>
-                    <Route path="/" element={<BoardMain />} />
-                    <Route path="intro" element={<Intro />} />
-                    <Route path="popularposts" element={<PopularPosts />} />
-                    <Route path="freeboard" element={<FreeBoard />} />
-                    <Route path="noticeboard" element={<NoticeBoard />} />
-                    <Route path="writepost" element={<WritePost />} />
-                    <Route path="/updatepost/:postId" element={<UpdatePost />} />
-                    <Route path="/post/:postId" element={<Post />} />
-                </Routes>
-                {location.pathname !== '/board/writepost' && <FixedMenu />}
-            </div>
-        </postMenuContext.Provider>
-    );
 };
 
 
