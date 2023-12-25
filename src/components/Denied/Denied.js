@@ -7,13 +7,17 @@ import axios from "axios";
 import GrayRectangleBtn from "../GrayRectangleBtn/GrayRectangleBtn";
 import PurpleRectangleBtn from "../PurpleRectangleBtn/PurpleRectangleBtn";
 import { LoginContext } from "../../App";
+import { MenuContext } from "../../App";
 
 const Denied = () => {
   const [authenticate, setAuthenticate] = useState();
+  const { setSelectedMenu } = useContext(MenuContext);
   const {loginId} = useContext(LoginContext);
   const navi = useNavigate();
 
+
   useEffect(() => {
+    setSelectedMenu("");
     axios.get("/api/member/isAuthenticated").then((resp) => {
       setAuthenticate(resp.data);
 
