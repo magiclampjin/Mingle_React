@@ -1,19 +1,14 @@
-<<<<<<< HEAD
-import { createContext, useContext, useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { createContext,
+         useContext,
+         useEffect,
+         useState } from 'react';
+import { BrowserRouter as Router,
+         Routes,
+         Route, 
+         useNavigate, 
+         useLocation } from 'react-router-dom';
 import styles from './Board.module.css'
 import BoardCategories from './components/BoardCategory/BoardCategories';
-=======
-import { createContext, useContext, useEffect, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useNavigate,
-} from "react-router-dom";
-import styles from "./Board.module.css";
-import BoardCategories from "./components/BoardCategory/BoardCategories";
->>>>>>> c8c40952e9562c0abcb1d3007e840051dfb9ca9a
 import BoardMain from "./BoardMain/BoardMain";
 import PopularPosts from "./PopularPosts/PopularPosts";
 import FreeBoard from "./FreeBoard/FreeBoard";
