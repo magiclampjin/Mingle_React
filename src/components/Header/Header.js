@@ -17,10 +17,16 @@ const Header = () => {
   const { loginId, setLoginId } = useContext(LoginContext);
   const { loginNick, setLoginNick } = useContext(LoginContext);
   const { loginRole, setLoginRole } = useContext(LoginContext);
+  const { selectedMenu, setSelectedMenu } = useContext(MenuContext);
   const scrollPosition = useRef(0);
 
-  // const navi = useNavigate();
+  const navi = useNavigate();
   const cookies = new Cookies();
+
+  // 선택한 메뉴 아래부분 border
+  const borderStyle = {
+    borderBottom: "2px solid #7b61ff",
+  };
 
   useEffect(() => {
     if (modalIsOpen) {
@@ -93,43 +99,113 @@ const Header = () => {
 
   // 자주 묻는 질문으로 이동
   const handleFAQClick = () => {
+    setSelectedMenu("자주 묻는 질문");
     window.location.href =
       "https://impossible-log-6dc.notion.site/4ac5ec788ca04f6ab7304dbb71891974?pvs=4";
   };
 
+  // 로그인하기
+  const handleGoLogin = () => {
+    setSelectedMenu("");
+    navi("/member/login");
+  };
+  // const handleGoMyParty = (label) => {
+  //   console.log(label);
+  //   navi("/party/myParty");
+  // };
+  // const handleGoPartyCreate = () => {
+  //   navi("/party/partycreate");
+  // };
+  // const handleGoPartySearch = () => {
+  //   navi("/party/partyJoin");
+  // };
+  // const handleGoBoard = () => {
+  //   navi("/board");
+  // };
+
+  // 각 메뉴 클릭했을 때 선택한 메뉴 초기화
+  const handleMenuClick = (path, label) => {
+    setSelectedMenu(label);
+    navi(path);
+  };
+
+  // 홈으로 가기
+  const handleHome = () => {
+    setSelectedMenu("");
+    navi("/");
+  };
+
+  const menuItems = [
+    { label: "나의 파티", path: "/party/myParty" },
+    { label: "파티 만들기", path: "/party/partycreate" },
+    { label: "파티 찾기", path: "/party/partyJoin" },
+    { label: "게시판", path: "/board" },
+    { label: "자주 묻는 질문", handle: handleFAQClick },
+  ];
+
   return (
     <div className={style.header}>
       <div className={style.header__pcSize}>
-        <Link to="/">
-          <div className={style.header__logo}>
-            M<span>I</span>NG<span>L</span>E
-          </div>
-        </Link>
+        <div className={style.header__logo} onClick={handleHome}>
+          M<span>I</span>NG<span>L</span>E
+        </div>
+
         <div className={style.header__menu}>
           <div className={style.menu__navi}>
-            <div className={style.navi__conf}>
+            {/* <div className={style.navi__conf} style={borderStyle}>
               <Link to="party/myParty">나의 파티</Link>
             </div>
-            <div className={style.navi__conf}>
+            <div className={style.navi__conf} style={borderStyle}>
               <Link to="party/partycreate">파티 만들기</Link>
             </div>
-            <div className={style.navi__conf}>
+            <div className={style.navi__conf} style={borderStyle}>
               <Link to="party/partyJoin">파티 찾기</Link>
             </div>
-            <div className={style.navi__conf}>
+            <div className={style.navi__conf} style={borderStyle}>
               <Link to="board">게시판</Link>
             </div>
 
-            <div className={style.navi__conf} onClick={handleFAQClick}>
+            <div
+              className={style.navi__conf}
+              onClick={handleFAQClick}
+              style={borderStyle}
+            >
               자주 묻는 질문
-            </div>
+            </div> */}
+            {menuItems.map((menuItem, index) => {
+              return (
+                <div
+                  key={index}
+                  className={style.navi__conf}
+                  // onClick={menuItem.handle}
+                  // style={{
+                  //   borderBottom:
+                  //     selectedMenu === menuItem.label
+                  //       ? "2px solid #7b61ff"
+                  //       : "border-bottom: 2px solid transparent",
+                  // }}
+                  onClick={() =>
+                    menuItem.handle
+                      ? menuItem.handle()
+                      : handleMenuClick(menuItem.path, menuItem.label)
+                  }
+                  style={{
+                    borderBottom:
+                      selectedMenu === menuItem.label
+                        ? "2px solid #7b61ff"
+                        : "2px solid transparent",
+                  }}
+                >
+                  {menuItem.label}
+                </div>
+              );
+            })}
             {loginId === "" || loginId === null ? (
-              <Link to="member/login">
-                <PurpleRoundBtn
-                  title={"로그인"}
-                  activation={true}
-                ></PurpleRoundBtn>
-              </Link>
+              <PurpleRoundBtn
+                title={"로그인"}
+                activation={true}
+                onClick={handleGoLogin}
+              ></PurpleRoundBtn>
             ) : (
               <>
                 <div className={style.menu__user}>
@@ -243,17 +319,38 @@ const Header = () => {
       </div>
 
       <div className={style.menu__naviTabSize}>
-        <div className={style.navi__conf}>
+        {/* <div className={style.navi__conf} style={borderStyle}>
           <Link to="party/myParty">나의 파티</Link>
         </div>
-        <div className={style.navi__conf}>
+        <div className={style.navi__conf} style={borderStyle}>
           <Link to="party/partycreate">파티 만들기</Link>
         </div>
-        <div className={style.navi__conf}>
+        <div className={style.navi__conf} style={borderStyle}>
           <Link to="party/partyJoin">파티 찾기</Link>
         </div>
-        <div className={style.navi__conf}>게시판</div>
-        <div className={style.navi__conf}>자주 묻는 질문</div>
+        <div className={style.navi__conf} style={borderStyle}>
+          게시판
+        </div>
+        <div className={style.navi__conf} style={borderStyle}>
+          자주 묻는 질문
+        </div> */}
+        {/* {menuItems.map((menuItem, index) => {
+          return (
+            <div
+              key={index}
+              className={style.navi__conf}
+              onClick={menuItem.handle()}
+              style={{
+                borderBottom:
+                  selectedMenu === menuItem.label
+                    ? "2px solid #7b61ff"
+                    : "border-bottom: 2px solid transparent",
+              }}
+            >
+              {menuItem.label}
+            </div>
+          );
+        })} */}
       </div>
     </div>
   );

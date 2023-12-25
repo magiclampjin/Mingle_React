@@ -1,13 +1,18 @@
 import PartyCreateList from "./PartyCreateList/PartyCreateList";
 import PartyCreatePage from "./PartyCreatePage/PartyCreatePage";
-import { createContext, useState } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
+import { MenuContext } from "../../../App";
 
 export const CreatePartyContext = createContext();
 
 const PartyCreateMain = () => {
   const [selectServiceCategory, setSelectServiceCategory] = useState("전체");
   const [service, setService] = useState(null);
+  const { setSelectedMenu } = useContext(MenuContext);
+  useEffect(() => {
+    setSelectedMenu("파티 만들기");
+  }, []);
   return (
     <CreatePartyContext.Provider
       value={{
