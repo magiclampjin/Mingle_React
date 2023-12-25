@@ -33,6 +33,7 @@
     "reactstrap": "^9.2.1",
     "socketjs-client": "^1.0.2",
     "styled-components": "^6.1.1",
+    "swiper": "^11.0.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

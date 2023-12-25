@@ -55,7 +55,6 @@
 .original,
 .clone {
   display: flex;
-  /* overflow: hidden; */
   height: 175px;
 }
 
@@ -165,7 +164,6 @@
 .party {
   flex-basis: calc(50% - 20px);
   margin-bottom: 20px;
-  width: 200px;
   display: flex;
   justify-content: space-between;
   position: relative;
@@ -225,6 +223,13 @@
 } */
 .partyBtns {
   text-align: end;
+}
+
+@media (max-width: 840px) {
+  .party {
+    width: 100%;
+    flex-basis: auto;
+  }
 }
 
 @media (max-width: 786px) {

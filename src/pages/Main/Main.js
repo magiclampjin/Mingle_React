@@ -1,4 +1,5 @@
 import style from "./Main.module.css";
+import "./Main.css";
 import GrayRectangleBtn from "../../components/GrayRectangleBtn/GrayRectangleBtn";
 import PurpleRectangleBtn from "../../components/PurpleRectangleBtn/PurpleRectangleBtn";
 import PurpleRoundBtn from "../../components/PurpleRoundBtn/PurpleRoundBtn";
@@ -13,8 +14,24 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightToBracket, faWonSign } from "@fortawesome/free-solid-svg-icons";
 import { faFaceSadTear } from "@fortawesome/free-regular-svg-icons";
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+// import Swiper core and required modules
+import {
+  Navigation,
+  Pagination,
+  Scrollbar,
+  A11y,
+  Autoplay,
+} from "swiper/modules";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { LoginContext } from "../../App";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
 
 const Main = () => {
   const { loginId } = useContext(LoginContext);
@@ -53,6 +70,11 @@ const Main = () => {
   const [newVideoInfo, setNewVideoInfo] = useState(null);
 
   const navi = useNavigate();
+  // 메인화면 로딩 시 페이지 맨 위로 끌어올리기
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   // 컴포넌트가 마운트될 때 데이터 로드
   useEffect(() => {
@@ -211,7 +233,25 @@ const Main = () => {
 
   return (
     <>
-      <div className={`${style.mainDiv}`}></div>
+      <div className={`${style.mainDiv}`}>
+        <Swiper
+          // install Swiper modules
+          modules={[Navigation, Pagination, Autoplay]}
+          spaceBetween={50}
+          slidesPerView={1}
+          // navigation
+          autoplay={{
+            delay: 3000,
+            disableOnInteraction: false,
+          }}
+          pagination={{ clickable: true }}
+          onSwiper={(swiper) => console.log(swiper)}
+          onSlideChange={() => console.log("slide change")}
+        >
+          <SwiperSlide>Slide 1</SwiperSlide>
+          <SwiperSlide>Slide 2</SwiperSlide>
+        </Swiper>
+      </div>
       <div
         className={`${style.rollingSlide}`}
         // onMouseEnter={onStop}
@@ -273,7 +313,7 @@ const Main = () => {
                     alt={`${e.name} 로고 이미지`}
                   />
                 </div>
-                {joinPossible ? (
+                {joinPossible && loginId !== "" ? (
                   <div
                     className={style.partyCreate}
                     data-id={e.id}
@@ -302,60 +342,120 @@ const Main = () => {
         setChked={setChked}
       ></ServiceInfoModal> */}
 
-      <div className={style.partyCardList}>
+      <div className={style.partyCardList} class="partList">
         <div className={style.sectionTitle}>참여 가능한 파티</div>
-        <div className={style.partySection}>
-          {partyList !== null ? (
-            // console.log(partyList);
-            partyList.map((e, i) => {
-              return (
-                <div key={i} className={style.party} data-id={i}>
-                  <div className={style.partyLeft}>
-                    <div className={style.partyTop}>
-                      <div className={style.partyStartDate}>
-                        {getStartDate(e.startDate)}
-                        <span className={style.monthCount}>
-                          {e.monthCount}개월
-                        </span>
-                        파티
-                      </div>
-                      <div className={style.partyPrice}>
-                        <div className={style.wonIcon}>
-                          <FontAwesomeIcon icon={faWonSign} />
+        <Swiper
+          // install Swiper modules
+          modules={[Navigation, Pagination, A11y]}
+          spaceBetween={50}
+          slidesPerView={1}
+          // navigation
+
+          pagination={{ clickable: true }}
+        >
+          <div className={style.partySection}>
+            {partyList !== null ? (
+              Array.from({ length: Math.ceil(partyList.length / 4) }).map(
+                (_, groupIndex) => (
+                  <SwiperSlide key={groupIndex}>
+                    {/* partyList를 4개씩 묶어서 매핑 */}
+                    {partyList
+                      .slice(groupIndex * 4, (groupIndex + 1) * 4)
+                      .map((e, i) => (
+                        <div
+                          key={groupIndex * 4 + i}
+                          className={style.party}
+                          data-id={groupIndex * 4 + i}
+                        >
+                          <div className={style.partyLeft}>
+                            <div className={style.partyTop}>
+                              <div className={style.partyStartDate}>
+                                {getStartDate(e.startDate)}
+                                <span className={style.monthCount}>
+                                  &nbsp;{e.monthCount}개월
+                                </span>
+                                파티
+                              </div>
+                              <div className={style.partyPrice}>
+                                <div className={style.wonIcon}>
+                                  <FontAwesomeIcon icon={faWonSign} />
+                                </div>
+                                <div>
+                                  월
+                                  {formatNumber(
+                                    Math.ceil(e.price / e.maxPeopleCount) + 1000
+                                  )}
+                                  원
+                                </div>
+                              </div>
+                            </div>
+                            <div className={style.partyBottom}>
+                              ~ {getEndDate(e.startDate, e.monthCount)}까지
+                            </div>
+                          </div>
+                          <div className={style.partyRight}>
+                            <img
+                              src={`/assets/serviceLogo/${e.englishName}.png`}
+                              alt={`${e.name} 로고 이미지`}
+                            />
+                          </div>
                         </div>
-                        <div>
-                          월
-                          {formatNumber(
-                            Math.ceil(e.price / e.maxPeopleCount) + 1000
-                          )}
-                          원
-                        </div>
-                      </div>
-                    </div>
-                    <div className={style.partyBottom}>
-                      ~ {getEndDate(e.startDate, e.monthCount)}까지
-                    </div>
-                  </div>
-                  <div className={style.partyRight}>
-                    <img
-                      src={`/assets/serviceLogo/${e.englishName}.png`}
-                      alt={`${e.name} 로고 이미지`}
-                    />
-                  </div>
+                      ))}
+                  </SwiperSlide>
+                )
+              )
+            ) : (
+              // partyList.map((e, i) => {
+              //   return (
+              //     <SwiperSlide key={i}>
+              //       <div className={style.party} data-id={i}>
+              //         <div className={style.partyLeft}>
+              //           <div className={style.partyTop}>
+              //             <div className={style.partyStartDate}>
+              //               {getStartDate(e.startDate)}
+              //               <span className={style.monthCount}>
+              //                 {e.monthCount}개월
+              //               </span>
+              //               파티
+              //             </div>
+              //             <div className={style.partyPrice}>
+              //               <div className={style.wonIcon}>
+              //                 <FontAwesomeIcon icon={faWonSign} />
+              //               </div>
+              //               <div>
+              //                 월
+              //                 {formatNumber(
+              //                   Math.ceil(e.price / e.maxPeopleCount) + 1000
+              //                 )}
+              //                 원
+              //               </div>
+              //             </div>
+              //           </div>
+              //           <div className={style.partyBottom}>
+              //             ~ {getEndDate(e.startDate, e.monthCount)}까지
+              //           </div>
+              //         </div>
+              //         <div className={style.partyRight}>
+              //           <img
+              //             src={`/assets/serviceLogo/${e.englishName}.png`}
+              //             alt={`${e.name} 로고 이미지`}
+              //           />
+              //         </div>
+              //       </div>
+              //     </SwiperSlide>
+              //   );
+              // })
+              <div className={style.empty}>
+                <div className={`${style.emptyIcon} ${style.centerAlign}`}>
+                  <FontAwesomeIcon icon={faFaceSadTear} />
                 </div>
-              );
-            })
-          ) : (
-            <div className={style.empty}>
-              <div className={`${style.emptyIcon} ${style.centerAlign}`}>
-                <FontAwesomeIcon icon={faFaceSadTear} />
+                <div className={`${style.emptyTxt} ${style.centerAlign}`}>
+                  비어있는 파티가 없어요.
+                </div>
               </div>
-              <div className={`${style.emptyTxt} ${style.centerAlign}`}>
-                비어있는 파티가 없어요.
-              </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        </Swiper>
         <div className={style.partyBtns}>
           {partyList !== null ? (
             <PurpleRectangleBtn
