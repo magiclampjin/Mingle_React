@@ -33,7 +33,162 @@ const SelectedReplyInfo = ({ selectedReply }) => {
     );
 };
 
-const RenderReplies = ({ replies, allReplies, onReplyClick, onChildReplyClick }) => {
+const ReplyForm = ({ onSubmit, onCancel, placeholder, initialContent = '' }) => {
+    const [content, setContent] = useState(initialContent);
+
+    const handleChange = (e) => {
+        setContent(e.target.value);
+    };
+
+    const handleSubmit = () => {
+        onSubmit(content);
+        setContent('');
+    };
+
+    const handleCancel = (e) => {
+        e.stopPropagation(); // 이벤트 버블링 방지
+        onCancel();
+    };
+
+    return (
+        <div className={styles.replyForm}>
+            <textarea
+                className={styles.replyInput}
+                value={content}
+                onChange={handleChange}
+                placeholder={placeholder}
+            />
+            <button onClick={handleSubmit} className={styles.replyButton}>대댓글 작성</button>
+            <button onClick={handleCancel} className={styles.cancelButton}>취소</button>
+        </div>
+    );
+};
+
+const RenderReplies = ({ replies, allReplies, onReplyClick, onChildReplyClick, replyingTo, setReplyingTo, onReplySubmit }) => {
+    // 부모 댓글의 닉네임을 찾는 함수
+    const findParentNicknameById = (parentId) => {
+        const parentReply = allReplies.find(reply => reply.id === parentId);
+        return parentReply ? parentReply.member.nickname : null;
+    };
+
+
+
+    // 대댓글 토글 상태를 관리하기 위한 상태
+    const [toggleReplies, setToggleReplies] = useState({});
+
+    // 대댓글 작성 폼을 취소하는 함수
+    const cancelReply = () => {
+        setReplyingTo(null);
+    };
+
+    // 대댓글 작성 함수
+    const submitReply = (content) => {
+        // 여기에 대댓글을 서버에 보내는 로직을 추가
+        // 예시: onReplySubmit(replyingTo, content);
+        setReplyingTo(null);
+    };
+
+    // 대댓글 작성 버튼 클릭 핸들러
+    const handleReplyButtonClick = (replyId, e) => {
+        e.stopPropagation(); // 댓글 클릭 이벤트 버블링 방지
+        setReplyingTo(replyId); // 대댓글 작성 상태 설정
+    };
+
+    // 특정 댓글의 대댓글을 토글하는 함수
+    const toggleChildReplies = (id) => {
+        setToggleReplies(prevState => ({
+            ...prevState,
+            [id]: !prevState[id]
+        }));
+    };
+
+    return (
+        <div>
+            {replies.sort((a, b) => a.id - b.id).map((reply, index) => {
+                // replyAdoptiveParentId가 있는 경우 해당 ID를 가진 댓글의 작성자 닉네임 찾기
+                const adoptiveParentNickname = reply.replyAdoptiveParentId
+                    ? findParentNicknameById(reply.replyAdoptiveParentId)
+                    : null;
+
+                return (
+                    <div
+                        key={reply.id}
+                        className={styles.replyItem}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            if (reply.parentReply) {
+                                onChildReplyClick(reply.id, reply.parentReply.id);
+                            } else {
+                                onReplyClick(reply.id);
+                            }
+                        }}
+                    >
+
+                        {/* 댓글 내용 */}
+                        {!reply.parentReply && (
+                            <div className={styles.replyContent}>
+                                <div className={styles.profileImage}></div> {/* 프로필 이미지 추가 필요 */}
+                                <div className={styles.replyText}>
+                                    <span className={styles.memberName}>{reply.member.nickname}</span>
+                                    {/* 대댓글일 경우 부모 또는 양부모의 닉네임을 멘션으로 표시 */}
+                                    {adoptiveParentNickname ? (
+                                        <span className={styles.mention}>@{adoptiveParentNickname}</span>
+                                    ) : (
+                                        reply.parentReply && <span className={styles.mention}>@{reply.parentReply.member.nickname}</span>
+                                    )}
+                                    <span>{reply.content}</span>
+                                    <div className={styles.replyTime}>{formatTime(reply.writeDate)}</div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* 대댓글 달기 버튼 */}
+                        <div className={styles.replyActionButton} onClick={(e) => handleReplyButtonClick(reply.id, e)}>
+                            대댓글 달기
+                        </div>
+
+                        {/* 대댓글 작성 폼 */}
+                        {replyingTo === reply.id && (
+                            <ReplyForm
+                                onSubmit={(content) => {
+                                    onReplySubmit(reply.id, content);
+                                    setReplyingTo(null); // 대댓글 작성 상태 해제
+                                }}
+                                onCancel={() => setReplyingTo(null)} // 취소 버튼 클릭 시 폼 숨기기
+                                placeholder="대댓글을 작성하세요"
+                            />
+                        )}
+
+                        {/* 대댓글 토글 버튼 */}
+                        {reply.childrenReplies && reply.childrenReplies.length > 0 && (
+                            <div className={styles.reply__hide__buttton} onClick={() => toggleChildReplies(reply.id)}>
+                                {toggleReplies[reply.id] ? `▲ 숨기기` : `▼ 댓글 ${reply.childrenReplies.length}개 펼치기`}
+                            </div>
+                        )}
+
+
+
+                        {/* 대댓글 목록 */}
+                        {toggleReplies[reply.id] && reply.childrenReplies && reply.childrenReplies.length > 0 && (
+                            <div className={styles.childReplies}>
+                                {/* 대댓글 리스트 렌더링 */}
+                                <RenderChildReplies
+                                    replies={reply.childrenReplies}
+                                    allReplies={allReplies}
+                                    onReplyClick={onReplyClick}
+                                    onChildReplyClick={onChildReplyClick}
+                                />
+                            </div>
+                        )}
+                    </div>
+                );
+            })}
+        </div>
+    );
+};
+
+
+const RenderChildReplies = ({ replies, allReplies, onReplyClick, onChildReplyClick }) => {
     // 부모 댓글의 닉네임을 찾는 함수
     const findParentNicknameById = (parentId) => {
         const parentReply = allReplies.find(reply => reply.id === parentId);
@@ -63,31 +218,20 @@ const RenderReplies = ({ replies, allReplies, onReplyClick, onChildReplyClick })
                     >
 
                         {/* 댓글 내용 */}
-                        <div className={styles.replyContent}>
-                            <div className={styles.profileImage}></div> {/* 프로필 이미지 추가 필요 */}
-                            <div className={styles.replyText}>
-                                <span className={styles.memberName}>{reply.member.nickname}</span>
-                                {/* 대댓글일 경우 부모 또는 양부모의 닉네임을 멘션으로 표시 */}
-                                {adoptiveParentNickname ? (
-                                    <span className={styles.mention}>@{adoptiveParentNickname}</span>
-                                ) : (
-                                    reply.parentReply && <span className={styles.mention}>@{reply.parentReply.member.nickname}</span>
-                                )}
-                                <span>{reply.content}</span>
-                                <div className={styles.replyTime}>{formatTime(reply.writeDate)}</div>
-                            </div>
-                        </div>
-
-                        {/* 대댓글 목록 */}
-                        {reply.childrenReplies && reply.childrenReplies.length > 0 && (
-                            <div className={styles.childReplies}>
-                                {/* 대댓글 리스트 렌더링 */}
-                                <RenderReplies
-                                    replies={reply.childrenReplies}
-                                    allReplies={allReplies}
-                                    onReplyClick={onReplyClick}
-                                    onChildReplyClick={onChildReplyClick}
-                                />
+                        {(
+                            <div className={styles.replyContent}>
+                                <div className={styles.profileImage}></div> {/* 프로필 이미지 추가 필요 */}
+                                <div className={styles.replyText}>
+                                    <span className={styles.memberName}>{reply.member.nickname}</span>
+                                    {/* 대댓글일 경우 부모 또는 양부모의 닉네임을 멘션으로 표시 */}
+                                    {adoptiveParentNickname ? (
+                                        <span className={styles.mention}>@{adoptiveParentNickname}</span>
+                                    ) : (
+                                        reply.parentReply && <span className={styles.mention}>@{reply.parentReply.member.nickname}</span>
+                                    )}
+                                    <span>{reply.content}</span>
+                                    <div className={styles.replyTime}>{formatTime(reply.writeDate)}</div>
+                                </div>
                             </div>
                         )}
                     </div>
@@ -102,6 +246,8 @@ const Reply = ({ replies, postId }) => {
     const { loginId } = useContext(LoginContext);
 
     const [allReplies, setAllReplies] = useState([]);
+
+    const [replyingTo, setReplyingTo] = useState(null);
 
 
     const [newReply, setNewReply] = useState("");
@@ -138,12 +284,14 @@ const Reply = ({ replies, postId }) => {
     const handleReplyClick = (replyId) => {
         console.log("Reply clicked:", replyId);
         setSelectedParentReply(replyId);
+        setReplyingTo(replyId); // 대댓글 작성 상태 설정
         setSelectedAdoptiveParentReply(null);
     };
 
     const handleChildReplyClick = (replyId, parentReplyId) => {
         console.log("Child reply clicked:", replyId, "Parent reply:", parentReplyId);
         setSelectedParentReply(parentReplyId);
+        setReplyingTo(parentReplyId); // 대댓글 작성 상태 설정
         setSelectedAdoptiveParentReply(replyId);
     };
 
@@ -188,7 +336,7 @@ const Reply = ({ replies, postId }) => {
             ...prev,
             postId: postId,
             memberId: loginId,
-            content : newReply,
+            content: newReply,
             replyParentId: selectedParentReply,
             replyAdoptiveParentId: selectedAdoptiveParentReply
         }));
@@ -197,21 +345,21 @@ const Reply = ({ replies, postId }) => {
     const handleSubmitReply = () => {
         const now = new Date();
         const formData = new FormData();
-        formData.append("content",submitReply.content);
+        formData.append("content", submitReply.content);
         formData.append("writeDate", now.toISOString());
         formData.append("postId", submitReply.postId);
-        formData.append("memberId",submitReply.memberId);
-        formData.append("replyParentId",submitReply.replyParentId ? submitReply.replyParentId.toString() : "0");
-        formData.append("replyAdoptiveParentId",submitReply.replyAdoptiveParentId ? submitReply.replyParentId.toString() : "0");
+        formData.append("memberId", submitReply.memberId);
+        formData.append("replyParentId", submitReply.replyParentId ? submitReply.replyParentId.toString() : "0");
+        formData.append("replyAdoptiveParentId", submitReply.replyAdoptiveParentId ? submitReply.replyParentId.toString() : "0");
 
-        axios.post("/api/reply",formData).then(resp =>{
+        axios.post("/api/reply", formData).then(resp => {
             console.log(resp.data);
             setNewReply(""); // 입력 필드 초기화
         }).catch(error => {
             console.log("error : " + error);
             setNewReply(""); // 입력 필드 초기화
         })
-       
+
     };
 
     return (
@@ -225,6 +373,11 @@ const Reply = ({ replies, postId }) => {
                         allReplies={allReplies}
                         onReplyClick={handleReplyClick}
                         onChildReplyClick={handleChildReplyClick}
+                        replyingTo={replyingTo}
+                        setReplyingTo={setReplyingTo}
+                        onReplySubmit={(replyId, content) => {
+                            // 서버에 대댓글을 보내는 로직
+                        }}
                     />
 
                     {/* 페이지네이션 */}
@@ -248,6 +401,7 @@ const Reply = ({ replies, postId }) => {
                     onChange={handleReplyChange}
                     placeholder="댓글을 작성하세요"
                 />
+                <div>댓글 글자 수 : {newReply.length}/1000</div>
                 <button onClick={handleSubmitReply} className={styles.replyButton}>댓글 작성</button>
             </div>
         </div>

@@ -185,7 +185,9 @@
     padding-top: 20px;
 }
 
-.deleteButton,.updateButton{
+
+
+.deleteButton,.updateButton,.reportButton{
     border: none;
     background-color: #f0f0f0;
     color: #333;

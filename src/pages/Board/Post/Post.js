@@ -24,11 +24,11 @@ const Post = () => {
 
     // 좋아요 클릭 핸들러
     const handleLike = () => {
-        if(loginId === null || loginId === ""){
+        if (loginId === null || loginId === "") {
             alert("로그인을 하지 않으면 추천을 할 수 없습니다!");
             return;
         }
-        if(post.member.id !== loginId && loginId){
+        if (post.member.id !== loginId && loginId) {
             axios.post(`/api/post/${postId}/like`, null, {
                 params: { memberId: loginId }
             })
@@ -39,19 +39,19 @@ const Post = () => {
                     alert("해당 게시글에 이미 투표를 완료하셨습니다.");
                 });
         }
-        else{
+        else {
             alert("본인 게시글에는 투표할 수 없습니다!")
         }
-        
+
     };
 
     // 싫어요 클릭 핸들러
     const handleDislike = () => {
-        if(loginId === null || loginId === ""){
+        if (loginId === null || loginId === "") {
             alert("로그인을 하지 않으면 추천을 할 수 없습니다!");
             return;
         }
-        if(post.member.id !== loginId){
+        if (post.member.id !== loginId) {
             axios.post(`/api/post/${postId}/dislike`, null, {
                 params: { memberId: loginId }
             })
@@ -62,7 +62,7 @@ const Post = () => {
                     alert("해당 게시글에 이미 투표를 완료하셨습니다.");
                 });
         }
-        else{
+        else {
             alert("본인 게시글에는 투표할 수 없습니다!")
         }
 
@@ -82,11 +82,16 @@ const Post = () => {
         }
     }
 
+    const handleReport = () => {
+
+    }
+
     // 파일 다운로드 함수
     const downloadFile = (sysName, oriName) => {
         axios.get(`/api/post/file/download`, {
-            params : { sysName : sysName, oriName:oriName},
-            responseType: "blob" })
+            params: { sysName: sysName, oriName: oriName },
+            responseType: "blob"
+        })
             .then(response => {
                 const url = window.URL.createObjectURL(new Blob([response.data]));
                 const link = document.createElement('a');
@@ -121,6 +126,7 @@ const Post = () => {
 
             if (!viewedPosts.includes(postId)) {
                 axios.put(`/api/post/updateViewCount/${postId}`).then(resp => {
+
                     viewedPosts.push(postId);
                     sessionStorage.setItem('viewedPosts', JSON.stringify(viewedPosts));
                 }).catch(error => {
@@ -200,18 +206,27 @@ const Post = () => {
 
             )}
 
-            {
-                post && (post.member.id === loginId || loginRole === "ROLE_ADMIN") && (
-                    <div className={styles.buttonDiv}>
-                        <button onClick={handleDelete} className={styles.deleteButton}>
-                            게시글 삭제하기
-                        </button>
-                        <button onClick={handleUpdate} className={styles.updateButton}>
-                            게시글 수정하기
-                        </button>
-                    </div>
-                )
-            }
+
+            <div className={styles.buttonDiv}>
+                <button onClick={handleReport} className={styles.reportButton}>
+                    게시글 신고하기
+                </button>
+                {
+
+                    post && (post.member.id === loginId || loginRole === "ROLE_ADMIN") && (
+                        <>
+                            <button onClick={handleDelete} className={styles.deleteButton}>
+                                게시글 삭제하기
+                            </button>
+                            <button onClick={handleUpdate} className={styles.updateButton}>
+                                게시글 수정하기
+                            </button>
+                        </>
+                    )
+                }
+
+            </div>
+
 
 
 
