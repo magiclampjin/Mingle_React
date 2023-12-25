@@ -1,5 +1,4 @@
 import style from "./Main.module.css";
-import "./Main.css";
 import GrayRectangleBtn from "../../components/GrayRectangleBtn/GrayRectangleBtn";
 import PurpleRectangleBtn from "../../components/PurpleRectangleBtn/PurpleRectangleBtn";
 import PurpleRoundBtn from "../../components/PurpleRoundBtn/PurpleRoundBtn";
@@ -342,7 +341,7 @@ const Main = () => {
         setChked={setChked}
       ></ServiceInfoModal> */}
 
-      <div className={style.partyCardList} class="partList">
+      <div className={`${style.partyCardList} ${partyList}`} id="partyList">
         <div className={style.sectionTitle}>참여 가능한 파티</div>
         <Swiper
           // install Swiper modules
@@ -357,7 +356,14 @@ const Main = () => {
             {partyList !== null ? (
               Array.from({ length: Math.ceil(partyList.length / 4) }).map(
                 (_, groupIndex) => (
-                  <SwiperSlide key={groupIndex}>
+                  <SwiperSlide
+                    key={groupIndex}
+                    style={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      justifyContent: "space-between",
+                    }}
+                  >
                     {/* partyList를 4개씩 묶어서 매핑 */}
                     {partyList
                       .slice(groupIndex * 4, (groupIndex + 1) * 4)

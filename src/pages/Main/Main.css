@@ -2,20 +2,3 @@
 .swiper-pagination-bullets.swiper-pagination-horizontal {
   bottom: var(--swiper-pagination-bottom, -20px);
 } */
-.swiper-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet,
-.swiper-pagination-horizontal.swiper-pagination-bullets
-  .swiper-pagination-bulle {
-  background-color: #7b61ff;
-}
-.partList .swiper-backface-hidden .swiper-slide {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-.partList .swiper-horizontal {
-  padding-bottom: 20px !important;
-  height: 400px !important;
-}
-.partList .swiper-backface-hidden .swiper-slide {
-  padding: 10px 0;
-}
