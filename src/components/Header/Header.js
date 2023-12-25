@@ -319,6 +319,34 @@ const Header = () => {
       </div>
 
       <div className={style.menu__naviTabSize}>
+        {menuItems.map((menuItem, index) => {
+          return (
+            <div
+              key={index}
+              className={style.navi__conf}
+              // onClick={menuItem.handle}
+              // style={{
+              //   borderBottom:
+              //     selectedMenu === menuItem.label
+              //       ? "2px solid #7b61ff"
+              //       : "border-bottom: 2px solid transparent",
+              // }}
+              onClick={() =>
+                menuItem.handle
+                  ? menuItem.handle()
+                  : handleMenuClick(menuItem.path, menuItem.label)
+              }
+              style={{
+                borderBottom:
+                  selectedMenu === menuItem.label
+                    ? "2px solid #7b61ff"
+                    : "2px solid transparent",
+              }}
+            >
+              {menuItem.label}
+            </div>
+          );
+        })}
         {/* <div className={style.navi__conf} style={borderStyle}>
           <Link to="party/myParty">나의 파티</Link>
         </div>

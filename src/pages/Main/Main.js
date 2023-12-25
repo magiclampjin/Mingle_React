@@ -10,7 +10,11 @@ import ServiceInfoModal from "../Party/PartyCreate/PartyCreateList/ServiceInfoMo
 import axios from "axios";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRightToBracket, faWonSign } from "@fortawesome/free-solid-svg-icons";
+import {
+  faRightToBracket,
+  faWonSign,
+  faHandshakeSimple,
+} from "@fortawesome/free-solid-svg-icons";
 import { faFaceSadTear } from "@fortawesome/free-regular-svg-icons";
 import { useContext, useEffect, useState } from "react";
 // import Swiper core and required modules
@@ -226,6 +230,11 @@ const Main = () => {
     navi("/party/partyJoin");
   };
 
+  // 로그인하기로 이동
+  const handleGoLogin = () => {
+    navi("/member/login");
+  };
+
   if (newVideoInfo === null || service.length === 0 /*|| partyList === null*/) {
     return <LoadingSpinner />;
   }
@@ -238,17 +247,77 @@ const Main = () => {
           modules={[Navigation, Pagination, Autoplay]}
           spaceBetween={50}
           slidesPerView={1}
-          // navigation
+          navigation={true}
           autoplay={{
             delay: 3000,
             disableOnInteraction: false,
           }}
           pagination={{ clickable: true }}
-          onSwiper={(swiper) => console.log(swiper)}
-          onSlideChange={() => console.log("slide change")}
         >
-          <SwiperSlide>Slide 1</SwiperSlide>
-          <SwiperSlide>Slide 2</SwiperSlide>
+          {/* <SwiperSlide>
+            <div className={style.slideBackground}>
+              <div className={style.slideGuide}>
+                <div className={style.slideLeft}>
+                  <div className={style.title}>
+                    1등 공동 구독 플랫폼 <br></br>Mingle
+                  </div>
+                  <div className={style.slideConf}>
+                    넷플릭스부터 오피스 365까지<br></br>더 안전하게 밍글과
+                    함께하세요<br></br>
+                  </div>
+                  <div className={style.btns}>
+                    <PurpleRectangleBtn
+                      title={"밍글 시작하기"}
+                      width={220}
+                      heightPadding={20}
+                      activation={true}
+                      onClick={handleGoLogin}
+                    ></PurpleRectangleBtn>
+                  </div>
+                  <div className={style.naviBtn}>01 | 02</div>
+                </div>
+                <div className={style.slideRight}>
+                  <img
+                    src="/assets/MainSlide/mainSlide01.png"
+                    alt="메인슬라이드1"
+                  />
+                </div>
+              </div>
+            </div>
+          </SwiperSlide> */}
+          <SwiperSlide>
+            <div className={style.slideBackground}>
+              <div className={style.slideGuide}>
+                <div className={style.slideLeft}>
+                  <div className={style.title}>
+                    파티에 참여해보세요! <br></br>지금 모집중인 파티는
+                    대기중&nbsp;
+                    <FontAwesomeIcon icon={faHandshakeSimple} />
+                  </div>
+                  <div className={style.slideConf}>
+                    넷플릭스부터 오피스 365까지<br></br>나에게 딱 맞는 파티를
+                    찾아보세요!
+                  </div>
+                  <div className={style.btns}>
+                    <PurpleRectangleBtn
+                      title={"나에게 맞는 파티 찾기"}
+                      width={220}
+                      heightPadding={20}
+                      activation={true}
+                      onClick={handleGoLogin}
+                    ></PurpleRectangleBtn>
+                  </div>
+                  <div className={style.naviBtn}>01 | 02</div>
+                </div>
+                <div className={style.slideRight}>
+                  <img
+                    src="/assets/MainSlide/mainSlide01.png"
+                    alt="메인슬라이드1"
+                  />
+                </div>
+              </div>
+            </div>
+          </SwiperSlide>
         </Swiper>
       </div>
       <div

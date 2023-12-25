@@ -6,6 +6,7 @@
 .partyCardList {
   max-width: 1300px;
   margin: auto;
+  margin-bottom: 100px;
 }
 .newVideoInfo > div {
   padding: 0;
@@ -225,7 +226,68 @@
 .partyBtns {
   text-align: end;
 }
-
+.mainDiv {
+  margin-bottom: 100px;
+}
+.slideBackground {
+  background-color: #7b61ff30;
+  height: 526px;
+}
+.slideGuide {
+  max-width: 1300px;
+  margin: auto;
+  padding: 50px 0;
+  display: flex;
+  justify-content: end;
+  position: relative;
+  /* background-color: #7b61ff30; */
+}
+.slideLeft {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+.title {
+  font-size: 50px;
+  font-weight: bold;
+}
+/* .title > div {
+  font-family: "LOTTERIACHAB";
+  font-size: 40px;
+  color: #7b61ff;
+}
+.title > div > span {
+  font-family: "LOTTERIACHAB";
+  font-size: 40px;
+  color: #f9b813;
+} */
+.slideConf {
+  margin-top: 30px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 27px;
+  text-align: left;
+}
+.btns {
+  margin-top: 20px;
+}
+.naviBtn {
+  margin-top: 20px;
+}
+.slideRight {
+  display: flex;
+  align-items: center;
+}
+@media (max-width: 1030px) {
+  .slideRight img {
+    opacity: 0.4;
+    max-width: 95%; /* 이미지의 최대 너비를 부모 요소의 너비에 맞춥니다. */
+    max-height: 95%; /* 이미지의 최대 높이를 부모 요소의 높이에 맞춥니다. */
+    height: auto; /* 높이를 자동으로 조절하여 이미지의 비율을 유지합니다. */
+  }
+}
 @media (max-width: 840px) {
   .party {
     width: 100%;
@@ -238,6 +300,7 @@
   .newVideoInfo,
   .partyCardList {
     max-width: 700px;
+    margin-bottom: 80px;
   }
 }
 
