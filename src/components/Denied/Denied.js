@@ -27,14 +27,6 @@ const Denied = () => {
     });
   }, []);
 
-  // useEffect(()=>{
-  //   if(loginId){
-  //     navi(-1);
-  //   }
-  // },[loginId]);
-
-
-
   // 이전으로 돌아가기
   // const handleBackPage = () => {
   //   navi(-1);
