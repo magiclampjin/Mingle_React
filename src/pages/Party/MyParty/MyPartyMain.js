@@ -5,7 +5,7 @@ import { createContext, useState } from "react";
 
 export const myPartyContext = createContext();
 const MyPartyMain = () => {
-    const [selectParty, setSelectParty] = useState(null);
+    const [selectParty, setSelectParty] = useState();
   
     return (
         <myPartyContext.Provider

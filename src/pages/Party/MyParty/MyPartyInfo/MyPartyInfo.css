@@ -1,0 +1,14 @@
+
+.guide{
+    margin: auto;
+    max-width: 1000px;
+    background-color: red;
+}
+
+.header{
+    background-color: blue;
+}
+
+.serviceName{
+    background-color: purple;
+}
