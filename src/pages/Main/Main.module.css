@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "Giants-Inline";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2307-1@1.1/Giants-Inline.woff2")
+    format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
 .mainDiv {
   background-color: lightblue;
 }
@@ -154,16 +162,8 @@
   color: #676d7c;
   margin-top: 20px;
 }
-/* .partySection {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  /* justify-content: space-around; */
-/* gap: 20px; 
-} */
 
 .party {
-  /* flex-basis: calc(50% - 20px); */
   width: calc(50% - 20px);
   margin-bottom: 20px;
   display: flex;
@@ -220,9 +220,7 @@
   font-size: 14px;
   margin-top: 10px;
 }
-/* .party:nth-child(odd) {
-  margin-right: 20px;
-} */
+
 .partyBtns {
   text-align: end;
 }
@@ -240,7 +238,7 @@
   display: flex;
   justify-content: end;
   position: relative;
-  /* background-color: #7b61ff30; */
+  height: 526px;
 }
 .slideLeft {
   position: absolute;
@@ -253,16 +251,7 @@
   font-size: 50px;
   font-weight: bold;
 }
-/* .title > div {
-  font-family: "LOTTERIACHAB";
-  font-size: 40px;
-  color: #7b61ff;
-}
-.title > div > span {
-  font-family: "LOTTERIACHAB";
-  font-size: 40px;
-  color: #f9b813;
-} */
+
 .slideConf {
   margin-top: 30px;
   font-size: 18px;
@@ -280,12 +269,45 @@
   display: flex;
   align-items: center;
 }
+
+.partyCountBox {
+  display: flex;
+  align-items: baseline;
+  font-size: 30px;
+  font-weight: bold;
+}
+.partyCount {
+  font-family: "Giants-Inline";
+  font-size: 100px;
+  background-color: #7b61ff;
+  width: 250px;
+  padding: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  color: white;
+  margin-right: 10px;
+}
+
+.nowTime {
+  color: #676d7c;
+  font-size: 14px;
+  margin-top: 10px;
+  padding-left: 50px;
+}
+.yellowBack {
+  background-color: #f9b81350 !important;
+}
 @media (max-width: 1030px) {
   .slideRight img {
     opacity: 0.4;
     max-width: 95%; /* 이미지의 최대 너비를 부모 요소의 너비에 맞춥니다. */
     max-height: 95%; /* 이미지의 최대 높이를 부모 요소의 높이에 맞춥니다. */
     height: auto; /* 높이를 자동으로 조절하여 이미지의 비율을 유지합니다. */
+  }
+  .noneImgBanner {
+    opacity: 0.4;
   }
 }
 @media (max-width: 840px) {
@@ -301,6 +323,9 @@
   .partyCardList {
     max-width: 700px;
     margin-bottom: 80px;
+  }
+  .title {
+    font-size: 40px;
   }
 }
 

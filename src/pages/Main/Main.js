@@ -39,6 +39,11 @@ import "swiper/css/scrollbar";
 const Main = () => {
   const { loginId } = useContext(LoginContext);
 
+  // 메인 배너 모집중인 파티 개수
+  const [partyCount, setPartyCount] = useState(0);
+  // 현재 시간 기준
+  const [nowTime, setNowTime] = useState("");
+
   // 무한 롤링 애니메이션 설정
   const [animate, setAnimate] = useState(true);
   const onStop = () => setAnimate(false); // 멈춤
@@ -86,7 +91,6 @@ const Main = () => {
     axios
       .get("/api/party/getService/" + getServiceId)
       .then((resp) => {
-        console.log(resp.data);
         setService(Array.isArray(resp.data.list) ? resp.data.list : []);
         let joinArr = Array.isArray(resp.data.joinList)
           ? resp.data.joinList
@@ -110,8 +114,6 @@ const Main = () => {
     axios
       .get("/api/party/getPartyListForMain", { params: data })
       .then((resp) => {
-        console.log(resp.data);
-        console.log(partyList);
         setPartyList(resp.data);
       });
     // 최신 비디오 목록 불러오기
@@ -119,19 +121,42 @@ const Main = () => {
       .get("/api/external/youtube/latestvideo")
       .then((resp) => {
         setNewVideoInfo(resp.data);
-        console.log(resp.data);
       })
       .catch((error) => {
         console.error("error reporting! : " + error);
       });
+    axios.get("/api/party/selectAllPartyCountForMain").then((resp) => {
+      //setPartyCount(resp.data);
+      let count = resp.data;
+      // partyCount를 두 자리 숫자로 변환
+      const formattedCount = String(count).padStart(2, "0");
+      setPartyCount(formattedCount);
+    });
+
+    const updateCurrentTime = () => {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth() + 1; // 월은 0부터 시작하므로 +1
+      const day = now.getDate();
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+
+      // 오후/오후 구분
+      const ampm = hours >= 12 ? "오후" : "오전";
+      const displayHours = hours % 12 || 12; // 12시간 표시
+
+      const formattedTime = `${year}.${month}.${day} ${ampm} ${displayHours}:${minutes}`;
+      setNowTime(formattedTime + "기준");
+    };
+
+    // 페이지가 마운트될 때와 함께 첫 번째 시간 업데이트 실행
+    updateCurrentTime();
   }, []);
 
   // 파티 만들러 가기
   const handlePartyCreate = (e) => {
-    console.log(e.currentTarget);
     const partyContentElement = e.currentTarget;
     const clickedElement = e.target;
-    console.log(partyContentElement.dataset.id);
     if (
       clickedElement === partyContentElement ||
       partyContentElement.contains(clickedElement)
@@ -141,18 +166,6 @@ const Main = () => {
       setModalIsOpen(true);
       setChked(false);
     }
-
-    console.log("stet" + selectService);
-    // if (
-    //   clickedElement === partyContentElement ||
-    //   partyContentElement.contains(clickedElement)
-    // ) {
-    //   // partyContent 또는 그 자식 요소를 클릭한 경우에만 처리
-    //   // setSelectService(partyContentElement.dataset.id);
-    //   navi("/party/PartyJoin/PartyList", {
-    //     state: { selectService: partyContentElement.dataset.id },
-    //   });
-    // }
   };
 
   // 서비스 정보 모달창 닫기
@@ -235,7 +248,7 @@ const Main = () => {
     navi("/member/login");
   };
 
-  if (newVideoInfo === null || service.length === 0 /*|| partyList === null*/) {
+  if (newVideoInfo === null || service.length === 0 || partyList === null) {
     return <LoadingSpinner />;
   }
 
@@ -247,14 +260,14 @@ const Main = () => {
           modules={[Navigation, Pagination, Autoplay]}
           spaceBetween={50}
           slidesPerView={1}
-          navigation={true}
+          // navigation={true}
           autoplay={{
             delay: 3000,
             disableOnInteraction: false,
           }}
           pagination={{ clickable: true }}
         >
-          {/* <SwiperSlide>
+          <SwiperSlide>
             <div className={style.slideBackground}>
               <div className={style.slideGuide}>
                 <div className={style.slideLeft}>
@@ -284,9 +297,9 @@ const Main = () => {
                 </div>
               </div>
             </div>
-          </SwiperSlide> */}
+          </SwiperSlide>
           <SwiperSlide>
-            <div className={style.slideBackground}>
+            <div className={`${style.slideBackground} ${style.yellowBack}`}>
               <div className={style.slideGuide}>
                 <div className={style.slideLeft}>
                   <div className={style.title}>
@@ -304,27 +317,26 @@ const Main = () => {
                       width={220}
                       heightPadding={20}
                       activation={true}
-                      onClick={handleGoLogin}
+                      onClick={handleSearchParty}
                     ></PurpleRectangleBtn>
                   </div>
-                  <div className={style.naviBtn}>01 | 02</div>
+                  <div className={style.naviBtn}>02 | 02</div>
                 </div>
                 <div className={style.slideRight}>
-                  <img
-                    src="/assets/MainSlide/mainSlide01.png"
-                    alt="메인슬라이드1"
-                  />
+                  <div className={style.noneImgBanner}>
+                    <div className={style.partyCountBox}>
+                      <div className={style.partyCount}>{partyCount}</div>
+                      <div>명</div>
+                    </div>
+                    <div className={style.nowTime}>{nowTime}</div>
+                  </div>
                 </div>
               </div>
             </div>
           </SwiperSlide>
         </Swiper>
       </div>
-      <div
-        className={`${style.rollingSlide}`}
-        // onMouseEnter={onStop}
-        // onMouseLeave={onRun}
-      >
+      <div className={`${style.rollingSlide}`}>
         <div className={`${style.original} ${animate ? "" : style.stop}`}>
           {service.map((e, i) => {
             if (e.id === joinService[jsId]) {
@@ -398,18 +410,6 @@ const Main = () => {
           })}
         </div>
       </div>
-
-      {/* <ServiceInfoModal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        contentLabel="정보 모달"
-        selectService={selectService}
-        width={450}
-        height={430}
-        isChked={isChked}
-        setChked={setChked}
-      ></ServiceInfoModal> */}
-
       <div className={`${style.partyCardList} ${partyList}`} id="partyList">
         <div className={style.sectionTitle}>참여 가능한 파티</div>
         <Swiper
@@ -417,8 +417,6 @@ const Main = () => {
           modules={[Navigation, Pagination, A11y]}
           spaceBetween={50}
           slidesPerView={1}
-          // navigation
-
           pagination={{ clickable: true }}
         >
           <div className={style.partySection}>
@@ -480,46 +478,6 @@ const Main = () => {
                 )
               )
             ) : (
-              // partyList.map((e, i) => {
-              //   return (
-              //     <SwiperSlide key={i}>
-              //       <div className={style.party} data-id={i}>
-              //         <div className={style.partyLeft}>
-              //           <div className={style.partyTop}>
-              //             <div className={style.partyStartDate}>
-              //               {getStartDate(e.startDate)}
-              //               <span className={style.monthCount}>
-              //                 {e.monthCount}개월
-              //               </span>
-              //               파티
-              //             </div>
-              //             <div className={style.partyPrice}>
-              //               <div className={style.wonIcon}>
-              //                 <FontAwesomeIcon icon={faWonSign} />
-              //               </div>
-              //               <div>
-              //                 월
-              //                 {formatNumber(
-              //                   Math.ceil(e.price / e.maxPeopleCount) + 1000
-              //                 )}
-              //                 원
-              //               </div>
-              //             </div>
-              //           </div>
-              //           <div className={style.partyBottom}>
-              //             ~ {getEndDate(e.startDate, e.monthCount)}까지
-              //           </div>
-              //         </div>
-              //         <div className={style.partyRight}>
-              //           <img
-              //             src={`/assets/serviceLogo/${e.englishName}.png`}
-              //             alt={`${e.name} 로고 이미지`}
-              //           />
-              //         </div>
-              //       </div>
-              //     </SwiperSlide>
-              //   );
-              // })
               <div className={style.empty}>
                 <div className={`${style.emptyIcon} ${style.centerAlign}`}>
                   <FontAwesomeIcon icon={faFaceSadTear} />
