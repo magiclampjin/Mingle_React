@@ -35,6 +35,14 @@ const MyPartyInfo = () =>{
         return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     };
 
+    // 파티 탈퇴하기
+    const handleSecession = () => {
+        // 파티장일 경우
+        // 1. 파티원이 없는 경우 -> 정상 해산 
+        // 2. 파티원이 있는 경우 -> 위약금
+        // 파티원일 경우
+        // 1. 위약금
+    }
 
 
     useEffect(()=>{
@@ -84,6 +92,10 @@ const MyPartyInfo = () =>{
                                     <div className={style.subContent}>{isStart(partyInfo.startDate)===1?partyInfo.loginId:"파티가 시작되면 공개됩니다."}</div>
                                     <div className={style.grayTitle}>비밀번호</div>
                                     <div className={style.subContent}>{isStart(partyInfo.startDate)===1?partyInfo.loginPw:"파티가 시작되면 공개됩니다."}</div>
+                                </div>
+                                <div className={style.leftInfo}>
+                                    <div className={style.subTitle}>파티 탈퇴</div>
+                                    <div className={`${style.grayTitle} ${style.secession}`} onClick={handleSecession}>탈퇴하기</div>
                                 </div>
                             </div>
                             <div className={style.right}>
