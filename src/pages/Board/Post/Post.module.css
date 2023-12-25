@@ -236,6 +236,34 @@
     border-radius: 5px;
 }
 
+.fileDownloadSection {
+    margin-top: 20px;
+    padding: 10px;
+    border-top: 1px solid #ccc; /* 상단에 경계선 추가 */
+    border-bottom: 1px solid #ccc; /* 상단에 경계선 추가 */
+    background-color: #f9f9f9; /* 배경색 */
+}
+
+.fileDownloadSection div {
+    margin-bottom: 10px; /* 각 파일 간격 */
+}
+
+.fileDownloadSection a {
+    color: #0645ad; /* 링크 색상 */
+    text-decoration: none; /* 밑줄 제거 */
+    font-size: 16px; /* 글자 크기 */
+}
+
+.fileDownloadButton{
+    border : none;
+}
+
+.fileDownloadSection a:hover,
+.fileDownloadSection a:focus {
+    text-decoration: underline; /* 마우스 오버시 밑줄 표시 */
+    color: #0b0080; /* 마우스 오버시 색상 변경 */
+}
+
 /* 미디어 쿼리를 적용하여 화면 크기에 따른 스타일 조정 */
 @media (max-width: 768px) {
     .post__title {

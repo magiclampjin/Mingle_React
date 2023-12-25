@@ -4,6 +4,7 @@ import { LoginContext } from "../../../App";
 import axios from "axios";
 import QuillEditor from "../../../components/QuillEditor/QuillEditor";
 import { useNavigate } from 'react-router-dom';
+import DOMPurify from "dompurify";
 
 const WritePost = () => {
 
@@ -36,15 +37,17 @@ const WritePost = () => {
 
 
     const handleTitleChange = (event) => {
-        const title = event.target.value;
-        setTitleLength(title.length); // 제목 길이 업데이트
-        setSubmitData({ ...submitData, title: title });
+        const title = event.target.value.replace(/[<>]/g, ''); 
+        const cleanTitle = DOMPurify.sanitize(title);
+        setTitleLength(cleanTitle.length);
+        setSubmitData({ ...submitData, title: cleanTitle });
     };
 
     const handleContentChange = (content) => {
-        const textLength = getTextLength(content); // HTML 태그 제거 후 길이 계산
+        const cleanContent = DOMPurify.sanitize(content); // 새니타이징 적용
+        const textLength = getTextLength(cleanContent); // HTML 태그 제거 후 길이 계산
         setContentLength(textLength.length); // 내용 길이 업데이트
-        setSubmitData({ ...submitData, content: content });
+        setSubmitData({ ...submitData, content: cleanContent });
     };
 
     // WYSIWIG 에디터에서 사용하기에 태그 관련된 요소를 지워야함.
@@ -157,10 +160,9 @@ const WritePost = () => {
         }
 
         axios.post("/api/post", formData).then(resp => {
-            console.log(resp);
-            navigate("/board");
+            navigate(`/board/post/${resp.data}`);
         }).catch(error => {
-            console.log("error : " + error);
+            console.error("error : " + error);
         })
     }
 

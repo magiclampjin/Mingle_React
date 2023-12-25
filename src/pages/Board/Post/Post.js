@@ -24,36 +24,48 @@ const Post = () => {
 
     // 좋아요 클릭 핸들러
     const handleLike = () => {
-        axios.post(`/api/post/${postId}/like`, null, {
-            params: { memberId: loginId }
-        })
-            .then(response => {
-                if (response.data !== -1) {
-                    setVote(response.data); // 서버에서 반환한 총 추천 수로 업데이트
-                } else {
-                    
-                }
+        if(loginId === null || loginId === ""){
+            alert("로그인을 하지 않으면 추천을 할 수 없습니다!");
+            return;
+        }
+        if(post.member.id !== loginId && loginId){
+            axios.post(`/api/post/${postId}/like`, null, {
+                params: { memberId: loginId }
             })
-            .catch(error => {
-                alert("해당 게시글에 이미 투표를 완료하셨습니다.");
-            });
+                .then(response => {
+                    setVote(response.data); // 서버에서 반환한 총 추천 수로 업데이트
+                })
+                .catch(error => {
+                    alert("해당 게시글에 이미 투표를 완료하셨습니다.");
+                });
+        }
+        else{
+            alert("본인 게시글에는 투표할 수 없습니다!")
+        }
+        
     };
 
     // 싫어요 클릭 핸들러
     const handleDislike = () => {
-        axios.post(`/api/post/${postId}/dislike`, null, {
-            params: { memberId: loginId }
-        })
-            .then(response => {
-                if (response.data !== -1) {
-                    setVote(response.data); // 서버에서 반환한 총 추천 수로 업데이트
-                } else {
-                    alert("해당 게시글에 이미 투표를 완료하셨습니다.")
-                }
+        if(loginId === null || loginId === ""){
+            alert("로그인을 하지 않으면 추천을 할 수 없습니다!");
+            return;
+        }
+        if(post.member.id !== loginId){
+            axios.post(`/api/post/${postId}/dislike`, null, {
+                params: { memberId: loginId }
             })
-            .catch(error => {
-                alert("해당 게시글에 이미 투표를 완료하셨습니다.");
-            });
+                .then(response => {
+                    setVote(response.data);
+                })
+                .catch(error => {
+                    alert("해당 게시글에 이미 투표를 완료하셨습니다.");
+                });
+        }
+        else{
+            alert("본인 게시글에는 투표할 수 없습니다!")
+        }
+
     };
 
     const handleDelete = () => {
@@ -70,8 +82,25 @@ const Post = () => {
         }
     }
 
+    // 파일 다운로드 함수
+    const downloadFile = (sysName, oriName) => {
+        axios.get(`/api/post/file/download`, {
+            params : { sysName : sysName, oriName:oriName},
+            responseType: "blob" })
+            .then(response => {
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', oriName); // 다운로드 파일 이름 설정
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            })
+            .catch(error => console.error("다운로드 중 오류 발생:", error));
+    }
+
     const handleUpdate = () => {
-        alert("관련모달 작업 중...")
+        navigate(`/board/updatepost/${postId}`)
     }
 
     useEffect(() => {
@@ -85,14 +114,13 @@ const Post = () => {
         Promise.all([fetchPostData, fetchVoteCount]).then(responses => {
             const [postDataResponse, voteCountResponse] = responses;
 
-            console.log(voteCountResponse.data);
+            console.log(postDataResponse.data);
 
             setPost(postDataResponse.data);
             setVote(voteCountResponse.data);
 
             if (!viewedPosts.includes(postId)) {
                 axios.put(`/api/post/updateViewCount/${postId}`).then(resp => {
-                    console.log("조회수 증가 완료");
                     viewedPosts.push(postId);
                     sessionStorage.setItem('viewedPosts', JSON.stringify(viewedPosts));
                 }).catch(error => {
@@ -157,6 +185,13 @@ const Post = () => {
                         <button onClick={handleDislike} className={styles.dislikeButton}>
                             <FontAwesomeIcon icon={faThumbsDown} /> 싫어요
                         </button>
+                    </div>
+                    <div className={styles.fileDownloadSection}>
+                        {post.files && post.files.map(file => (
+                            <div key={file.id} onClick={() => downloadFile(file.sysName, file.oriName)}>
+                                <button className={styles.fileDownloadButton} type="button">{file.oriName}</button>
+                            </div>
+                        ))}
                     </div>
                     <div className={styles.post__replies}>
                         <Reply replies={post.replies} postId={postId} />

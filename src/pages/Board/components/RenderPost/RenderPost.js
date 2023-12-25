@@ -1,27 +1,33 @@
 import styles from "./RenderPost.module.css"
 import { timeFormatter } from "../../../../components/TimeFormatter/TimeFormatter";
-import { Link } from "react-router-dom";
+import { Link,useSearchParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faThumbsUp,faClock } from "@fortawesome/free-solid-svg-icons";
 import Pagination from "react-js-pagination";
-import { useState } from "react";
+import { useEffect,useState } from "react";
 
 const RenderPost = ({ posts, title }) => {
 
-    // 페이지 상태 관리
-    const [currentPage, setCurrentPage] = useState(1);
+    const [searchParams, setSearchParams] = useSearchParams();
     const postsPerPage = 10;
+    const currentPageFromUrl = Number(searchParams.get("page")) || 1;
+    const [currentPage, setCurrentPage] = useState(currentPageFromUrl);
+
+    useEffect(() => {
+        if (!searchParams.get("page")) {
+            setSearchParams({ page: currentPage.toString() });
+        }
+    }, [searchParams, setSearchParams, currentPage]);
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+        setSearchParams({ page: pageNumber.toString() });
+    };
 
     // 현재 페이지의 게시글 계산
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
     const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
-
-    // 페이지 변경 핸들러
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
-    };
-
 
     return (
         <div className={styles.render}>

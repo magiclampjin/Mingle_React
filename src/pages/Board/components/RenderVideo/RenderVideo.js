@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import styles from "./RenderVideo.module.css";
 import OttCard from "../OttCard/OttCard";
 import VideoModal from "../VideoModal/VideoModal";
@@ -15,6 +16,8 @@ const RenderVideo = ({ newVideoInfo }) => {
         setIsModalOpen(true); // 모달 열기
     };
 
+    
+
     const [currentPage, setCurrentPage] = useState(1);
     const [videosPerPage] = useState(12); // 한 페이지에 표시할 비디오 수
 
@@ -30,14 +33,6 @@ const RenderVideo = ({ newVideoInfo }) => {
     const handleOttChange = (ott) => {
         setSelectedOtt(ott);
         setCurrentPage(1); // 카테고리 변경 시 현재 페이지를 1로 초기화
-    };
-
-    // OTT 카테고리에 따라 비디오를 필터링하는 함수
-    const filterVideosByOtt = () => {
-        if (selectedOtt === '전체') {
-            return newVideoInfo;
-        }
-        return newVideoInfo.filter(video => video.ott === selectedOtt);
     };
 
     // 필터링된 비디오 목록
