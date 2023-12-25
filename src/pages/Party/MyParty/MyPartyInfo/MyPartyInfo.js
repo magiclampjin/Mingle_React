@@ -44,7 +44,7 @@ const MyPartyInfo = () =>{
             setPartyInfo(resp.data);
             setLoading(false);
         }).catch(()=>{
-            alert("정보를 불러오지 못 했습니다. 같은 문제가 반복되면 관리자에게 문의하세요.");
+            alert("정보를 불러오지 못 했습니다.\n같은 문제가 반복되면 관리자에게 문의하세요.");
             navi(-1);
         })
     },[selectParty]);
@@ -79,7 +79,7 @@ const MyPartyInfo = () =>{
                                     <div className={style.subContent}>매달 {formatNumber(Math.ceil((partyInfo.price)/(partyInfo.maxPeopleCount))+1000)}원</div>
                                 </div>
                                 <div className={style.leftInfo}>
-                                    <div className={style.subTitle}>파티 계정 정보</div>
+                                    <div className={style.subTitle}>계정 정보</div>
                                     <div className={style.grayTitle}>아이디</div>
                                     <div className={style.subContent}>{isStart(partyInfo.startDate)===1?partyInfo.loginId:"파티가 시작되면 공개됩니다."}</div>
                                     <div className={style.grayTitle}>비밀번호</div>
@@ -89,12 +89,12 @@ const MyPartyInfo = () =>{
                             <div className={style.right}>
                                 <div className={style.partyInfo}>
                                     <div className={style.infoContent}>
-                                        <div className={style.infoTitle}>아이디</div>
-                                        <div className={style.infoSubContent}>{isStart(partyInfo.startDate)===1?partyInfo.loginId:"파티가 시작되면 공개됩니다."}</div>
+                                        <div className={style.infoTitle}></div>
+                                        <div className={style.infoSubContent}></div>
                                     </div>
                                     <div className={style.infoContent}>
-                                        <div className={style.infoTitle}>비밀번호</div>
-                                        <div className={style.infoSubContent}>{isStart(partyInfo.startDate)===1?partyInfo.loginPw:"파티가 시작되면 공개됩니다."}</div>
+                                        <div className={style.infoTitle}></div>
+                                        <div className={style.infoSubContent}></div>
                                     </div>
                                 </div>
                             </div>
