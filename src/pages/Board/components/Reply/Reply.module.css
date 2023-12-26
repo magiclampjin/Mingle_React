@@ -53,13 +53,11 @@
 }
 
 .replyForm {
-  margin-top: 20px;
 }
 
 .replyInput {
   width: 100%;
   height: 100px;
-  margin-bottom: 10px;
   padding: 10px;
   border: 1px solid #e0e0e0;
   border-radius: 5px;
@@ -176,4 +174,69 @@ ul.pagination li:hover:not(ul.pagination li.active,
 
 .reply__hide__buttton{
   color : #7b61ff;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.replyActionsContainer{
+  display: flex; /* Flexbox를 사용하여 내부 항목들을 나란히 배열 */
+  align-items: center; /* 항목들을 수직 중앙에 정렬 */
+  justify-content: flex-end;
+  gap: 5px; /* 버튼 사이의 간격 */
+}
+
+/* 각 액션 버튼에 공통적으로 적용될 스타일 */
+.replyActionButton{
+  cursor: pointer; /* 마우스 오버 시 포인터 모양 변경 */
+  padding: 5px 10px; /* 버튼 패딩 */
+  border: none; /* 테두리 스타일 */
+  border-radius: 5px; /* 테두리 둥근 모서리 */
+  font-size: 10px;
+  background-color: #f9f9f9; /* 배경색 */
+  /* 기타 스타일 */
+}
+
+.buttonContainer {
+  display: flex; /* 이를 통해 자식 요소들을 행으로 배치 */
+  justify-content: flex-end;
+  gap: 10px; /* 버튼 사이의 간격을 줍니다 */
+}
+
+.rereplyButton {
+  width: 20%;
+  padding: 10px 0;
+  background-color: #7b61ff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cancelButton{
+  width: 20%;
+  padding: 10px 0;
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.selectedReplyInfo {
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #f9f9f9;
+  border-left: 3px solid #7b61ff;;
+  font-size: 0.9em;
+  color: #333;
+}
+
+.selectedReplyInfo p {
+  margin: 0;
+  padding: 5px 0;
+}
+
+.selectedReplyInfo strong {
+  font-weight: bold;
+  color: #007bff;
 }

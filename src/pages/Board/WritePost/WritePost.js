@@ -196,7 +196,7 @@ const WritePost = () => {
     return (
         <div className={styles.board}>
             <div className={styles.post__container}>
-                <h2 className={styles.post__title}>게시물 등록</h2>
+                <h2 className={styles.post__title}>게시글 등록</h2>
                 <hr />
                 {loginRole === "ROLE_ADMIN" ?
                     <div className={styles.post__category}>

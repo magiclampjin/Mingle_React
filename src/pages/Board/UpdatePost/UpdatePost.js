@@ -28,6 +28,8 @@ const UpdatePost = () => {
         files: []
     });
 
+    const [newFiles, setNewFiles] = useState([]);
+
     // 게시글 정보 로드
     useEffect(() => {
         axios.get(`/api/post/${postId}`)
@@ -59,6 +61,12 @@ const UpdatePost = () => {
         }
     }, [loginId, submitData.memberId]);
 
+    // 파일의 입력 및 출력상태를 추적
+    useEffect(() => {
+        const fileNamesList = submitData.files.map(file => file.name);
+        setFileNames(fileNamesList);
+    }, [submitData.files]);
+
 
 
     const handleTitleChange = (event) => {
@@ -86,23 +94,19 @@ const UpdatePost = () => {
 
     // 파일 추가 핸들러
     const handleFileChange = (event) => {
-        const newFiles = event.target.files;
-        if (newFiles) {
-            const totalFileCount = submitData.files.length + newFiles.length;
-
+        const selectedFiles = event.target.files;
+        if (selectedFiles) {
+            const totalFileCount = submitData.files.length + selectedFiles.length;
             if (totalFileCount > 5) {
                 alert("파일은 최대 5개까지만 업로드 가능합니다.");
                 return;
             }
-
-            const updatedFilesArray = Array.from(newFiles);
-            const updatedFileNamesArray = updatedFilesArray.map(file => file.name);
-
-            // 파일과 파일 이름 상태 업데이트
-            setSubmitData(prev => ({ ...prev, files: [...prev.files, ...newFiles] }));
-            setFileNames([...fileNames, ...updatedFileNamesArray]);
+    
+            const newFilesArray = Array.from(selectedFiles);
+            setNewFiles([...newFiles, ...newFilesArray]);
         }
     };
+    
 
     // 파일 삭제 핸들러
     const handleRemoveFile = (file, fileIndex) => {
@@ -118,7 +122,7 @@ const UpdatePost = () => {
 
 
         // 파일 입력 필드 초기화
-        document.getElementById('file').value = '';
+        // document.getElementById('file').value = '';
     };
 
     const handleCategoryChange = (event) => {
@@ -168,7 +172,11 @@ const UpdatePost = () => {
         const titleByteSize = calculateByteSize(submitData.title);
         const contentByteSize = calculateByteSize(submitData.content);
 
-        submitData.files.forEach((file) => {
+        // submitData.files.forEach((file) => {
+        //     formData.append('files', file);
+        // });
+
+        newFiles.forEach(file => {
             formData.append('files', file);
         });
 
@@ -187,12 +195,6 @@ const UpdatePost = () => {
             return;
         }
 
-        axios.put(`/api/post/${submitData.id}`, formData)
-            .then(response => {
-                navigate(`/board/post/${submitData.id}`); // 수정된 게시글로 이동
-            })
-            .catch(error => console.error("Error updating post:", error));
-
         if (removeFileList) {
             axios.delete(`/api/post/file/delete`, {
                 headers: {
@@ -200,13 +202,29 @@ const UpdatePost = () => {
                 },
                 data: JSON.stringify(removeFileList)
             })
-            .then(response => {
-                // 파일 삭제 성공 처리
-            })
-            .catch(error => {
-                // 에러 처리
-            });
+                .then(response => {
+                    // 파일 삭제 성공 처리
+                })
+                .catch(error => {
+                    // 에러 처리
+                });
         }
+        
+        axios.put(`/api/post/${submitData.id}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        .then(response => {
+            // 성공 처리
+            navigate(`/board/post/${submitData.id}`);
+        })
+        .catch(error => {
+            // 오류 처리
+            console.error("Error updating post:", error);
+        });
+
+        
 
     }
 
@@ -224,6 +242,11 @@ const UpdatePost = () => {
         }
     };
 
+    const handleNewFileRemove = (index) => {
+        const updatedNewFiles = newFiles.filter((_, fileIndex) => fileIndex !== index);
+        setNewFiles(updatedNewFiles);
+    };
+
     const [category, setCategory] = useState("자유게시판");
 
 
@@ -237,7 +260,7 @@ const UpdatePost = () => {
     return (
         <div className={styles.board}>
             <div className={styles.post__container}>
-                <h2 className={styles.post__title}>게시물 수정</h2>
+                <h2 className={styles.post__title}>게시글 수정</h2>
                 <hr />
                 {loginRole === "ROLE_ADMIN" ?
                     <div className={styles.post__category}>
@@ -308,8 +331,30 @@ const UpdatePost = () => {
                                     </button>
                                 </div>
                             ))
+                        ) :  (
+                            <div className={styles.emptyFileMessage}>기존에 업로드된 파일이 없습니다</div>
+                        )}
+                    
+                        {/* 새 파일 목록 렌더링 */}
+                        {newFiles.length > 0 ? (
+                            newFiles.map((file, index) => (
+                                <div key={index} className={styles.fileItem}>
+                                    <span className={styles.fileName}>{file.name}</span>
+                                    <button
+                                        className={styles.removeFileButton}
+                                        onClick={(event) => {
+                                            event.stopPropagation(); // 이벤트 버블링 방지
+                                            // 새 파일 삭제 핸들러
+                                            handleNewFileRemove(index);
+                                        }}
+                                        aria-label="파일 삭제"
+                                    >
+                                        X
+                                    </button>
+                                </div>
+                            ))
                         ) : (
-                            <div className={styles.emptyFileMessage}>파일이 비어있습니다</div>
+                            <div className={styles.emptyFileMessage}>새로 추가된 파일이 없습니다</div>
                         )}
                     </div>
                 </div>
@@ -324,7 +369,7 @@ const UpdatePost = () => {
                         onClick={handleUpdate}
                         disabled={!submitData.title.trim() || !submitData.content.trim()}
                     >
-                        게시물 수정
+                        게시글 수정
                     </button>
                     <button
                         className={styles.post__button}
