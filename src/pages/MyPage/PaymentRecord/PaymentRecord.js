@@ -57,7 +57,6 @@ const PaymentRecord = () =>{
     // 서비스 셀렉트 박스 변화 함수
     const handleServiceChange = (e) => {
         const valueService = e.target.value;
-        console.log(valueService);
         setSearchService(valueService);
     }
 
@@ -67,7 +66,6 @@ const PaymentRecord = () =>{
     // 결제/적립/인출 박스 변화 함수
     const handlePaymentTypeChange = (e)=>{
         const valueType = e.target.value;
-        console.log(valueType);
         setSearchType(valueType);
     }
 
@@ -80,8 +78,6 @@ const PaymentRecord = () =>{
         if (inputDate.length <= 8) {
           setStartDate(inputDate.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'));
         }
-
-        console.log(startDate);
     }
 
     // 끝 날짜 입력
@@ -92,7 +88,6 @@ const PaymentRecord = () =>{
         if (inputDate.length <= 8) {
           setEndDate(inputDate.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'));
         }
-        console.log(endDate);
     };
 
     // 정산 내역 State
@@ -100,39 +95,28 @@ const PaymentRecord = () =>{
 
     // 정산 내역 불러오기
     useEffect(()=>{
-        // setLoading(true);
-        // axios.get("/api/payment").then((resp)=>{
-        //     setPayList(resp.data);
-        //     setLoading(false);
-        //     console.log(resp.data);
-        // }).catch(()=>{
-        //     setLoading(false);
-        //     alert("문제가 발생했습니다.");
-        // })
+       
+        setLoading(true);
+        const queryParams = {};
 
-        if(loginId !== ""){
-            setLoading(true);
-            const queryParams = {};
+        if (searchService) { queryParams.serviceId  = searchService; }
+        if (searchType) { queryParams.paymentTypeId  = searchType;  }
+        if (startDate) { queryParams.start = startDate; }
+        if (endDate) {  queryParams.end = endDate; }
 
-            if (searchService) { queryParams.serviceId  = searchService; }
-            if (searchType) { queryParams.paymentTypeId  = searchType;  }
-            if (startDate) { queryParams.start = startDate; }
-            if (endDate) {  queryParams.end = endDate; }
-
-            axios.get("/api/payment/searchBy", { params: queryParams })
-            .then((resp) => {
-                // 성공적으로 처리된 경우의 로직
-                console.log(resp.data);
-                setPayList(resp.data);
-                setLoading(false);
-            })
-            .catch((error) => {
-                // 오류 발생 시의 처리 로직
-                console.error(error);
-                setLoading(false);
-                alert("검색에 실패했습니다.");
-            });
-        }
+        axios.get("/api/payment/searchBy", { params: queryParams })
+        .then((resp) => {
+            // 성공적으로 처리된 경우의 로직
+            // console.log(resp.data);
+            setPayList(resp.data);
+            setLoading(false);
+        })
+        .catch((error) => {
+            // 오류 발생 시의 처리 로직
+            console.error(error);
+            setLoading(false);
+            alert("검색에 실패했습니다.");
+        });
 
     },[])
 
@@ -147,11 +131,6 @@ const PaymentRecord = () =>{
     // 검색 완료
     const handleSubmit = () => {
 
-        console.log(searchService);
-        console.log(searchType);
-        console.log(startDate);
-        console.log(endDate);
-
         const queryParams = {};
 
         if (searchService) { queryParams.serviceId  = searchService; }
@@ -162,7 +141,6 @@ const PaymentRecord = () =>{
         axios.get("/api/payment/searchBy", { params: queryParams })
         .then((resp) => {
             // 성공적으로 처리된 경우의 로직
-            console.log(resp.data);
             setPayList(resp.data);
             handleSearchModalClose();
         })
