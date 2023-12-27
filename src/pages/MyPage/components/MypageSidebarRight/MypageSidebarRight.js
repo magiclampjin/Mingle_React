@@ -21,7 +21,7 @@ const MypageSidebarRight = () =>{
 
     useEffect(()=>{
         // console.log("money "+loginId);
-        if(loginId !== "" || loginId !== undefined || loginId !== null){
+        if(loginId){
             axios.get("/api/member/getMingleMoney").then((resp) => {
                 // 성공적으로 처리된 경우의 로직
                 setMingleMoney(resp.data);
@@ -197,6 +197,8 @@ const MypageSidebarRight = () =>{
         
         if(isAccount){
             // 계좌 등록
+            console.log("은행 : "+selectedBank);
+            console.log("계좌번호 : "+accountNum);
             axios.post("/api/paymentAccount/accountInsert",postData).then((resp)=>{
                 alert("등록이 완료되었습니다.")
             }).catch(()=>{

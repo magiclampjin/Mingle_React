@@ -59,6 +59,7 @@ const Header = () => {
       const data = resp.data; // axios로 받아온 데이터
       // data가 Map과 유사한 경우
       // Map의 값들 꺼내오기
+      
       if (data.loginID !== undefined) {
         setLoginId(data.loginID);
         // setLoading(false);

@@ -95,7 +95,7 @@ const PaymentRecord = () =>{
 
     // 정산 내역 불러오기
     useEffect(()=>{
-       
+       if(loginId){
         setLoading(true);
         const queryParams = {};
 
@@ -117,6 +117,8 @@ const PaymentRecord = () =>{
             setLoading(false);
             alert("검색에 실패했습니다.");
         });
+       }
+        
 
     },[])
 
