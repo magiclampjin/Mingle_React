@@ -20,7 +20,7 @@ export const MenuContext = createContext();
 export const LoginContext = createContext();
 
 function App() {
-  const [selectedMenu, setSelectedMenu] = useState(null);
+  const [selectedMenu, setSelectedMenu] = useState("");
   const [loginId, setLoginId] = useState("");
   const [loginNick, setLoginNick] = useState("");
   const [loginRole, setLoginRole] = useState("");
