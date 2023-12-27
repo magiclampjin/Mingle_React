@@ -8,6 +8,7 @@ import { FindPwContext } from "../FindPw";
 
 const PwChange = () => {
   const { user } = useContext(FindPwContext); //사용자 정보
+  const { findPw } = useContext(FindPwContext); // 비밀번호 찾기 활성화 여부
   const [update, setUpdate] = useState({ id: "", password: "" });
   // 비밀번호 확인 input value
   const [pwCheckText, setPwCheckText] = useState("");
@@ -36,7 +37,8 @@ const PwChange = () => {
     if (user.id !== "") {
       setUpdate((prev) => ({ ...prev, id: user.id }));
     } else {
-      navi("/");
+      alert("잘못된 접근입니다.");
+      navi("/member/findInfo/pw");
     }
   }, []);
 
@@ -168,7 +170,7 @@ const PwChange = () => {
   }, [pwCheckText]);
 
   const handleChangePw = () => {
-    if (changePw) {
+    if (changePw && findPw) {
       axios.put("/api/member/updatePw", update).then((resp) => {
         if (resp.data) {
           alert("비밀번호 변경이 완료되었습니다.");
@@ -186,10 +188,10 @@ const PwChange = () => {
     navi("/member/login");
   };
 
-  // 엔터키로 로그인 감지
+  // 엔터키로 비밀번호 변경하기 감지
   const handleKeyPress = (event) => {
     if (event.keyCode === 13) {
-      handleLogin();
+      handleChangePw();
     }
   };
 

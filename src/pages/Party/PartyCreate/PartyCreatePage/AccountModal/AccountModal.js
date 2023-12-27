@@ -56,12 +56,19 @@ const AccountModal = ({ isOpen, onRequestClose, width, height, setAllComplete}) 
     useEffect(()=>{
         // 은행 정보 불러오기
         setLoading(true);
-        axios.get("/api/member/bankList").then((resp)=>{
+        setAccountNum("");
+        setIsAccount(false);
+        setIsBank(false);
+        setSelectedBank("");
+
+        axios.get("/api/paymentAccount/selectBankList").then((resp)=>{
             setBankList(resp.data);
             setLoading(false);
         }).catch(()=>{
             setLoading(false);
-        })
+        });
+
+
     },[isOpen]);
 
     // 계좌 등록 완료 버튼
@@ -87,12 +94,7 @@ const AccountModal = ({ isOpen, onRequestClose, width, height, setAllComplete}) 
                 setLoading(false);
                 alert("결제 수단 등록에 실패했습니다.");
             })
-        }else{
-            onRequestClose();
-            setLoading(false);
-            alert("결제 수단 등록에 실패했습니다.");
         }
-
     }
 
 
@@ -157,17 +159,13 @@ const AccountModal = ({ isOpen, onRequestClose, width, height, setAllComplete}) 
                     </div>
 
                     <div className={style.modalBtn}>
-                        {isBank && isAccount &&
-                            <>
-                                <PurpleRectangleBtn
-                                    title={"완료"}
-                                    width={150}
-                                    heightPadding={10}
-                                    onClick={handleSubmit}
-                                    activation={true}
-                                ></PurpleRectangleBtn>
-                            </>
-                        }
+                        <PurpleRectangleBtn
+                            title={"완료"}
+                            width={150}
+                            heightPadding={10}
+                            onClick={handleSubmit}
+                            activation={isBank && isAccount}
+                        ></PurpleRectangleBtn>
                     </div>
                 </div>
             }

@@ -20,7 +20,7 @@ export const MenuContext = createContext();
 export const LoginContext = createContext();
 
 function App() {
-  const [selectedMenu, setSelectedMenu] = useState(null);
+  const [selectedMenu, setSelectedMenu] = useState("");
   const [loginId, setLoginId] = useState("");
   const [loginNick, setLoginNick] = useState("");
   const [loginRole, setLoginRole] = useState("");
@@ -46,8 +46,8 @@ function App() {
               <Route path="/party/*" element={<Party />}></Route>
               <Route path="/Mypage/*" element={<Mypage />}></Route>
               <Route path="/denied" element={<Denied />}></Route>
-              <Route path="/admin/*" element={<AdminMain />}/>
-              <Route path="/board/*" element={<Board/>}/>
+              <Route path="/admin/*" element={<AdminMain />} />
+              <Route path="/board/*" element={<Board />} />
             </Routes>
             <Footer></Footer>
           </Router>

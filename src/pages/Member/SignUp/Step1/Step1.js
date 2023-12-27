@@ -8,6 +8,7 @@ import { SignUpInfoContext } from "../SignUp";
 
 const Step1 = () => {
   const { currentStep, setCurrentStep } = useContext(SignUpInfoContext);
+  const { user, setUser } = useContext(SignUpInfoContext);
   const { isNext, setNext } = useContext(SignUpInfoContext);
   const { chkAll, setChhAll } = useContext(SignUpInfoContext);
   const { chkUse, setChkUse } = useContext(SignUpInfoContext);
@@ -24,6 +25,41 @@ const Step1 = () => {
   //       return { display: "none" };
   //     }
   //   };
+
+  useEffect(() => {
+    console.log(currentStep);
+    console.log(chkAll);
+    if (currentStep === "step3") {
+      console.log("durl");
+      setUser({
+        id: "",
+        password: "",
+        name: "",
+        email: "",
+        phone: "",
+        nickname: "",
+        birth: "",
+        memberRecommenderId: "",
+      });
+      setChhAll(false);
+      setChkUse(false);
+      setChkPrivacy(false);
+    }
+    if (chkAll) {
+      setChhAll(true);
+      setNext(true);
+    }
+    setCurrentStep("step1");
+  }, []);
+
+  // // 이전 페이지에서 돌아왔을 때
+  // useEffect(() => {
+  //   console.log(chkAll);
+  //   if (chkAll) {
+  //     setChhAll(true);
+  //     setNext(true);
+  //   }
+  // }, []);
 
   // 전체 동의 눌렀을 때
   const handleAllCheck = () => {
@@ -62,15 +98,6 @@ const Step1 = () => {
       setNext(true);
     }
   }, [chkUse, chkPrivacy]);
-
-  // 이전 페이지에서 돌아왔을 때
-  useEffect(() => {
-    console.log(chkAll);
-    if (chkAll) {
-      setChhAll(true);
-      setNext(true);
-    }
-  }, []);
 
   //취소 혹은 이전 버튼 눌렀을 때
   const handleCancle = () => {

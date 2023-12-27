@@ -42,8 +42,11 @@
 }
 
 .post__item-title {
-    flex: 3;
+    flex: 4;
     font-weight: bold;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 /* 기본 폰트 사이즈 */
@@ -58,7 +61,10 @@
         font-size: 14px; /* 폰트 사이즈를 조금 줄임 */
     }
     .post__item-date {
-        font-size: 14px;
+        font-size: 12px;
+    }
+    .post__item-title{
+        font-size: 12px;
     }
 }
 
@@ -70,6 +76,9 @@
     .post__item-date {
         font-size: 10px;
     }
+    .post__item-title{
+        font-size: 10px;
+    }
 }
 
 .post__item-date {
@@ -78,6 +87,11 @@
 }
 
 .post__item-viewcount {
+    flex: 1;
+    text-align: center;
+}
+
+.post__item-totalvotes {
     flex: 1;
     text-align: center;
 }

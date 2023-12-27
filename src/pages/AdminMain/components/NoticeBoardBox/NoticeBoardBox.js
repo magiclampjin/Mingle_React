@@ -4,21 +4,40 @@ import {Link} from 'react-router-dom';
 import axios from "axios";
 
 import WhiteRoundBtn from '../../../../components/WhiteRoundBtn/WhiteRoundBtn';
+import LoadingSpinnerMini from '../../../../components/LoadingSpinnerMini/LoadingSpinnerMini';
+
+// html 태그를 제거하는 함수 (공지글 내용 출력)
+const removeHtmlTags = (html) => {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || "";
+}
 
 const NoticeBoardBox = () => {
 
     const [notice, setNotice] = useState([{}]);
+    const [isServiceLoading, setServiceLoading] = useState(false);
 
     useEffect(() => {
+        setServiceLoading(true);
+
         axios.get(`/api/admin/noticeBoardList`).then(resp => {
             setNotice(resp.data);
-        })
+            setServiceLoading(false);
+        }).catch(() => {
+            setServiceLoading(false);
+        });
     }, []);
+
+    
 
     return (
         <div className={style.box}>
             <div className={style.componentTitle}>공지 게시판</div>
             <div className={style.componentBox}>
+            {isServiceLoading ? (
+                <LoadingSpinnerMini height={350} />
+            ) : (
+                <>
                 <div className={style.componentSeeMore}>
                     <div></div>
                     <div className={style.componentSeeMoreBtn}>
@@ -32,11 +51,13 @@ const NoticeBoardBox = () => {
                         <div key={i} className={style.componentLine}>
                             <div className={style.componentItem}>{e.id}</div>
                             <div className={style.componentItem}>{e.title}</div>
-                            <div className={style.componentItem}>{e.content}</div>
+                            <div className={style.componentItem}>{removeHtmlTags(e.content)}</div>
                             <div className={style.componentItem}>{e.writeDate ? new Date(e.writeDate).toLocaleString('en-US', { timeZone: 'Asia/Seoul' }) : null}</div>
                         </div>
                     );
                 })}
+                </>
+            )}
             </div>
         </div>
     );

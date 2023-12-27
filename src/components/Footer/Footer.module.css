@@ -43,6 +43,9 @@
 .navi__conf:not(:last-child) {
   border-right: 1px solid #73757750;
 }
+.navi__conf:hover {
+  cursor: pointer;
+}
 .footer__info {
   padding: 0 20px;
   font-size: 12px;

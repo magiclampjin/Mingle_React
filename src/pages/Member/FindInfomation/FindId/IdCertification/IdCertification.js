@@ -169,7 +169,7 @@ const IdCertification = () => {
         } else {
           alert("본인 인증 코드가 일치하지 않습니다.");
           // 정보 초기화
-          setUser({ name: "", email: "" });
+          // setUser({ name: "", email: "" });
           setCertificationNum("");
           setFindId(false);
           setTimerStart(false);
@@ -178,6 +178,13 @@ const IdCertification = () => {
       });
     } else {
       alert("이름과 이메일 정보를 통해 본인 인증을 완료해주세요.");
+    }
+  };
+
+  // 엔터키로 인증완료 감지
+  const handleKeyPress = (event) => {
+    if (event.keyCode === 13) {
+      handleFindId();
     }
   };
 
@@ -222,6 +229,7 @@ const IdCertification = () => {
           type="text"
           placeholder="인증번호를 입력해주세요."
           onChange={handleCertificaton}
+          onKeyDown={handleKeyPress}
           value={certificationNum}
         />
         <div className={style.timer}>{`${String(

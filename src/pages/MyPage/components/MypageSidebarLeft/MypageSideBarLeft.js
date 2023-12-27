@@ -49,10 +49,6 @@ const MyPageSideBarLeft = () =>{
                     > 정산일 관리 </div>
                 </Link>
                 
-                <div className={style.sidebar__inner}
-                onClick={handleClickNav} 
-                style={menu === "파티 관리" ? backStyle : {}}
-                >파티 관리</div>
             </div>
             
         </div>

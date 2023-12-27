@@ -17,6 +17,7 @@
     "axios": "^1.6.2",
     "bootstrap": "^5.3.2",
     "date-fns": "^2.30.0",
+    "dompurify": "^3.0.6",
     "http-proxy-middleware": "^2.0.6",
     "moment": "^2.29.4",
     "react": "^18.2.0",
@@ -33,6 +34,7 @@
     "reactstrap": "^9.2.1",
     "socketjs-client": "^1.0.2",
     "styled-components": "^6.1.1",
+    "swiper": "^11.0.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

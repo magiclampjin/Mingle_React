@@ -22,8 +22,58 @@ input[type="checkbox"] {
   margin: 0px;
   position: relative;
 }
+
+
+.ql-editor{
+  min-height : 500px;
+}
+
 @media screen and (max-width: 600px) {
   .ql-container {
     font-size: 1.125rem;
   }
 }
+
+.swiper-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet,
+.swiper-pagination-horizontal.swiper-pagination-bullets
+  .swiper-pagination-bulle {
+  background-color: #7b61ff;
+}
+.partList .swiper-backface-hidden .swiper-slide {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.swiper-horizontal {
+  padding: 20px 0 !important;
+  background-color: white;
+}
+.swiper-backface-hidden .swiper-slide {
+  padding: 10px 2px;
+}
+.swiper-button-prev {
+  left: 130px !important;
+  top: 441px !important;
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 7px;
+}
+.swiper-button-next {
+  left: 170px !important;
+  top: 441px !important;
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 7px;
+}
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  background-color: #676d7c50;
+}
+.swiper-button-next:after,
+.swiper-button-prev:after {
+  color: black;
+  font-size: 15px !important;
+}
+
+
+

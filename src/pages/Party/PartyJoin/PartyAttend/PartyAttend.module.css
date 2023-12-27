@@ -175,6 +175,11 @@
     padding:20px;
 }
 
+.mmInfoPop{
+    bottom:0;
+    left:50;
+}
+
 .miniTitle{
     font-size: 15px;
     font-weight: 700;

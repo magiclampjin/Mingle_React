@@ -1,9 +1,8 @@
 import style from "./PartyCreatePage.module.css";
-import {useLocation} from "react-router-dom";
-import {useState, useEffect} from "react";
+import {useState, useEffect, useContext} from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faTriangleExclamation, faPlus, faMinus, faChevronDown, faChevronUp, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faTriangleExclamation, faPlus, faMinus, faChevronDown, faCheck, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import PurpleRectangleBtn from "../../../../components/PurpleRectangleBtn/PurpleRectangleBtn";
 import StartDateModal from "./StartDateModal/StartDateModal"
 import moment from "moment";
@@ -13,15 +12,31 @@ import CalculationSelectBox from "../../../../components/CalculationSelectBox/Ca
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
 import LoadingSpinnerMini from "../../../../components/LoadingSpinnerMini/LoadingSpinnerMini";
-import MypageModal from "../../../MyPage/components/MypageModal/MypageModal";
 import AccountModal from "./AccountModal/AccountModal";
+import { CreatePartyContext } from "../PartyCreateMain";
+import { LoginContext } from "../../../../App";
 
 const PartyCreatePage = () =>{
     //  공통 사용 -------------------------------------------------
 
-    const location = useLocation();
-    const service = location.state.service;
+
+    // 로그인하지 않았다면 접근권한 페이지로 이동
     const navi = useNavigate();
+    const {loginId} = useContext(LoginContext);
+    useEffect(()=>{
+        if(loginId===""){
+           navi("/denied");
+        }
+    },[loginId]);
+
+    const {service, setService} = useContext(CreatePartyContext);
+    //뒤로가기 버튼을 통해서 들어오거나 주소를 통해서 들어왔다면 돌려보내기
+    useEffect(() => {
+        if (service === null) {
+            navi("/party/partycreate");
+        }
+    });
+
     const [isLoading, setLoading] = useState(false);
     const [isLoadingMini, setLoadingMini] = useState(false);
 
@@ -39,7 +54,6 @@ const PartyCreatePage = () =>{
                     if(prev+1 !== 2) setGoNext(false);
                     return prev+1;
                 });
-           
         }
     }
 
@@ -71,6 +85,8 @@ const PartyCreatePage = () =>{
 
     // 1단계 ----------------------------------------------------
 
+    // 아이디 중복 여부
+    const [isDup, setDup] = useState(false);
     // 비밀번호 보기 여부
     const [isView,setView] = useState(false);
     // 비밀번호 일치 여부
@@ -88,20 +104,31 @@ const PartyCreatePage = () =>{
     const handleChangeId = (e) => {
 
         // 한글, 특수문자 입력 제한 (_, ., @는 허용 -> 이메일 아이디 대비)
-        const regResult = e.target.value.replace(/[^a-zA-Z0-9_@.]/g,'');
-
-        setChecked((prev)=>({...prev,id:true}))
-        setAccountInfo((prev)=>{
-            if(regResult!==""){setChecked((prev)=>{ if(isChked.pw){setGoNext(true)} return {...prev,id:true};})}
-            else setChecked((prev)=>{ setGoNext(false); return {...prev,id:false}});
-            return {...prev,id:regResult}
+        const regResult = e.target.value.replace(/[^a-zA-Z0-9_@.]/g,'').replace(/([\s\S]{300})([\s\S]{1,})/g, '$1');
+        setAccountInfo(prev=>({...prev,id:regResult}));
+        const inputId = {loginId:regResult};
+      
+        axios.get(`/api/party/idDupChk/${service.id}`,{params:inputId}).then((resp)=>{
+            if(!resp.data){
+                setDup(false);
+                setChecked((prev)=>({...prev,id:true}));
+                if(regResult!==""){setChecked((prev)=>{ if(isChked.pw){setGoNext(true)} return {...prev,id:true};})}
+                else setChecked((prev)=>{ setGoNext(false); return {...prev,id:false}});
+            }else{
+                setDup(true);
+                setChecked((prev)=>{ setGoNext(false); return {...prev,id:false}});
+            }
         });
+
+       
     }
 
     // 비밀번호 or 비밀번호 확인 입력
     const handleChangePW = (e) => {
         const {name, value} = e.target;
         setChecked((prev)=>({...prev,pw:false}))
+        const regResult = value.replace(/[=<>]/g,"").replace(/([\s\S]{300})([\s\S]{1,})/g, '$1');
+        console.log(regResult);
         setAccountInfo((prev)=>{
             
             // 비밀번호 일치여부 검사
@@ -111,7 +138,7 @@ const PartyCreatePage = () =>{
             else {setSame(false); setGoNext(false);};
 
             // 입력한 비밀번호 state에 저장
-            return {...prev,[name]:value}
+            return {...prev,[name]:regResult}
         });
     };
 
@@ -130,10 +157,16 @@ const PartyCreatePage = () =>{
 
     // 2단계 -------------------------------------------------------------------------
     // 파티원 명수
-    const [peopleCnt, setPeopleCnt] = useState(service.maxPeopleCount-1);
+    useEffect(()=>{
+        if(service){
+            setPeopleCnt(service.maxPeopleCount-1);
+            setUpdatePeopleCnt({minus:(service.maxPeopleCount-1)!==1, plus:false});
+        }
+    },[]);
+    const [peopleCnt, setPeopleCnt] = useState(0);
     
     // 파티원 명수 버튼 클릭할 수 있는지
-    const [isUpdatePeopleCnt, setUpdatePeopleCnt] = useState({minus:(service.maxPeopleCount-1)!==1, plus:false})
+    const [isUpdatePeopleCnt, setUpdatePeopleCnt] = useState()
 
     // 파티원 명수 조절
     const handleUpdatePeopleCnt = (e) => {
@@ -306,8 +339,9 @@ const PartyCreatePage = () =>{
                     }
                     axios.post("/api/party/auth", partyData).then(resp=>{
                         setLoading(false);
+                        setService(null);
                         if(window.confirm("파티 등록 성공! 등록된 정보를 확인하시겠어요?")){
-                            navi("/");
+                            navi("/party/myParty");
                         }else{
                             navi("/");
                         }
@@ -346,23 +380,26 @@ const PartyCreatePage = () =>{
             </div>
             <div className={style.right}>
                 {
-                    step===1?(
+                    step===1 && service?(
                         <>
                             <div className={style.title}>{service.name} {service.plan}의<br></br>로그인 정보를 입력해주세요.</div>
                             <div className={style.inputTags}>
                                 <div className={style.inputTag}><div className={style.inputCover}><div className={`${accountInfo.id===""?`${style.inputTitle} ${style.inputTitleHidden}`:`${style.inputTitle}`}`}>아이디</div><input type="text"  className={`${accountInfo.id===""?null:`${style.hasContent}`}`} name="id" placeholder="아이디" onChange={handleChangeId} value={accountInfo.id}></input></div></div>
+                                <div className={style.dupResult}>
+                                    {`${isDup===true && accountInfo.id!=="" ? "이미 등록된 아이디 입니다.":""}`}
+                                </div>
                                 <div className={style.inputTag}><div className={style.inputCover}><div className={`${accountInfo.pw===""?`${style.inputTitle} ${style.inputTitleHidden}`:`${style.inputTitle}`}`}>비밀번호</div><input type={`${isView?"text":"password"}`} className={`${accountInfo.pw===""?null:`${style.hasContent}`}`} name="pw" placeholder="비밀번호" onChange={handleChangePW} value={accountInfo.pw}></input></div><div className={`${style.iconCover} ${style.centerAlign}`}><FontAwesomeIcon icon={faEye} size="sm" className={`${isView?`${style.eyeIconActive} ${style.eyeIcon}`:`${style.eyeIcon}`}`} onClick={handleView} data-name="pw"/></div></div>
                                 <div className={style.inputTag}><div className={style.inputCover}><div className={`${accountInfo.pwConfirm===""?`${style.inputTitle} ${style.inputTitleHidden}`:`${style.inputTitle}`}`}>비밀번호 확인</div><input type={`${isView?"text":"password"}`} className={`${accountInfo.pwConfirm===""?null:`${style.hasContent}`}`} name="pwConfirm" placeholder="비밀번호 확인" onChange={handleChangePW} value={accountInfo.pwConfirm}></input></div><div className={`${style.iconCover} ${style.centerAlign}`}><FontAwesomeIcon icon={faEye} size="sm" className={`${isView?`${style.eyeIconActive} ${style.eyeIcon}`:`${style.eyeIcon}`}`} onClick={handleView} data-name="pwConfirm"/></div></div>
                             </div>
                             <div className={style.pwCheck}>
                                 {`${isSame===false && accountInfo.pwConfirm !=="" && accountInfo.pw!=="" ? "비밀번호가 일치하지 않습니다.":""}`}
                             </div>
-                            <div className={`${style.inputNotice}`}><FontAwesomeIcon icon={faTriangleExclamation} size="xs"/><div className={style.inputNoticeTxt}>입력하신 계정은 유효성 검증에 사용되며, 파티를 만들고 난 뒤 정보를 변경할 수 없으니 주의해주세요.</div></div>
+                            <div className={`${style.inputNotice}`}><FontAwesomeIcon icon={faTriangleExclamation} size="xs"/><div className={style.inputNoticeTxt}>입력하신 계정은 파티를 만들고 난 뒤 정보를 변경할 수 없으니 주의해주세요.</div></div>
                             
                             <div className={style.goService}><a href={service.url} target="_blank" rel="noopener noreferrer">{service.name} 바로가기</a></div>
                             <div className={style.nextBtn}><PurpleRectangleBtn title="다음" activation={isGoNext} onClick={handleNext} width={150} heightPadding={10}/></div>
                         </>
-                    ):step===2?
+                    ):step===2 && service?
                     <>
                         <div className={style.title}>몇 명의 파티원을<br></br>모집하실 건가요?</div>
                         <div className={style.peopleCntCover}>
@@ -378,7 +415,7 @@ const PartyCreatePage = () =>{
                             <div className={style.prevBtn}><PurpleRectangleBtn title="이전" activation={true} onClick={handlePrev} width={150} heightPadding={10}/></div>
                             <div className={style.nextBtn}><PurpleRectangleBtn title="다음" activation={isGoNext} onClick={handleNext} width={150} heightPadding={10}/></div>
                         </div>
-                    </>:step===3?
+                    </>:step===3 && service?
                     <>
                         <div className={style.title}>파티 기간을<br></br>설정해 주세요.</div>
                         <div className={`${style.partyDateCover}`}>
@@ -387,7 +424,7 @@ const PartyCreatePage = () =>{
                                     <div className={`${style.periodTitle}`}>시작일</div>
                                     <div className={`${style.periodTxt}`}>{value ? moment(value).format("YYYY-MM-DD"):`선택`}</div>
                                 </div>
-                                <div className={`${style.periodIcon} ${style.centerAlign}`}><FontAwesomeIcon icon={faChevronDown}/></div>
+                                <div className={`${style.periodIcon} ${style.centerAlign}`}><FontAwesomeIcon icon={modalIsOpen?faChevronUp:faChevronDown}/></div>
                             </div>
                             <StartDateModal
                                 isOpen={modalIsOpen}
@@ -408,7 +445,7 @@ const PartyCreatePage = () =>{
                                             <div className={`${style.periodTitle}`}>파티 기간</div>
                                             <div className={`${style.periodTxt}`}>{periodMonth ? periodMonth+"개월":`선택`}</div>
                                         </div>
-                                        <div className={`${style.periodIcon} ${style.centerAlign}`}><FontAwesomeIcon icon={faChevronDown}/></div>
+                                        <div className={`${style.periodIcon} ${style.centerAlign}`}><FontAwesomeIcon icon={periodModalIsOpen?faChevronUp:faChevronDown}/></div>
                                     </div>
                                     <PeriodModal
                                         isOpen={periodModalIsOpen}
@@ -459,7 +496,7 @@ const PartyCreatePage = () =>{
                                         </>
                                         
                                     }
-                                    <div className={`${style.inputNotice}`}><FontAwesomeIcon icon={faTriangleExclamation} size="xs"/><div className={style.inputNoticeTxt}>결제 계좌는 파티장의 귀책 사유 발생시 위약금 부과를 위해 필요하며, 유효성 검증을 위해 1원 시범 결제 후 즉시 취소처리 합니다.</div></div>
+                                    <div className={`${style.inputNotice}`}><FontAwesomeIcon icon={faTriangleExclamation} size="xs"/><div className={style.inputNoticeTxt}>결제 계좌는 파티장의 귀책 사유 발생시 위약금 부과를 위해 필요합니다.</div></div>
                                 </div>
                             
                                 <div className={style.subMenu}>
@@ -479,6 +516,7 @@ const PartyCreatePage = () =>{
                             </>
                         }
                     </>
+                    
                 }
             </div>
         </div>

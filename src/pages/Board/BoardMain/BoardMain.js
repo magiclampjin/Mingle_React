@@ -4,8 +4,10 @@ import axios from 'axios';
 import RenderTable from '../components/RenderTable/RenderTable';
 import RenderNewVideo from '../components/RenderNewVideo/RenderNewVideo';
 import LoadingSpinner from '../../../components/LoadingSpinner/LoadingSpinner';
+import { LoginContext } from '../../../App';
 
 const BoardMain = () => {
+    const {loginId} = useContext(LoginContext);
 
     // 초기 상태를 null로 설정하여 로드 전 상태 표시
     const [popularPosts, setPopularPosts] = useState(null);

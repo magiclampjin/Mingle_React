@@ -12,15 +12,22 @@ import {
   } from "@fortawesome/free-solid-svg-icons";
 import Pagination from "react-js-pagination";
 import "../../../../../../../../components/Pagination/Pagination.css"
+import LoadingSpinnerMini from '../../../../../../../../components/LoadingSpinnerMini/LoadingSpinnerMini';
 
 const ReportPartyReplyBox = () => {
 
     const [report, setReport] = useState([{}]);
     const category = "댓글";
+    const [isServiceLoading, setServiceLoading] = useState(false);
 
     useEffect(() => {
+        setServiceLoading(true);
+
         axios.get(`/api/admin/reportPartyCategoryList/${category}`).then(resp => {
             setReport(resp.data);
+            setServiceLoading(false);
+        }).catch(() => {
+            setServiceLoading(false);
         });
     }, []);
 
@@ -43,7 +50,11 @@ const ReportPartyReplyBox = () => {
         <div className={parentStyle.box}>
             <div className={parentStyle.componentTitle}>파티 댓글 신고</div>
             <div className={style.componentBox}>
-                {report.map((e, i) => {
+            {isServiceLoading ? (
+                <LoadingSpinnerMini height={500} />
+            ) : (
+                <>
+                {currentReports.map((e, i) => {
                     return(
                         <Link key={i} to="/admin/ReportReadForm" state={{id : e.id, category : `파티 ${category}`}}>
                             <div className={style.componentLine}>
@@ -55,6 +66,8 @@ const ReportPartyReplyBox = () => {
                         </Link>
                     );
                 })}
+                </>
+            )}
             </div>
             {report.length > 0 && (
                 <Pagination

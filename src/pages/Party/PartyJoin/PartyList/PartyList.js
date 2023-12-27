@@ -1,6 +1,6 @@
 import style from "./PartyList.module.css"
 import { useEffect, useState, useContext } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWonSign, faCirclePlus, faMagnifyingGlass, faBolt } from "@fortawesome/free-solid-svg-icons";
 import { faFaceSadTear, faCalendar } from "@fortawesome/free-regular-svg-icons";
@@ -9,18 +9,19 @@ import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner
 import SearchDateModal from "./SearchDateModal/SearchDateModal";
 import {LoginContext} from "../../../../App";
 import PartyJoinInfoModal from "./PartyJoinInfoModal/PartyJoinInfoModal";
+import { JoinPartyContext } from "../PartyJoinMain";
 
 const PartyList = () => {
-    const location = useLocation();
-    const selectService = location.state.selectService;
+    // const location = useLocation();
+    // const selectService = location.state.selectService;
+    const {selectService} = useContext(JoinPartyContext);
     const [partyList, setPartyList] = useState();
-    const [service, setService] = useState();
     const [isLoading, setLoading] = useState(false);
     const [price, setPrice] = useState();
     const navi = useNavigate();
     
     // 선택한 파티
-    const [selectParty, setSelectParty] = useState();
+    const { setSelectParty, service, setService } = useContext(JoinPartyContext);
 
     // 로그인 정보
     const {loginId} = useContext(LoginContext);
@@ -243,7 +244,7 @@ const PartyList = () => {
                         <div className={style.subTitle}>파티 검색 결과</div>
                         {
                             // 가입 가능한 파티가 있는 경우
-                            partyList.length>0?partyList.map((e,i)=>( 
+                            partyList?partyList.map((e,i)=>( 
                                 <div key={i} className={`${style.party}`} data-id={i} onClick={handleJoinModal}>
                                     <div className={`${style.partyTop} ${style.dflex}`}>
                                         <div className={`${style.partyStartDate} ${style.title} ${style.w70}`}>
@@ -280,8 +281,6 @@ const PartyList = () => {
                             contentLabel="파티 가입 모달"
                             width={500}
                             height={670}
-                            service={service}
-                            selectParty={selectParty}
                         >
                         </PartyJoinInfoModal>
 
