@@ -2,24 +2,30 @@ import style from "./Denied.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBan } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState, useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import GrayRectangleBtn from "../GrayRectangleBtn/GrayRectangleBtn";
 import PurpleRectangleBtn from "../PurpleRectangleBtn/PurpleRectangleBtn";
+import { LoginContext } from "../../App";
 import { MenuContext } from "../../App";
 
 const Denied = () => {
   const [authenticate, setAuthenticate] = useState();
   const { setSelectedMenu } = useContext(MenuContext);
+  const {loginId} = useContext(LoginContext);
+  const navi = useNavigate();
+
 
   useEffect(() => {
     setSelectedMenu("");
     axios.get("/api/member/isAuthenticated").then((resp) => {
       setAuthenticate(resp.data);
+
+      if(resp.data){
+        navi(-1);
+      }
     });
   }, []);
-
-  const navi = useNavigate();
 
   // 이전으로 돌아가기
   // const handleBackPage = () => {

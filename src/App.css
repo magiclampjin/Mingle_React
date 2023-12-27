@@ -23,6 +23,17 @@ input[type="checkbox"] {
   position: relative;
 }
 
+
+.ql-editor{
+  min-height : 500px;
+}
+
+@media screen and (max-width: 600px) {
+  .ql-container {
+    font-size: 1.125rem;
+  }
+}
+
 .swiper-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet,
 .swiper-pagination-horizontal.swiper-pagination-bullets
   .swiper-pagination-bulle {
@@ -64,8 +75,5 @@ input[type="checkbox"] {
   font-size: 15px !important;
 }
 
-@media screen and (max-width: 600px) {
-  .ql-container {
-    font-size: 1.125rem;
-  }
-}
+
+

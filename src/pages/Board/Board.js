@@ -4,6 +4,7 @@ import {
   Routes,
   Route,
   useNavigate,
+  useLocation,
 } from "react-router-dom";
 import styles from "./Board.module.css";
 import BoardCategories from "./components/BoardCategory/BoardCategories";
@@ -25,6 +26,8 @@ const Board = () => {
   // 선택된 메뉴 초기화
   const { loginId } = useContext(LoginContext);
   const { setSelectedMenu } = useContext(MenuContext);
+  const location = useLocation(); // 현재 위치 정보 가져오기
+
   useEffect(() => {
     setSelectedMenu("게시판");
   }, []);
@@ -34,7 +37,7 @@ const Board = () => {
   //     if (!loginId) {
   //         navigate('/denied');
   //     }
-  // }, [loginId, navigate]); // 의존성 배열에 loginId와 navigate를 넣어줍니다.
+  // }, [loginId, navigate]);
 
   const [menu, setMenu] = useState("");
   return (
@@ -50,10 +53,10 @@ const Board = () => {
           <Route path="freeboard" element={<FreeBoard />} />
           <Route path="noticeboard" element={<NoticeBoard />} />
           <Route path="writepost" element={<WritePost />} />
-          <Route path="updatepost/*" element={<UpdatePost />} />
+          <Route path="/updatepost/:postId" element={<UpdatePost />} />
           <Route path="/post/:postId" element={<Post />} />
         </Routes>
-        <FixedMenu />
+        {location.pathname !== "/board/writepost" && <FixedMenu />}
       </div>
     </postMenuContext.Provider>
   );
