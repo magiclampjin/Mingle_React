@@ -20,6 +20,8 @@ const Header = () => {
   const { selectedMenu, setSelectedMenu } = useContext(MenuContext);
   const scrollPosition = useRef(0);
 
+  const {loginStatus,setLoginStatus} = useContext(LoginContext);
+
   const navi = useNavigate();
   const cookies = new Cookies();
 
@@ -54,12 +56,14 @@ const Header = () => {
     }
   }, [scrollPosition, modalIsOpen]);
 
+
   useEffect(() => {
     // setLoading(true);
     axios.get("/api/member/userBasicInfo").then((resp) => {
       const data = resp.data; // axios로 받아온 데이터
       // data가 Map과 유사한 경우
       // Map의 값들 꺼내오기
+      
       if (data.loginID !== undefined) {
         setLoginId(data.loginID);
         // setLoading(false);
@@ -71,7 +75,9 @@ const Header = () => {
       if (data.loginRole !== undefined) {
         setLoginRole(data.loginRole);
       }
-    });
+    }).finally(()=>{
+      setLoginStatus("confirm");
+    })
   }, [loginId, modalIsOpen]);
 
   // 프로필 모달창 열기
