@@ -190,7 +190,7 @@ const UpdatePost = () => {
             return;
         }
 
-        if (submitData.files.length > 5) {
+        if (submitData.files.length + newFiles.length > 5) {
             alert("게시글에는 최대 5개의 파일만 등록할 수 있습니다. 확인 부탁드립니다.");
             return;
         }
@@ -209,7 +209,7 @@ const UpdatePost = () => {
                     // 에러 처리
                 });
         }
-        
+
         axios.put(`/api/post/${submitData.id}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
@@ -312,7 +312,7 @@ const UpdatePost = () => {
                         multiple
                     />
                 </div>
-                <div>{`첨부된 파일 수: ${submitData.files.length}/5`}</div> {/* 현재 파일 수 표시 */}
+                <div>{`첨부된 파일 수: ${submitData.files.length + newFiles.length}/5`}</div> {/* 현재 파일 수 표시 */}
                 <div className={styles.post__fileDiv}>
                     <div className={styles.fileContainer}>
                         {submitData.files.length > 0 ? (
