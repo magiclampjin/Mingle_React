@@ -22,6 +22,7 @@ import { MenuContext } from "../../App";
 export const postMenuContext = createContext();
 
 const Board = () => {
+  // 선택된 메뉴 초기화
   const { loginId } = useContext(LoginContext);
   const { setSelectedMenu } = useContext(MenuContext);
   useEffect(() => {

@@ -42,12 +42,6 @@ const PwChange = () => {
     }
   }, []);
 
-  useEffect(() => {
-    console.log(update);
-    console.log(pwCheckText);
-    console.log(changePwConditions);
-  }, [update, pwCheckText]);
-
   // user State 값 채우기
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -60,7 +54,6 @@ const PwChange = () => {
 
   // 유효성 검사 결과 텍스트
   const handleCondition = (key, value) => {
-    console.log(key);
     setChangePwConditions((prev) => ({ ...prev, [key]: value }));
   };
 
