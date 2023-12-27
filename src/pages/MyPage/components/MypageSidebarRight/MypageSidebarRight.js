@@ -23,26 +23,18 @@ const MypageSidebarRight = () => {
 
     useEffect(() => {
 
-
-        const source = axios.CancelToken.source();
-
         console.log("money " + loginId);
-        if (loginStatus === "confirm") {
-            if (loginId !== "") {
-                axios.get("/api/member/getMingleMoney",{ cancelToken: source.token }).then((resp) => {
-                    // 성공적으로 처리된 경우의 로직
-                    setMingleMoney(resp.data);
-                }).catch((error) => {
-                    // 오류 발생 시의 처리 로직
-                    console.error(error);
-                    console.log("밍글머니를 불러오는데 실패했습니다.");
-                });
-            }
+        if (loginStatus === "confirm" && loginId !== "") {
+            axios.get("/api/member/getMingleMoney"
+            ).then((resp) => {
+                // 성공적으로 처리된 경우의 로직
+                setMingleMoney(resp.data);
+            }).catch((error) => {
+                // 오류 발생 시의 처리 로직
+                console.error(error);
+                console.log("밍글머니를 불러오는데 실패했습니다.");
+            });
         }
-
-        return () => {
-            source.cancel('Operation canceled by the user.');
-        };
     }, [])
 
 
