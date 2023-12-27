@@ -12,7 +12,6 @@ const Intro = () => {
         setLoading(true);
         axios.get("/api/external/youtube/selectAll").then(resp => {
             setNewVideoInfo(resp.data);
-            console.log(resp.data);
             setLoading(false);
         })
 

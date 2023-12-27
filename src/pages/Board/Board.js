@@ -1,12 +1,14 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useNavigate,
-} from "react-router-dom";
-import styles from "./Board.module.css";
-import BoardCategories from "./components/BoardCategory/BoardCategories";
+import { createContext,
+         useContext,
+         useEffect,
+         useState } from 'react';
+import { BrowserRouter as Router,
+         Routes,
+         Route, 
+         useNavigate, 
+         useLocation } from 'react-router-dom';
+import styles from './Board.module.css'
+import BoardCategories from './components/BoardCategory/BoardCategories';
 import BoardMain from "./BoardMain/BoardMain";
 import PopularPosts from "./PopularPosts/PopularPosts";
 import FreeBoard from "./FreeBoard/FreeBoard";
@@ -22,8 +24,11 @@ import { MenuContext } from "../../App";
 export const postMenuContext = createContext();
 
 const Board = () => {
+    
   const { loginId } = useContext(LoginContext);
   const { setSelectedMenu } = useContext(MenuContext);
+  const location = useLocation(); // 현재 위치 정보 가져오기
+
   useEffect(() => {
     setSelectedMenu("게시판");
   }, []);
@@ -33,7 +38,7 @@ const Board = () => {
   //     if (!loginId) {
   //         navigate('/denied');
   //     }
-  // }, [loginId, navigate]); // 의존성 배열에 loginId와 navigate를 넣어줍니다.
+  // }, [loginId, navigate]); 
 
   const [menu, setMenu] = useState("");
   return (
@@ -49,13 +54,15 @@ const Board = () => {
           <Route path="freeboard" element={<FreeBoard />} />
           <Route path="noticeboard" element={<NoticeBoard />} />
           <Route path="writepost" element={<WritePost />} />
-          <Route path="updatepost/*" element={<UpdatePost />} />
+          <Route path="/updatepost/:postId" element={<UpdatePost />} />
           <Route path="/post/:postId" element={<Post />} />
         </Routes>
-        <FixedMenu />
+        {location.pathname !== '/board/writepost' && <FixedMenu />}
       </div>
     </postMenuContext.Provider>
   );
+
 };
+
 
 export default Board;
