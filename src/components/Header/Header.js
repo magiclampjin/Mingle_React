@@ -19,6 +19,9 @@ const Header = () => {
   const { loginRole, setLoginRole } = useContext(LoginContext);
   const scrollPosition = useRef(0);
 
+  const {loginStatus,setLoginStatus} = useContext(LoginContext);
+
+
   // const navi = useNavigate();
   const cookies = new Cookies();
 
@@ -53,6 +56,7 @@ const Header = () => {
     };
   }, [scrollPosition]);
 
+
   useEffect(() => {
     // setLoading(true);
     axios.get("/api/member/userBasicInfo").then((resp) => {
@@ -71,7 +75,9 @@ const Header = () => {
       if (data.loginRole !== undefined) {
         setLoginRole(data.loginRole);
       }
-    });
+    }).finally(()=>{
+      setLoginStatus("confirm");
+    })
   }, [loginId, modalIsOpen]);
 
   // 프로필 모달창 열기

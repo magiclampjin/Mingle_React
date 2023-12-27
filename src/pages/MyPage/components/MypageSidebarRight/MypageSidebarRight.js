@@ -14,25 +14,29 @@ import { LoginContext } from '../../../../App';
 const MypageSidebarRight = () =>{
 
     // 로그인 컨텍스트
-    const { loginId ,setLoginId } = useContext(LoginContext);
+    const { loginId } = useContext(LoginContext);
+
+    const {loginStatus} = useContext(LoginContext);
 
     // 밍글머니 State
     const [mingleMoney, setMingleMoney] = useState("");
 
     useEffect(()=>{
-        // console.log("money "+loginId);
-        if(loginId){
-            axios.get("/api/member/getMingleMoney").then((resp) => {
-                // 성공적으로 처리된 경우의 로직
-                setMingleMoney(resp.data);
-            })
-            .catch((error) => {
-                // 오류 발생 시의 처리 로직
-                console.error(error);
-                alert("밍글머니를 불러오는데 실패했습니다.");
-            });
+        console.log("money "+loginId);
+        if(loginStatus === "confirm"){
+            if(loginId !== ""){
+                axios.get("/api/member/getMingleMoney").then((resp) => {
+                    // 성공적으로 처리된 경우의 로직
+                    setMingleMoney(resp.data);
+                })
+                .catch(() => {
+                    // 오류 발생 시의 처리 로직
+                    console.log("밍글머니를 불러오는데 실패했습니다.");
+                });
+            }
         }
-    })
+            
+    },[])
    
 
     // 숫자를 천 단위로 콤마 찍어주는 함수
