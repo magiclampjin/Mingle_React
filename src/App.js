@@ -24,6 +24,7 @@ function App() {
   const [loginId, setLoginId] = useState("");
   const [loginNick, setLoginNick] = useState("");
   const [loginRole, setLoginRole] = useState("");
+  const [loginStatus, setLoginStatus] = useState("loading");
 
   return (
     <LoginContext.Provider
@@ -34,6 +35,8 @@ function App() {
         setLoginNick,
         loginRole,
         setLoginRole,
+        loginStatus,
+        setLoginStatus
       }}
     >
       <MenuContext.Provider value={{ selectedMenu, setSelectedMenu }}>

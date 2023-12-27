@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import PurpleRoundBtn from '../../../components/PurpleRoundBtn/PurpleRoundBtn';
 import style from '../../MyPage/PaymentManage/PaymentManage.module.css';
 import PurpleRectangleBtn from '../../../components/PurpleRectangleBtn/PurpleRectangleBtn';
@@ -9,9 +9,13 @@ import MypageModal from '../components/MypageModal/MypageModal';
 import WhiteRoundBtn from '../../../components/WhiteRoundBtn/WhiteRoundBtn';
 import axios from 'axios';
 import LoadingSpinnerMini from '../../../components/LoadingSpinnerMini/LoadingSpinnerMini';
+import { LoginContext } from '../../../App';
 
 
 const PaymentManage = () =>{
+
+    // 로그인 컨텍스트
+    const { loginId ,setLoginId } = useContext(LoginContext);
 
      // 로딩 State
      const [isLoading, setLoading]=useState(false);
@@ -21,7 +25,7 @@ const PaymentManage = () =>{
     // 계좌 모달창 State
     const [isCardModalOpen, setIsCardModalOpen] = useState(false);
 
-    // 계좌카드 등록 버튼 클릭
+    // 계좌 등록 버튼 클릭
     const handleCardInsert = () =>{
         setCard(!card);
         setIsCardModalOpen(!isCardModalOpen); // 모달 열기
@@ -29,6 +33,8 @@ const PaymentManage = () =>{
     // 계좌 모달창 닫기
     const closeCardModal = () => {
         setCard(!card);
+        setAccountNum("");
+        setSelectedBank("");
         setIsCardModalOpen(!isCardModalOpen);
     };
 
@@ -100,7 +106,7 @@ const PaymentManage = () =>{
    useEffect(()=>{
         // 은행 정보 불러오기
         setLoading(true);
-       axios.get("/api/paymentAccount/selectBankList").then((resp)=>{
+        axios.get("/api/paymentAccount/selectBankList").then((resp)=>{
             // console.log(resp.data);
             setBankList(resp.data);
             setLoading(false);
@@ -192,26 +198,31 @@ const PaymentManage = () =>{
    // Regex 검사결과
     const totalValid = isAccount && isBank;
 
+    // 계좌번호 수정 State
+    const [updateAccount, setUpdateAccount] = useState("");
+
    // 서버로 보낼 데이터
    const postData = {
     bankId: selectedBank,
     accountNumber: accountNum
    }
 
-   // 카드 등록 완료 버튼
+   // 계좌 등록 완료 버튼
     const handleSubmit = () =>{
         console.log(totalValid);
         
         if(totalValid){
-            // 카드 등록
+            // 계좌 등록
             console.log("은행 : "+selectedBank);
             console.log("계좌번호 : "+accountNum);
             axios.post("/api/paymentAccount/accountInsert",postData).then((resp)=>{
                 closeCardModal();
+                setUpdateAccount(accountNum);
+            }).catch(()=>{
+                alert("계좌 등록에 실패했습니다.")
             })
-            window.location.reload();
         }else{
-            alert("카드 등록에 실패했습니다.");
+            alert("은행명과 계좌번호를 다시 입력해주세요.");
         }
 
     }
@@ -221,11 +232,15 @@ const PaymentManage = () =>{
 
     // 등록된 계좌 불러오기
     useEffect(()=>{
-        axios.get("/api/paymentAccount/accountSelect").then((resp)=>{
-            console.log(resp.data);
-            setAccount(resp.data);
-        })
-    },[])
+        // if(loginId !== ""){
+            axios.get("/api/paymentAccount/accountSelect").then((resp)=>{
+                console.log(resp.data);
+                setAccount(resp.data);
+            }).catch(()=>{
+                alert("계좌를 불러오는데 실패했습니다.");
+            })
+        // }
+    },[updateAccount])
 
     // 계좌 삭제하시겠습니까 모달 상태
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -245,12 +260,10 @@ const PaymentManage = () =>{
         axios.delete("/api/paymentAccount/accountDelete").then((resp)=>{
             setIsDeleteModalOpen(!isDeleteModalOpen);
             alert(resp.data);
-            window.location.reload();
+            setUpdateAccount("");
         }).catch(()=>{
             alert("삭제에 실패했습니다.");
-        })
-
-        
+        });
     }
 
     // 계좌 수정 모달창 State
@@ -263,21 +276,24 @@ const PaymentManage = () =>{
 
     // 수정 모달닫기
     const closeUpdateModal = () =>{
+        setAccountNum("");
+        setSelectedBank("");
         setIsUpdateModalOpen(!isUpdateModalOpen);
     }
 
     const handleUpdateReject = () => {}
+
     
     // 수정모달의 제출
     const handleUpdateSubmit = () => {
         
         if(totalValid){
-            // 카드 등록
+            // 계좌 등록
             console.log("은행 : "+selectedBank);
             console.log("계좌번호 : "+accountNum);
             axios.put("/api/paymentAccount/accountUpdate",postData).then((resp)=>{
                 closeUpdateModal();
-                window.location.reload();
+                setUpdateAccount(accountNum);
                 alert("계좌가 변경되었습니다.");
             }).catch(()=>{
                 alert("계좌 변경을 실패했습니다.");
@@ -399,7 +415,7 @@ const PaymentManage = () =>{
                                     title={"완료"}
                                     width={150}
                                     heightPadding={10}
-                                    onClick={totalValid ? handleUpdateSubmit : handleUpdateReject}
+                                    onClick={totalValid ? handleSubmit : handleUpdateReject}
                                     activation={totalValid}
                                     ></PurpleRectangleBtn>
                                 </div>
