@@ -20,7 +20,7 @@ const Step3 = () => {
 
   useEffect(() => {
     if (currentStep !== "step3") {
-      alert("잘못된 접근입니다.");
+      // alert("잘못된 접근입니다.");
       navi("/member/signup");
     }
     setChkAll(false);

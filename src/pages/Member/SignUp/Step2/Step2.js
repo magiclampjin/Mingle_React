@@ -6,7 +6,7 @@ import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner
 import axios from "axios";
 
 import { SignUpInfoContext } from "../SignUp";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useReducer } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const Step2 = () => {
@@ -44,11 +44,19 @@ const Step2 = () => {
     memberRecommenderId: true,
   });
   const [isLoading, setLoading] = useState(false); // 닉네임 로딩 상태
+  const [timeSeconds, setTimerSeconds] = useState(180); // 초기 시간 설정 (3분)
+  const [timerStart, setTimerStart] = useState(false); // 타이머 시작 여부
+
   const navi = useNavigate();
   const { pathname } = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
+
+  useEffect(() => {
+    console.log(user);
+    console.log(mycode);
+  }, [user, mycode]);
 
   // 뒤로가기 버튼을 통해서 들어오거나 주소를 통해서 들어왔다면 돌려보내기
   useEffect(() => {
@@ -65,41 +73,90 @@ const Step2 = () => {
     };
   };
 
+  // 인증코드 확인하기
+  const handleCode = (value) => {
+    // 인증번호를 입력하면 서버에 저장된 코드랑 일치하는지 확인
+    setMycode(value);
+    const formData = new FormData();
+    formData.append("code", value);
+    if (value !== "" && timeSeconds !== 0) {
+      axios.post("/api/member/certification/signup", formData).then((resp) => {
+        if (resp.data) {
+          setCheckText((prev) => ({
+            ...prev,
+            mycode: "인증 코드가 일치합니다.",
+          }));
+          handleCondition("mycode", true);
+        } else {
+          setCheckText((prev) => ({
+            ...prev,
+            mycode: "인증 코드가 일치하지 않습니다.",
+          }));
+          handleCondition("mycode", false);
+        }
+      });
+    } else {
+      if (timeSeconds === 0) {
+        setCheckText((prev) => ({
+          ...prev,
+          mycode: "인증 시간이 초과되었습니다.",
+        }));
+        handleCondition("mycode", false);
+      } else {
+        setCheckText((prev) => ({
+          ...prev,
+          mycode: "",
+        }));
+      }
+
+      handleCondition("mycode", false);
+    }
+  };
+
   // user State 값 채우기
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name !== "pwCheck" && name !== "mycode") {
       setUser((prev) => ({ ...prev, [name]: value }));
     } else if (name === "mycode") {
-      // 인증번호를 입력하면 서버에 저장된 코드랑 일치하는지 확인
-      setMycode(value);
-      const formData = new FormData();
-      formData.append("code", value);
-      if (value !== "") {
-        axios
-          .post("/api/member/certification/signup", formData)
-          .then((resp) => {
-            if (resp.data) {
-              setCheckText((prev) => ({
-                ...prev,
-                mycode: "인증 코드가 일치합니다.",
-              }));
-              handleCondition("mycode", true);
-            } else {
-              setCheckText((prev) => ({
-                ...prev,
-                mycode: "인증 코드가 일치하지 않습니다.",
-              }));
-              handleCondition("mycode", false);
-            }
-          });
-      } else {
-        setCheckText((prev) => ({
-          ...prev,
-          mycode: "",
-        }));
-        handleCondition("mycode", false);
-      }
+      handleCode(value);
+      // // 인증번호를 입력하면 서버에 저장된 코드랑 일치하는지 확인
+      // setMycode(value);
+      // const formData = new FormData();
+      // formData.append("code", value);
+      // if (value !== "" && timeSeconds !== 0) {
+      //   axios
+      //     .post("/api/member/certification/signup", formData)
+      //     .then((resp) => {
+      //       if (resp.data) {
+      //         setCheckText((prev) => ({
+      //           ...prev,
+      //           mycode: "인증 코드가 일치합니다.",
+      //         }));
+      //         handleCondition("mycode", true);
+      //       } else {
+      //         setCheckText((prev) => ({
+      //           ...prev,
+      //           mycode: "인증 코드가 일치하지 않습니다.",
+      //         }));
+      //         handleCondition("mycode", false);
+      //       }
+      //     });
+      // } else {
+      //   if (timeSeconds === 0) {
+      //     setCheckText((prev) => ({
+      //       ...prev,
+      //       mycode: "인증 시간이 초과되었습니다.",
+      //     }));
+      //   } else {
+      //     setCheckText((prev) => ({
+      //       ...prev,
+      //       mycode: "",
+      //     }));
+      //   }
+
+      //   handleCondition("mycode", false);
+      // }
     } else {
       setPwCheckText(value);
     }
@@ -519,13 +576,56 @@ const Step2 = () => {
       axios
         .post("/api/member/verificationSignupEmail", formData)
         .then((resp) => {
+          // 본인 인증이 성공하고 메일 발송을 마침
           setLoading(false);
           if (resp.data) {
-            alert("인증 코드 전송이 완료되었습니다.");
+            // 타이머 시간 세팅
+            setTimerSeconds(180);
+            // 타이머 시작
+            setTimerStart(true);
+            alert(
+              "인증번호가 발송되었습니다. 메일을 확인해주세요. \n 메일이 도착하지 않을 경우 스팸 메일함을 확인해주세요."
+            );
+            console.log(mycode);
+            if (mycode !== "") {
+              console.log(mycode);
+              // handleCode(mycode);
+              setMycode("");
+            }
+          } else {
+            alert("인증번호 발송이 실패하였습니다.");
           }
         });
     }
   };
+
+  // 타이머 로직
+  useEffect(() => {
+    const updateCountdown = () => {
+      if (timerStart) {
+        // 시간 업데이트
+        setTimerSeconds((prev) => (prev > 0 ? prev - 1 : 0));
+        // 인증 시간 초과 시
+        if (timeSeconds === 0) {
+          setTimerStart(false);
+          // setFindId(false);
+          alert("인증 시간이 초과되었습니다.");
+          handleCondition("mycode", false);
+        } else if (timeSeconds === 180) {
+          setCheckText((prev) => ({
+            ...prev,
+            mycode: "",
+          }));
+        }
+      }
+    };
+
+    // 1초마다 업데이트
+    const timerId = setInterval(updateCountdown, 1000);
+
+    // 컴포넌트가 언마운트되면 타이머 정리
+    return () => clearInterval(timerId);
+  }, [timeSeconds, timerStart]);
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -702,6 +802,12 @@ const Step2 = () => {
                 id="mycodeCheck"
                 style={colorStyle(signupConditions.mycode)}
               >
+                <span className={style.timer}>{`${String(
+                  Math.floor(timeSeconds / 60)
+                ).padStart(2, "0")}:${String(timeSeconds % 60).padStart(
+                  2,
+                  "0"
+                )}`}</span>
                 {checkText.mycode}
               </div>
             </div>
