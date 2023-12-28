@@ -26,7 +26,7 @@ export const mypageMenuContext = createContext();
 
 const Mypage = () => {
   // 로그인 컨텍스트
-  const { loginId } = useContext(LoginContext);
+  const { loginId, ,setLoginId } = useContext(LoginContext);
 
   // sidebar로 넘겨주는 State
   const [menu, setMenu] = useState("");
@@ -34,7 +34,7 @@ const Mypage = () => {
   // 드롭다운 메뉴 State (닫힘 :false, 열림: true)
   const [dropDown, setDropDown] = useState(true);
 
-  const { loginStatus } = useContext(LoginContext);
+  const { loginStatus, setLoginStatus } = useContext(LoginContext);
 
   const navigate = useNavigate();
 
