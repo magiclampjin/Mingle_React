@@ -10,7 +10,7 @@ import React from "react";
 
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { JoinPartyContext } from "../PartyJoinMain";
+import { JoinPartyContext } from "../../../../App";
 
 const PartyAllList = ({ selectServiceCategory, setSelectServiceCategory }) => {
   // 서비스 카테고리 목록
@@ -31,10 +31,9 @@ const PartyAllList = ({ selectServiceCategory, setSelectServiceCategory }) => {
 
   const navi = useNavigate();
 
-
   // 선택한 서비스 종류
   //const [selectService, setSelectService] = useState("");
-  const {setSelectService} = useContext(JoinPartyContext);
+  const { setSelectService } = useContext(JoinPartyContext);
 
   // 숫자를 천 단위로 콤마 찍어주는 함수
   const formatNumber = (value) => {
