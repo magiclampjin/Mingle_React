@@ -104,8 +104,7 @@ const Header = () => {
   // 자주 묻는 질문으로 이동
   const handleFAQClick = () => {
     setSelectedMenu("자주 묻는 질문");
-    window.location.href =
-      "https://impossible-log-6dc.notion.site/4ac5ec788ca04f6ab7304dbb71891974?pvs=4";
+    window.open('https://impossible-log-6dc.notion.site/4ac5ec788ca04f6ab7304dbb71891974?pvs=4');
   };
 
   // 로그인하기
