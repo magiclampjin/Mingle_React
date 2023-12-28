@@ -1,9 +1,5 @@
 import style from "./Main.module.css";
-import GrayRectangleBtn from "../../components/GrayRectangleBtn/GrayRectangleBtn";
 import PurpleRectangleBtn from "../../components/PurpleRectangleBtn/PurpleRectangleBtn";
-import PurpleRoundBtn from "../../components/PurpleRoundBtn/PurpleRoundBtn";
-import WhiteRectangleBtn from "../../components/WhiteRectangleBtn/WhiteRectangleBtn";
-import WhiteRoundBtn from "../../components/WhiteRoundBtn/WhiteRoundBtn";
 import RenderNewVideo from "../Board/components/RenderNewVideo/RenderNewVideo";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import ServiceInfoModal from "../Party/PartyCreate/PartyCreateList/ServiceInfoModal/ServiceInfoModal";
@@ -18,13 +14,7 @@ import {
 import { faFaceSadTear } from "@fortawesome/free-regular-svg-icons";
 import { useContext, useEffect, useState } from "react";
 // import Swiper core and required modules
-import {
-  Navigation,
-  Pagination,
-  Scrollbar,
-  A11y,
-  Autoplay,
-} from "swiper/modules";
+import { Navigation, Pagination, A11y, Autoplay } from "swiper/modules";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -105,17 +95,10 @@ const Main = () => {
       });
   }, [loginId]);
   useEffect(() => {
-    // 오늘부터 1달동안의 가입가능한 파티 불러오기
-    let data = {
-      start: period.start.toISOString(),
-      end: period.end.toISOString(),
-    };
     // 파티 목록 불러오기
-    axios
-      .get("/api/party/getPartyListForMain", { params: data })
-      .then((resp) => {
-        setPartyList(resp.data);
-      });
+    axios.get("/api/party/getPartyListForMain").then((resp) => {
+      setPartyList(resp.data);
+    });
     // 최신 비디오 목록 불러오기
     axios
       .get("/api/external/youtube/latestvideo")
@@ -126,7 +109,6 @@ const Main = () => {
         console.error("error reporting! : " + error);
       });
     axios.get("/api/party/selectAllPartyCountForMain").then((resp) => {
-      //setPartyCount(resp.data);
       let count = resp.data;
       // partyCount를 두 자리 숫자로 변환
       const formattedCount = String(count).padStart(2, "0");
@@ -275,8 +257,8 @@ const Main = () => {
                     1등 공동 구독 플랫폼 <br></br>Mingle
                   </div>
                   <div className={style.slideConf}>
-                    넷플릭스부터 오피스 365까지<br></br>더 안전하게 밍글과
-                    함께하세요<br></br>
+                    {service[0].name}부터 {service[service.length - 1].name}까지
+                    <br></br>더 안전하게 밍글과 함께하세요<br></br>
                   </div>
                   <div className={style.btns}>
                     <PurpleRectangleBtn

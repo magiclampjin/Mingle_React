@@ -11,6 +11,7 @@ const PartyCreateMain = () => {
   const [selectServiceCategory,setSelectServiceCategory] = useState("전체");
   const [selectParty, setSelectParty] = useState(null);
   const [service, setService] = useState(null);
+  // 선택된 메뉴 초기화
   const { setSelectedMenu } = useContext(MenuContext);
   useEffect(() => {
     setSelectedMenu("파티 찾기");

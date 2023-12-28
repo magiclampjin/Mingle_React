@@ -33,7 +33,6 @@ const Login = () => {
       setUser({ id: cookieLoginId, pw: "" });
       setRememberId(cookieRememeberId);
     }
-    // console.log(REDIRECT_URI);
   }, []);
 
   // user State 값 채우기
@@ -61,8 +60,6 @@ const Login = () => {
       axios
         .post("/api/member/login", formData)
         .then((resp) => {
-          console.log(resp);
-          console.log(resp.statusText);
           if (resp.statusText === "OK") {
             setLoginId(user.id);
             // 아이디 기억하기를 눌렀다면 쿠키에 로그인 아이디 저장
@@ -123,7 +120,6 @@ const Login = () => {
 
   // // 카카오 로그인
   // const handleKakaoLogin = () => {
-  //   console.log("d");
   //   window.location.href = KAKAO_AUTH_URL;
   //   // window.location.href = "/oauth2/authorization/kakao";
   // };
