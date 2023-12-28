@@ -11,7 +11,7 @@ import { LoginContext } from "../../../App";
 const Login = () => {
   const [user, setUser] = useState({ id: "", pw: "" });
   const [isLoading, setLoading] = useState(false);
-  const [rememberId, setRememberId] = useState("");
+  const [rememberId, setRememberId] = useState(false);
   const { setLoginId } = useContext(LoginContext);
   // const { setLogout } = useContext(LoginContext);
   const navi = useNavigate();
@@ -59,26 +59,21 @@ const Login = () => {
 
       axios
         .post("/api/member/login", formData)
-        .then((resp) => {
-          if (resp.statusText === "OK") {
-            setLoginId(user.id);
-            // 아이디 기억하기를 눌렀다면 쿠키에 로그인 아이디 저장
-            const expiresInSeconds = 7 * 24 * 60 * 60; // 7일을 초 단위로 계산
-            cookies.set("loginID", user.id, {
-              path: "/",
-              maxAge: expiresInSeconds,
-            });
-            cookies.set("rememberID", rememberId, {
-              path: "/",
-            });
+        .then (()=> {        
+          setLoginId(user.id);
+          // 아이디 기억하기를 눌렀다면 쿠키에 로그인 아이디 저장
+          const expiresInSeconds = 7 * 24 * 60 * 60; // 7일을 초 단위로 계산
+          cookies.set("loginID", user.id, {
+            path: "/",
+            maxAge: expiresInSeconds,
+          });
+          cookies.set("rememberID", rememberId, {
+            path: "/",
+          });
 
-            setUser({ id: "", pw: "" });
-
-            navi(-1);
-
-            setLoading(false);
-            // setLogout(false);
-          }
+          setUser({ id: "", pw: "" });
+          navi(-1);
+          setLoading(false);
         })
         .catch((error) => {
           // 에러 핸들링
