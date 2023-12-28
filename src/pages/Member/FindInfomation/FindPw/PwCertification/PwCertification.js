@@ -30,10 +30,6 @@ const PwCertification = () => {
   const [isLoading, setLoading] = useState(false); // 본인 인증 시 로딩바
   const navi = useNavigate();
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
-
   // user State 값 채우기
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -56,11 +52,6 @@ const PwCertification = () => {
     const updateCountdown = () => {
       const minutes = Math.floor(timeSeconds / 60);
       const seconds = timeSeconds % 60;
-
-      // // 시간을 2자리 숫자로 표시
-      // const formattedTime = `${String(minutes).padStart(2, "0")}:${String(
-      //   seconds
-      // ).padStart(2, "0")}`;
 
       if (timerStart) {
         // 시간 업데이트
@@ -167,7 +158,6 @@ const PwCertification = () => {
     ) {
       setLoading(true);
       axios.post("/api/member/verificationEmail", user).then((resp) => {
-        console.log(resp.data);
         if (resp.data) {
           // 본인 인증이 성공하고 메일 발송을 마침
           setLoading(false);
@@ -212,7 +202,6 @@ const PwCertification = () => {
         } else {
           alert("본인 인증 코드가 일치하지 않습니다.");
           // 정보 초기화
-          // setUser({ name: "", email: "" });
           setCertificationNum("");
           setFindPw(false);
           setTimerStart(false);

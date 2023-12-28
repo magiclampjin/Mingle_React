@@ -169,7 +169,6 @@ const IdCertification = () => {
         } else {
           alert("본인 인증 코드가 일치하지 않습니다.");
           // 정보 초기화
-          // setUser({ name: "", email: "" });
           setCertificationNum("");
           setFindId(false);
           setTimerStart(false);

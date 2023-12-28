@@ -2,58 +2,6 @@
   margin: 100px auto 150px auto;
   max-width: 1300px;
 }
-/* .title {
-  font-size: 40px;
-  font-weight: 700;
-  text-align: center;
-}
-
-.stepBox,
-.stepBox__step {
-  display: flex;
-}
-
-.stepBox {
-  margin-top: 70px;
-  border-radius: 100px;
-  background-color: #7b61ff50;
-  justify-content: space-between;
-}
-
-.stepBox__step {
-  width: calc((100% - 80px) / 3);
-  padding: 20px;
-  align-items: center;
-  display: flex;
-  justify-content: center;
-}
-
-.step__info {
-  width: 90px;
-  padding: 7px;
-  text-align: center;
-  color: #7d7d7d;
-  border-radius: 100px;
-  background-color: white;
-  margin-right: 15px;
-  display: none;
-}
-.currentStep .step__info {
-  display: block;
-}
-.currentStep .step__title {
-  font-weight: 700;
-}
-
-.stepBox__arrow {
-  margin: auto 0;
-  width: 30px;
-  text-align: center;
-}
-
-.stepBox__arrow > i {
-  color: #7d7d7d;
-} */
 
 .agrreBox,
 .signupBox,
@@ -62,64 +10,6 @@
   margin-top: 30px;
 }
 
-/* .useAgree,
-.privacyAgree {
-  margin-top: 30px;
-}
-.agrreBox input,
-.agrreBox label {
-  cursor: pointer;
-}
-.agree__span {
-  color: #ff4500;
-  margin-left: 10px;
-}
-.useDetail {
-  margin-top: 20px;
-  border: 1px solid #d1d2d850;
-  padding: 20px;
-  background-color: #d1d2d850;
-  height: 400px;
-  overflow-y: auto;
-}
-
-.useDetail::-webkit-scrollbar {
-  width: 10px;
-}
-.useDetail::-webkit-scrollbar-thumb {
-  background-color: #d1d2d8;
-  border-radius: 10px;
-  border: 7px solid transparent; 
-}
-.useDetail::-webkit-scrollbar-track {
-  background-color: #d1d2d850; 
-}
-.privacyAgree::-webkit-scrollbar {
-  width: 10px;
-}
-.privacyAgree::-webkit-scrollbar-thumb {
-  background-color: #d1d2d8;
-  border-radius: 10px;
-  border: 7px solid transparent; 
-}
-.privacyAgree::-webkit-scrollbar-track {
-  background-color: #d1d2d850; 
-
-.article:not(:first-child) {
-  margin-top: 50px;
-}
-.article__title {
-  font-weight: 700;
-  margin-bottom: 20px;
-  font-size: 16px;
-}
-.article__text {
-  font-size: 14px;
-}
-
-.article__text:not(:first-child) {
-  margin-top: 20px;
-} */
 .stepBtns {
   text-align: center;
   margin-top: 50px;
@@ -127,77 +17,7 @@
 .stepBtns button:last-child {
   margin-left: 20px;
 }
-/* .signupTitle {
-  padding: 0 0 7px 24px;
-  font-size: 20px;
-  font-weight: 700;
-}
-.signupTitle:not(:first-child) {
-  margin-top: 100px;
-} */
-/* .basicInfo,
-.myInfo,
-.etcInfo {
-  border: 1px solid #676d7c50;
-  border-radius: 20px;
-  padding: 16px 24px;
-} */
-/* .basicInfo__line,
-.myInfo__line,
-.etcInfo__line {
-  display: flex;
-}
-.signup__title {
-  margin-right: 15px;
-  width: 120px;
-  padding-top: 10px;
-}
-.essential {
-  color: #ff4500;
-  vertical-align: middle;
-  margin-left: 3px;
-}
-.signup__inputBox {
-  width: calc(100% - 120px);
-  overflow: hidden;
-}
-.signup__inputBox input {
-  padding: 10px;
-  border-radius: 7px;
-  border: 1px solid #676d7c50;
-  width: 100%;
-  margin: 0;
-}
-.signup__chk {
-  height: 25px;
-  color: #ffae6f;
-  font-size: 14px;
-  padding-left: 10px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.myInfo__line:nth-child(4) .signup__inputBox,
-.myInfo__line:last-child .signup__inputBox {
-  display: flex;
-  margin-bottom: 25px;
-  align-items: center;
-}
-.myInfo__line:nth-child(4) .signup__inputBox input,
-.myInfo__line:last-child .signup__inputBox input {
-  width: 200px;
-}
-.myInfo__line:nth-child(4) .signup__chk button,
-.myInfo__line:last-child .signup__chk button {
-  margin: 0 10px;
-}
 
-.myInfo__line:nth-child(4) .signup__chk,
-.myInfo__line:last-child .signup__chk {
-  height: 40px;
-  display: flex;
-  align-items: center;
-} */
 .currentBtn {
   display: flex;
 }
@@ -205,7 +25,6 @@
   border: 1px solid #7b61ff;
   border-radius: 20px;
   padding: 30px 24px;
-  /* text-align: center; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -243,7 +62,6 @@
 .userWelcome__conf {
   margin-top: 50px;
   font-size: 20px;
-  /* width: 90%; */
   text-align: center;
 }
 .userWelcome__info {
@@ -267,34 +85,7 @@
     margin: 100px auto 100px auto;
   }
 
-  /* .stepBox__step {
-    padding: 10px;
-    width: calc((100% - 30px) / 3);
-  }
-  .stepBox__arrow {
-    width: 15px;
-  } */
   .stepBtns button {
     width: 150px !important;
   }
-  /* .myInfo__line:nth-child(4) .signup__inputBox input,
-  .myInfo__line:last-child .signup__inputBox input {
-    width: 100%;
-  }
-  .myInfo__line:nth-child(4) .signup__inputBox,
-  .myInfo__line:last-child .signup__inputBox {
-    display: block;
-    margin-bottom: 0;
-    align-items: center;
-  }
-
-  .myInfo__line:nth-child(4) .signup__chk,
-  .myInfo__line:last-child .signup__chk {
-    padding: 0 10px 0 0;
-  }
-
-  .myInfo__line:nth-child(4) .signup__chk button,
-  .myInfo__line:last-child .signup__chk button {
-    margin: 0 10px 0 0;
-  } */
 }

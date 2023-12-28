@@ -2,35 +2,21 @@ import style from "./Step1.module.css";
 import GrayRectangleBtn from "../../../../components/GrayRectangleBtn/GrayRectangleBtn";
 import PurpleRectangleBtn from "../../../../components/PurpleRectangleBtn/PurpleRectangleBtn";
 
-import { useState, useEffect, useContext } from "react";
+import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { SignUpInfoContext } from "../SignUp";
 
 const Step1 = () => {
   const { currentStep, setCurrentStep } = useContext(SignUpInfoContext);
-  const { user, setUser } = useContext(SignUpInfoContext);
+  const { setUser } = useContext(SignUpInfoContext);
   const { isNext, setNext } = useContext(SignUpInfoContext);
-  const { chkAll, setChhAll } = useContext(SignUpInfoContext);
+  const { chkAll, setChkAll } = useContext(SignUpInfoContext);
   const { chkUse, setChkUse } = useContext(SignUpInfoContext);
   const { chkPrivacy, setChkPrivacy } = useContext(SignUpInfoContext);
-  //   const [chkUse, setChkUse] = useState(false); // 1단계 이용약관 동의
-  //   const [chkPrivacy, setChkPrivacy] = useState(false); // 1단계 개인정보 활용 동의
   const navi = useNavigate();
 
-  //   // 각 단계별 페이지 보이기 설정
-  //   const displayStyle = (stepId) => {
-  //     if (stepId === currentStep) {
-  //       return { display: "block" };
-  //     } else {
-  //       return { display: "none" };
-  //     }
-  //   };
-
   useEffect(() => {
-    console.log(currentStep);
-    console.log(chkAll);
     if (currentStep === "step3") {
-      console.log("durl");
       setUser({
         id: "",
         password: "",
@@ -41,30 +27,21 @@ const Step1 = () => {
         birth: "",
         memberRecommenderId: "",
       });
-      setChhAll(false);
+      setChkAll(false);
       setChkUse(false);
       setChkPrivacy(false);
     }
     if (chkAll) {
-      setChhAll(true);
+      setChkAll(true);
       setNext(true);
     }
     setCurrentStep("step1");
   }, []);
 
-  // // 이전 페이지에서 돌아왔을 때
-  // useEffect(() => {
-  //   console.log(chkAll);
-  //   if (chkAll) {
-  //     setChhAll(true);
-  //     setNext(true);
-  //   }
-  // }, []);
-
   // 전체 동의 눌렀을 때
   const handleAllCheck = () => {
     let check = chkAll;
-    setChhAll(!check);
+    setChkAll(!check);
     setChkUse(!check);
     setChkPrivacy(!check);
     setNext(!check);
@@ -74,7 +51,7 @@ const Step1 = () => {
   const handleUseCheck = () => {
     if (chkUse) {
       setChkUse(false);
-      setChhAll(false);
+      setChkAll(false);
       setNext(false);
     } else {
       setChkUse(true);
@@ -84,7 +61,7 @@ const Step1 = () => {
   const handlePrivacyCheck = () => {
     if (chkPrivacy) {
       setChkPrivacy(false);
-      setChhAll(false);
+      setChkAll(false);
       setNext(false);
     } else {
       setChkPrivacy(true);
@@ -94,7 +71,7 @@ const Step1 = () => {
   // 약관 둘다 동의 시 전체 동의 체크
   useEffect(() => {
     if (chkUse && chkPrivacy) {
-      setChhAll(true);
+      setChkAll(true);
       setNext(true);
     }
   }, [chkUse, chkPrivacy]);
