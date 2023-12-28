@@ -26,7 +26,7 @@ export const mypageMenuContext = createContext();
 
 const Mypage = () => {
   // 로그인 컨텍스트
-  const { loginId, ,setLoginId } = useContext(LoginContext);
+  const { loginId, setLoginId } = useContext(LoginContext);
 
   // sidebar로 넘겨주는 State
   const [menu, setMenu] = useState("");
