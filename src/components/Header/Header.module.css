@@ -41,9 +41,21 @@
   align-items: center;
   cursor: pointer;
   font-size: 16px;
+  position: relative;
+  /* width: 100px; */
+  text-align: center;
+  border-bottom: 2px solid transparent;
+  /* padding: 10px 0; */
+}
+.navi__conf > a {
+  margin: auto;
 }
 .navi__conf:not(:last-child) {
   margin-right: 30px;
+}
+
+.navi__conf:hover {
+  border-bottom: 2px solid #7b61ff;
 }
 .menu__user {
   display: flex;
@@ -98,7 +110,7 @@
 .mypageBtn {
   cursor: pointer;
 }
-@media (max-width: 870px) {
+@media (max-width: 1030px) {
   .header {
     padding: 24px 16px;
     margin: auto;

@@ -1,6 +1,6 @@
 import style from "./PartyList.module.css"
 import { useEffect, useState, useContext } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWonSign, faCirclePlus, faMagnifyingGlass, faBolt } from "@fortawesome/free-solid-svg-icons";
 import { faFaceSadTear, faCalendar } from "@fortawesome/free-regular-svg-icons";
@@ -12,8 +12,9 @@ import PartyJoinInfoModal from "./PartyJoinInfoModal/PartyJoinInfoModal";
 import { JoinPartyContext } from "../PartyJoinMain";
 
 const PartyList = () => {
-    const location = useLocation();
-    const selectService = location.state.selectService;
+    // const location = useLocation();
+    // const selectService = location.state.selectService;
+    const {selectService} = useContext(JoinPartyContext);
     const [partyList, setPartyList] = useState();
     const [isLoading, setLoading] = useState(false);
     const [price, setPrice] = useState();

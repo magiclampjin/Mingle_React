@@ -13,9 +13,6 @@ const Step2 = () => {
   const { currentStep, setCurrentStep } = useContext(SignUpInfoContext);
   const { user, setUser } = useContext(SignUpInfoContext);
   const { isNext, setNext } = useContext(SignUpInfoContext);
-  // const { chkAll, setChhAll } = useContext(SignUpInfoContext);
-  // const { chkUse, setChkUse } = useContext(SignUpInfoContext);
-  // const { chkPrivacy, setChkPrivacy } = useContext(SignUpInfoContext);
   // 비밀번호 확인 input value
   const [pwCheckText, setPwCheckText] = useState("");
   // 본인 인증 코드 확인 input value
@@ -59,7 +56,7 @@ const Step2 = () => {
       alert("잘못된 접근입니다.");
       navi("/member/signup");
     }
-  });
+  }, []);
 
   // 글씨 색 변경 css
   const colorStyle = (check) => {
@@ -71,21 +68,17 @@ const Step2 = () => {
   // user State 값 채우기
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(name);
-    console.log(name === "mycode");
     if (name !== "pwCheck" && name !== "mycode") {
       setUser((prev) => ({ ...prev, [name]: value }));
     } else if (name === "mycode") {
       // 인증번호를 입력하면 서버에 저장된 코드랑 일치하는지 확인
       setMycode(value);
-      console.log("durl");
       const formData = new FormData();
       formData.append("code", value);
       if (value !== "") {
         axios
           .post("/api/member/certification/signup", formData)
           .then((resp) => {
-            console.log(resp);
             if (resp.data) {
               setCheckText((prev) => ({
                 ...prev,
@@ -135,11 +128,6 @@ const Step2 = () => {
       return false;
     } else {
       setLoading(true);
-      // 'YYYYMMDD' 형식의 문자열을 'YYYY-MM-DD' 날짜형식으로 변환
-      // const formattedBirth = `${user.birth.substring(
-      //   0,
-      //   4
-      // )}-${user.birth.substring(4, 6)}-${user.birth.substring(6, 8)}`;
       const birthToSend = new Date(user.birth).toISOString();
 
       axios
@@ -451,25 +439,25 @@ const Step2 = () => {
   // 추천인 아이디 존재하는지 검사
   useEffect(() => {
     if (user.memberRecommenderId !== "") {
-      axios
-        .post("/api/member/idDuplicateCheck", user.memberRecommenderId)
-        .then((resp) => {
-          if (resp.data) {
-            // 추천인 아이디 있을 때
-            setCheckText((prev) => ({
-              ...prev,
-              memberRecommenderId: "",
-            }));
-            handleCondition("memberRecommenderId", true);
-          } else {
-            // 추천인 아이디가 없을 때
-            setCheckText((prev) => ({
-              ...prev,
-              memberRecommenderId: "존재하지 않는 추천인입니다.",
-            }));
-            handleCondition("memberRecommenderId", false);
-          }
-        });
+      const formDtat = new FormData();
+      formDtat.append("id", user.memberRecommenderId);
+      axios.post("/api/member/idDuplicateCheck", formDtat).then((resp) => {
+        if (resp.data) {
+          // 추천인 아이디 있을 때
+          setCheckText((prev) => ({
+            ...prev,
+            memberRecommenderId: "",
+          }));
+          handleCondition("memberRecommenderId", true);
+        } else {
+          // 추천인 아이디가 없을 때
+          setCheckText((prev) => ({
+            ...prev,
+            memberRecommenderId: "존재하지 않는 추천인입니다.",
+          }));
+          handleCondition("memberRecommenderId", false);
+        }
+      });
     } else {
       setCheckText((prev) => ({ ...prev, memberRecommenderId: "" }));
       handleCondition("memberRecommenderId", true);
@@ -515,13 +503,10 @@ const Step2 = () => {
     } else {
       setNext(false);
     }
-    console.log(signupConditions);
-    console.log(user);
   }, [signupConditions]);
 
   // 이메일 본인인증
   const handleAuthenticationEmail = () => {
-    console.log(signupConditions.email);
     if (!signupConditions.email && user.email === "") {
       // 이메일을 입력하지 않았으면
       alert("이메일 주소를 입력해주세요.");
@@ -664,28 +649,6 @@ const Step2 = () => {
               </div>
             </div>
           </div>
-          {/* <div className={style.myInfo__line} id="email">
-            <div className={style.signup__title}>
-              이메일<span className={style.essential}>*</span>
-            </div>
-            <div className={style.signup__inputBox}>
-              <input
-                type="text"
-                id="emailInput"
-                name="email"
-                placeholder="이메일을 입력해주세요."
-                onChange={handleChange}
-                value={user.email !== "" ? user.email : ""}
-              />
-              <div
-                className={style.signup__chk}
-                id="emailCheck"
-                style={colorStyle(signupConditions.email)}
-              >
-                {checkText.email}
-              </div>
-            </div>
-          </div> */}
           <div className={style.myInfo__line} id="email">
             <div className={style.signup__title}>
               이메일<span className={style.essential}>*</span>
@@ -765,29 +728,6 @@ const Step2 = () => {
               </div>
             </div>
           </div>
-          {/* <div className={style.myInfo__line} id="phone">
-            <div className={style.signup__title}>
-              전화번호<span className={style.essential}>*</span>
-            </div>
-            <div className={style.signup__inputBox}>
-              <input
-                type="text"
-                id="phoneInput"
-                name="phone"
-                placeholder="- 없이 숫자만 입력해주세요. ex)01012345678"
-                onChange={handleChange}
-                value={user.phone !== "" ? user.phone : ""}
-              />
-              <div
-                className={style.signup__chk}
-                id="phoneCheck"
-                style={colorStyle(signupConditions.phone)}
-              >
-                <WhiteRoundBtn title={"본인인증"}></WhiteRoundBtn>
-                {checkText.phone}
-              </div>
-            </div>
-          </div> */}
           <div className={style.myInfo__line} id="nick">
             <div className={style.signup__title}>
               닉네임<span className={style.essential}>*</span>

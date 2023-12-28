@@ -29,3 +29,80 @@
     font-weight: 700;
     margin-bottom: 50px;    
 }
+
+.serviceImg>img{
+    width: 90px;
+    height: 90px;
+    border-radius: 50px;
+}
+
+.serviceName{
+    font-weight: 500;
+    margin: 15px 0 10px 0;
+}
+
+.startDate{
+    font-size: 13px;
+    font-weight: 500;
+    color:#737577;
+}
+
+.partyList{
+    margin: auto;
+    flex-flow: row wrap;
+    max-width: 1300px;
+}
+
+.partyList>.myParty{
+    margin: 30px;
+    cursor: pointer;
+}
+
+.myParty{    
+    width: 550px;
+    box-shadow: 0 0 5px 0 #73757750 ;
+    padding:20px 10px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    border:2px solid transparent;
+}
+
+.tag{
+    background-color: #6A57D799;
+    padding:5px 10px;
+    border-radius: 10px;
+    color:white;
+    font-size: 15px;
+    font-weight: normal;
+    margin-left: 10px;
+}
+
+.tag:first-child{
+    margin-left: 0px;
+}
+
+
+.myParty:hover{
+    border:2px solid #6A57D750;
+}
+
+@media (max-width:1290px){
+    .partyList>.myParty{
+        width: 44%;
+        margin-bottom: 30px;
+    }
+}
+
+@media (max-width:1080px){
+    .partyList>.myParty{
+        width: 41%;
+        margin-bottom: 30px;
+    }
+}
+
+@media (max-width:786px){
+    .partyList>.myParty{
+        margin-bottom: 30px;
+        width: 100%
+    }
+}

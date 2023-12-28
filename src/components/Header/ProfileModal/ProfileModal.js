@@ -37,6 +37,7 @@ const ProfileModal = ({ isOpen, onRequestClose, contentLabel, children }) => {
           backgroundColor: "rgba(0, 0, 0, 0.0)",
           maxWidth: 1300 + "px",
           margin: "auto",
+          zIndex: "999",
         },
         content: {
           top: topPosition,
