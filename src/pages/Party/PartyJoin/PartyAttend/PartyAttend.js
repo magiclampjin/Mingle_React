@@ -301,7 +301,7 @@ const PartyAttend = () => {
                     "파티 가입에 성공했습니다.\n가입한 파티 정보를 확인하시겠습니까?"
                   )
                 ) {
-                  navi("/");
+                  navi("/party/myParty");
                 } else {
                   navi("/");
                 }
@@ -404,44 +404,27 @@ const PartyAttend = () => {
 
           <div className={style.allContent}>
             <div className={style.leftAllContent}>
-              <div className={`${style.contentBox}`}>
-                <div className={style.subTitle}>파티 정보</div>
-                <div className={style.contents}>
-                  <div className={style.content}>
-                    <div className={style.leftContent}>이용 서비스</div>
-                    <div className={style.rightContent}>
-                      {service.name} {service.plan}
+             <div className={`${style.contentBox}`}>
+                    <div className={style.subTitle}>파티 정보</div>
+                    <div className={style.contents}>
+                        <div className={style.content}>
+                            <div className={style.leftContent}>이용 서비스</div>
+                            <div className={style.rightContent}>{service.name} {service.plan}</div>
+                        </div>
+                        <div className={style.content}>
+                            <div className={style.leftContent}>정산 일자</div>
+                            <div className={style.rightContent}>매월 {selectParty.calculationDate}일</div>
+                        </div>
+                        <div className={style.content}>
+                            <div className={style.leftContent}>파티 기간</div>
+                            <div className={style.rightContent}>{getStartDateOver(selectParty.startDate)} ~ {getEndDate(selectParty.startDate, selectParty.monthCount)}</div>
+                        </div>
+                        <div className={style.content}>
+                            <div className={style.leftContent}>파티 요금 (월, VAT 포함)</div>
+                            <div className={style.rightContent}>{formatNumber(Math.ceil((service.price)/(service.maxPeopleCount))+1000)}원</div>
+                        </div>
                     </div>
-                  </div>
-                  <div className={style.content}>
-                    <div className={style.leftContent}>정산 일자</div>
-                    <div className={style.rightContent}>
-                      매월 {selectParty.calculationDate}일
-                    </div>
-                  </div>
-                  <div className={style.content}>
-                    <div className={style.leftContent}>파티 기간</div>
-                    <div className={style.rightContent}>
-                      {getStartDateOver(selectParty.startDate)} ~{" "}
-                      {getEndDate(
-                        selectParty.startDate,
-                        selectParty.monthCount
-                      )}
-                    </div>
-                  </div>
-                  <div className={style.content}>
-                    <div className={style.leftContent}>
-                      파티 요금 (월, VAT 포함)
-                    </div>
-                    <div className={style.rightContent}>
-                      {formatNumber(
-                        Math.ceil(service.price / service.maxPeopleCount) + 1000
-                      )}
-                      원
-                    </div>
-                  </div>
                 </div>
-              </div>
               <div className={`${style.contentBox}`}>
                 <div className={`${style.subTitle}`}>결제수단</div>
                 <div className={style.contents}>
