@@ -34,11 +34,6 @@ const Main = () => {
   // 현재 시간 기준
   const [nowTime, setNowTime] = useState("");
 
-  // 무한 롤링 애니메이션 설정
-  const [animate, setAnimate] = useState(true);
-  const onStop = () => setAnimate(false); // 멈춤
-  const onRun = () => setAnimate(true); // 재생
-
   const getServiceId = "전체";
   // 서비스 목록
   const [service, setService] = useState([]);
@@ -53,6 +48,15 @@ const Main = () => {
   const [selectService, setSelectService] = useState("");
   // 요금 안내 확인용 chkBox
   const [isChked, setChked] = useState(false);
+
+  // 무한 롤링 애니메이션 설정
+  const [animate, setAnimate] = useState(true);
+  const onStop = () => setAnimate(false); // 멈춤
+  const onRun = () => {
+    if (!modalIsOpen) {
+      setAnimate(true);
+    }
+  }; // 재생
 
   // 파티 목록
   const [partyList, setPartyList] = useState(null);
@@ -147,8 +151,16 @@ const Main = () => {
       setSelectService(partyContentElement.dataset.id);
       setModalIsOpen(true);
       setChked(false);
+      console.log("durl");
+      console.log(animate);
+      onStop();
+      // setAnimate(false);
     }
   };
+
+  useEffect(() => {
+    console.log(animate);
+  }, [animate]);
 
   // 서비스 정보 모달창 닫기
   const closeModal = () => {
@@ -332,6 +344,7 @@ const Main = () => {
                 className={style.slideDiv}
                 onMouseEnter={onStop}
                 onMouseLeave={onRun}
+                // onClick={handleCreate}
               >
                 <div className={style.slideImg}>
                   <img
@@ -493,6 +506,16 @@ const Main = () => {
       <div className={style.newVideoInfo}>
         <RenderNewVideo newVideoInfo={newVideoInfo} />
       </div>
+      <ServiceInfoModal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="정보 모달"
+        selectService={selectService}
+        width={450}
+        height={430}
+        isChked={isChked}
+        setChked={setChked}
+      ></ServiceInfoModal>
     </>
   );
 };

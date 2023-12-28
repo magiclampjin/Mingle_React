@@ -18,6 +18,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 export const MenuContext = createContext();
 export const LoginContext = createContext();
+export const CreatePartyContext = createContext();
 
 function App() {
   const [selectedMenu, setSelectedMenu] = useState("");
@@ -25,7 +26,7 @@ function App() {
   const [loginNick, setLoginNick] = useState("");
   const [loginRole, setLoginRole] = useState("");
   const [loginStatus, setLoginStatus] = useState("loading");
-
+  const [service, setService] = useState(null);
   return (
     <LoginContext.Provider
       value={{
@@ -36,25 +37,32 @@ function App() {
         loginRole,
         setLoginRole,
         loginStatus,
-        setLoginStatus
+        setLoginStatus,
       }}
     >
       <MenuContext.Provider value={{ selectedMenu, setSelectedMenu }}>
-        <>
-          <Router>
-            <Header></Header>
-            <Routes>
-              <Route path="/" element={<Main />} />
-              <Route path="/member/*" element={<Member />}></Route>
-              <Route path="/party/*" element={<Party />}></Route>
-              <Route path="/Mypage/*" element={<Mypage />}></Route>
-              <Route path="/denied" element={<Denied />}></Route>
-              <Route path="/admin/*" element={<AdminMain />} />
-              <Route path="/board/*" element={<Board />} />
-            </Routes>
-            <Footer></Footer>
-          </Router>
-        </>
+        <CreatePartyContext.Provider
+          value={{
+            service,
+            setService,
+          }}
+        >
+          <>
+            <Router>
+              <Header></Header>
+              <Routes>
+                <Route path="/" element={<Main />} />
+                <Route path="/member/*" element={<Member />}></Route>
+                <Route path="/party/*" element={<Party />}></Route>
+                <Route path="/Mypage/*" element={<Mypage />}></Route>
+                <Route path="/denied" element={<Denied />}></Route>
+                <Route path="/admin/*" element={<AdminMain />} />
+                <Route path="/board/*" element={<Board />} />
+              </Routes>
+              <Footer></Footer>
+            </Router>
+          </>
+        </CreatePartyContext.Provider>
       </MenuContext.Provider>
     </LoginContext.Provider>
   );
