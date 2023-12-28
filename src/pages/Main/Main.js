@@ -176,18 +176,6 @@ const Main = () => {
       contentElement.contains(clickedElement)
     ) {
       setJoinModalIsOpen(true);
-      console.log(contentElement.getAttribute("data-id"));
-      console.log(partyList);
-      console.log(
-        partyList.find(
-          (obj) => obj.id == contentElement.getAttribute("data-id")
-        )
-      );
-      // setSelectParty(
-      //   partyList.filter(
-      //     (obj) => obj.id === contentElement.getAttribute("data-id")
-      //   )
-      // );
       setSelectParty(
         partyList.find(
           (obj) => obj.id == contentElement.getAttribute("data-id")
@@ -200,17 +188,8 @@ const Main = () => {
 
       const selectServiceId = selectedObj ? selectedObj.serviceId : null;
       const serviceObj = serviceList.find((obj) => obj.id === selectServiceId);
-      console.log(selectServiceId);
-      console.log(serviceList);
-      console.log(serviceObj);
-      setService(serviceObj);
-      // setSelectParty(partyList[contentElement.dataset.id]);
     }
   };
-
-  useEffect(() => {
-    console.log(selectParty);
-  }, [selectParty]);
 
   useEffect(() => {
     if (!modalIsOpen) {
@@ -222,7 +201,6 @@ const Main = () => {
   const closeModal = () => {
     setModalIsOpen(false);
     setChked(false);
-    console.log("ekerl");
     onRun();
   };
 
@@ -270,30 +248,6 @@ const Main = () => {
     endDate.setMonth(endDate.getMonth() + period);
     return endDate.toISOString().slice(0, 10);
   };
-
-  // // 파티 만들기 페이지로 이동
-  // const goCreateParty = (e) => {
-  //   if (loginId) {
-  //     const contentElement = e.currentTarget;
-  //     const clickedElement = e.target;
-
-  //     if (
-  //       clickedElement === contentElement ||
-  //       contentElement.contains(clickedElement)
-  //     ) {
-  //       navi("/party/partyCreate");
-  //     }
-  //   } else {
-  //     // 로그인하지않은 유저일 경우 로그인창으로 이동 혹은 현재 페이지 유지
-  //     if (
-  //       window.confirm(
-  //         "로그인 후 이용 가능한 서비스입니다.\n로그인 화면으로 이동하시겠습니까?"
-  //       )
-  //     ) {
-  //       navi("/member/login");
-  //     }
-  //   }
-  // };
 
   // 파티 찾기 페이지로 이동
   const handleSearchParty = () => {
