@@ -188,6 +188,7 @@ const Main = () => {
 
       const selectServiceId = selectedObj ? selectedObj.serviceId : null;
       const serviceObj = serviceList.find((obj) => obj.id === selectServiceId);
+      setService(serviceObj);
     }
   };
 
