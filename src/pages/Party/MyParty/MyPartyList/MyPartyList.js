@@ -14,12 +14,19 @@ const MyPartyList = () => {
     const navi = useNavigate();
 
     // 미로그인 시 접근불가
-    const {loginId} = useContext(LoginContext);
+    const {loginId, loginStatus} = useContext(LoginContext);
+    
+    // 로그인 여부
     useEffect(()=>{
-        if(loginId===""){
-           navi("/denied");
+        if(loginStatus!=="confirm")
+            setLoading(true);
+        else{
+            if(loginId===""){
+                navi("/denied");
+            }
+            setLoading(false);
         }
-    },[loginId]);
+    },[loginId, loginStatus]);
 
     // 가입한 파티 목록 가져오기
     useEffect(()=>{
@@ -100,32 +107,3 @@ const MyPartyList = () => {
 }
 
 export default MyPartyList;
-
-/*
-
-
- <div className={`${style.partyListLine} ${style.centerAlign}`}>
-{   
-    isServiceListLoading ? (
-        <LoadingSpinnerMini height={260} width={100}/>
-    ) :(
-        service.map((e,i)=>{                         
-            return(
-                <>
-                    <div key={i} data-id={e.id} className={`${style.partyContent}`} onClick={openModal}>
-                        <div className={`${style.partyContent__img} ${style.centerAlign}`}><img src={`/assets/serviceLogo/${e.englishName}.png`} alt={`${e.name} 로고 이미지`}></img></div>
-                        <div className={`${style.partyContent__name} ${style.centerAlign}`}>{e.name}</div>
-                        <div className={`${style.partyContent__txt} ${style.centerAlign}`}>매달 적립!</div>
-                        <div className={`${style.centerAlign}`}>
-                            <div className={`${style.maxPrice} ${style.centerAlign}`}>~{formatNumber(Math.ceil((e.price)/(e.maxPeopleCount))*(e.maxPeopleCount-1)-(e.commission)*(e.maxPeopleCount-1))}원</div>
-                            <div className={`${style.hotTag} ${style.centerAlign}`}><FontAwesomeIcon icon={faStar} size="1x"/><div className={`${style.hatTagTxt}`}>HOT</div></div>
-                        </div>
-                    </div>
-                </>
-            ); 
-        })  
-    )                 
-}
-
-
-*/

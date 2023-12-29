@@ -29,13 +29,22 @@ const PartyCreatePage = () => {
 
   // 로그인하지 않았다면 접근권한 페이지로 이동
   const navi = useNavigate();
-  const { loginId } = useContext(LoginContext);
-  useEffect(() => {
-    if (loginId === "") {
-      navi("/denied");
-    }
-  }, [loginId]);
-
+  
+  // 미로그인 시 접근불가
+  const {loginId, loginStatus} = useContext(LoginContext);
+  
+  // 로그인 여부
+  useEffect(()=>{
+      if(loginStatus!=="confirm")
+          setLoading(true);
+      else{
+          if(loginId===""){
+              navi("/denied");
+          }
+          setLoading(false);
+      }
+  },[loginId, loginStatus]);
+  
   const { service, setService } = useContext(CreatePartyContext);
   //뒤로가기 버튼을 통해서 들어오거나 주소를 통해서 들어왔다면 돌려보내기
   useEffect(() => {

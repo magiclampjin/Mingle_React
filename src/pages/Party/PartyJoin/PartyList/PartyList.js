@@ -17,8 +17,6 @@ import PartyJoinInfoModal from "./PartyJoinInfoModal/PartyJoinInfoModal";
 import { JoinPartyContext } from "../../../../App";
 
 const PartyList = () => {
-  // const location = useLocation();
-  // const selectService = location.state.selectService;
   const { selectService } = useContext(JoinPartyContext);
   const [partyList, setPartyList] = useState();
   const [isLoading, setLoading] = useState(false);
@@ -29,7 +27,7 @@ const PartyList = () => {
   const { setSelectParty, service, setService } = useContext(JoinPartyContext);
 
   // 로그인 정보
-  const { loginId } = useContext(LoginContext);
+  const { loginId, loginStatus } = useContext(LoginContext);
 
   // 검색할 파티일자 선택 모달창 열림 / 닫힘
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -45,9 +43,17 @@ const PartyList = () => {
   // 검색 기간
   const [period, setPeriod] = useState({ start: currentDate, end: maginot });
 
+
   // 서비스 목록 불러오기
   useEffect(() => {
     setLoading(true);
+
+    // 새로고침 혹은 비정상접근 감지
+    if(selectService===undefined || selectService===""){
+      navi("/party/partyJoin");
+      return;
+    }
+
     axios
       .get(`/api/party/getServiceById/${selectService}`)
       .then((resp) => {
@@ -57,7 +63,9 @@ const PartyList = () => {
             Math.ceil(resp.data.price / resp.data.maxPeopleCount) + 1000
           )
         );
-        axios
+        
+        if(loginStatus === "confirm"){
+          axios
           .get(`/api/party/getPartyList/${selectService}`)
           .then((resp) => {
             setPartyList(resp.data);
@@ -66,11 +74,12 @@ const PartyList = () => {
           .catch(() => {
             setLoading(false);
           });
+        }   
       })
       .catch(() => {
         setLoading(false);
       });
-  }, [selectService]);
+  }, [selectService, loginStatus]);
 
   // 날짜로 검색
   useEffect(() => {
@@ -171,7 +180,7 @@ const PartyList = () => {
         clickedElement === contentElement ||
         contentElement.contains(clickedElement)
       ) {
-        // navi("/party/partyCreate");
+        alert("열심히 기능을 만들고 있어요!\n고객님들의 편의를 위해 노력하겠습니다.^_^");
       }
     } else {
       // 로그인하지않은 유저일 경우 로그인창으로 이동 혹은 현재 페이지 유지
@@ -256,7 +265,7 @@ const PartyList = () => {
 
   return (
     <div className={style.body}>
-      {service ? (
+      {service && partyList? (
         <>
           <div className={`${style.dflex} ${style.m35}`}>
             <div className={`${style.bigTitle} ${style.w70}`}>
