@@ -41,8 +41,10 @@ const Main = () => {
   // 가입된 서비스 목록
   const [joinService, setJoinService] = useState([]);
   let jsId = 0;
+  let joinServiceId = 0;
   // 가입 가능 여부 (이미 가입했을 경우 fasle)
   let joinPossible = true;
+  let joinPartyPossible = true;
   // 서비스 모달창 열림 / 닫힘
   const [modalIsOpen, setModalIsOpen] = useState(false);
   // 모달창을 띄울 서비스 종류
@@ -74,8 +76,7 @@ const Main = () => {
   // 최신 비디오 목록
   const [newVideoInfo, setNewVideoInfo] = useState(null);
   // 선택한 파티
-  const { selectParty, setSelectParty, service, setService } =
-    useContext(JoinPartyContext);
+  const { setSelectParty, setService } = useContext(JoinPartyContext);
 
   const navi = useNavigate();
   // 메인화면 로딩 시 페이지 맨 위로 끌어올리기
@@ -104,6 +105,7 @@ const Main = () => {
         setServiceList([]);
       });
   }, [loginId]);
+
   useEffect(() => {
     // 파티 목록 불러오기
     axios.get("/api/party/getPartyListForMain").then((resp) => {
@@ -157,10 +159,7 @@ const Main = () => {
       setSelectService(partyContentElement.dataset.id);
       setModalIsOpen(true);
       setChked(false);
-      console.log("durl");
-      console.log(animate);
       onStop();
-      // setAnimate(false);
     }
   };
 
@@ -168,27 +167,33 @@ const Main = () => {
   const handleJoinModal = (e) => {
     const contentElement = e.currentTarget;
     const clickedElement = e.target;
-    console.log(contentElement);
-    console.log(clickedElement);
 
     if (
       clickedElement === contentElement ||
       contentElement.contains(clickedElement)
     ) {
-      setJoinModalIsOpen(true);
-      setSelectParty(
-        partyList.find(
+      // 가입 할 수 없는 서비스의 파티에는 partyNotJoin이라는 클래스 명이 있음
+      if (clickedElement.className.includes("partyNotJoin")) {
+        alert("이미 가입한 서비스의 파티입니다.\n추가 가입은 불가능합니다.");
+      } else {
+        // 가입할 수 있는 서비스의 파티라면 파티 참여 모달을 열어줌
+        setJoinModalIsOpen(true);
+        setSelectParty(
+          partyList.find(
+            (obj) => obj.id == contentElement.getAttribute("data-id")
+          )
+        );
+
+        const selectedObj = partyList.find(
           (obj) => obj.id == contentElement.getAttribute("data-id")
-        )
-      );
+        );
 
-      const selectedObj = partyList.find(
-        (obj) => obj.id == contentElement.getAttribute("data-id")
-      );
-
-      const selectServiceId = selectedObj ? selectedObj.serviceId : null;
-      const serviceObj = serviceList.find((obj) => obj.id === selectServiceId);
-      setService(serviceObj);
+        const selectServiceId = selectedObj ? selectedObj.serviceId : null;
+        const serviceObj = serviceList.find(
+          (obj) => obj.id === selectServiceId
+        );
+        setService(serviceObj);
+      }
     }
   };
 
@@ -448,47 +453,58 @@ const Main = () => {
                     {/* partyList를 4개씩 묶어서 매핑 */}
                     {partyList
                       .slice(groupIndex * 4, (groupIndex + 1) * 4)
-                      .map((e, i) => (
-                        <div
-                          key={groupIndex * 4 + i}
-                          className={style.party}
-                          data-id={e.id}
-                          onClick={handleJoinModal}
-                        >
-                          <div className={style.partyLeft}>
-                            <div className={style.partyTop}>
-                              <div className={style.partyStartDate}>
-                                {getStartDate(e.startDate)}
-                                <span className={style.monthCount}>
-                                  &nbsp;{e.monthCount}개월
-                                </span>
-                                파티
+                      .map((e, i) => {
+                        if (joinService.includes(e.serviceId)) {
+                          joinPartyPossible = false;
+                          joinServiceId++;
+                        } else joinPartyPossible = true;
+                        return (
+                          <div
+                            key={groupIndex * 4 + i}
+                            className={`${style.party} ${
+                              !joinPartyPossible || loginId === ""
+                                ? style.partyNotJoin
+                                : ""
+                            }`}
+                            data-id={e.id}
+                            onClick={handleJoinModal}
+                          >
+                            <div className={style.partyLeft}>
+                              <div className={style.partyTop}>
+                                <div className={style.partyStartDate}>
+                                  {getStartDate(e.startDate)}
+                                  <span className={style.monthCount}>
+                                    &nbsp;{e.monthCount}개월
+                                  </span>
+                                  파티
+                                </div>
+                                <div className={style.partyPrice}>
+                                  <div className={style.wonIcon}>
+                                    <FontAwesomeIcon icon={faWonSign} />
+                                  </div>
+                                  <div>
+                                    월
+                                    {formatNumber(
+                                      Math.ceil(e.price / e.maxPeopleCount) +
+                                        1000
+                                    )}
+                                    원
+                                  </div>
+                                </div>
                               </div>
-                              <div className={style.partyPrice}>
-                                <div className={style.wonIcon}>
-                                  <FontAwesomeIcon icon={faWonSign} />
-                                </div>
-                                <div>
-                                  월
-                                  {formatNumber(
-                                    Math.ceil(e.price / e.maxPeopleCount) + 1000
-                                  )}
-                                  원
-                                </div>
+                              <div className={style.partyBottom}>
+                                ~ {getEndDate(e.startDate, e.monthCount)}까지
                               </div>
                             </div>
-                            <div className={style.partyBottom}>
-                              ~ {getEndDate(e.startDate, e.monthCount)}까지
+                            <div className={style.partyRight}>
+                              <img
+                                src={`/assets/serviceLogo/${e.englishName}.png`}
+                                alt={`${e.name} 로고 이미지`}
+                              />
                             </div>
                           </div>
-                          <div className={style.partyRight}>
-                            <img
-                              src={`/assets/serviceLogo/${e.englishName}.png`}
-                              alt={`${e.name} 로고 이미지`}
-                            />
-                          </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                   </SwiperSlide>
                 )
               )
