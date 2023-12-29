@@ -299,6 +299,17 @@
 .yellowBack {
   background-color: #f9b81350 !important;
 }
+.partyNotJoin{
+  /* background-color: pink; */
+  background-color: #73757750;
+    opacity: 0.7;
+}
+.partyNotJoin:hover{
+  cursor: not-allowed;
+}
+.newVideoInfo>div>div:last-child{
+  text-align: end;
+}
 @media (max-width: 1030px) {
   .slideRight img {
     opacity: 0.4;
