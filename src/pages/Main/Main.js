@@ -176,23 +176,31 @@ const Main = () => {
       if (clickedElement.className.includes("partyNotJoin")) {
         alert("이미 가입한 서비스의 파티입니다.\n추가 가입은 불가능합니다.");
       } else {
-        // 가입할 수 있는 서비스의 파티라면 파티 참여 모달을 열어줌
-        setJoinModalIsOpen(true);
-        setSelectParty(
-          partyList.find(
+        if(loginId===""){
+          let loginCheck=window.confirm("로그인 후 이용 가능한 서비스입니다.\n로그인 화면으로 이동하시겠습니까?");
+          if(loginCheck){
+            navi("/member/login");
+          }
+        }else{
+          // 가입할 수 있는 서비스의 파티라면 파티 참여 모달을 열어줌
+          setJoinModalIsOpen(true);
+          setSelectParty(
+            partyList.find(
+              (obj) => obj.id == contentElement.getAttribute("data-id")
+            )
+          );
+
+          const selectedObj = partyList.find(
             (obj) => obj.id == contentElement.getAttribute("data-id")
-          )
-        );
+          );
 
-        const selectedObj = partyList.find(
-          (obj) => obj.id == contentElement.getAttribute("data-id")
-        );
-
-        const selectServiceId = selectedObj ? selectedObj.serviceId : null;
-        const serviceObj = serviceList.find(
-          (obj) => obj.id === selectServiceId
-        );
-        setService(serviceObj);
+          const selectServiceId = selectedObj ? selectedObj.serviceId : null;
+          const serviceObj = serviceList.find(
+            (obj) => obj.id === selectServiceId
+          );
+          setService(serviceObj);
+        }
+        
       }
     }
   };
@@ -462,7 +470,7 @@ const Main = () => {
                           <div
                             key={groupIndex * 4 + i}
                             className={`${style.party} ${
-                              !joinPartyPossible || loginId === ""
+                              !joinPartyPossible
                                 ? style.partyNotJoin
                                 : ""
                             }`}
