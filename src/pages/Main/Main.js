@@ -355,7 +355,7 @@ const Main = () => {
                   <div className={style.noneImgBanner}>
                     <div className={style.partyCountBox}>
                       <div className={style.partyCount}>{partyCount}</div>
-                      <div>명</div>
+                      <div>개</div>
                     </div>
                     <div className={style.nowTime}>{nowTime}</div>
                   </div>
