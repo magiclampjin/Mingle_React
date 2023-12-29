@@ -41,7 +41,7 @@ const Main = () => {
   // 가입된 서비스 목록
   const [joinService, setJoinService] = useState([]);
   let jsId = 0;
-  let joinServiceId=0;
+  let joinServiceId = 0;
   // 가입 가능 여부 (이미 가입했을 경우 fasle)
   let joinPossible = true;
   let joinPartyPossible = true;
@@ -76,8 +76,7 @@ const Main = () => {
   // 최신 비디오 목록
   const [newVideoInfo, setNewVideoInfo] = useState(null);
   // 선택한 파티
-  const { selectParty, setSelectParty, service, setService } =
-    useContext(JoinPartyContext);
+  const { setSelectParty, setService } = useContext(JoinPartyContext);
 
   const navi = useNavigate();
   // 메인화면 로딩 시 페이지 맨 위로 끌어올리기
@@ -106,6 +105,7 @@ const Main = () => {
         setServiceList([]);
       });
   }, [loginId]);
+
   useEffect(() => {
     // 파티 목록 불러오기
     axios.get("/api/party/getPartyListForMain").then((resp) => {
@@ -127,8 +127,6 @@ const Main = () => {
       setPartyCount(formattedCount);
     });
 
-    
-
     const updateCurrentTime = () => {
       const now = new Date();
       const year = now.getFullYear();
@@ -149,10 +147,6 @@ const Main = () => {
     updateCurrentTime();
   }, []);
 
-  useEffect(()=>{
-    console.log(partyList)
-  },[partyList])
-
   // 파티 만들러 가기
   const handlePartyCreate = (e) => {
     const partyContentElement = e.currentTarget;
@@ -165,10 +159,7 @@ const Main = () => {
       setSelectService(partyContentElement.dataset.id);
       setModalIsOpen(true);
       setChked(false);
-      console.log("durl");
-      console.log(animate);
       onStop();
-      // setAnimate(false);
     }
   };
 
@@ -176,29 +167,31 @@ const Main = () => {
   const handleJoinModal = (e) => {
     const contentElement = e.currentTarget;
     const clickedElement = e.target;
-    console.log(contentElement);
-    console.log(clickedElement);
 
     if (
       clickedElement === contentElement ||
       contentElement.contains(clickedElement)
     ) {
-      if(clickedElement.className.includes("partyNotJoin")){
+      // 가입 할 수 없는 서비스의 파티에는 partyNotJoin이라는 클래스 명이 있음
+      if (clickedElement.className.includes("partyNotJoin")) {
         alert("이미 가입한 서비스의 파티입니다.\n추가 가입은 불가능합니다.");
-      }else{
+      } else {
+        // 가입할 수 있는 서비스의 파티라면 파티 참여 모달을 열어줌
         setJoinModalIsOpen(true);
         setSelectParty(
           partyList.find(
             (obj) => obj.id == contentElement.getAttribute("data-id")
           )
         );
-  
+
         const selectedObj = partyList.find(
           (obj) => obj.id == contentElement.getAttribute("data-id")
         );
-  
+
         const selectServiceId = selectedObj ? selectedObj.serviceId : null;
-        const serviceObj = serviceList.find((obj) => obj.id === selectServiceId);
+        const serviceObj = serviceList.find(
+          (obj) => obj.id === selectServiceId
+        );
         setService(serviceObj);
       }
     }
@@ -465,10 +458,14 @@ const Main = () => {
                           joinPartyPossible = false;
                           joinServiceId++;
                         } else joinPartyPossible = true;
-                        return(
+                        return (
                           <div
                             key={groupIndex * 4 + i}
-                            className={`${style.party} ${ !joinPartyPossible || loginId === "" ? style.partyNotJoin : ""}`}
+                            className={`${style.party} ${
+                              !joinPartyPossible || loginId === ""
+                                ? style.partyNotJoin
+                                : ""
+                            }`}
                             data-id={e.id}
                             onClick={handleJoinModal}
                           >
@@ -488,7 +485,8 @@ const Main = () => {
                                   <div>
                                     월
                                     {formatNumber(
-                                      Math.ceil(e.price / e.maxPeopleCount) + 1000
+                                      Math.ceil(e.price / e.maxPeopleCount) +
+                                        1000
                                     )}
                                     원
                                   </div>
