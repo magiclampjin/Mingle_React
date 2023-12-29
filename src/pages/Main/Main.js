@@ -320,6 +320,9 @@ const Main = () => {
                     src="/assets/MainSlide/mainSlide01.png"
                     alt="메인슬라이드1"
                   />
+                  <div className={style.slideImgSource}>
+                    <a href="https://kr.freepik.com/free-vector/character-illustration-of-people-with-networking-icon_3585194.htm#page=5&query=%EA%B3%B5%EC%9C%A0%20%ED%94%8C%EB%9E%AB%ED%8F%BC%20%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8&position=42&from_view=search&track=ais&uuid=2154f9d5-bc5f-4b31-a533-fbe4f3b7917a" target="_blance" rel="noopener noreferrer">작가 rawpixel.com</a> 출처 Freepik
+                  </div>
                 </div>
               </div>
             </div>

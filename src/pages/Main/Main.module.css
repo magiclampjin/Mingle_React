@@ -257,6 +257,13 @@
 .slideRight {
   display: flex;
   align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+.slideImgSource, .slideImgSource a{
+  color: #676d7c;
+  font-size: 14px;
+  margin-top: 10px;
 }
 
 .partyCountBox {
