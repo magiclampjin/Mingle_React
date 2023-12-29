@@ -176,23 +176,31 @@ const Main = () => {
       if (clickedElement.className.includes("partyNotJoin")) {
         alert("이미 가입한 서비스의 파티입니다.\n추가 가입은 불가능합니다.");
       } else {
-        // 가입할 수 있는 서비스의 파티라면 파티 참여 모달을 열어줌
-        setJoinModalIsOpen(true);
-        setSelectParty(
-          partyList.find(
+        if(loginId===""){
+          let loginCheck=window.confirm("로그인 후 이용 가능한 서비스입니다.\n로그인 화면으로 이동하시겠습니까?");
+          if(loginCheck){
+            navi("/member/login");
+          }
+        }else{
+          // 가입할 수 있는 서비스의 파티라면 파티 참여 모달을 열어줌
+          setJoinModalIsOpen(true);
+          setSelectParty(
+            partyList.find(
+              (obj) => obj.id == contentElement.getAttribute("data-id")
+            )
+          );
+
+          const selectedObj = partyList.find(
             (obj) => obj.id == contentElement.getAttribute("data-id")
-          )
-        );
+          );
 
-        const selectedObj = partyList.find(
-          (obj) => obj.id == contentElement.getAttribute("data-id")
-        );
-
-        const selectServiceId = selectedObj ? selectedObj.serviceId : null;
-        const serviceObj = serviceList.find(
-          (obj) => obj.id === selectServiceId
-        );
-        setService(serviceObj);
+          const selectServiceId = selectedObj ? selectedObj.serviceId : null;
+          const serviceObj = serviceList.find(
+            (obj) => obj.id === selectServiceId
+          );
+          setService(serviceObj);
+        }
+        
       }
     }
   };
@@ -312,6 +320,9 @@ const Main = () => {
                     src="/assets/MainSlide/mainSlide01.png"
                     alt="메인슬라이드1"
                   />
+                  <div className={style.slideImgSource}>
+                    <a href="https://kr.freepik.com/free-vector/character-illustration-of-people-with-networking-icon_3585194.htm#page=5&query=%EA%B3%B5%EC%9C%A0%20%ED%94%8C%EB%9E%AB%ED%8F%BC%20%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8&position=42&from_view=search&track=ais&uuid=2154f9d5-bc5f-4b31-a533-fbe4f3b7917a" target="_blance" rel="noopener noreferrer">작가 rawpixel.com</a> 출처 Freepik
+                  </div>
                 </div>
               </div>
             </div>
@@ -462,7 +473,7 @@ const Main = () => {
                           <div
                             key={groupIndex * 4 + i}
                             className={`${style.party} ${
-                              !joinPartyPossible || loginId === ""
+                              !joinPartyPossible
                                 ? style.partyNotJoin
                                 : ""
                             }`}
