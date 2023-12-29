@@ -9,6 +9,7 @@ import {
   faBolt,
 } from "@fortawesome/free-solid-svg-icons";
 import { faFaceSadTear, faCalendar } from "@fortawesome/free-regular-svg-icons";
+import {faXmark} from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
 import SearchDateModal from "./SearchDateModal/SearchDateModal";
@@ -244,6 +245,11 @@ const PartyList = () => {
     setModalIsOpen(false);
   };
 
+  // 검색 기간 지정 취소
+  const handelSearchCancel = (e) =>{
+    
+  }
+
   // 파티 가입 모달창 열기
   const handleJoinModal = (e) => {
     const contentElement = e.currentTarget;
@@ -292,6 +298,7 @@ const PartyList = () => {
               </div>
               파티 시작일
               <div className={`${style.periodDate}`}>{getSearchDate()}</div>
+              <div className={`${style.xmark}`}><FontAwesomeIcon icon={faXmark} onClick={handelSearchCancel}/></div>
             </div>
             <div className={style.periodBtn} onClick={handleToday}>
               <div className={style.periodIcon}>
