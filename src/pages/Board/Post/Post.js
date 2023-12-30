@@ -10,6 +10,7 @@ import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 import ReadOnlyQuill from "../../../components/QuillEditor/ReadOnlyQuill";
 import { useNavigate } from "react-router-dom";
 import { timeFormatter } from "../../../components/TimeFormatter/TimeFormatter";
+import ReportPostModal from "../components/ReportPostModal/ReportPostModal";
 
 const Post = () => {
 
@@ -19,6 +20,19 @@ const Post = () => {
     // 좋아요와 싫어요 상태
     const [vote, setVote] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
+
+
+    const [reportModalOpen, setReportModalOpen] = useState(false); // 신고 모달 상태 추가
+
+    // 신고 모달 열기 함수
+    const handleReport = () => {
+        setReportModalOpen(true);
+    };
+
+    // 신고 모달 닫기 함수
+    const closeReportModal = () => {
+        setReportModalOpen(false);
+    };
 
     const navigate = useNavigate();
 
@@ -82,9 +96,6 @@ const Post = () => {
         }
     }
 
-    const handleReport = () => {
-
-    }
 
     // 파일 다운로드 함수
     const downloadFile = (sysName, oriName) => {
@@ -163,6 +174,13 @@ const Post = () => {
     return (
 
         <div className={styles.board}>
+
+            <ReportPostModal
+                isOpen={reportModalOpen}
+                onRequestClose={closeReportModal}
+                contentLabel="게시글 신고하기"
+                postId = {postId}
+            />
             {post && (
                 <div className={styles.post__container}>
                     <h1 className={styles.post__title}>{post.title}</h1>
@@ -208,9 +226,14 @@ const Post = () => {
 
 
             <div className={styles.buttonDiv}>
-                <button onClick={handleReport} className={styles.reportButton}>
-                    게시글 신고하기
-                </button>
+                {
+                    post && !post.isNotice && (
+                        <button onClick={handleReport} className={styles.reportButton}>
+                            게시글 신고하기
+                        </button>
+
+                    )
+                }
                 {
 
                     post && (post.member.id === loginId || loginRole === "ROLE_ADMIN") && (

@@ -1,0 +1,133 @@
+.modalOverlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.modalContent {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 500px; /* 모달의 가로 크기 */
+    height: auto; /* 높이는 내용에 따라 자동으로 설정 */
+    transform: translate(-50%, -50%);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    background: white;
+}
+
+.modalBody {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+}
+
+.modalTitle {
+    text-align: center;
+    margin-bottom: 20px; /* 제목과 내용 사이의 간격 */
+}
+
+.reportReasons {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.radioContainer {
+    margin-bottom: 12px;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* 사용자 정의 스타일 제거 및 기본 라디오 버튼 스타일 사용 */
+.radioContainer input[type="radio"] {
+    margin-right: 10px;
+}
+
+.radioContainer label {
+    margin-left: 5px;
+}
+
+
+.textArea {
+    width: 100%;
+    min-height: 100px;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px; /* 모서리 둥글게 */
+    resize: none; /* 크기 조절 비활성화 */
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+.reportButton {
+    width: 40%;
+    padding: 10px 20px;
+    background-color: #6c63ff; /* 버튼 색상 */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.reportButton:hover {
+    background-color: #5a55da; /* 버튼 호버 색상 */
+}
+
+.reportButton:active {
+    background-color: #4a42c8; /* 버튼 클릭 색상 */
+}
+
+.reportButton:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.buttonGroup {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.cancelButton {
+    width:40%;
+    padding: 10px 20px;
+    background-color: #999; /* 취소 버튼 색상 */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.cancelButton:hover {
+    background-color: #777; /* 취소 버튼 호버 색상 */
+}
+
+
+
+.reasonHeader {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .reportDisclaimer {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  .charCountLimit {
+    font-size: 0.8rem;
+    color: #666;
+    text-align: right;
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
