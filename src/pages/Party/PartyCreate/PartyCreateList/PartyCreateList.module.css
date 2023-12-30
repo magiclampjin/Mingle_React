@@ -33,21 +33,6 @@
     min-width: 500px;
 }
 
-@media (max-width: 600px){
-
-    .partyCategoryList{
-        margin-bottom: 20px;
-        flex-flow: row wrap;
-    }
-    .partyCategoryList>*{
-        margin-left: 0 !important;
-        width: fit-content;
-        min-width: 100px;
-        align-items: center;
-        display: flex;
-        justify-content: center;
-    }
-}
 
 .partyCategory{
     margin-left: 20px;
@@ -170,4 +155,25 @@
     font-weight: 500;
     color: #676D7C;
     margin-top: 20px;
+}
+
+
+
+@media (max-width: 600px){
+
+    .partyCategoryList{
+        margin-bottom: 20px;
+        flex-flow: row wrap;
+    }
+    .partyCategoryList>*{
+        margin-left: 0 !important;
+        width: fit-content;
+        min-width: 100px;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+    }
+    .empty{
+        width: 100%;
+    }
 }
