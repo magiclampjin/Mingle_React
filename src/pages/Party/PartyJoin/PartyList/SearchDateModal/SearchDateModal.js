@@ -16,7 +16,7 @@ const currentDateTime = new Date();
 const Maginot = new Date();
 Maginot.setMonth(currentDateTime.getMonth()+1);
 
-const SearchDateModal = ({ isOpen, onRequestClose, contentLabel, width, height, period, setPeriod}) => {
+const SearchDateModal = ({ isOpen, onRequestClose, contentLabel, width, height, period, setPeriod, setSearch}) => {
   // 최소 날짜 이전 달로 이동 불가능
   const [isPrev, setPrev] = useState(false);
   // 최대 날짜 이후 달로 이동 불가능
@@ -49,6 +49,7 @@ const changeDate = (e) => {
   ed.setHours(ed.getHours()+9)
   setStartDate(sd);
   setEndDate(ed);
+  setSearch(true);
 } 
 
 const setDate = (e) => {
