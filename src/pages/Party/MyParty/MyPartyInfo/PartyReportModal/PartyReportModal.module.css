@@ -1,0 +1,126 @@
+.modalBody {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+}
+
+.modalTitle {
+    text-align: center;
+    margin-bottom: 20px; /* 제목과 내용 사이의 간격 */
+}
+
+.reportReasons {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.radioContainer {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.radioContainer input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.radioContainer::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+    border-radius: 50%;
+}
+
+.radioContainer input:checked ~ .checkmark {
+    background-color: #2196F3;
+}
+
+.radioContainer .checkmark:after {
+    display: none;
+}
+
+.radioContainer input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.radioContainer .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 8px;
+    height: 13px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.textArea {
+    width: 100%;
+    min-height: 100px;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px; /* 모서리 둥글게 */
+    resize: none; /* 크기 조절 비활성화 */
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+.reportButton {
+    width: 100%;
+    padding: 10px 20px;
+    background-color: #6c63ff; /* 버튼 색상 */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.reportButton:hover {
+    background-color: #5a55da; /* 버튼 호버 색상 */
+}
+
+.reportButton:active {
+    background-color: #4a42c8; /* 버튼 클릭 색상 */
+}
+
+.reportButton:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.reasonHeader {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.reportDisclaimer {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.charCountLimit {
+    font-size: 0.8rem;
+    color: #666;
+    text-align: right;
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+

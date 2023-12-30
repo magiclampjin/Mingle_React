@@ -7,6 +7,7 @@ import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner
 import PartyWithdrawalModal from "./PartyWithdrawalModal/PartyWithdrawalModal";
 import { LoginContext } from "../../../../App";
 import PartyReportModal from "./PartyReportModal/PartyReportModal";
+import PartyDeleteModal from "./PartyDeleteModal/PartyDeleteModal";
 
 const MyPartyInfo = () =>{
     const {selectParty} = useContext(myPartyContext);
@@ -91,6 +92,17 @@ const MyPartyInfo = () =>{
         setReportModalIsOpen(false);
     }
 
+    // 파티 삭제
+    const handleDeleteParty = () => {
+        setDeleteModalIsOpen(true);
+    }
+    // 파티 삭제 모달창 열림 / 닫힘 여부 state
+    const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
+    // 파티 삭제 모달창 닫기
+    const closeDeleteModal = () => {
+        setDeleteModalIsOpen(false);
+    }
+
     useEffect(()=>{
         setLoading(true);
         if(selectParty === undefined){
@@ -157,8 +169,20 @@ const MyPartyInfo = () =>{
                                 </div>
                                 <div className={style.leftInfo}>
                                     <div className={style.subTitle}>기타 메뉴</div>
-                                    <div className={`${style.grayTitle} ${style.withdrawal}`} onClick={handleWithdrawal}>파티 탈퇴하기</div>
+                                    {/* <div className={`${style.grayTitle} ${style.withdrawal}`} onClick={handleWithdrawal}>파티 탈퇴하기</div> */}
                                     <div className={`${style.grayTitle} ${style.withdrawal}`} onClick={handleReport}>파티 신고하기</div>
+                                    {isManager && partyInfo.memberCnt===0?
+                                    <>
+                                        <div className={`${style.grayTitle} ${style.withdrawal}`} onClick={handleDeleteParty}>파티 삭제하기</div>
+                                        <PartyDeleteModal
+                                            isOpen={deleteModalIsOpen}
+                                            onRequestClose={closeDeleteModal}
+                                            width={300}
+                                            height={210}
+                                            regId={partyInfo.partyRegistrationId
+                                            }
+                                        />
+                                    </>:null}
                                 </div>
                                 <PartyWithdrawalModal
                                     isOpen={modalIsOpen}
@@ -170,7 +194,7 @@ const MyPartyInfo = () =>{
                                     isOpen={reportModalIsOpen}
                                     onRequestClose={closeReportModal}
                                     width={500}
-                                    height={270}
+                                    height={630}
                                 />
                             </div>
                             <div className={style.right}>
