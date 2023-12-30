@@ -355,18 +355,21 @@ const PartyList = () => {
                     </div>
                   </div>
                 ))
-              ) : (
-                // 가입 가능한 파티가 없는 경우
-                <div className={style.empty}>
-                  <div className={`${style.emptyIcon} ${style.centerAlign}`}>
-                    <FontAwesomeIcon icon={faFaceSadTear} />
-                  </div>
-                  <div className={`${style.emptyTxt} ${style.centerAlign}`}>
-                    비어있는 파티가 없어요.
-                  </div>
-                </div>
-              )
+              ) : null
             }
+            {
+              partyList&&partyList.length===0?
+              // 가입 가능한 파티가 없는 경우
+              <div className={style.empty}>
+                <div className={`${style.emptyIcon} ${style.centerAlign}`}>
+                  <FontAwesomeIcon icon={faFaceSadTear} />
+                </div>
+                <div className={`${style.emptyTxt} ${style.centerAlign}`}>
+                  비어있는 파티가 없어요.
+                </div>
+              </div>:null
+            }
+            
             <SearchDateModal
               isOpen={modalIsOpen}
               onRequestClose={closeModal}
