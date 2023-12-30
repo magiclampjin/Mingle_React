@@ -106,7 +106,7 @@
 }
 .timer {
   font-size: 14px;
-  margin-left: 10px;
+  margin-right: 10px;
 }
 @media (max-width: 786px) {
   .stepBtns button {

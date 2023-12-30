@@ -4,12 +4,14 @@
     padding:20px 24px;
 }
 
-.right, .left{
+/* .right, .left{
     padding:0px 20px;
     width: 50%;
-}
+} */
 
 .right{
+    padding:0px 20px;
+    width: 50%;
 }
 
 .centerAlign {

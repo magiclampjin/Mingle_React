@@ -1,0 +1,32 @@
+
+.title{
+    font-weight: bold;
+}
+
+.content{
+    margin: 30px 0;
+    font-size: 14px;
+}
+
+.btns>button{
+    width: 48%;
+}
+
+.btns>button:last-child{
+    margin-left: 10px;
+}
+
+.btns>button{
+    padding:3px 10px;
+}
+
+.btns>button:first-child:hover{
+    background-color: #6c63ff50 !important;
+    color:white;
+    transition-duration: 0.3s;
+}
+
+.btns>button:hover{
+    background-color: #6c63ff99 !important;
+    transition-duration: 0.3s;
+}
