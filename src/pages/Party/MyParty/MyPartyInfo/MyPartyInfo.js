@@ -170,7 +170,21 @@ const MyPartyInfo = () =>{
                                 <div className={style.leftInfo}>
                                     <div className={style.subTitle}>기타 메뉴</div>
                                     {/* <div className={`${style.grayTitle} ${style.withdrawal}`} onClick={handleWithdrawal}>파티 탈퇴하기</div> */}
-                                    <div className={`${style.grayTitle} ${style.withdrawal}`} onClick={handleReport}>파티 신고하기</div>
+                                    {
+                                        partyMember.length>1?
+                                        <>
+                                            <div className={`${style.grayTitle} ${style.withdrawal}`} onClick={handleReport}>파티 신고하기</div>
+                                            <PartyReportModal
+                                                isOpen={reportModalIsOpen}
+                                                onRequestClose={closeReportModal}
+                                                width={500}
+                                                height={690}
+                                                regId={partyInfo.partyRegistrationId}
+                                                partyMember={partyMember}
+                                            />
+                                        </>
+                                        :null
+                                    }
                                     {isManager && partyInfo.memberCnt===0?
                                     <>
                                         <div className={`${style.grayTitle} ${style.withdrawal}`} onClick={handleDeleteParty}>파티 삭제하기</div>
@@ -179,8 +193,7 @@ const MyPartyInfo = () =>{
                                             onRequestClose={closeDeleteModal}
                                             width={300}
                                             height={210}
-                                            regId={partyInfo.partyRegistrationId
-                                            }
+                                            regId={partyInfo.partyRegistrationId}
                                         />
                                     </>:null}
                                 </div>
@@ -189,12 +202,6 @@ const MyPartyInfo = () =>{
                                     onRequestClose={closeModal}
                                     width={500}
                                     height={270}
-                                />
-                                 <PartyReportModal
-                                    isOpen={reportModalIsOpen}
-                                    onRequestClose={closeReportModal}
-                                    width={500}
-                                    height={630}
                                 />
                             </div>
                             <div className={style.right}>

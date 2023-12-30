@@ -3,36 +3,70 @@ import style from "./PartyReportModal.module.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import LoadingSpinnerMini from "../../../../../components/LoadingSpinnerMini/LoadingSpinnerMini";
+import DOMPurify from "dompurify";
+import { LoginContext } from "../../../../../App";
+import { useContext } from "react";
 
 Modal.setAppElement("#root");
 
 const reportReasons =[
-    "파티 계정 신고",
-    "파티 미납 신고",
-    "파티 댓글 신고"
+    "계정",
+    "미납",
+    "댓글"
 ];
 
 const MAX_REASON_LENGTH = 1000;
 
 
-const PartyReportModal = ({isOpen, onRequestClose, width, height}) => {
+const PartyReportModal = ({isOpen, onRequestClose, width, height, regId, partyMember}) => {
     
+    const {loginNick} =useContext(LoginContext);
+
     // 신고 사유
-    const [selectedReason, setSelectedReason] = useState({0:false, 1:false, 2:false});
+    const [selectedReason, setSelectedReason] = useState("");
     // 상세 신고 사유
     const [reportReasonTxt, setReportReasonTxt] = useState("");
+    // 신고 대상자
+    const [reportMember, setReportMember] = useState("");
 
     // 신고 버튼 클릭
     const handleReport = (e) =>{
         if(selectedReason!=="" && reportReasonTxt!==""){
-            alert("제출");
+            // report
+            // id, memberId, content, report_date, is_process
+            // report_party
+            // report_id, party_regi_id, member_id, party_report_category
+            // 자동생성, regId, 카테고리마다 다름, reportReasons[0]
+
+            const now = new Date();
+            now.setHours(now.getHours()+9);
+
+            const reportData = {
+                content:reportReasonTxt,
+                reportDate:now.toISOString(),
+                partyRegistrationId:regId,
+                partyReportCategory: reportReasons[selectedReason],
+                memberId:reportMember
+            }
+            console.log(reportData);
+            axios.post(`/api/party/insertReport`,reportData).then(resp=>{
+                console.log(resp.data);
+            }).catch(()=>{
+                alert("문제가 발생했습니다.");
+                onRequestClose();
+            });
         }
     }
 
     useEffect(()=>{
-        setSelectedReason({0:false, 1:false, 2:false});
+        setSelectedReason("");
         setReportReasonTxt("");
     },[isOpen]);
+
+    const handleMemberSelect = (e) => {
+        console.log(e.target.value);
+        setReportMember(e.target.value);
+    }
 
     return (
         <Modal
@@ -66,26 +100,39 @@ const PartyReportModal = ({isOpen, onRequestClose, width, height}) => {
                         <div className={style.reasonHeader}>신고 사유</div>
                         <div className={style.reportReasons}>
                         {reportReasons.map((reason, index) => (
-                            <label key={`reason-${index}`} className={style.radioContainer}>
+                            <label key={`reason-${index}`} data-id={index} className={style.radioContainer} htmlFor={`reason-${index}`}>
                                 <input
                                     type="radio"
                                     name="reportReason"
-                                    value={reason}
-                                    checked={selectedReason[index]}
-                                    onChange={(e) => { 
-                                        setSelectedReason(prevState => {
-                                            const newSelection = { ...prevState };
-                                            reportReasons.forEach((e, i) => {
-                                                newSelection[i] = false;
-                                            });
-                                            newSelection[index] = true;
-                                            return newSelection;
-                                        });
+                                    value={`파티 ${reason} 신고`}
+                                    id={`reason-${index}`}
+                                    checked={selectedReason===index}
+                                    className={selectedReason===index?`${style.seleted}`:null}
+                                    onChange={() => {
+                                        setSelectedReason(index);
                                     }}
                                 />
-                                {reason}
+                                {`파티 ${reason} 신고`}
                             </label>
                         ))}
+                        </div>
+                    </div>
+                    <div className={style.reportLine}>
+                        <div className={style.reasonHeader}>신고 대상자</div>
+                        <div>
+                            <select className={style.selectBox} value={reportMember} onChange={handleMemberSelect}>
+                            {
+                                partyMember ? partyMember.map((e, i) => {
+                                    if (e !== loginNick) {
+                                        return (
+                                            <option key={`reportMember-${i}`} value={e}>
+                                                {e}
+                                            </option>
+                                        );
+                                    }
+                                }) : null
+                            }
+                            </select>
                         </div>
                     </div>
                    <div className={style.reportLine}>
@@ -96,7 +143,8 @@ const PartyReportModal = ({isOpen, onRequestClose, width, height}) => {
                             value={reportReasonTxt}
                             maxLength={MAX_REASON_LENGTH}
                             onChange={(e) => {
-                                setReportReasonTxt(e.target.value);
+                                const cleanTitle = DOMPurify.sanitize(e.target.value);
+                                setReportReasonTxt(cleanTitle);
                             }}
                         />
                     </div>
