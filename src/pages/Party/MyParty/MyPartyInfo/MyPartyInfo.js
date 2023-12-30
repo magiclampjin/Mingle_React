@@ -6,6 +6,7 @@ import style from "./MyPartyInfo.module.css";
 import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
 import PartyWithdrawalModal from "./PartyWithdrawalModal/PartyWithdrawalModal";
 import { LoginContext } from "../../../../App";
+import PartyReportModal from "./PartyReportModal/PartyReportModal";
 
 const MyPartyInfo = () =>{
     const {selectParty} = useContext(myPartyContext);
@@ -13,6 +14,9 @@ const MyPartyInfo = () =>{
     const navi = useNavigate();
     const [isLoading, setLoading] = useState(false);
     const {loginStatus ,loginId } = useContext(LoginContext);
+
+    // 파티장 여부
+    const [isManager, setManager] = useState(false);
 
     // 로그인 여부
     useEffect(()=>{
@@ -65,6 +69,22 @@ const MyPartyInfo = () =>{
         setModalIsOpen(false);
     }
 
+    // 파티 신고하기
+    const handleReport = () => {
+        // 파티장일 경우
+        // 1. 파티원 신고 (미납 문제, 파티 댓글)
+        // 파티원일 경우
+        // 1. 파티장 신고 (서비스 계정관련 문제, 파티 댓글)
+
+        setReportModalIsOpen(true);
+    }
+
+    // 파티 탈퇴 모달창 열림 / 닫힘 여부 state
+    const [reportModalIsOpen, setReportModalIsOpen] = useState(false);
+    // 파티 탈퇴 모달창 닫기
+    const closeReportModal = () => {
+        setReportModalIsOpen(false);
+    }
 
     useEffect(()=>{
         setLoading(true);
@@ -75,6 +95,8 @@ const MyPartyInfo = () =>{
         }
         axios.get(`/api/party/getPartyInfo/${selectParty}`).then(resp=>{
             setPartyInfo(resp.data);
+            setManager(resp.data.partyManager);
+            console.log(resp.data);
             setLoading(false);
         }).catch(()=>{
             alert("정보를 불러오지 못 했습니다.\n같은 문제가 반복되면 관리자에게 문의하세요.");
@@ -108,8 +130,17 @@ const MyPartyInfo = () =>{
                                     <div className={style.subContent}>{partyInfo.startDate.slice(0,10)} <span className={style.br}>~</span> {getEndDate(partyInfo.startDate, partyInfo.monthCount)}</div>
                                     <div className={style.grayTitle}>정산일</div>
                                     <div className={style.subContent}>매달 {partyInfo.calculationDate}일</div>
-                                    <div className={style.grayTitle}>정산 금액</div>
-                                    <div className={style.subContent}>매달 {formatNumber(Math.ceil((partyInfo.price)/(partyInfo.maxPeopleCount))+1000)}원</div>
+                                    {isManager?
+                                    <>
+                                        <div className={style.grayTitle}>다음 정산 금액</div>
+                                        <div className={style.subContent}>매달 {formatNumber((Math.ceil((partyInfo.price)/(partyInfo.maxPeopleCount))-partyInfo.commission)*partyInfo.memberCnt)}원</div>
+                                    </>
+                                    :
+                                    <>
+                                        <div className={style.grayTitle}>다음 정산 금액</div>
+                                        <div className={style.subContent}>매달 {formatNumber(Math.ceil((partyInfo.price)/(partyInfo.maxPeopleCount))+1000)}원</div>
+                                    </>
+                                    }  
                                 </div>
                                 <div className={style.leftInfo}>
                                     <div className={style.subTitle}>계정 정보</div>
@@ -119,8 +150,9 @@ const MyPartyInfo = () =>{
                                     <div className={style.subContent}>{isStart(partyInfo.startDate)===1?partyInfo.loginPw:"파티가 시작되면 공개됩니다."}</div>
                                 </div>
                                 <div className={style.leftInfo}>
-                                    <div className={style.subTitle}>파티 탈퇴</div>
-                                    <div className={`${style.grayTitle} ${style.withdrawal}`} onClick={handleWithdrawal}>탈퇴하기</div>
+                                    <div className={style.subTitle}>기타 메뉴</div>
+                                    <div className={`${style.grayTitle} ${style.withdrawal}`} onClick={handleWithdrawal}>파티 탈퇴하기</div>
+                                    <div className={`${style.grayTitle} ${style.withdrawal}`} onClick={handleReport}>파티 신고하기</div>
                                 </div>
                                 <PartyWithdrawalModal
                                     isOpen={modalIsOpen}
@@ -128,16 +160,24 @@ const MyPartyInfo = () =>{
                                     width={500}
                                     height={270}
                                 />
+                                 <PartyReportModal
+                                    isOpen={reportModalIsOpen}
+                                    onRequestClose={closeReportModal}
+                                    width={500}
+                                    height={270}
+                                />
                             </div>
                             <div className={style.right}>
                                 <div className={style.partyInfo}>
                                     <div className={style.infoContent}>
-                                        <div className={style.infoTitle}></div>
-                                        <div className={style.infoSubContent}></div>
+                                        <div className={style.infoTitle}>파티멤버</div>
+                                        <div className={style.infoSubContent}>s</div>
                                     </div>
+                                </div>
+                                <div className={style.partyInfo}>
                                     <div className={style.infoContent}>
-                                        <div className={style.infoTitle}></div>
-                                        <div className={style.infoSubContent}></div>
+                                        <div className={style.infoTitle}>파티댓글UI영역</div>
+                                        <div className={style.infoSubContent}>파티댓글UI영역</div>
                                     </div>
                                 </div>
                             </div>
