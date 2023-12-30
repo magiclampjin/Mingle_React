@@ -128,7 +128,7 @@
 .infoMemberContent{
     display:flex;
     flex-flow: row wrap;
-    padding: 13.5px 0;
+    padding-top: 20px;
 }
 
 .memberContent{
