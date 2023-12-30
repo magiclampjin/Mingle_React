@@ -14,17 +14,22 @@ const MyPartyInfo = () =>{
     const navi = useNavigate();
     const [isLoading, setLoading] = useState(false);
     const {loginStatus ,loginId } = useContext(LoginContext);
-
     // 파티장 여부
     const [isManager, setManager] = useState(false);
-
+    // 파티 구성원 정보
+    const [partyMember, setPartyMember] = useState([]);
+    
     // 로그인 여부
     useEffect(()=>{
-        if(loginStatus==="loading")
+        if(loginStatus!=="confirm")
             setLoading(true);
+        else{
+            if(loginId===""){
+                navi("/denied");
+            }
+            setLoading(false);
+        }
     },[loginId, loginStatus]);
-    
-
 
 
     // 시작일 경과 여부
@@ -96,6 +101,7 @@ const MyPartyInfo = () =>{
         axios.get(`/api/party/getPartyInfo/${selectParty}`).then(resp=>{
             setPartyInfo(resp.data);
             setManager(resp.data.partyManager);
+            setPartyMember(resp.data.memberNicknames.split(","));
             console.log(resp.data);
             setLoading(false);
         }).catch(()=>{
@@ -132,12 +138,12 @@ const MyPartyInfo = () =>{
                                     <div className={style.subContent}>매달 {partyInfo.calculationDate}일</div>
                                     {isManager?
                                     <>
-                                        <div className={style.grayTitle}>다음 정산 금액</div>
+                                        <div className={style.grayTitle}>적립<span className={style.br}></span> 예정 금액</div>
                                         <div className={style.subContent}>매달 {formatNumber((Math.ceil((partyInfo.price)/(partyInfo.maxPeopleCount))-partyInfo.commission)*partyInfo.memberCnt)}원</div>
                                     </>
                                     :
                                     <>
-                                        <div className={style.grayTitle}>다음 정산 금액</div>
+                                        <div className={style.grayTitle}>정산<span className={style.br}></span> 예정 금액</div>
                                         <div className={style.subContent}>매달 {formatNumber(Math.ceil((partyInfo.price)/(partyInfo.maxPeopleCount))+1000)}원</div>
                                     </>
                                     }  
@@ -168,10 +174,29 @@ const MyPartyInfo = () =>{
                                 />
                             </div>
                             <div className={style.right}>
-                                <div className={style.partyInfo}>
+                                <div className={style.partyMemberInfo}>
                                     <div className={style.infoContent}>
-                                        <div className={style.infoTitle}>파티멤버</div>
-                                        <div className={style.infoSubContent}>s</div>
+                                        <div className={style.infoTitle}>파티 구성원</div>
+                                        <div className={style.infoMemberContent}>
+                                            {
+                                                partyMember.length>0?
+                                                partyMember.map((e,i)=>
+                                                (
+                                                    <div className={style.memberContent} key={`member-${1}`}>
+                                                        <div className={style.memberRole}>
+                                                            {e===partyInfo.managerNickname?<b>파티장</b>:<>파티원</>}
+                                                        </div>
+                                                        <div className={style.memberProfile}>
+                                                            <img className={style.memberProfileImg} src="/assets/basicProfile.png" alt="프로필 이미지"></img>
+                                                        </div>
+                                                        <div className={style.memberNickName}>
+                                                            {e}
+                                                        </div>
+                                                    </div>
+                                                )):null
+                                            }
+                                           
+                                        </div>
                                     </div>
                                 </div>
                                 <div className={style.partyInfo}>
