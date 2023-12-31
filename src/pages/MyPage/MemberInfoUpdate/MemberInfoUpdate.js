@@ -207,7 +207,7 @@ const MemberInfoUpdate = () =>{
                     setTimerSeconds(180);
                     // 타이머 시작
                     setTimerStart(true);
-                    alert("인증번호가 발송되었습니다.");
+                   alert("인증번호가 발송되었습니다. 메일을 확인해주세요. \n 메일이 도착하지 않을 경우 스팸 메일함을 확인해주세요.");
                 }
             })
           
@@ -229,14 +229,14 @@ const MemberInfoUpdate = () =>{
             console.log(resp.data);
             if(resp.data){
                 setIsEmailModalOpen(false);
-                alert("변경되었습니다.");
+                alert("이메일이 변경되었습니다.");
                 setCodeCom(!codeCom);
                  // 타이머 시간 세팅
                  setTimerSeconds(0);
                  // 타이머 시작
                  setTimerStart(false);
             }else{
-                alert("이메일 인증에 실패했습니다.");
+                alert("본인 인증 코드가 일치하지 않습니다.");
                 setInputEmail("");
                 setCode("");
             }
