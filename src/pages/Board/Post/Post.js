@@ -143,7 +143,6 @@ const Post = () => {
         Promise.all([fetchPostData, fetchVoteCount]).then(responses => {
             const [postDataResponse, voteCountResponse] = responses;
 
-            console.log(postDataResponse.data);
 
             setPost(postDataResponse.data);
             setVote(voteCountResponse.data);

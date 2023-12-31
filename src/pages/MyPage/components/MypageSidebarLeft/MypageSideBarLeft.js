@@ -1,6 +1,6 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import style from '../../../../pages/MyPage/components/MypageSidebarLeft/MypageSideBarLeft.module.css';
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from "react-router-dom";
 import { mypageMenuContext } from './../../Mypage';
 
 
@@ -23,7 +23,13 @@ const MyPageSideBarLeft = () =>{
     return(
         <div className={style.sidebarBox}>
             <div className={style.sidebar}>
-                
+
+                <Link to="">
+                    <div className={style.sidebar__inner}
+                     onClick={handleClickNav} 
+                     style={menu === "마이페이지" ? backStyle : {}}
+                     >마이페이지</div>
+                </Link>
                 <Link to="MemberInfoUpdate">
                     <div className={style.sidebar__inner}
                      onClick={handleClickNav} 
@@ -42,13 +48,6 @@ const MyPageSideBarLeft = () =>{
                     style={menu === "정산 내역 확인" ? backStyle : {}}
                     >정산 내역 확인</div>
                 </Link>
-                 <Link to="Calculation"> 
-                    <div className={style.sidebar__inner} 
-                    onClick={handleClickNav} 
-                    style={menu === "정산일 관리" ? backStyle : {}}
-                    > 정산일 관리 </div>
-                </Link>
-                
             </div>
             
         </div>

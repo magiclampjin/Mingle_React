@@ -51,7 +51,6 @@ const PartyAllList = ({ selectServiceCategory, setSelectServiceCategory }) => {
         axios
           .get(`/api/party/getService/${selectServiceCategory}`)
           .then((resp) => {
-            console.log(resp.data.list);
             setService(Array.isArray(resp.data.list) ? resp.data.list : []);
             let joinArr = Array.isArray(resp.data.joinList)
               ? resp.data.joinList
@@ -142,7 +141,7 @@ const PartyAllList = ({ selectServiceCategory, setSelectServiceCategory }) => {
                   } else joinPossible = true;
                   return (
                     <>
-                      <div key={i} data-id={e.id} className={joinPossible?`${style.partyContent}`:`${style.partyContent} ${style.cantSelectContent}`}
+                      <div key={`joinList-${i}`} data-id={e.id} className={joinPossible?`${style.partyContent}`:`${style.partyContent} ${style.cantSelectContent}`}
                           onClick={joinPossible?handleSelectService: () => {alert("이미 가입한 서비스의 파티입니다.\n추가 가입은 불가능합니다.");}}>
                         <div className={`${style.partyContent__img} ${style.centerAlign}`}>
                           <img src={`/assets/serviceLogo/${e.englishName}.png`} alt={`${e.name} 로고 이미지`}></img>

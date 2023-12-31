@@ -29,19 +29,17 @@ const Mypage = () => {
   const { loginId, setLoginId } = useContext(LoginContext);
 
   // sidebar로 넘겨주는 State
-  const [menu, setMenu] = useState("");
+  const [menu, setMenu] = useState("마이페이지");
 
   // 드롭다운 메뉴 State (닫힘 :false, 열림: true)
   const [dropDown, setDropDown] = useState(true);
 
   const { loginStatus, setLoginStatus } = useContext(LoginContext);
 
-  const navigate = useNavigate();
-
   // 선택된 메뉴 초기화
   const { setSelectedMenu } = useContext(MenuContext);
   useEffect(() => {
-    setSelectedMenu("");
+    setSelectedMenu("마이페이지");
   }, []);
 
   // on,off

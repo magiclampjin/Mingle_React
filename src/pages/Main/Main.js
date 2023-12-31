@@ -41,9 +41,11 @@ const Main = () => {
   // 가입된 서비스 목록
   const [joinService, setJoinService] = useState([]);
   let jsId = 0;
+  let jsIdClone = 0;
   let joinServiceId = 0;
   // 가입 가능 여부 (이미 가입했을 경우 fasle)
   let joinPossible = true;
+  let joinPossibleClone = true;
   let joinPartyPossible = true;
   // 서비스 모달창 열림 / 닫힘
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -99,6 +101,8 @@ const Main = () => {
         if (joinArr.length > 0) {
           joinArr.sort();
           setJoinService(joinArr);
+        }else{ // 로그인 아이디가 바뀌면서 가입된 서비스의 목록이 없어지면 초기화해주는 작업 필요
+          setJoinService([]);
         }
       })
       .catch(() => {
@@ -173,7 +177,7 @@ const Main = () => {
       contentElement.contains(clickedElement)
     ) {
       // 가입 할 수 없는 서비스의 파티에는 partyNotJoin이라는 클래스 명이 있음
-      if (clickedElement.className.includes("partyNotJoin") || clickedElement.className.includes("partyNotJoin")) {
+      if (clickedElement.className.includes("partyNotJoin") || contentElement.className.includes("partyNotJoin")) {
         alert("이미 가입한 서비스의 파티입니다.\n추가 가입은 불가능합니다.");
       } else {
         if(loginId===""){
@@ -270,7 +274,12 @@ const Main = () => {
 
   // 로그인하기로 이동
   const handleGoLogin = () => {
-    navi("/member/login");
+    if(loginId===""){
+      navi("/member/login");
+    }else{
+      navi("/party/partycreate");
+    }
+    
   };
 
   if (newVideoInfo === null || serviceList.length === 0 || partyList === null) {
@@ -379,7 +388,6 @@ const Main = () => {
                 className={style.slideDiv}
                 onMouseEnter={onStop}
                 onMouseLeave={onRun}
-                // onClick={handleCreate}
               >
                 <div className={style.slideImg}>
                   <img
@@ -405,10 +413,10 @@ const Main = () => {
         </div>
         <div className={`${style.clone} ${animate ? "" : style.stop}`}>
           {serviceList.map((e, i) => {
-            if (e.id === joinService[jsId]) {
-              joinPossible = false;
-              jsId++;
-            } else joinPossible = true;
+            if (e.id === joinService[jsIdClone]) {
+              joinPossibleClone = false;
+              jsIdClone++;
+            } else joinPossibleClone = true;
             return (
               <div
                 key={i}
@@ -423,7 +431,7 @@ const Main = () => {
                     alt={`${e.name} 로고 이미지`}
                   />
                 </div>
-                {joinPossible && loginId !== "" ? (
+                {joinPossibleClone && loginId !== "" ? (
                   <div
                     className={style.partyCreate}
                     data-id={e.id}

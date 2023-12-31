@@ -22,6 +22,8 @@ const Header = () => {
 
   const {loginStatus,setLoginStatus} = useContext(LoginContext);
 
+
+
   const navi = useNavigate();
   const cookies = new Cookies();
 
@@ -126,12 +128,16 @@ const Header = () => {
   };
 
   const menuItems = [
-    { label: "나의 파티", path: "/party/myParty" },
     { label: "파티 만들기", path: "/party/partycreate" },
     { label: "파티 찾기", path: "/party/partyJoin" },
     { label: "게시판", path: "/board" },
     { label: "자주 묻는 질문", handle: handleFAQClick },
   ];
+
+  // 로그인 시에만 나의 파티 출력
+  if (loginId) {
+    menuItems.unshift({ label: "나의 파티", path: "/party/myParty" });
+  }
 
   return (
     <div className={style.header}>
