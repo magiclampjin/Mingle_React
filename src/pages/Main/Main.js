@@ -274,7 +274,7 @@ const Main = () => {
 
   // 로그인하기로 이동
   const handleGoLogin = () => {
-    if(loginId!==""){
+    if(loginId===""){
       navi("/member/login");
     }else{
       navi("/party/partycreate");
