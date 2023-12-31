@@ -15,11 +15,24 @@ import ReportPostModal from "../components/ReportPostModal/ReportPostModal";
 const Post = () => {
 
     const { postId } = useParams();
-    const { loginId, loginRole } = useContext(LoginContext);
+    const { loginId, loginRole, loginStatus } = useContext(LoginContext);
     const [post, setPost] = useState(null);
     // 좋아요와 싫어요 상태
     const [vote, setVote] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
+
+    // 로그인 여부
+    useEffect(() => {
+        if (loginStatus !== "confirm")
+            setIsLoading(true);
+        else {
+            if (loginId === "") {
+                navigate("/denied");
+            }
+            setIsLoading(false);
+        }
+    }, [loginId, loginStatus]);
 
 
     const [reportModalOpen, setReportModalOpen] = useState(false); // 신고 모달 상태 추가
@@ -34,12 +47,12 @@ const Post = () => {
         setReportModalOpen(false);
     };
 
-    const navigate = useNavigate();
+
 
     // 좋아요 클릭 핸들러
     const handleLike = () => {
         if (loginId === null || loginId === "") {
-            alert("로그인을 하지 않으면 추천을 할 수 없습니다!");
+            alert("로그인을 하지 않으면 투표를 할 수 없습니다!");
             return;
         }
         if (post.member.id !== loginId && loginId) {
@@ -179,7 +192,7 @@ const Post = () => {
                 isOpen={reportModalOpen}
                 onRequestClose={closeReportModal}
                 contentLabel="게시글 신고하기"
-                postId = {postId}
+                postId={postId}
             />
             {post && (
                 <div className={styles.post__container}>

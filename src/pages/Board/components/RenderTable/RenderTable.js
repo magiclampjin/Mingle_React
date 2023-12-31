@@ -2,9 +2,10 @@ import styles from "./RenderTable.module.css"
 import { timeFormatter } from "../../../../components/TimeFormatter/TimeFormatter";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faThumbsUp, faClock } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faThumbsUp, faClock, faThumbtack } from "@fortawesome/free-solid-svg-icons";
 
 const RenderTable = ({ posts, title }) => {
+
 
     const categories = [
         { name: "인기글", path: "/board/popularposts" },
@@ -13,10 +14,18 @@ const RenderTable = ({ posts, title }) => {
         { name: "리뷰", path: "/board/review" }
     ];
 
+
+
+
     const safePosts = Array.isArray(posts) ? posts : [];
 
     // title에 해당하는 카테고리의 경로를 찾습니다.
     const categoryPath = categories.find(category => category.name === title)?.path;
+
+    // 게시글 스타일 결정 함수
+    const getPostStyle = (post) => {
+        return post.isFix ? `${styles.post__item} ${styles[`post__item-fixed`]}` : styles.post__item;
+    };
 
     return (
         <div className={styles.render}>
@@ -24,7 +33,11 @@ const RenderTable = ({ posts, title }) => {
             <div className={styles.board__container}>
                 {safePosts.map((post, index) => (
                     <Link to={`/board/post/${post.id}`} key={index}>
-                        <div className={styles.post__item}>
+
+                        <div className={getPostStyle(post)}>
+                            {post.isFix && (
+                                <FontAwesomeIcon icon={faThumbtack} className={styles.fixedIcon} />
+                            )}
                             <div className={styles[`post__item-rownum`]}>{post.rownum}</div>
                             <div className={styles[`post__item-title`]}>{post.title}</div>
                             <div className={styles[`post__item-nickname`]}>{post.memberNickname}</div>
