@@ -1,10 +1,10 @@
 import styles from "./RenderPost.module.css"
 import { timeFormatter } from "../../../../components/TimeFormatter/TimeFormatter";
-import { Link,useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faThumbsUp,faClock } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faThumbsUp, faClock, faThumbtack } from "@fortawesome/free-solid-svg-icons";
 import Pagination from "react-js-pagination";
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 
 const RenderPost = ({ posts, title }) => {
 
@@ -29,13 +29,21 @@ const RenderPost = ({ posts, title }) => {
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
     const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
 
+    // 게시글 스타일 결정 함수
+    const getPostStyle = (post) => {
+        return post.isFix ? `${styles.post__item} ${styles[`post__item-fixed`]}` : styles.post__item;
+    };
+
     return (
         <div className={styles.render}>
             <p className={styles.board__title}>{title}</p>
             <div className={styles.board__container}>
                 {currentPosts.map((post, index) => (
                     <Link to={`/board/post/${post.id}`} key={post.id}>
-                        <div className={styles.post__item}>
+                        <div className={getPostStyle(post)}>
+                            {post.isFix && (
+                                <FontAwesomeIcon icon={faThumbtack} className={styles.fixedIcon} />
+                            )}
                             <div className={styles[`post__item-rownum`]}>{post.rownum}</div>
                             <div className={styles[`post__item-title`]}>{post.title}</div>
                             <div className={styles[`post__item-nickname`]}>{post.memberNickname}</div>
