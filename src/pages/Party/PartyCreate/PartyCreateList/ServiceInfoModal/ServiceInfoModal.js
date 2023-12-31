@@ -140,7 +140,7 @@ const ServiceInfoModal = ({
                 </li>
               </ul>
               <FontAwesomeIcon icon={faTriangleExclamation} size="xs" />
-              &nbsp;&nbsp;원단위 올림으로 10원 이내 차이가 있을 수 있어요.
+              &nbsp;&nbsp;원단위 올림으로 1원 이내 차이가 있을 수 있어요.
             </div>
           </div>
           <div className={style.chkBox}>

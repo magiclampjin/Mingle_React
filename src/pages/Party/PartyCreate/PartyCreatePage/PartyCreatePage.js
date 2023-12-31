@@ -561,7 +561,7 @@ const PartyCreatePage = () => {
               <FontAwesomeIcon icon={faTriangleExclamation} size="xs" />
               <div className={style.inputNoticeTxt}>
                 입력하신 계정은 파티를 만들고 난 뒤 정보를 변경할 수 없으니
-                주의해주세요.
+                주의해주세요. 비밀번호는 파티원들과 공유 가능한 비밀번호로 변경 후 등록해주세요.
               </div>
             </div>
 
@@ -708,8 +708,7 @@ const PartyCreatePage = () => {
             <div className={`${style.inputNotice}`}>
               <FontAwesomeIcon icon={faTriangleExclamation} size="xs" />
               <div className={style.inputNoticeTxt}>
-                파티를 만들고 난 뒤에는 파티 기간 수정이 불가능하며, 파티 종료일
-                이전에 파티를 해산할 경우 위약금이 부과돼요.
+                파티를 만들고 난 뒤에는 파티 기간 수정이 불가능해요.
               </div>
             </div>
             <div className={style.bnts}>
