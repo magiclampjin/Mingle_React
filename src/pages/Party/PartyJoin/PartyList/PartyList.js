@@ -43,6 +43,7 @@ const PartyList = () => {
   maginot.setMonth(currentDate.getMonth() + 1);
   // 검색 기간
   const [period, setPeriod] = useState({ start: currentDate, end: maginot });
+  const [isSearch, setSearch] = useState(false);
 
 
   // 서비스 목록 불러오기
@@ -55,6 +56,7 @@ const PartyList = () => {
       return;
     }
 
+    if(!isSearch){
     axios
       .get(`/api/party/getServiceById/${selectService}`)
       .then((resp) => {
@@ -80,7 +82,8 @@ const PartyList = () => {
       .catch(() => {
         setLoading(false);
       });
-  }, [selectService, loginStatus]);
+    }else setLoading(false);
+  }, [selectService, loginStatus, isSearch]);
 
   // 날짜로 검색
   useEffect(() => {
@@ -171,39 +174,41 @@ const PartyList = () => {
     }
   };
 
-  // 파티 매칭 페이지로 이동
-  const goMatchingParty = (e) => {
-    if (loginId) {
-      const contentElement = e.currentTarget;
-      const clickedElement = e.target;
+  // // 파티 매칭 페이지로 이동
+  // const goMatchingParty = (e) => {
+  //   if (loginId) {
+  //     const contentElement = e.currentTarget;
+  //     const clickedElement = e.target;
 
-      if (
-        clickedElement === contentElement ||
-        contentElement.contains(clickedElement)
-      ) {
-        alert("열심히 기능을 만들고 있어요!\n고객님들의 편의를 위해 노력하겠습니다.^_^");
-      }
-    } else {
-      // 로그인하지않은 유저일 경우 로그인창으로 이동 혹은 현재 페이지 유지
-      if (
-        window.confirm(
-          "로그인 후 이용 가능한 서비스입니다.\n로그인 화면으로 이동하시겠습니까?"
-        )
-      ) {
-        navi("/member/login");
-      }
-    }
-  };
+  //     if (
+  //       clickedElement === contentElement ||
+  //       contentElement.contains(clickedElement)
+  //     ) {
+  //       alert("열심히 기능을 만들고 있어요!\n고객님들의 편의를 위해 노력하겠습니다.^_^");
+  //     }
+  //   } else {
+  //     // 로그인하지않은 유저일 경우 로그인창으로 이동 혹은 현재 페이지 유지
+  //     if (
+  //       window.confirm(
+  //         "로그인 후 이용 가능한 서비스입니다.\n로그인 화면으로 이동하시겠습니까?"
+  //       )
+  //     ) {
+  //       navi("/member/login");
+  //     }
+  //   }
+  // };
 
   // 검색할 날짜 출력
   const getSearchDate = () => {
-    if (period.start === period.end)
-      return <>{period.start.toISOString().slice(5, 10)}</>;
+    const sd = period.start.toISOString().slice(5, 10);
+    const ed = period.end.toISOString().slice(5, 10);
+    if (sd === ed)
+      return <>{sd}</>;
     else {
       return (
         <>
-          {period.start.toISOString().slice(5, 10)} ~{" "}
-          {period.end.toISOString().slice(5, 10)}
+          {sd} ~{" "}
+          {ed}
         </>
       );
     }
@@ -218,6 +223,7 @@ const PartyList = () => {
       clickedElement === contentElement ||
       contentElement.contains(clickedElement)
     ) {
+      setSearch(true);
       setLoading(true);
       let now = new Date();
       now.setHours(0, 0, 0, 0);
@@ -247,6 +253,9 @@ const PartyList = () => {
 
   // 검색 기간 지정 취소
   const handelSearchCancel = (e) =>{
+    e.preventDefault();
+    e.stopPropagation();
+    setSearch(false);
     
   }
 
@@ -297,7 +306,7 @@ const PartyList = () => {
                 <FontAwesomeIcon icon={faCalendar} />
               </div>
               파티 시작일
-              <div className={`${style.periodDate}`}>{getSearchDate()}</div>
+              <div className={`${style.periodDate}`}>{isSearch?getSearchDate():"전체"}</div>
               <div className={`${style.xmark}`}><FontAwesomeIcon icon={faXmark} onClick={handelSearchCancel}/></div>
             </div>
             <div className={style.periodBtn} onClick={handleToday}>
@@ -346,18 +355,21 @@ const PartyList = () => {
                     </div>
                   </div>
                 ))
-              ) : (
-                // 가입 가능한 파티가 없는 경우
-                <div className={style.empty}>
-                  <div className={`${style.emptyIcon} ${style.centerAlign}`}>
-                    <FontAwesomeIcon icon={faFaceSadTear} />
-                  </div>
-                  <div className={`${style.emptyTxt} ${style.centerAlign}`}>
-                    비어있는 파티가 없어요.
-                  </div>
-                </div>
-              )
+              ) : null
             }
+            {
+              partyList&&partyList.length===0?
+              // 가입 가능한 파티가 없는 경우
+              <div className={style.empty}>
+                <div className={`${style.emptyIcon} ${style.centerAlign}`}>
+                  <FontAwesomeIcon icon={faFaceSadTear} />
+                </div>
+                <div className={`${style.emptyTxt} ${style.centerAlign}`}>
+                  비어있는 파티가 없어요.
+                </div>
+              </div>:null
+            }
+            
             <SearchDateModal
               isOpen={modalIsOpen}
               onRequestClose={closeModal}
@@ -366,6 +378,7 @@ const PartyList = () => {
               height={670}
               period={period}
               setPeriod={setPeriod}
+              setSearch={setSearch}
             ></SearchDateModal>
 
             <PartyJoinInfoModal
@@ -378,7 +391,7 @@ const PartyList = () => {
 
             <div className={`${style.others}`}>
               <div className={`${style.subTitle}`}>원하는 파티가 없다면</div>
-              <div
+              {/* <div
                 className={`${style.party} ${style.dflex}`}
                 onClick={goMatchingParty}
               >
@@ -393,7 +406,7 @@ const PartyList = () => {
                     <FontAwesomeIcon icon={faMagnifyingGlass} />
                   </div>
                 </div>
-              </div>
+              </div> */}
               <div
                 className={`${style.party} ${style.dflex}`}
                 onClick={goCreateParty}

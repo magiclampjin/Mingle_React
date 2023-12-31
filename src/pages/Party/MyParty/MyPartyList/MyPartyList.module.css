@@ -86,10 +86,40 @@
     border:2px solid #6A57D750;
 }
 
+.subTitle{
+    font-weight: 500;
+    font-size: 18px;
+    margin-left: 30px;
+}
+
+.empty{
+    margin: 30px 0 50px 0;
+    margin-left: 30px;
+    width: 93%;
+    padding: 100px 0;
+    background-color: #DFE2E6;
+    border-radius: 10px;
+}
+
+.emptyIcon *{
+    font-size: 40px;
+    color: #676D7C;
+}
+
+.emptyTxt {
+    font-size: 20px;
+    font-weight: 500;
+    color: #676D7C;
+    margin-top: 20px;
+}
+
 @media (max-width:1290px){
     .partyList>.myParty{
         width: 44%;
         margin-bottom: 30px;
+    }
+    .empty{
+      width: 94%;
     }
 }
 
@@ -98,11 +128,53 @@
         width: 41%;
         margin-bottom: 30px;
     }
+    .empty{
+        width: 88%;
+    }
+}
+
+@media (max-width:1070px){
+    .empty{
+        width: 88.5%;
+    }
+}
+
+@media (max-width:930px){
+    .empty{
+        width: 89%;
+    }
+}
+
+@media (max-width:850px){
+    .empty{
+        width: 90%;
+    }
 }
 
 @media (max-width:786px){
     .partyList>.myParty{
         margin-bottom: 30px;
         width: 100%
+    }
+    .empty{
+        width: 92%;
+    }
+}
+
+@media (max-width:720px){
+    .empty{
+        width: 90%;
+    }
+}
+
+@media (max-width:640px){
+    .empty{
+        width:89%;
+    }
+}
+
+@media (max-width:500px){
+    .empty{
+        width:87%;
     }
 }

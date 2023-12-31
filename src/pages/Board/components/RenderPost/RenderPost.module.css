@@ -126,3 +126,12 @@
     color: #888;
     margin: 20px 0;
 }
+
+.post__item-fixed {
+    background-color: #fff3cd; /* 노란색 배경 */
+}
+
+.fixedIcon {
+    margin-right: 10px; /* 아이콘과 제목 사이 간격 */
+    color: #ffc107; /* 아이콘 색상 */
+}

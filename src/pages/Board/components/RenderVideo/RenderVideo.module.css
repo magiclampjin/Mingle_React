@@ -23,9 +23,10 @@
 .ott__container {
     display: flex;
     flex-wrap: wrap; /* 요소들이 컨테이너 너비를 초과하면 다음 줄로 이동 */
-    justify-content: space-around; /* 카드 사이에 공간을 균등하게 배분 */
+    justify-content: flex-start; /* 요소들을 컨테이너의 시작 부분부터 정렬 */
     gap: 20px; /* 카드 사이의 간격 설정 */
 }
+
 
 .ott__card {
     border: 1px solid #ddd;
@@ -42,6 +43,7 @@
     /* 카드 내부 패딩 */
     background-color: #f9f9f9;
     /* 카드 배경색 */
+    flex: 0 0 calc(25% - 20px); /* 너비를 25%로 설정하고, gap 크기만큼 감소 */
 }
 
 .ott__title {
@@ -96,4 +98,23 @@
     color: white;
     border-color: #7b61ff;
     font-weight: bold;
+}
+
+/* 반응형 디자인을 위한 미디어 쿼리 조정 */
+@media (max-width: 1024px) {
+    .ott__card {
+        flex: 0 0 calc(33.333% - 20px); /* 화면이 작을 경우 카드 너비를 33.333%로 조정 */
+    }
+}
+
+@media (max-width: 768px) {
+    .ott__card {
+        flex: 0 0 calc(50% - 20px); /* 화면이 더 작을 경우 카드 너비를 50%로 조정 */
+    }
+}
+
+@media (max-width: 576px) {
+    .ott__card {
+        flex: 0 0 100%; /* 모바일 화면에서는 카드가 전체 너비를 차지하도록 조정 */
+    }
 }
