@@ -379,7 +379,6 @@ const PartyCreatePage = () => {
           // 결제 수단이 존재하는 경우
           if (resp.data !== "") {
             let date = new Date(value);
-            date.setHours(date.getHours() + 9);
             let partyData = {
               peopleCount: peopleCnt,
               serviceId: service.id,
