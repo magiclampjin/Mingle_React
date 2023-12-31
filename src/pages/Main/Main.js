@@ -274,7 +274,12 @@ const Main = () => {
 
   // 로그인하기로 이동
   const handleGoLogin = () => {
-    navi("/member/login");
+    if(loginId!==""){
+      navi("/member/login");
+    }else{
+      navi("/party/partycreate");
+    }
+    
   };
 
   if (newVideoInfo === null || serviceList.length === 0 || partyList === null) {
