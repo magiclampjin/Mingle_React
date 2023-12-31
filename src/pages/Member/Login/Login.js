@@ -119,6 +119,11 @@ const Login = () => {
   //   // window.location.href = "/oauth2/authorization/kakao";
   // };
 
+  const handleGoogleLogin=()=>{
+    // window.location.href
+    window.location.href="/oauth2/authorization/google";
+  }
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -174,6 +179,11 @@ const Login = () => {
           onClick={handleLogin}
           activation={true}
         ></PurpleRectangleBtn>
+        <img src="/assets/loginBtns/google.png" alt="구글 로그인 버튼" className={style.socialLoginbtn} onClick={handleGoogleLogin}/>
+      </div>
+      <div>
+        
+        {/* <a href="/oauth2/authorization/google" class="btn btn-success active" role="button">Google Login</a> */}
       </div>
       {/* <div>
        

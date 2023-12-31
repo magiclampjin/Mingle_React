@@ -59,6 +59,7 @@ const IdCertification = () => {
           setTimerStart(false);
           setFindId(false);
           alert("인증 시간이 초과되었습니다.");
+          axios.get("/api/member/removeVerificationCode");
         }
       }
     };
@@ -137,7 +138,8 @@ const IdCertification = () => {
           );
         } else {
           setLoading(false);
-          alert("해당 정보로 회원가입된 기록이 없습니다.");
+          alert("해당 정보로 회원가입된 기록이 없거나 메일 발송을 실패하였습니다.");
+          axios.get("/api/member/removeVerificationCode")
         }
       });
     } else {

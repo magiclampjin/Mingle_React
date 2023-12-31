@@ -41,9 +41,11 @@ const Main = () => {
   // 가입된 서비스 목록
   const [joinService, setJoinService] = useState([]);
   let jsId = 0;
+  let jsIdClone = 0;
   let joinServiceId = 0;
   // 가입 가능 여부 (이미 가입했을 경우 fasle)
   let joinPossible = true;
+  let joinPossibleClone = true;
   let joinPartyPossible = true;
   // 서비스 모달창 열림 / 닫힘
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -99,6 +101,8 @@ const Main = () => {
         if (joinArr.length > 0) {
           joinArr.sort();
           setJoinService(joinArr);
+        }else{ // 로그인 아이디가 바뀌면서 가입된 서비스의 목록이 없어지면 초기화해주는 작업 필요
+          setJoinService([]);
         }
       })
       .catch(() => {
@@ -379,7 +383,6 @@ const Main = () => {
                 className={style.slideDiv}
                 onMouseEnter={onStop}
                 onMouseLeave={onRun}
-                // onClick={handleCreate}
               >
                 <div className={style.slideImg}>
                   <img
@@ -405,10 +408,10 @@ const Main = () => {
         </div>
         <div className={`${style.clone} ${animate ? "" : style.stop}`}>
           {serviceList.map((e, i) => {
-            if (e.id === joinService[jsId]) {
-              joinPossible = false;
-              jsId++;
-            } else joinPossible = true;
+            if (e.id === joinService[jsIdClone]) {
+              joinPossibleClone = false;
+              jsIdClone++;
+            } else joinPossibleClone = true;
             return (
               <div
                 key={i}
@@ -423,7 +426,7 @@ const Main = () => {
                     alt={`${e.name} 로고 이미지`}
                   />
                 </div>
-                {joinPossible && loginId !== "" ? (
+                {joinPossibleClone && loginId !== "" ? (
                   <div
                     className={style.partyCreate}
                     data-id={e.id}
