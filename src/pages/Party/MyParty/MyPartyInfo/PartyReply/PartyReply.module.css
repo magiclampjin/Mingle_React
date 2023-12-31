@@ -51,7 +51,24 @@
     padding-left: 20px;
 }
 
-.replyForm {}
+.checkForm {
+    display: flex;
+    justify-content: space-between; /* 양쪽 끝에 요소를 배치 */
+    align-items: center; /* 요소들을 세로로 중앙 정렬 */
+    padding: 10px 0; /* 상하 여백을 줍니다 (필요에 따라 조정) */
+}
+
+.secretCheckboxContainer {
+    /* 비밀댓글 체크박스 스타일 */
+    display: flex;
+    align-items: center; /* 체크박스와 라벨을 세로 중앙 정렬 */
+}
+
+.secretCheckboxLabel {
+    margin-left: 5px; /* 체크박스와 라벨 사이의 간격 */
+    /* 라벨에 대한 추가 스타일이 필요하면 여기에 추가 */
+}
+
 
 .replyInput {
     width: 100%;
@@ -248,4 +265,10 @@ ul.pagination li:hover:not(ul.pagination li.active,
 .selectedReplyInfo strong {
     font-weight: bold;
     color: #007bff;
+}
+
+.secretReply {
+    color: #777; /* 회색 톤 */
+    font-style: italic; /* 이탤릭체 */
+    /* 추가 스타일링 */
 }
