@@ -82,7 +82,6 @@ const Main = () => {
 
   const navi = useNavigate();
   // 메인화면 로딩 시 페이지 맨 위로 끌어올리기
-  const { pathname } = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
