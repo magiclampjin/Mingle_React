@@ -177,7 +177,7 @@ const Main = () => {
       contentElement.contains(clickedElement)
     ) {
       // 가입 할 수 없는 서비스의 파티에는 partyNotJoin이라는 클래스 명이 있음
-      if (clickedElement.className.includes("partyNotJoin")) {
+      if (clickedElement.className.includes("partyNotJoin") || contentElement.className.includes("partyNotJoin")) {
         alert("이미 가입한 서비스의 파티입니다.\n추가 가입은 불가능합니다.");
       } else {
         if(loginId===""){
@@ -359,7 +359,7 @@ const Main = () => {
                   <div className={style.noneImgBanner}>
                     <div className={style.partyCountBox}>
                       <div className={style.partyCount}>{partyCount}</div>
-                      <div>명</div>
+                      <div>개</div>
                     </div>
                     <div className={style.nowTime}>{nowTime}</div>
                   </div>

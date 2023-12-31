@@ -206,6 +206,22 @@
     color:#73757790;
 }
 
+.xmark{
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.xmark *{
+    font-size: 18px;
+    color:#7B61FF50;
+}
+
+.xmark *:hover{
+    color:#7B61FF;
+}
+
 
 @media (max-width:768px){
     .others{

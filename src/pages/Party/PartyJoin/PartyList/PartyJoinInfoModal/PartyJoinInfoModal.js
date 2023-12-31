@@ -37,7 +37,6 @@ const getStartDate = (value) => {
 
 // 시작일이 경과했는 지 판단
 const getStartDateOver = (value) => {
-  console.log(value);
   let now = new Date();
   now.setHours(0, 0, 0, 0);
   now.setHours(now.getHours() + 9);

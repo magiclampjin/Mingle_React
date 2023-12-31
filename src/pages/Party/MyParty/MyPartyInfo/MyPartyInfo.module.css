@@ -82,13 +82,13 @@
 }
 .right{
     width: 70%;
+    height: 100%;
     margin-left: 30px;
-    height: 443px;
 }
 .partyInfo{
     height: 100%;
 }
-.leftInfo, .partyInfo{
+.leftInfo, .partyInfo, .partyMemberInfo{
     box-shadow: 0 0 5px 0 #73757750 ;
     border-radius: 15px;
     padding: 20px;
@@ -119,18 +119,56 @@
     margin-bottom: 0;
 }
 
-.secession:hover{
+.withdrawal:hover{
     cursor: pointer;
     text-decoration: underline;
 }
 
 
+.infoMemberContent{
+    display:flex;
+    flex-flow: row wrap;
+    padding-top: 25px;
+}
+
+.memberContent{
+    text-align: center;
+    box-shadow: 0 0 5px 0 #73757750 ;
+    border-radius: 20px;
+    padding:10px;
+    margin: 0 10px;
+    width: 22%;
+    background-color: #8787D030;
+}
+
+.memberContent:last-child{
+    margin-bottom: 0;
+}
+
+.memberProfileImg{
+    width: 80px;
+    height: 80px;
+}
+
+.memberNickName{
+    padding-top:20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.memberRole {
+    font-size:13px;
+    margin: 5px 0;
+}
+
 @media (max-width: 850px){
     .br{
         display: block;
     }
-    .right{
-        height: 485px;
+    .memberContent{
+        width: 45%;
+        margin-bottom: 20px;
     }
 }  
 
@@ -138,7 +176,12 @@
     .guide{
         max-width: 100%;
     }
+    .memberContent{
+        width: 100%;
+        margin-bottom: 20px;
+    }
 }
+
 
 @media (max-width: 600px){
     .guide{

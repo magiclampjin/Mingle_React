@@ -30,10 +30,10 @@ const MypageHam = () =>{
     }
 
     const navArray = [
+                    {'title':'마이페이지', 'url':''},
                     {'title':'회원 정보 수정' , 'url':'MemberInfoUpdate'},
                     {'title':'결제 수단 관리' , 'url':'PaymentManage'},
-                    {'title':'정산 내역 확인' , 'url':'PaymentRecord'},
-                    {'title':'정산일 관리' , 'url':'Calculation'}
+                    {'title':'정산 내역 확인' , 'url':'PaymentRecord'}
                 ];
  
 

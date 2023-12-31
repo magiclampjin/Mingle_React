@@ -51,6 +51,7 @@
     margin: auto;
     flex-flow: row wrap;
     max-width: 1300px;
+    margin-bottom: 50px;
 }
 
 .partyList>.myParty{
@@ -86,10 +87,90 @@
     border:2px solid #6A57D750;
 }
 
+.subTitle{
+    font-weight: 500;
+    font-size: 18px;
+    margin-left: 30px;
+}
+
+.empty{
+    margin: 30px 0 50px 0;
+    margin-left: 30px;
+    width: 93%;
+    padding: 100px 0;
+    background-color: #DFE2E6;
+    border-radius: 10px;
+}
+
+.emptyIcon *{
+    font-size: 40px;
+    color: #676D7C;
+}
+
+.emptyTxt {
+    font-size: 20px;
+    font-weight: 500;
+    color: #676D7C;
+    margin-top: 20px;
+}
+
+.subTitle{
+    position:relative;
+}
+
+.questionIcon{
+    cursor: pointer;
+    margin-left: 10px;
+    margin-top: 5px;
+    width: 12px;
+    height: 12px;
+    padding: 3px;
+    background-color: #73757730;
+    border-radius: 50px;
+}
+.questionIcon * {
+    color : #43485199;
+    display: flex;
+    align-items: center;
+}
+
+
+
+.infoPop{
+    width: 300px;
+    position:absolute;
+    top:40px;
+    left:0px;
+    background-color: #fff;
+    box-shadow: 0 0 5px 0 #73757750;
+    border-radius: 10px;
+    padding:20px;
+    opacity: 1.0 !important;
+    z-index: 999;
+}
+
+.endParty{
+    background-color: #73757730;
+    opacity: 0.3;
+}
+
+.miniTitle{
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.miniContent{
+    font-size: 14px;
+}
+
 @media (max-width:1290px){
     .partyList>.myParty{
         width: 44%;
         margin-bottom: 30px;
+    }
+    .empty{
+      width: 94%;
     }
 }
 
@@ -98,11 +179,53 @@
         width: 41%;
         margin-bottom: 30px;
     }
+    .empty{
+        width: 88%;
+    }
+}
+
+@media (max-width:1070px){
+    .empty{
+        width: 88.5%;
+    }
+}
+
+@media (max-width:930px){
+    .empty{
+        width: 89%;
+    }
+}
+
+@media (max-width:850px){
+    .empty{
+        width: 90%;
+    }
 }
 
 @media (max-width:786px){
     .partyList>.myParty{
         margin-bottom: 30px;
         width: 100%
+    }
+    .empty{
+        width: 92%;
+    }
+}
+
+@media (max-width:720px){
+    .empty{
+        width: 90%;
+    }
+}
+
+@media (max-width:640px){
+    .empty{
+        width:89%;
+    }
+}
+
+@media (max-width:500px){
+    .empty{
+        width:87%;
     }
 }
