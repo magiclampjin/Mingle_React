@@ -189,7 +189,6 @@ const WritePost = () => {
     }, [submitData.files]);
 
     useEffect(() => {
-        console.log(submitData.files);
     }, [submitData.files]);
 
 

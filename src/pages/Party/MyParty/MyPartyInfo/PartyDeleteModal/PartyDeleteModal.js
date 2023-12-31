@@ -17,7 +17,6 @@ const PartyDeleteModal = ({isOpen, onRequestClose, width, height, regId}) => {
     }    
     const handleDeleteParty = () => {
         axios.delete(`/api/party/delete/${regId}`).then(resp=>{
-           console.log(resp.data);
             if(resp.data===1){
                 // 삭제 성공
                 alert("파티가 삭제되었습니다.");

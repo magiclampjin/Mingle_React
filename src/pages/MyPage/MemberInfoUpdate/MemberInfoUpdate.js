@@ -154,6 +154,35 @@ const MemberInfoUpdate = () =>{
         })
     },[codeCom,userPhone])
 
+    const [timeSeconds, setTimerSeconds] = useState(180); // 초기 시간 설정 (3분)
+    const [timerStart, setTimerStart] = useState(false); // 타이머 시작 여부
+
+    // 타이머 로직
+    useEffect(() => {
+        const updateCountdown = () => {
+        const minutes = Math.floor(timeSeconds / 60);
+        const seconds = timeSeconds % 60;
+
+        if (timerStart) {
+            // 시간 업데이트
+            setTimerSeconds((prev) => (prev > 0 ? prev - 1 : 0));
+            // 인증 시간 초과 시
+            if (timeSeconds === 0) {
+            setTimerStart(false);
+            alert("인증 시간이 초과되었습니다.");
+            axios.get("/api/member/removeVerificationCode").then((resp)=>{
+                //console.log("삭제완료");
+            })
+            }
+        }
+        };
+
+    // 1초마다 업데이트
+    const timerId = setInterval(updateCountdown, 1000);
+
+    // 컴포넌트가 언마운트되면 타이머 정리
+    return () => clearInterval(timerId);
+  }, [timeSeconds, timerStart]);
 
     // 이메일 인증하기 버튼 누름
     const handleAuthBtn = () =>{
@@ -174,7 +203,11 @@ const MemberInfoUpdate = () =>{
                    alert("이미 존재하는 이메일입니다.");
                    
                 }else if(resp.data==1){
-                    alert("인증번호가 발송되었습니다.");
+                    // 타이머 시간 세팅
+                    setTimerSeconds(180);
+                    // 타이머 시작
+                    setTimerStart(true);
+                   alert("인증번호가 발송되었습니다. 메일을 확인해주세요. \n 메일이 도착하지 않을 경우 스팸 메일함을 확인해주세요.");
                 }
             })
           
@@ -196,10 +229,16 @@ const MemberInfoUpdate = () =>{
             console.log(resp.data);
             if(resp.data){
                 setIsEmailModalOpen(false);
-                alert("변경되었습니다.");
+                alert("이메일이 변경되었습니다.");
                 setCodeCom(!codeCom);
+                 // 타이머 시간 세팅
+                 setTimerSeconds(0);
+                 // 타이머 시작
+                 setTimerStart(false);
             }else{
-                alert("이메일 인증에 실패했습니다.");
+                alert("본인 인증 코드가 일치하지 않습니다.");
+                setInputEmail("");
+                setCode("");
             }
         });
 
@@ -247,7 +286,6 @@ const MemberInfoUpdate = () =>{
         if(isPw){
             axios.get("/api/member/mypageMemberOut",{params:{password:inputPw}}).then((resp)=>{
               
-                console.log(resp.data);
                 if(resp.data === 1){
                     alert("탈퇴가 완료되었습니다.")
                     moveHome();
@@ -445,7 +483,12 @@ const MemberInfoUpdate = () =>{
                                 className={style.inputEmail}
                                 onChange={handleAuthCode}
                                 />
+                                <div className={style.timer}>{`${String(
+                                    Math.floor(timeSeconds / 60)
+                                    ).padStart(2, "0")}:${String(timeSeconds % 60).padStart(2, "0")}`}
+                                </div>
                             </div>
+                            
 
                             <div className={style.modalBtn}>
                                 <PurpleRectangleBtn
