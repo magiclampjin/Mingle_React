@@ -4,7 +4,7 @@ import LoadingSpinnerMini from "../../../../components/LoadingSpinnerMini/Loadin
 import ServiceCategoryNavi from "../../PartyCreate/PartyCreateList/ServiceCategoryNavi/ServiceCategoryNavi";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { faFaceSadTear, faStar } from "@fortawesome/free-solid-svg-icons";
 import { useContext, useEffect, useState } from "react";
 import React from "react";
 
@@ -51,7 +51,6 @@ const PartyAllList = ({ selectServiceCategory, setSelectServiceCategory }) => {
         axios
           .get(`/api/party/getService/${selectServiceCategory}`)
           .then((resp) => {
-            console.log(resp.data.list);
             setService(Array.isArray(resp.data.list) ? resp.data.list : []);
             let joinArr = Array.isArray(resp.data.joinList)
               ? resp.data.joinList
@@ -132,68 +131,44 @@ const PartyAllList = ({ selectServiceCategory, setSelectServiceCategory }) => {
           {isServiceListLoading ? (
             <LoadingSpinnerMini height={260} width={100} />
           ) : (
-            service.map((e, i) => {
-              if (e.id === joinService[jsId]) {
-                joinPossible = false;
-                jsId++;
-              } else joinPossible = true;
-              return (
-                <>
-                  <div
-                    key={i}
-                    data-id={e.id}
-                    className={
-                      joinPossible
-                        ? `${style.partyContent}`
-                        : `${style.partyContent} ${style.cantSelectContent}`
-                    }
-                    onClick={
-                      joinPossible
-                        ? handleSelectService
-                        : () => {
-                            alert(
-                              "이미 가입한 서비스의 파티입니다.\n추가 가입은 불가능합니다."
-                            );
-                          }
-                    }
-                  >
-                    <div
-                      className={`${style.partyContent__img} ${style.centerAlign}`}
-                    >
-                      <img
-                        src={`/assets/serviceLogo/${e.englishName}.png`}
-                        alt={`${e.name} 로고 이미지`}
-                      ></img>
-                    </div>
-                    <div
-                      className={`${style.partyContent__name} ${style.centerAlign}`}
-                    >
-                      {e.name}
-                    </div>
-                    <div
-                      className={`${style.partyContent__txt} ${style.centerAlign}`}
-                    >
-                      매달 적립!
-                    </div>
-                    <div className={`${style.centerAlign}`}>
-                      <div className={`${style.maxPrice} ${style.centerAlign}`}>
-                        ~
-                        {formatNumber(
-                          Math.ceil(e.price / e.maxPeopleCount) *
-                            (e.maxPeopleCount - 1) -
-                            e.commission * (e.maxPeopleCount - 1)
-                        )}
-                        원
+            <>
+              {service&&service.length!==0?
+             
+                service.map((e, i) => {
+                  if (e.id === joinService[jsId]) {
+                    joinPossible = false;
+                    jsId++;
+                  } else joinPossible = true;
+                  return (
+                    <>
+                      <div key={`joinList-${i}`} data-id={e.id} className={joinPossible?`${style.partyContent}`:`${style.partyContent} ${style.cantSelectContent}`}
+                          onClick={joinPossible?handleSelectService: () => {alert("이미 가입한 서비스의 파티입니다.\n추가 가입은 불가능합니다.");}}>
+                        <div className={`${style.partyContent__img} ${style.centerAlign}`}>
+                          <img src={`/assets/serviceLogo/${e.englishName}.png`} alt={`${e.name} 로고 이미지`}></img>
+                        </div>
+                        <div className={`${style.partyContent__name} ${style.centerAlign}`}>{e.name}</div>
+                        <div className={`${style.partyContent__txt} ${style.centerAlign}`}>매달 적립!</div>
+                        <div className={`${style.centerAlign}`}>
+                          <div className={`${style.maxPrice} ${style.centerAlign}`}>~{formatNumber(Math.ceil(e.price / e.maxPeopleCount) *(e.maxPeopleCount - 1) - e.commission * (e.maxPeopleCount - 1))}원</div>
+                          <div className={`${style.hotTag} ${style.centerAlign}`}>
+                            <FontAwesomeIcon icon={faStar} size="1x" />
+                            <div className={`${style.hatTagTxt}`}>HOT</div>
+                          </div>
+                        </div>
                       </div>
-                      <div className={`${style.hotTag} ${style.centerAlign}`}>
-                        <FontAwesomeIcon icon={faStar} size="1x" />
-                        <div className={`${style.hatTagTxt}`}>HOT</div>
-                      </div>
+                    </>
+                  );
+                }):
+                <div className={style.empty}>
+                    <div className={`${style.emptyIcon} ${style.centerAlign}`}>
+                    <FontAwesomeIcon icon={faFaceSadTear} />
                     </div>
-                  </div>
-                </>
-              );
-            })
+                    <div className={`${style.emptyTxt} ${style.centerAlign}`}>
+                        해당 카테고리는 아직 서비스가 존재하지 않아요.
+                    </div>
+                </div>
+              }
+          </>
           )}
         </div>
       </div>

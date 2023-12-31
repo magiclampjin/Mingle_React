@@ -433,10 +433,10 @@ const PartyCreatePage = () => {
   // -------------------------------------------------------------------------------
 
   return (
-    <div className={`${style.body} ${style.dflex}`}>
-      <div className={style.left}>
+    <div className={`${style.body} ${style.centerAlign}`}>
+      {/* <div className={style.left}>
         <div className={style.stepBox}>스텝</div>
-      </div>
+      </div> */}
       <div className={style.right}>
         {step === 1 && service ? (
           <>

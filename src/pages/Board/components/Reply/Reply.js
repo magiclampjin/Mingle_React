@@ -4,6 +4,7 @@ import axios from 'axios';
 import { LoginContext } from '../../../../App';
 import Pagination from 'react-js-pagination';
 import DOMPurify from 'dompurify';
+import ReportReplyModal from '../ReportReplyModal/ReportReplyModal';
 
 // 댓글 작성 시간 포맷팅 함수
 const formatTime = (timeString) => {
@@ -21,7 +22,6 @@ const flattenReplies = (replies) => {
         return acc;
     }, []);
 };
-
 
 
 const ReplyForm = ({ content, setContent, onSubmit, onCancel, placeholder }) => {
@@ -73,7 +73,7 @@ const UpdateReplyForm = ({ content, setContent, onSubmit, onCancel, placeholder 
     };
 
     const handleSubmit = () => {
-                // 글자 수가 1000자를 초과하는 경우 경고 메시지를 표시하고 제출하지 않음
+        // 글자 수가 1000자를 초과하는 경우 경고 메시지를 표시하고 제출하지 않음
         if (content.length > 1000) {
             alert("댓글은 1000자를 초과할 수 없습니다.");
             return;
@@ -106,7 +106,7 @@ const UpdateReplyForm = ({ content, setContent, onSubmit, onCancel, placeholder 
     );
 }
 
-const RenderReplies = ({ content, setContent, replies, allReplies, setSelectedParentReply, setSelectedAdoptiveParentReply, replyingTo, handleCommentReply, setReplyingTo, selectedParentReply, handleCancelReplyClick, selectedAdoptiveParentReply, editingReply, setEditingReply, handleEditButtonClick, handleEditReply, handleDeleteReply }) => {
+const RenderReplies = ({ content, setContent, replies, allReplies, setSelectedParentReply, setSelectedAdoptiveParentReply, replyingTo, handleCommentReply, setReplyingTo, selectedParentReply, handleCancelReplyClick, selectedAdoptiveParentReply, editingReply, setEditingReply, handleEditButtonClick, handleEditReply, handleDeleteReply, openReportModal }) => {
 
     const { loginId, loginRole } = useContext(LoginContext);
 
@@ -203,7 +203,7 @@ const RenderReplies = ({ content, setContent, replies, allReplies, setSelectedPa
                                 </span>
                                 |
                                 {/* 신고하기 버튼 */}
-                                <span className={styles.replyActionButton}>
+                                <span className={styles.replyActionButton} onClick={() => openReportModal(reply.id)}>
                                     신고하기
                                 </span>
                                 {(loginId === reply.member.id || loginRole === "ROLE_ADMIN") && (
@@ -251,6 +251,7 @@ const RenderReplies = ({ content, setContent, replies, allReplies, setSelectedPa
                                         handleEditReply={handleEditReply}
                                         // 댓글 삭제 로직
                                         handleDeleteReply={handleDeleteReply}
+                                        openReportModal={openReportModal}
                                     />
 
                                 </div>
@@ -299,7 +300,7 @@ const RenderReplies = ({ content, setContent, replies, allReplies, setSelectedPa
 };
 
 
-const RenderChildReplies = ({ replies, allReplies, replyingTo, setReplyingTo, setSelectedParentReply, setSelectedAdoptiveParentReply, editingReply, setEditingReply, handleEditButtonClick, handleEditReply, selectedAdoptiveParentReply, content, setContent, handleCommentReply, handleCancelReplyClick, handleDeleteReply }) => {
+const RenderChildReplies = ({ replies, allReplies, replyingTo, setReplyingTo, setSelectedParentReply, setSelectedAdoptiveParentReply, editingReply, setEditingReply, handleEditButtonClick, handleEditReply, selectedAdoptiveParentReply, content, setContent, handleCommentReply, handleCancelReplyClick, handleDeleteReply, openReportModal }) => {
     const { loginId, loginRole } = useContext(LoginContext);
 
     // 대댓글 작성 버튼 클릭 핸들러
@@ -374,7 +375,7 @@ const RenderChildReplies = ({ replies, allReplies, replyingTo, setReplyingTo, se
                             </span>
                             |
                             {/* 신고하기 버튼 */}
-                            <span className={styles.replyActionButton}>
+                            <span className={styles.replyActionButton} onClick={() => openReportModal(reply.id)}>
                                 신고하기
                             </span>
                             {(loginId === reply.member.id || loginRole === "ROLE_ADMIN") && (
@@ -455,6 +456,7 @@ const Reply = ({ replies, postId }) => {
     const [selectedParentReply, setSelectedParentReply] = useState(null);
     const [selectedAdoptiveParentReply, setSelectedAdoptiveParentReply] = useState(null);
 
+    // 페이지네이션에 필요한 상태 추가
     const [currentPage, setCurrentPage] = useState(1);
     const repliesPerPage = 7; // 페이지당 댓글 수
     const [currentReplies, setCurrentReplies] = useState([]); // 현재 페이지에 표시할 댓글들
@@ -472,6 +474,10 @@ const Reply = ({ replies, postId }) => {
 
     // 수정 중인 댓글 상태 추가
     const [editingReply, setEditingReply] = useState(null);
+
+    // 댓글 신고를 관리할 상태 추가
+    const [isReportModalOpen, setReportModalOpen] = useState(false);
+    const [selectedReplyId, setSelectedReplyId] = useState(null);
 
     // 수정 버튼 클릭 핸들러
     const handleEditButtonClick = (reply) => {
@@ -494,6 +500,18 @@ const Reply = ({ replies, postId }) => {
         setSelectedParentReply(null);
         setReplyingTo(null); // 대댓글 작성 상태 설정
         setSelectedAdoptiveParentReply(null);
+    };
+
+    // 신고 모달을 여는 함수
+    const openReportModal = (replyId) => {
+        setReportModalOpen(true);
+        setSelectedReplyId(replyId);
+    };
+
+    // 신고 모달을 닫는 함수
+    const closeReportModal = () => {
+        setReportModalOpen(false);
+        setSelectedReplyId(null);
     };
 
     // replies prop이 변경될 때마다 allReplies를 업데이트합니다.
@@ -693,58 +711,70 @@ const Reply = ({ replies, postId }) => {
 
 
     return (
-        <div className={styles.reply__section}>
-            <hr />
-            {allReplies.length > 0 ? (
-                <>
-                    <RenderReplies
-                        content={content}
-                        setContent={setContent}
-                        replies={currentReplies}
-                        allReplies={allReplies}
-                        setSelectedParentReply={setSelectedParentReply}
-                        setSelectedAdoptiveParentReply={setSelectedAdoptiveParentReply}
-                        replyingTo={replyingTo}
-                        setReplyingTo={setReplyingTo}
-                        handleCancelReplyClick={handleCancelReplyClick}
-                        handleCommentReply={handleCommentReply}
-                        selectedParentReply={selectedParentReply}
-                        selectedAdoptiveParentReply={selectedAdoptiveParentReply}
-                        // 댓글 수정 관련 props
-                        editingReply={editingReply}
-                        setEditingReply={setEditingReply}
-                        handleEditButtonClick={handleEditButtonClick}
-                        handleEditReply={handleEditReply}
-                        // 댓글 삭제 props
-                        handleDeleteReply={handleDeleteReply}
-                    />
-
-                    {/* 페이지네이션 */}
-                    <Pagination
-                        activePage={currentPage}
-                        itemsCountPerPage={repliesPerPage}
-                        totalItemsCount={allReplies.filter(reply => !reply.parentReply).length}
-                        pageRangeDisplayed={5}
-                        onChange={handlePageChange}
-                    />
-
-                </>
-            ) : (
-                <div className={styles.noReplies}>댓글이 없습니다</div>
-            )}
-            <hr />
-            <div className={styles.replyForm}>
-                <textarea
-                    className={styles.replyInput}
-                    value={newReply}
-                    onChange={handleReplyChange}
-                    placeholder="댓글을 작성하세요"
-                    onClick={handleCancelReplyClick}
+        <>
+            {isReportModalOpen && (
+                <ReportReplyModal
+                    isOpen={isReportModalOpen}
+                    onRequestClose={closeReportModal}
+                    contentLabel="댓글 신고하기"
+                    replyId={selectedReplyId}
                 />
-                <div>댓글 글자 수 : {newReply.length}/1000</div>
-                <button onClick={handleSubmitReply} className={styles.replyButton}>댓글 작성</button>
+            )}
+            <div className={styles.reply__section}>
+                <hr />
+                {allReplies.length > 0 ? (
+                    <>
+                        <RenderReplies
+                            content={content}
+                            setContent={setContent}
+                            replies={currentReplies}
+                            allReplies={allReplies}
+                            setSelectedParentReply={setSelectedParentReply}
+                            setSelectedAdoptiveParentReply={setSelectedAdoptiveParentReply}
+                            replyingTo={replyingTo}
+                            setReplyingTo={setReplyingTo}
+                            handleCancelReplyClick={handleCancelReplyClick}
+                            handleCommentReply={handleCommentReply}
+                            selectedParentReply={selectedParentReply}
+                            selectedAdoptiveParentReply={selectedAdoptiveParentReply}
+                            // 댓글 수정 관련 props
+                            editingReply={editingReply}
+                            setEditingReply={setEditingReply}
+                            handleEditButtonClick={handleEditButtonClick}
+                            handleEditReply={handleEditReply}
+                            // 댓글 삭제 props
+                            handleDeleteReply={handleDeleteReply}
+                            // 댓글 신고 props
+                            openReportModal={openReportModal}
+                        />
+
+                        {/* 페이지네이션 */}
+                        <Pagination
+                            activePage={currentPage}
+                            itemsCountPerPage={repliesPerPage}
+                            totalItemsCount={allReplies.filter(reply => !reply.parentReply).length}
+                            pageRangeDisplayed={5}
+                            onChange={handlePageChange}
+                        />
+
+                    </>
+                ) : (
+                    <div className={styles.noReplies}>댓글이 없습니다</div>
+                )}
+                <hr />
+                <div className={styles.replyForm}>
+                    <textarea
+                        className={styles.replyInput}
+                        value={newReply}
+                        onChange={handleReplyChange}
+                        placeholder="댓글을 작성하세요"
+                        onClick={handleCancelReplyClick}
+                    />
+                    <div>댓글 글자 수 : {newReply.length}/1000</div>
+                    <button onClick={handleSubmitReply} className={styles.replyButton}>댓글 작성</button>
+                </div>
             </div>
-        </div>
+        </>
     );
 
 };
