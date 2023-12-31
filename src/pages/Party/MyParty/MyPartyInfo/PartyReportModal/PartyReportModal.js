@@ -12,7 +12,6 @@ Modal.setAppElement("#root");
 const reportReasons =[
     "계정",
     "미납",
-    "댓글"
 ];
 
 const MAX_REASON_LENGTH = 1000;
@@ -32,12 +31,6 @@ const PartyReportModal = ({isOpen, onRequestClose, width, height, regId, partyMe
     // 신고 버튼 클릭
     const handleReport = (e) =>{
         if(selectedReason!=="" && reportReasonTxt!==""){
-            // report
-            // id, memberId, content, report_date, is_process
-            // report_party
-            // report_id, party_regi_id, member_id, party_report_category
-            // 자동생성, regId, 카테고리마다 다름, reportReasons[0]
-
             const now = new Date();
             now.setHours(now.getHours()+9);
 
@@ -48,9 +41,9 @@ const PartyReportModal = ({isOpen, onRequestClose, width, height, regId, partyMe
                 partyReportCategory: reportReasons[selectedReason],
                 memberId:reportMember
             }
-            console.log(reportData);
             axios.post(`/api/party/insertReport`,reportData).then(resp=>{
-                console.log(resp.data);
+                alert("신고가 완료되었습니다.");
+                onRequestClose();
             }).catch(()=>{
                 alert("문제가 발생했습니다.");
                 onRequestClose();
@@ -64,7 +57,6 @@ const PartyReportModal = ({isOpen, onRequestClose, width, height, regId, partyMe
     },[isOpen]);
 
     const handleMemberSelect = (e) => {
-        console.log(e.target.value);
         setReportMember(e.target.value);
     }
 

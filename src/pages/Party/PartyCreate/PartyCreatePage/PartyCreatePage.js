@@ -165,7 +165,6 @@ const PartyCreatePage = () => {
     const regResult = value
       .replace(/[=<>]/g, "")
       .replace(/([\s\S]{300})([\s\S]{1,})/g, "$1");
-    console.log(regResult);
     setAccountInfo((prev) => {
       // 비밀번호 일치여부 검사
       let compartTargetName = "pw";

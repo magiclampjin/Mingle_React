@@ -202,11 +202,10 @@ const MyPartyList = () => {
                  {isHovering ? (
                     <div className={style.infoPop}>
                         <div className={style.miniTitle}>
-                            종료된 파티 정보는 왜 보관되나요?
+                            종료된 파티
                         </div>
                         <div className={style.miniContent}>
-                            파티원들간의 원활한 소통을 위해 파티 종료일로부터 3개월간 파티 정보가 보관됩니다. 
-                            단, 서비스 계정의 비밀번호 정보는 종료일에 즉시 파기됩니다.
+                            파티 정보는 파기되지 않지만, 파티에서 사용된 계정 정보는 종료일에 즉시 파기됩니다.
                         </div>
                     </div>
                   ) : null}
