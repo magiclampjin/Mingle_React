@@ -37,6 +37,7 @@ const MemberInfoUpdate = () =>{
     // 휴대폰 변경 버튼 클릭
     const handlePhoneUpdate =(e)=>{
         // setPhone(!phone);
+        setInputPhone("");
         setIsModalOpen(true);
     }
     // 휴대폰 모달창 닫기
@@ -112,8 +113,15 @@ const MemberInfoUpdate = () =>{
         console.log(isPhone);
         if(isPhone){
             axios.put("/api/member/mypagePhoneUpdate",{phone:inputPhone}).then((resp)=>{
-                setUserPhone(inputPhone);
-                closeModal();
+                if(resp.data == 0){
+                    alert("이미 존재하는 휴대폰 번호입니다.");
+                    setInputPhone("");
+                }else if(resp.data==1){
+                    setUserPhone(inputPhone);
+                    closeModal();
+                    alert("변경이 완료되었습니다.");
+                }
+                
             })
         }else{
             setInputPhone();
@@ -158,11 +166,15 @@ const MemberInfoUpdate = () =>{
             alert("이메일 양식을 확인해주세요.");
             return;
         }else{
-            alert("인증번호가 발송되었습니다.");
+            
             // 이메일 제대로 입력함
             axios.get("/api/member/mypageEmailAuth",{params:{email:inputEmail}}).then((resp)=>{
-                if (resp) {
-                   console.log(resp.data);
+                if (resp.data ==0 ) {
+                    setInputEmail("");
+                   alert("이미 존재하는 이메일입니다.");
+                   
+                }else if(resp.data==1){
+                    alert("인증번호가 발송되었습니다.");
                 }
             })
           
@@ -274,7 +286,7 @@ const MemberInfoUpdate = () =>{
                 :
                 <>
 
-                    <>
+                    {/* <>
                         <div className={style.inner}>
                             <div className={style.inner__left}>연결된 소셜 로그인 계정</div>
                             <div className={style.inner__right}>
@@ -282,42 +294,42 @@ const MemberInfoUpdate = () =>{
                                 <PurpleRoundBtn title={account?"변경하기":"변경취소"} activation={account} onClick={handleAccUpdate}></PurpleRoundBtn>
                             </div>
                         </div>
-                    </>
+                    </> */}
                 
-                {!account &&
-                <>
-                    <div >
-                        <div className={style.loginText}>변경하려는 소셜 로그인 수단을 선택해 주세요.</div>
-                        <div className={style.socialBox}>
-                            <div className={style.social}>
-                                <div>
-                                    <img src="/assets/socialLogo/kakao.png" className={style.socialImg} alt="카카오 로그인" />
+                    {!account &&
+                    <>
+                        <div >
+                            <div className={style.loginText}>변경하려는 소셜 로그인 수단을 선택해 주세요.</div>
+                            <div className={style.socialBox}>
+                                <div className={style.social}>
+                                    <div>
+                                        <img src="/assets/socialLogo/kakao.png" className={style.socialImg} alt="카카오 로그인" />
+                                    </div>
+                                    <div className={style.text}>
+                                        카카오로 시작하기
+                                    </div>
+                                    <div></div>
                                 </div>
-                                <div className={style.text}>
-                                    카카오로 시작하기
+                                <div className={style.social}>
+                                    <div>
+                                        <img src="/assets/socialLogo/google.png" className={style.socialImg}  alt="구글 로그인" />
+                                    </div>
+                                    <div className={style.text}>
+                                        구글로 시작하기
+                                    </div>
                                 </div>
-                                <div></div>
+                                <div className={style.social}>
+                                    <div>
+                                        <img src="/assets/socialLogo/naver.png" className={style.socialImg}  alt="네이버 로그인" />
+                                    </div>
+                                    <div className={style.text}>
+                                        네이버로 시작하기
+                                    </div>
+                                </div>
                             </div>
-                            <div className={style.social}>
-                                <div>
-                                    <img src="/assets/socialLogo/google.png" className={style.socialImg}  alt="구글 로그인" />
-                                </div>
-                                <div className={style.text}>
-                                    구글로 시작하기
-                                </div>
-                            </div>
-                            <div className={style.social}>
-                                <div>
-                                    <img src="/assets/socialLogo/naver.png" className={style.socialImg}  alt="네이버 로그인" />
-                                </div>
-                                <div className={style.text}>
-                                    네이버로 시작하기
-                                </div>
-                            </div>
-                        </div>
 
-                    </div>
-                </>
+                        </div>
+                    </>
                 }
                
 
