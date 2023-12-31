@@ -221,7 +221,7 @@ const MyPartyInfo = () =>{
                                     <div className={style.infoContent}>
                                         <div className={style.infoTitle}>파티댓글</div>
                                         <div className={style.infoSubContent}>
-                                            <PartyReply partyRegistrationId={partyInfo.partyRegistrationId}/>
+                                            <PartyReply partyRegistrationId={partyInfo.partyRegistrationId} isEnd={isStart(partyInfo.startDate, partyInfo.monthCount)===-1}/>
                                         </div>
                                     </div>
                                 </div>

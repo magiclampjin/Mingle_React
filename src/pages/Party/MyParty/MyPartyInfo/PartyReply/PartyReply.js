@@ -140,7 +140,7 @@ const UpdateReplyForm = ({ content, setContent, onSubmit, onCancel, placeholder,
     );
 }
 
-const RenderReplies = ({ content, setContent, replies, allReplies, setSelectedParentReply, setSelectedAdoptiveParentReply, replyingTo, handleCommentReply, setReplyingTo, selectedParentReply, handleCancelReplyClick, selectedAdoptiveParentReply, editingReply, setEditingReply, handleEditButtonClick, handleEditReply, handleDeleteReply, isSecret, setIsSecret, managerId }) => {
+const RenderReplies = ({ content, setContent, replies, allReplies, setSelectedParentReply, setSelectedAdoptiveParentReply, replyingTo, handleCommentReply, setReplyingTo, selectedParentReply, handleCancelReplyClick, selectedAdoptiveParentReply, editingReply, setEditingReply, handleEditButtonClick, handleEditReply, handleDeleteReply, isSecret, setIsSecret, managerId, isPartyEnd }) => {
 
     const { loginId } = useContext(LoginContext);
 
@@ -245,7 +245,7 @@ const RenderReplies = ({ content, setContent, replies, allReplies, setSelectedPa
 
                                         |
                                         {/* 대댓글 달기 버튼 */}
-                                        <span className={styles.replyActionButton} onClick={(e) => {
+                                        <span className={styles.replyActionButton} onClick={isPartyEnd?()=>{}:(e) => {
                                             handleReplyButtonClick(e, reply.id, reply.parentPartyReply ? reply.parentPartyReply.id : null);
                                         }}>
                                             대댓글 달기
@@ -500,7 +500,9 @@ const RenderChildReplies = ({ replies, allReplies, replyingTo, setReplyingTo, se
 };
 
 
-const PartyReply = ({ partyRegistrationId }) => {
+const PartyReply = ({ partyRegistrationId, isEnd}) => {
+
+    const [isPartyEnd] = useState(isEnd);
 
     const { loginId } = useContext(LoginContext);
 
@@ -543,7 +545,9 @@ const PartyReply = ({ partyRegistrationId }) => {
 
     // 수정 버튼 클릭 핸들러
     const handleEditButtonClick = (reply) => {
-        setEditingReply({ id: reply.id, content: reply.content, isSecret: reply.isSecret });
+        if(!isPartyEnd){
+            setEditingReply({ id: reply.id, content: reply.content, isSecret: reply.isSecret });
+        }
     };
 
 
@@ -553,8 +557,10 @@ const PartyReply = ({ partyRegistrationId }) => {
     };
 
     const handleReplyChange = (e) => {
-        const clearText = DOMPurify.sanitize(e.target.value);
-        setNewReply(clearText);
+        if(!isPartyEnd){
+            const clearText = DOMPurify.sanitize(e.target.value);
+            setNewReply(clearText);
+        }
     };
 
 
@@ -609,51 +615,52 @@ const PartyReply = ({ partyRegistrationId }) => {
     }, [loginId, partyRegistrationId, selectedParentReply, selectedAdoptiveParentReply, newReply]);
 
     const handleCommentReply = () => {
-        const now = new Date();
-        const formData = new FormData();
-        formData.append("content", content);
-        formData.append("writeDate", now.toISOString());
-        formData.append("partyRegistrationId", submitReply.partyRegistrationId);
-        formData.append("memberId", submitReply.memberId);
-        formData.append("partyReplyParentId", submitReply.partyReplyParentId ? submitReply.partyReplyParentId.toString() : "0");
-        formData.append("partyReplyAdoptiveParentId", submitReply.partyReplyAdoptiveParentId ? submitReply.partyReplyAdoptiveParentId.toString() : "0");
-        formData.append("isSecret", isSecret); // 비밀댓글 여부 추가
+        if(!isPartyEnd){
+            const now = new Date();
+            const formData = new FormData();
+            formData.append("content", content);
+            formData.append("writeDate", now.toISOString());
+            formData.append("partyRegistrationId", submitReply.partyRegistrationId);
+            formData.append("memberId", submitReply.memberId);
+            formData.append("partyReplyParentId", submitReply.partyReplyParentId ? submitReply.partyReplyParentId.toString() : "0");
+            formData.append("partyReplyAdoptiveParentId", submitReply.partyReplyAdoptiveParentId ? submitReply.partyReplyAdoptiveParentId.toString() : "0");
+            formData.append("isSecret", isSecret); // 비밀댓글 여부 추가
 
-        if (!content) {
-            alert("댓글을 입력해주세요!");
-            return;
-        }
-        axios.post("/api/party/reply", formData).then(resp => {
-            // 서버로부터 받은 새로운 댓글 데이터
-            const newReplyData = resp.data;
+            if (!content) {
+                alert("댓글을 입력해주세요!");
+                return;
+            }
+            axios.post("/api/party/reply", formData).then(resp => {
+                // 서버로부터 받은 새로운 댓글 데이터
+                const newReplyData = resp.data;
 
-            // 새 대댓글이 추가될 부모 댓글 ID 확인
-            const parentPartyReplyId = newReplyData.parentPartyReply.id;
+                // 새 대댓글이 추가될 부모 댓글 ID 확인
+                const parentPartyReplyId = newReplyData.parentPartyReply.id;
 
-            // 상태 업데이트
-            setAllReplies(prevReplies => {
-                // 부모 댓글을 찾아 대댓글 목록 업데이트
-                return prevReplies.map(reply => {
-                    if (reply.id === parentPartyReplyId) {
-                        // 대댓글 목록에 새로운 대댓글 추가
-                        const updatedChildrenPartyReplies = reply.childrenPartyReplies
-                            ? [...reply.childrenPartyReplies, newReplyData]
-                            : [newReplyData];
-                        return { ...reply, childrenPartyReplies: updatedChildrenPartyReplies };
-                    }
-                    return reply;
+                // 상태 업데이트
+                setAllReplies(prevReplies => {
+                    // 부모 댓글을 찾아 대댓글 목록 업데이트
+                    return prevReplies.map(reply => {
+                        if (reply.id === parentPartyReplyId) {
+                            // 대댓글 목록에 새로운 대댓글 추가
+                            const updatedChildrenPartyReplies = reply.childrenPartyReplies
+                                ? [...reply.childrenPartyReplies, newReplyData]
+                                : [newReplyData];
+                            return { ...reply, childrenPartyReplies: updatedChildrenPartyReplies };
+                        }
+                        return reply;
+                    });
                 });
+
+                setContent(""); // 입력 필드 초기화
+                setNewReply(""); // 입력 필드 초기화
+                setReplyingTo(null);
+                setIsSecret(false);
+            }).catch(error => {
+                console.error("error : ", error);
+                setNewReply(""); // 입력 필드 초기화
             });
-
-            setContent(""); // 입력 필드 초기화
-            setNewReply(""); // 입력 필드 초기화
-            setReplyingTo(null);
-            setIsSecret(false);
-        }).catch(error => {
-            console.error("error : ", error);
-            setNewReply(""); // 입력 필드 초기화
-        });
-
+        }
     }
 
     const handleSubmitReply = () => {
@@ -738,57 +745,59 @@ const PartyReply = ({ partyRegistrationId }) => {
 
     // 삭제 로직
     const handleDeleteReply = (replyId, parentPartyReplyId = null, updatedIsSecret = false) => {
-        if (!window.confirm("이 댓글을 정말 삭제하시겠습니까?")) {
-            return;
-        }
-
-        // 해당 댓글을 찾아 자식 댓글이 있는지 확인
-        const replyToDelete = allReplies.find(reply => reply.id === replyId);
-        const hasChildren = replyToDelete && replyToDelete.childrenPartyReplies && replyToDelete.childrenPartyReplies.length > 0;
-
-        // 양부모 댓글로 참조되는지 확인
-        const isAdoptiveParent = allReplies.some(reply => reply.partyReplyAdoptiveParentId === replyId);
-
-        if (hasChildren || isAdoptiveParent) {
-            const formData = new URLSearchParams();
-            if (loginId === managerId) {
-                formData.append('content', "파티 관리자에 의해 지워진 댓글입니다");
-                formData.append('isSecret', false);
-            }
-            else {
-                formData.append('content', "사용자에 의해 지워진 댓글입니다");
-                formData.append('isSecret', false);
+        if(!isPartyEnd){
+            if (!window.confirm("이 댓글을 정말 삭제하시겠습니까?")) {
+                return;
             }
 
-            axios.put(`/api/party/reply/${replyId}`, formData)
-                .then(response => {
-                    setAllReplies(prevReplies => prevReplies.map(reply => {
-                        if (reply.id === replyId) {
-                            if (loginId === managerId) {
-                                return { ...reply, content: "파티 관리자에 의해 지워진 댓글입니다", isSecret: false };
-                            }
-                            else {
-                                return { ...reply, content: "사용자에 의해 지워진 댓글입니다", isSecret: false };
-                            }
+            // 해당 댓글을 찾아 자식 댓글이 있는지 확인
+            const replyToDelete = allReplies.find(reply => reply.id === replyId);
+            const hasChildren = replyToDelete && replyToDelete.childrenPartyReplies && replyToDelete.childrenPartyReplies.length > 0;
 
+            // 양부모 댓글로 참조되는지 확인
+            const isAdoptiveParent = allReplies.some(reply => reply.partyReplyAdoptiveParentId === replyId);
+
+            if (hasChildren || isAdoptiveParent) {
+                const formData = new URLSearchParams();
+                if (loginId === managerId) {
+                    formData.append('content', "파티 관리자에 의해 지워진 댓글입니다");
+                    formData.append('isSecret', false);
+                }
+                else {
+                    formData.append('content', "사용자에 의해 지워진 댓글입니다");
+                    formData.append('isSecret', false);
+                }
+
+                axios.put(`/api/party/reply/${replyId}`, formData)
+                    .then(response => {
+                        setAllReplies(prevReplies => prevReplies.map(reply => {
+                            if (reply.id === replyId) {
+                                if (loginId === managerId) {
+                                    return { ...reply, content: "파티 관리자에 의해 지워진 댓글입니다", isSecret: false };
+                                }
+                                else {
+                                    return { ...reply, content: "사용자에 의해 지워진 댓글입니다", isSecret: false };
+                                }
+
+                            }
+                            return reply;
+                        }));
+                    })
+                    .catch(error => console.error("Error updating reply: ", error));
+            } else {
+                // 자식 댓글이 없고 양부모 댓글로 참조되지 않는 경우, 댓글 삭제
+                axios.delete(`/api/party/reply/${replyId}`)
+                    .then(response => {
+                        if (parentPartyReplyId) {
+                            // 자식 댓글 삭제 처리
+                            handleDeleteChildReply(replyId, parentPartyReplyId);
+                        } else {
+                            // 최상위 댓글 삭제 처리
+                            setAllReplies(prevReplies => prevReplies.filter(reply => reply.id !== replyId));
                         }
-                        return reply;
-                    }));
-                })
-                .catch(error => console.error("Error updating reply: ", error));
-        } else {
-            // 자식 댓글이 없고 양부모 댓글로 참조되지 않는 경우, 댓글 삭제
-            axios.delete(`/api/party/reply/${replyId}`)
-                .then(response => {
-                    if (parentPartyReplyId) {
-                        // 자식 댓글 삭제 처리
-                        handleDeleteChildReply(replyId, parentPartyReplyId);
-                    } else {
-                        // 최상위 댓글 삭제 처리
-                        setAllReplies(prevReplies => prevReplies.filter(reply => reply.id !== replyId));
-                    }
-                })
-                .catch(error => console.error("Error deleting reply: ", error));
+                    })
+                    .catch(error => console.error("Error deleting reply: ", error));
+            }
         }
     };
 
@@ -829,6 +838,7 @@ const PartyReply = ({ partyRegistrationId }) => {
                         setIsSecret={setIsSecret}
                         // 파티 관리자 id
                         managerId={managerId}
+                        isPartyEnd={isPartyEnd}
                     />
 
                     {/* 페이지네이션 */}
@@ -852,12 +862,14 @@ const PartyReply = ({ partyRegistrationId }) => {
                     onChange={handleReplyChange}
                     placeholder="댓글을 작성하세요"
                     onClick={handleCancelReplyClick}
+                    disabled={isPartyEnd}
                 />
                 <div className={styles.checkForm}>
                     <div className={styles.secretCheckboxContainer}>
                         <input
                             type="checkbox"
                             checked={isSecret}
+                            disabled={isPartyEnd}
                             onChange={(e) => setIsSecret(e.target.checked)}
                         />
                         <label className={styles.secretCheckboxLabel}>
@@ -869,7 +881,7 @@ const PartyReply = ({ partyRegistrationId }) => {
                     </div>
                 </div>
 
-                <button onClick={handleSubmitReply} className={styles.replyButton}>댓글 작성</button>
+                <button onClick={isPartyEnd?()=>{}:handleSubmitReply} className={styles.replyButton}>댓글 작성</button>
             </div>
         </div>
     );
