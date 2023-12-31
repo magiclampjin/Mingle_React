@@ -37,8 +37,9 @@ const PwChange = () => {
     if (user.id !== "") {
       setUpdate((prev) => ({ ...prev, id: user.id }));
     } else {
-      alert("잘못된 접근입니다.");
-      navi("/member/findInfo/pw");
+      // 로그인 시 이 페이지가 이전 페이지일 수 있어서
+      // 잘못된 접근입니다보다는 login페이지로 이동
+      navi("/member/login");
     }
   }, []);
 

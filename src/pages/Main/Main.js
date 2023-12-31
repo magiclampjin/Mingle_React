@@ -85,7 +85,7 @@ const Main = () => {
   const { pathname } = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [pathname]);
+  }, []);
 
   // 컴포넌트가 마운트될 때 데이터 로드
   useEffect(() => {
@@ -274,7 +274,7 @@ const Main = () => {
 
   // 로그인하기로 이동
   const handleGoLogin = () => {
-    if(loginId!==""){
+    if(loginId===""){
       navi("/member/login");
     }else{
       navi("/party/partycreate");
