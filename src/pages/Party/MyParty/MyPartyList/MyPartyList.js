@@ -6,20 +6,32 @@ import { useNavigate } from "react-router-dom";
 import { renderToString } from 'react-dom/server';
 import { LoginContext } from "../../../../App";
 import {myPartyContext} from "../MyPartyMain";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFaceSadTear } from "@fortawesome/free-solid-svg-icons";
 
 const MyPartyList = () => {
     const [isLoading, setLoading] = useState(false);
     const [myPartyList, setMyPartyList] = useState();
+    const [proceedEmpty, setProceedEmpty] = useState(true);
+    const [progressEmpty, setProgressEmpty] = useState(true);
+
     const {setSelectParty} = useContext(myPartyContext);
     const navi = useNavigate();
 
     // 미로그인 시 접근불가
-    const {loginId} = useContext(LoginContext);
+    const {loginId, loginStatus} = useContext(LoginContext);
+    
+    // 로그인 여부
     useEffect(()=>{
-        if(loginId===""){
-           navi("/denied");
+        if(loginStatus!=="confirm")
+            setLoading(true);
+        else{
+            if(loginId===""){
+                navi("/denied");
+            }
+            setLoading(false);
         }
-    },[loginId]);
+    },[loginId, loginStatus]);
 
     // 가입한 파티 목록 가져오기
     useEffect(()=>{
@@ -73,59 +85,92 @@ const MyPartyList = () => {
             <div className={style.title}>
                 나의 파티    
             </div>
+
+            <div className={style.subTitle}>
+                진행 예정 파티
+            </div>
             <div className={`${style.partyList} ${style.dflex}`}>
                 {
-                    myPartyList?myPartyList.map((e,i)=>(
-                        <div className={`${style.myParty}`} key={i} data-id={e.id} onClick={handleClick}>
-                            <div className={`${style.serviceImg} ${style.centerAlign}`}>
-                                <img src={`/assets/serviceLogo/${e.englishName}.png`} alt={`${e.name} 로고 이미지`} className={`${e.logoImg} ${style.VAlign}`}></img>
-                            </div>
-                            <div className={`${style.serviceName} ${style.centerAlign}`}>
-                                {e.name} {e.plan}
-                            </div>
-                            <div className={`${style.startDate} ${style.centerAlign}`}>
-                                {getStartDate(e.startDate)}
-                            </div> 
-                            <div className={`${style.serviceName} ${style.centerAlign}`}>
-                                <div className={style.tag}>{renderToString(getStartDate(e.startDate))==="진행중"?"진행":"예정"}</div>
-                                {e.partyManager?<div className={style.tag}>방장</div>:null}
-                            </div>
-                        </div>
-                    )):null
+                    myPartyList?myPartyList.map((e,i)=>{
+                        
+                        if(renderToString(getStartDate(e.startDate))!=="진행중"){
+                            if(proceedEmpty) setProceedEmpty(false);
+                            return(
+                                <div className={`${style.myParty}`} key={i} data-id={e.id} onClick={handleClick}>
+                                    <div className={`${style.serviceImg} ${style.centerAlign}`}>
+                                        <img src={`/assets/serviceLogo/${e.englishName}.png`} alt={`${e.name} 로고 이미지`} className={`${e.logoImg} ${style.VAlign}`}></img>
+                                    </div>
+                                    <div className={`${style.serviceName} ${style.centerAlign}`}>
+                                        {e.name} {e.plan}
+                                    </div>
+                                    <div className={`${style.startDate} ${style.centerAlign}`}>
+                                        {getStartDate(e.startDate)}
+                                    </div> 
+                                    <div className={`${style.serviceName} ${style.centerAlign}`}>
+                                        <div className={style.tag}>예정</div>
+                                        {e.partyManager?<div className={style.tag}>방장</div>:null}
+                                    </div>
+                                </div>
+                            )
+                        }
+                    }):null
                 }
-               
+                {
+                    proceedEmpty?
+                    <div className={style.empty}>
+                    <div className={`${style.emptyIcon} ${style.centerAlign}`}>
+                        <FontAwesomeIcon icon={faFaceSadTear} />
+                    </div>
+                    <div className={`${style.emptyTxt} ${style.centerAlign}`}>
+                        진행 예정인 파티가 없어요.
+                    </div>
+                    </div>:null
+            }
+            </div>
+
+            <div className={style.subTitle}>
+                진행 중인 파티
+            </div>
+            <div className={`${style.partyList} ${style.dflex}`}>
+                {
+                     myPartyList?myPartyList.map((e,i)=>{
+                        
+                        if(renderToString(getStartDate(e.startDate))==="진행중"){
+                            if(progressEmpty) setProgressEmpty(false);
+                            return(
+                                <div className={`${style.myParty}`} key={i} data-id={e.id} onClick={handleClick}>
+                                    <div className={`${style.serviceImg} ${style.centerAlign}`}>
+                                        <img src={`/assets/serviceLogo/${e.englishName}.png`} alt={`${e.name} 로고 이미지`} className={`${e.logoImg} ${style.VAlign}`}></img>
+                                    </div>
+                                    <div className={`${style.serviceName} ${style.centerAlign}`}>
+                                        {e.name} {e.plan}
+                                    </div>
+                                    <div className={`${style.startDate} ${style.centerAlign}`}>
+                                        {getStartDate(e.startDate)}
+                                    </div> 
+                                    <div className={`${style.serviceName} ${style.centerAlign}`}>
+                                        <div className={style.tag}>진행</div>
+                                        {e.partyManager?<div className={style.tag}>방장</div>:null}
+                                    </div>
+                                </div>
+                            )
+                        }
+                    }):null
+                } 
+                {
+                    progressEmpty?
+                    <div className={style.empty}>
+                        <div className={`${style.emptyIcon} ${style.centerAlign}`}>
+                            <FontAwesomeIcon icon={faFaceSadTear} />
+                        </div>
+                        <div className={`${style.emptyTxt} ${style.centerAlign}`}>
+                            진행 중인 파티가 없어요.
+                        </div>
+                    </div>:null
+                }
             </div>
         </div>
     );
 }
 
 export default MyPartyList;
-
-/*
-
-
- <div className={`${style.partyListLine} ${style.centerAlign}`}>
-{   
-    isServiceListLoading ? (
-        <LoadingSpinnerMini height={260} width={100}/>
-    ) :(
-        service.map((e,i)=>{                         
-            return(
-                <>
-                    <div key={i} data-id={e.id} className={`${style.partyContent}`} onClick={openModal}>
-                        <div className={`${style.partyContent__img} ${style.centerAlign}`}><img src={`/assets/serviceLogo/${e.englishName}.png`} alt={`${e.name} 로고 이미지`}></img></div>
-                        <div className={`${style.partyContent__name} ${style.centerAlign}`}>{e.name}</div>
-                        <div className={`${style.partyContent__txt} ${style.centerAlign}`}>매달 적립!</div>
-                        <div className={`${style.centerAlign}`}>
-                            <div className={`${style.maxPrice} ${style.centerAlign}`}>~{formatNumber(Math.ceil((e.price)/(e.maxPeopleCount))*(e.maxPeopleCount-1)-(e.commission)*(e.maxPeopleCount-1))}원</div>
-                            <div className={`${style.hotTag} ${style.centerAlign}`}><FontAwesomeIcon icon={faStar} size="1x"/><div className={`${style.hatTagTxt}`}>HOT</div></div>
-                        </div>
-                    </div>
-                </>
-            ); 
-        })  
-    )                 
-}
-
-
-*/

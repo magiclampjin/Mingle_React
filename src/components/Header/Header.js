@@ -2,10 +2,10 @@ import style from "./Header.module.css";
 import PurpleRoundBtn from "../PurpleRoundBtn/PurpleRoundBtn";
 import ProfileModal from "./ProfileModal/ProfileModal";
 
-import { Link, unstable_HistoryRouter, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faBell } from "@fortawesome/free-solid-svg-icons";
-import { useState, useContext, useEffect, createContext, useRef } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import { MenuContext } from "../../App";
 import { LoginContext } from "../../App";
 import axios from "axios";
@@ -19,6 +19,8 @@ const Header = () => {
   const { loginRole, setLoginRole } = useContext(LoginContext);
   const { selectedMenu, setSelectedMenu } = useContext(MenuContext);
   const scrollPosition = useRef(0);
+
+  const {loginStatus,setLoginStatus} = useContext(LoginContext);
 
   const navi = useNavigate();
   const cookies = new Cookies();
@@ -54,12 +56,14 @@ const Header = () => {
     }
   }, [scrollPosition, modalIsOpen]);
 
+
   useEffect(() => {
     // setLoading(true);
     axios.get("/api/member/userBasicInfo").then((resp) => {
       const data = resp.data; // axios로 받아온 데이터
       // data가 Map과 유사한 경우
       // Map의 값들 꺼내오기
+      
       if (data.loginID !== undefined) {
         setLoginId(data.loginID);
         // setLoading(false);
@@ -71,7 +75,9 @@ const Header = () => {
       if (data.loginRole !== undefined) {
         setLoginRole(data.loginRole);
       }
-    });
+    }).finally(()=>{
+      setLoginStatus("confirm");
+    })
   }, [loginId, modalIsOpen]);
 
   // 프로필 모달창 열기
@@ -92,16 +98,13 @@ const Header = () => {
         cookies.remove("loginID", { path: "/" });
       }
       closeModal();
-      // setLogout(true);
-      // navi(-1);
     });
   };
 
   // 자주 묻는 질문으로 이동
   const handleFAQClick = () => {
     setSelectedMenu("자주 묻는 질문");
-    window.location.href =
-      "https://impossible-log-6dc.notion.site/4ac5ec788ca04f6ab7304dbb71891974?pvs=4";
+    window.open('https://impossible-log-6dc.notion.site/4ac5ec788ca04f6ab7304dbb71891974?pvs=4');
   };
 
   // 로그인하기
@@ -109,19 +112,6 @@ const Header = () => {
     setSelectedMenu("");
     navi("/member/login");
   };
-  // const handleGoMyParty = (label) => {
-  //   console.log(label);
-  //   navi("/party/myParty");
-  // };
-  // const handleGoPartyCreate = () => {
-  //   navi("/party/partycreate");
-  // };
-  // const handleGoPartySearch = () => {
-  //   navi("/party/partyJoin");
-  // };
-  // const handleGoBoard = () => {
-  //   navi("/board");
-  // };
 
   // 각 메뉴 클릭했을 때 선택한 메뉴 초기화
   const handleMenuClick = (path, label) => {
@@ -152,38 +142,11 @@ const Header = () => {
 
         <div className={style.header__menu}>
           <div className={style.menu__navi}>
-            {/* <div className={style.navi__conf} style={borderStyle}>
-              <Link to="party/myParty">나의 파티</Link>
-            </div>
-            <div className={style.navi__conf} style={borderStyle}>
-              <Link to="party/partycreate">파티 만들기</Link>
-            </div>
-            <div className={style.navi__conf} style={borderStyle}>
-              <Link to="party/partyJoin">파티 찾기</Link>
-            </div>
-            <div className={style.navi__conf} style={borderStyle}>
-              <Link to="board">게시판</Link>
-            </div>
-
-            <div
-              className={style.navi__conf}
-              onClick={handleFAQClick}
-              style={borderStyle}
-            >
-              자주 묻는 질문
-            </div> */}
             {menuItems.map((menuItem, index) => {
               return (
                 <div
                   key={index}
                   className={style.navi__conf}
-                  // onClick={menuItem.handle}
-                  // style={{
-                  //   borderBottom:
-                  //     selectedMenu === menuItem.label
-                  //       ? "2px solid #7b61ff"
-                  //       : "border-bottom: 2px solid transparent",
-                  // }}
                   onClick={() =>
                     menuItem.handle
                       ? menuItem.handle()
@@ -259,9 +222,6 @@ const Header = () => {
           </div>
         </div>
         <div className={style.loginBtn}>
-          {/* <Link to="login">
-            <PurpleRoundBtn title={"로그인"} activation={true}></PurpleRoundBtn>
-          </Link> */}
           {loginId === "" || loginId === null ? (
             <Link to="member/login">
               <PurpleRoundBtn
@@ -324,13 +284,6 @@ const Header = () => {
             <div
               key={index}
               className={style.navi__conf}
-              // onClick={menuItem.handle}
-              // style={{
-              //   borderBottom:
-              //     selectedMenu === menuItem.label
-              //       ? "2px solid #7b61ff"
-              //       : "border-bottom: 2px solid transparent",
-              // }}
               onClick={() =>
                 menuItem.handle
                   ? menuItem.handle()
@@ -347,38 +300,6 @@ const Header = () => {
             </div>
           );
         })}
-        {/* <div className={style.navi__conf} style={borderStyle}>
-          <Link to="party/myParty">나의 파티</Link>
-        </div>
-        <div className={style.navi__conf} style={borderStyle}>
-          <Link to="party/partycreate">파티 만들기</Link>
-        </div>
-        <div className={style.navi__conf} style={borderStyle}>
-          <Link to="party/partyJoin">파티 찾기</Link>
-        </div>
-        <div className={style.navi__conf} style={borderStyle}>
-          게시판
-        </div>
-        <div className={style.navi__conf} style={borderStyle}>
-          자주 묻는 질문
-        </div> */}
-        {/* {menuItems.map((menuItem, index) => {
-          return (
-            <div
-              key={index}
-              className={style.navi__conf}
-              onClick={menuItem.handle()}
-              style={{
-                borderBottom:
-                  selectedMenu === menuItem.label
-                    ? "2px solid #7b61ff"
-                    : "border-bottom: 2px solid transparent",
-              }}
-            >
-              {menuItem.label}
-            </div>
-          );
-        })} */}
       </div>
     </div>
   );

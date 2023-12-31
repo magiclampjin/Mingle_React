@@ -9,7 +9,7 @@ import { FindIdContext } from "../FindId";
 import { useNavigate } from "react-router-dom";
 
 const IdCheck = () => {
-  const { user, setUser } = useContext(FindIdContext);
+  const { user } = useContext(FindIdContext);
   const [id, setId] = useState("");
   const navi = useNavigate();
 

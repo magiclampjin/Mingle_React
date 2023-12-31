@@ -5,46 +5,25 @@ import GrayRectangleBtn from "../../../../components/GrayRectangleBtn/GrayRectan
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { SignUpInfoContext } from "../SignUp";
-import { useState, useEffect, useContext } from "react";
+import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Step3 = () => {
-  const { currentStep, setCurrentStep } = useContext(SignUpInfoContext);
-  const { user, setUser } = useContext(SignUpInfoContext);
-  const { setChhAll } = useContext(SignUpInfoContext);
+  const { currentStep } = useContext(SignUpInfoContext);
+  const { user } = useContext(SignUpInfoContext);
+  const { setChkAll } = useContext(SignUpInfoContext);
   const { setChkUse } = useContext(SignUpInfoContext);
   const { setChkPrivacy } = useContext(SignUpInfoContext);
-  const { nextStep, setNextStep } = useContext(SignUpInfoContext);
   const navi = useNavigate();
 
-  // const handleAccount = () => {
-  //   navi("/member/account");
-  // };
-
-  // useEffect(() => {
-  //   setUser({
-  //     id: "",
-  //     password: "",
-  //     name: "",
-  //     email: "",
-  //     phone: "",
-  //     nickname: "",
-  //     birth: "",
-  //     memberRecommenderId: "",
-  //   });
-  //   setChhAll(false);
-  //   setChkUse(false);
-  //   setChkPrivacy(false);
-  // }, []);
-  // 뒤로가기 버튼을 통해서 들어오거나 주소를 통해서 들어왔다면 돌려보내기
   useEffect(() => {}, []);
 
   useEffect(() => {
     if (currentStep !== "step3") {
-      alert("잘못된 접근입니다.");
+      // alert("잘못된 접근입니다.");
       navi("/member/signup");
     }
-    setChhAll(false);
+    setChkAll(false);
     setChkUse(false);
     setChkPrivacy(false);
   }, [currentStep]); // 빈 배열을 전달하여 마운트 및 언마운트 시에만 실행
@@ -75,9 +54,6 @@ const Step3 = () => {
             입력한 회원 정보는 마이페이지에서 확인 및 수정이 가능합니다.
             <br></br>파티를 이용하시려면 계좌 정보를 등록해주세요.
           </div>
-          {/* <div className={style.accountInfo} onClick={handleAccount}>
-            계좌 정보 등록하기
-          </div> */}
         </div>
       </div>
       <div className={style.stepBtns}>

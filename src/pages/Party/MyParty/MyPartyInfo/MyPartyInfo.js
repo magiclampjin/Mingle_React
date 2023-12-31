@@ -4,12 +4,34 @@ import { myPartyContext } from "../MyPartyMain";
 import axios from "axios";
 import style from "./MyPartyInfo.module.css";
 import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
+import PartyWithdrawalModal from "./PartyWithdrawalModal/PartyWithdrawalModal";
+import { LoginContext } from "../../../../App";
+import PartyReportModal from "./PartyReportModal/PartyReportModal";
+import PartyDeleteModal from "./PartyDeleteModal/PartyDeleteModal";
 
 const MyPartyInfo = () =>{
     const {selectParty} = useContext(myPartyContext);
     const [partyInfo, setPartyInfo] = useState();
     const navi = useNavigate();
     const [isLoading, setLoading] = useState(false);
+    const {loginStatus ,loginId } = useContext(LoginContext);
+    // 파티장 여부
+    const [isManager, setManager] = useState(false);
+    // 파티 구성원 정보
+    const [partyMember, setPartyMember] = useState([]);
+    
+    // 로그인 여부
+    useEffect(()=>{
+        if(loginStatus!=="confirm")
+            setLoading(true);
+        else{
+            if(loginId===""){
+                navi("/denied");
+            }
+            setLoading(false);
+        }
+    },[loginId, loginStatus]);
+
 
     // 시작일 경과 여부
     const isStart = (value) => {
@@ -36,24 +58,67 @@ const MyPartyInfo = () =>{
     };
 
     // 파티 탈퇴하기
-    const handleSecession = () => {
+    const handleWithdrawal = () => {
         // 파티장일 경우
         // 1. 파티원이 없는 경우 -> 정상 해산 
         // 2. 파티원이 있는 경우 -> 위약금
         // 파티원일 경우
         // 1. 위약금
+
+        setModalIsOpen(true);
     }
 
+    // 파티 탈퇴 모달창 열림 / 닫힘 여부 state
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    // 파티 탈퇴 모달창 닫기
+    const closeModal = () => {
+        setModalIsOpen(false);
+    }
+
+    // 파티 신고하기
+    const handleReport = () => {
+        // 파티장일 경우
+        // 1. 파티원 신고 (미납 문제, 파티 댓글)
+        // 파티원일 경우
+        // 1. 파티장 신고 (서비스 계정관련 문제, 파티 댓글)
+
+        setReportModalIsOpen(true);
+    }
+
+    // 파티 탈퇴 모달창 열림 / 닫힘 여부 state
+    const [reportModalIsOpen, setReportModalIsOpen] = useState(false);
+    // 파티 탈퇴 모달창 닫기
+    const closeReportModal = () => {
+        setReportModalIsOpen(false);
+    }
+
+    // 파티 삭제
+    const handleDeleteParty = () => {
+        setDeleteModalIsOpen(true);
+    }
+    // 파티 삭제 모달창 열림 / 닫힘 여부 state
+    const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
+    // 파티 삭제 모달창 닫기
+    const closeDeleteModal = () => {
+        setDeleteModalIsOpen(false);
+    }
 
     useEffect(()=>{
         setLoading(true);
+        if(selectParty === undefined){
+            setLoading(false);
+            navi("/party/myParty");
+            return;
+        }
         axios.get(`/api/party/getPartyInfo/${selectParty}`).then(resp=>{
-            console.log(resp.data);
             setPartyInfo(resp.data);
+            setManager(resp.data.partyManager);
+            setPartyMember(resp.data.memberNicknames.split(","));
+            console.log(resp.data);
             setLoading(false);
         }).catch(()=>{
             alert("정보를 불러오지 못 했습니다.\n같은 문제가 반복되면 관리자에게 문의하세요.");
-            navi(-1);
+            navi("/");
         })
     },[selectParty]);
 
@@ -83,8 +148,17 @@ const MyPartyInfo = () =>{
                                     <div className={style.subContent}>{partyInfo.startDate.slice(0,10)} <span className={style.br}>~</span> {getEndDate(partyInfo.startDate, partyInfo.monthCount)}</div>
                                     <div className={style.grayTitle}>정산일</div>
                                     <div className={style.subContent}>매달 {partyInfo.calculationDate}일</div>
-                                    <div className={style.grayTitle}>정산 금액</div>
-                                    <div className={style.subContent}>매달 {formatNumber(Math.ceil((partyInfo.price)/(partyInfo.maxPeopleCount))+1000)}원</div>
+                                    {isManager?
+                                    <>
+                                        <div className={style.grayTitle}>적립<span className={style.br}></span> 예정 금액</div>
+                                        <div className={style.subContent}>매달 {formatNumber((Math.ceil((partyInfo.price)/(partyInfo.maxPeopleCount))-partyInfo.commission)*partyInfo.memberCnt)}원</div>
+                                    </>
+                                    :
+                                    <>
+                                        <div className={style.grayTitle}>정산<span className={style.br}></span> 예정 금액</div>
+                                        <div className={style.subContent}>매달 {formatNumber(Math.ceil((partyInfo.price)/(partyInfo.maxPeopleCount))+1000)}원</div>
+                                    </>
+                                    }  
                                 </div>
                                 <div className={style.leftInfo}>
                                     <div className={style.subTitle}>계정 정보</div>
@@ -94,19 +168,72 @@ const MyPartyInfo = () =>{
                                     <div className={style.subContent}>{isStart(partyInfo.startDate)===1?partyInfo.loginPw:"파티가 시작되면 공개됩니다."}</div>
                                 </div>
                                 <div className={style.leftInfo}>
-                                    <div className={style.subTitle}>파티 탈퇴</div>
-                                    <div className={`${style.grayTitle} ${style.secession}`} onClick={handleSecession}>탈퇴하기</div>
+                                    <div className={style.subTitle}>기타 메뉴</div>
+                                    {/* <div className={`${style.grayTitle} ${style.withdrawal}`} onClick={handleWithdrawal}>파티 탈퇴하기</div> */}
+                                    {
+                                        partyMember.length>1?
+                                        <>
+                                            <div className={`${style.grayTitle} ${style.withdrawal}`} onClick={handleReport}>파티 신고하기</div>
+                                            <PartyReportModal
+                                                isOpen={reportModalIsOpen}
+                                                onRequestClose={closeReportModal}
+                                                width={500}
+                                                height={690}
+                                                regId={partyInfo.partyRegistrationId}
+                                                partyMember={partyMember}
+                                            />
+                                        </>
+                                        :null
+                                    }
+                                    {isManager && partyInfo.memberCnt===0?
+                                    <>
+                                        <div className={`${style.grayTitle} ${style.withdrawal}`} onClick={handleDeleteParty}>파티 삭제하기</div>
+                                        <PartyDeleteModal
+                                            isOpen={deleteModalIsOpen}
+                                            onRequestClose={closeDeleteModal}
+                                            width={300}
+                                            height={210}
+                                            regId={partyInfo.partyRegistrationId}
+                                        />
+                                    </>:null}
                                 </div>
+                                <PartyWithdrawalModal
+                                    isOpen={modalIsOpen}
+                                    onRequestClose={closeModal}
+                                    width={500}
+                                    height={270}
+                                />
                             </div>
                             <div className={style.right}>
+                                <div className={style.partyMemberInfo}>
+                                    <div className={style.infoContent}>
+                                        <div className={style.infoTitle}>파티 구성원</div>
+                                        <div className={style.infoMemberContent}>
+                                            {
+                                                partyMember.length>0?
+                                                partyMember.map((e,i)=>
+                                                (
+                                                    <div className={style.memberContent} key={`member-${1}`}>
+                                                        <div className={style.memberRole}>
+                                                            {e===partyInfo.managerNickname?<b>파티장</b>:<>파티원</>}
+                                                        </div>
+                                                        <div className={style.memberProfile}>
+                                                            <img className={style.memberProfileImg} src="/assets/basicProfile.png" alt="프로필 이미지"></img>
+                                                        </div>
+                                                        <div className={style.memberNickName}>
+                                                            {e}
+                                                        </div>
+                                                    </div>
+                                                )):null
+                                            }
+                                           
+                                        </div>
+                                    </div>
+                                </div>
                                 <div className={style.partyInfo}>
                                     <div className={style.infoContent}>
-                                        <div className={style.infoTitle}></div>
-                                        <div className={style.infoSubContent}></div>
-                                    </div>
-                                    <div className={style.infoContent}>
-                                        <div className={style.infoTitle}></div>
-                                        <div className={style.infoSubContent}></div>
+                                        <div className={style.infoTitle}>파티댓글UI영역</div>
+                                        <div className={style.infoSubContent}>파티댓글UI영역</div>
                                     </div>
                                 </div>
                             </div>

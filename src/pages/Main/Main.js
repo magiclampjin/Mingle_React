@@ -1,12 +1,9 @@
 import style from "./Main.module.css";
-import GrayRectangleBtn from "../../components/GrayRectangleBtn/GrayRectangleBtn";
 import PurpleRectangleBtn from "../../components/PurpleRectangleBtn/PurpleRectangleBtn";
-import PurpleRoundBtn from "../../components/PurpleRoundBtn/PurpleRoundBtn";
-import WhiteRectangleBtn from "../../components/WhiteRectangleBtn/WhiteRectangleBtn";
-import WhiteRoundBtn from "../../components/WhiteRoundBtn/WhiteRoundBtn";
 import RenderNewVideo from "../Board/components/RenderNewVideo/RenderNewVideo";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import ServiceInfoModal from "../Party/PartyCreate/PartyCreateList/ServiceInfoModal/ServiceInfoModal";
+import PartyJoinInfoModal from "../Party/PartyJoin/PartyList/PartyJoinInfoModal/PartyJoinInfoModal";
 import axios from "axios";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,17 +15,11 @@ import {
 import { faFaceSadTear } from "@fortawesome/free-regular-svg-icons";
 import { useContext, useEffect, useState } from "react";
 // import Swiper core and required modules
-import {
-  Navigation,
-  Pagination,
-  Scrollbar,
-  A11y,
-  Autoplay,
-} from "swiper/modules";
+import { Navigation, Pagination, A11y, Autoplay } from "swiper/modules";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { LoginContext } from "../../App";
+import { LoginContext, JoinPartyContext } from "../../App";
 
 // Import Swiper styles
 import "swiper/css";
@@ -44,19 +35,16 @@ const Main = () => {
   // 현재 시간 기준
   const [nowTime, setNowTime] = useState("");
 
-  // 무한 롤링 애니메이션 설정
-  const [animate, setAnimate] = useState(true);
-  const onStop = () => setAnimate(false); // 멈춤
-  const onRun = () => setAnimate(true); // 재생
-
   const getServiceId = "전체";
   // 서비스 목록
-  const [service, setService] = useState([]);
+  const [serviceList, setServiceList] = useState([]);
   // 가입된 서비스 목록
   const [joinService, setJoinService] = useState([]);
   let jsId = 0;
+  let joinServiceId = 0;
   // 가입 가능 여부 (이미 가입했을 경우 fasle)
   let joinPossible = true;
+  let joinPartyPossible = true;
   // 서비스 모달창 열림 / 닫힘
   const [modalIsOpen, setModalIsOpen] = useState(false);
   // 모달창을 띄울 서비스 종류
@@ -64,8 +52,19 @@ const Main = () => {
   // 요금 안내 확인용 chkBox
   const [isChked, setChked] = useState(false);
 
+  // 무한 롤링 애니메이션 설정
+  const [animate, setAnimate] = useState(true);
+  const onStop = () => setAnimate(false); // 멈춤
+  const onRun = () => {
+    if (!modalIsOpen) {
+      setAnimate(true);
+    }
+  }; // 재생
+
   // 파티 목록
   const [partyList, setPartyList] = useState(null);
+  // 파티 가입 모달창 열림 / 닫힘
+  const [joinModalIsOpen, setJoinModalIsOpen] = useState(false);
   // 최소 날짜 (오늘)
   const currentDate = new Date();
   // 최대 날짜 (한달 후)
@@ -76,6 +75,8 @@ const Main = () => {
 
   // 최신 비디오 목록
   const [newVideoInfo, setNewVideoInfo] = useState(null);
+  // 선택한 파티
+  const { setSelectParty, setService } = useContext(JoinPartyContext);
 
   const navi = useNavigate();
   // 메인화면 로딩 시 페이지 맨 위로 끌어올리기
@@ -91,7 +92,7 @@ const Main = () => {
     axios
       .get("/api/party/getService/" + getServiceId)
       .then((resp) => {
-        setService(Array.isArray(resp.data.list) ? resp.data.list : []);
+        setServiceList(Array.isArray(resp.data.list) ? resp.data.list : []);
         let joinArr = Array.isArray(resp.data.joinList)
           ? resp.data.joinList
           : [];
@@ -101,21 +102,15 @@ const Main = () => {
         }
       })
       .catch(() => {
-        setService([]);
+        setServiceList([]);
       });
   }, [loginId]);
+
   useEffect(() => {
-    // 오늘부터 1달동안의 가입가능한 파티 불러오기
-    let data = {
-      start: period.start.toISOString(),
-      end: period.end.toISOString(),
-    };
     // 파티 목록 불러오기
-    axios
-      .get("/api/party/getPartyListForMain", { params: data })
-      .then((resp) => {
-        setPartyList(resp.data);
-      });
+    axios.get("/api/party/getPartyListForMain").then((resp) => {
+      setPartyList(resp.data);
+    });
     // 최신 비디오 목록 불러오기
     axios
       .get("/api/external/youtube/latestvideo")
@@ -126,7 +121,6 @@ const Main = () => {
         console.error("error reporting! : " + error);
       });
     axios.get("/api/party/selectAllPartyCountForMain").then((resp) => {
-      //setPartyCount(resp.data);
       let count = resp.data;
       // partyCount를 두 자리 숫자로 변환
       const formattedCount = String(count).padStart(2, "0");
@@ -165,13 +159,68 @@ const Main = () => {
       setSelectService(partyContentElement.dataset.id);
       setModalIsOpen(true);
       setChked(false);
+      onStop();
     }
   };
+
+  // 파티 가입 모달창 열기
+  const handleJoinModal = (e) => {
+    const contentElement = e.currentTarget;
+    const clickedElement = e.target;
+
+    if (
+      clickedElement === contentElement ||
+      contentElement.contains(clickedElement)
+    ) {
+      // 가입 할 수 없는 서비스의 파티에는 partyNotJoin이라는 클래스 명이 있음
+      if (clickedElement.className.includes("partyNotJoin") || clickedElement.className.includes("partyNotJoin")) {
+        alert("이미 가입한 서비스의 파티입니다.\n추가 가입은 불가능합니다.");
+      } else {
+        if(loginId===""){
+          let loginCheck=window.confirm("로그인 후 이용 가능한 서비스입니다.\n로그인 화면으로 이동하시겠습니까?");
+          if(loginCheck){
+            navi("/member/login");
+          }
+        }else{
+          // 가입할 수 있는 서비스의 파티라면 파티 참여 모달을 열어줌
+          setJoinModalIsOpen(true);
+          setSelectParty(
+            partyList.find(
+              (obj) => obj.id == contentElement.getAttribute("data-id")
+            )
+          );
+
+          const selectedObj = partyList.find(
+            (obj) => obj.id == contentElement.getAttribute("data-id")
+          );
+
+          const selectServiceId = selectedObj ? selectedObj.serviceId : null;
+          const serviceObj = serviceList.find(
+            (obj) => obj.id === selectServiceId
+          );
+          setService(serviceObj);
+        }
+        
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (!modalIsOpen) {
+      onRun();
+    }
+  }, [modalIsOpen]);
 
   // 서비스 정보 모달창 닫기
   const closeModal = () => {
     setModalIsOpen(false);
     setChked(false);
+    onRun();
+  };
+
+  // 파티 가입 모달창 닫기
+  const closeJoinModal = () => {
+    setJoinModalIsOpen(false);
   };
 
   // 숫자를 천 단위로 콤마 찍어주는 함수
@@ -214,30 +263,6 @@ const Main = () => {
     return endDate.toISOString().slice(0, 10);
   };
 
-  // 파티 만들기 페이지로 이동
-  const goCreateParty = (e) => {
-    if (loginId) {
-      const contentElement = e.currentTarget;
-      const clickedElement = e.target;
-
-      if (
-        clickedElement === contentElement ||
-        contentElement.contains(clickedElement)
-      ) {
-        navi("/party/partyCreate");
-      }
-    } else {
-      // 로그인하지않은 유저일 경우 로그인창으로 이동 혹은 현재 페이지 유지
-      if (
-        window.confirm(
-          "로그인 후 이용 가능한 서비스입니다.\n로그인 화면으로 이동하시겠습니까?"
-        )
-      ) {
-        navi("/member/login");
-      }
-    }
-  };
-
   // 파티 찾기 페이지로 이동
   const handleSearchParty = () => {
     navi("/party/partyJoin");
@@ -248,7 +273,7 @@ const Main = () => {
     navi("/member/login");
   };
 
-  if (newVideoInfo === null || service.length === 0 || partyList === null) {
+  if (newVideoInfo === null || serviceList.length === 0 || partyList === null) {
     return <LoadingSpinner />;
   }
 
@@ -275,8 +300,9 @@ const Main = () => {
                     1등 공동 구독 플랫폼 <br></br>Mingle
                   </div>
                   <div className={style.slideConf}>
-                    넷플릭스부터 오피스 365까지<br></br>더 안전하게 밍글과
-                    함께하세요<br></br>
+                    {serviceList[0].name}부터{" "}
+                    {serviceList[serviceList.length - 1].name}까지
+                    <br></br>더 안전하게 밍글과 함께하세요<br></br>
                   </div>
                   <div className={style.btns}>
                     <PurpleRectangleBtn
@@ -294,6 +320,9 @@ const Main = () => {
                     src="/assets/MainSlide/mainSlide01.png"
                     alt="메인슬라이드1"
                   />
+                  <div className={style.slideImgSource}>
+                    <a href="https://kr.freepik.com/free-vector/character-illustration-of-people-with-networking-icon_3585194.htm#page=5&query=%EA%B3%B5%EC%9C%A0%20%ED%94%8C%EB%9E%AB%ED%8F%BC%20%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8&position=42&from_view=search&track=ais&uuid=2154f9d5-bc5f-4b31-a533-fbe4f3b7917a" target="_blance" rel="noopener noreferrer">작가 rawpixel.com</a> 출처 Freepik
+                  </div>
                 </div>
               </div>
             </div>
@@ -326,7 +355,7 @@ const Main = () => {
                   <div className={style.noneImgBanner}>
                     <div className={style.partyCountBox}>
                       <div className={style.partyCount}>{partyCount}</div>
-                      <div>명</div>
+                      <div>개</div>
                     </div>
                     <div className={style.nowTime}>{nowTime}</div>
                   </div>
@@ -338,7 +367,7 @@ const Main = () => {
       </div>
       <div className={`${style.rollingSlide}`}>
         <div className={`${style.original} ${animate ? "" : style.stop}`}>
-          {service.map((e, i) => {
+          {serviceList.map((e, i) => {
             if (e.id === joinService[jsId]) {
               joinPossible = false;
               jsId++;
@@ -350,6 +379,7 @@ const Main = () => {
                 className={style.slideDiv}
                 onMouseEnter={onStop}
                 onMouseLeave={onRun}
+                // onClick={handleCreate}
               >
                 <div className={style.slideImg}>
                   <img
@@ -374,7 +404,7 @@ const Main = () => {
           })}
         </div>
         <div className={`${style.clone} ${animate ? "" : style.stop}`}>
-          {service.map((e, i) => {
+          {serviceList.map((e, i) => {
             if (e.id === joinService[jsId]) {
               joinPossible = false;
               jsId++;
@@ -434,46 +464,58 @@ const Main = () => {
                     {/* partyList를 4개씩 묶어서 매핑 */}
                     {partyList
                       .slice(groupIndex * 4, (groupIndex + 1) * 4)
-                      .map((e, i) => (
-                        <div
-                          key={groupIndex * 4 + i}
-                          className={style.party}
-                          data-id={groupIndex * 4 + i}
-                        >
-                          <div className={style.partyLeft}>
-                            <div className={style.partyTop}>
-                              <div className={style.partyStartDate}>
-                                {getStartDate(e.startDate)}
-                                <span className={style.monthCount}>
-                                  &nbsp;{e.monthCount}개월
-                                </span>
-                                파티
+                      .map((e, i) => {
+                        if (joinService.includes(e.serviceId)) {
+                          joinPartyPossible = false;
+                          joinServiceId++;
+                        } else joinPartyPossible = true;
+                        return (
+                          <div
+                            key={groupIndex * 4 + i}
+                            className={`${style.party} ${
+                              !joinPartyPossible
+                                ? style.partyNotJoin
+                                : ""
+                            }`}
+                            data-id={e.id}
+                            onClick={handleJoinModal}
+                          >
+                            <div className={style.partyLeft}>
+                              <div className={style.partyTop}>
+                                <div className={style.partyStartDate}>
+                                  {getStartDate(e.startDate)}
+                                  <span className={style.monthCount}>
+                                    &nbsp;{e.monthCount}개월
+                                  </span>
+                                  파티
+                                </div>
+                                <div className={style.partyPrice}>
+                                  <div className={style.wonIcon}>
+                                    <FontAwesomeIcon icon={faWonSign} />
+                                  </div>
+                                  <div>
+                                    월
+                                    {formatNumber(
+                                      Math.ceil(e.price / e.maxPeopleCount) +
+                                        1000
+                                    )}
+                                    원
+                                  </div>
+                                </div>
                               </div>
-                              <div className={style.partyPrice}>
-                                <div className={style.wonIcon}>
-                                  <FontAwesomeIcon icon={faWonSign} />
-                                </div>
-                                <div>
-                                  월
-                                  {formatNumber(
-                                    Math.ceil(e.price / e.maxPeopleCount) + 1000
-                                  )}
-                                  원
-                                </div>
+                              <div className={style.partyBottom}>
+                                ~ {getEndDate(e.startDate, e.monthCount)}까지
                               </div>
                             </div>
-                            <div className={style.partyBottom}>
-                              ~ {getEndDate(e.startDate, e.monthCount)}까지
+                            <div className={style.partyRight}>
+                              <img
+                                src={`/assets/serviceLogo/${e.englishName}.png`}
+                                alt={`${e.name} 로고 이미지`}
+                              />
                             </div>
                           </div>
-                          <div className={style.partyRight}>
-                            <img
-                              src={`/assets/serviceLogo/${e.englishName}.png`}
-                              alt={`${e.name} 로고 이미지`}
-                            />
-                          </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                   </SwiperSlide>
                 )
               )
@@ -511,6 +553,23 @@ const Main = () => {
       <div className={style.newVideoInfo}>
         <RenderNewVideo newVideoInfo={newVideoInfo} />
       </div>
+      <ServiceInfoModal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="정보 모달"
+        selectService={selectService}
+        width={450}
+        height={430}
+        isChked={isChked}
+        setChked={setChked}
+      ></ServiceInfoModal>
+      <PartyJoinInfoModal
+        isOpen={joinModalIsOpen}
+        onRequestClose={closeJoinModal}
+        contentLabel="파티 가입 모달"
+        width={500}
+        height={670}
+      ></PartyJoinInfoModal>
     </>
   );
 };

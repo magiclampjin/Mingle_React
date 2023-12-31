@@ -18,13 +18,21 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 export const MenuContext = createContext();
 export const LoginContext = createContext();
+export const CreatePartyContext = createContext();
+export const JoinPartyContext = createContext();
 
 function App() {
   const [selectedMenu, setSelectedMenu] = useState("");
   const [loginId, setLoginId] = useState("");
   const [loginNick, setLoginNick] = useState("");
   const [loginRole, setLoginRole] = useState("");
-
+  const [loginStatus, setLoginStatus] = useState("loading");
+  // 파티생성
+  const [service, setService] = useState(null);
+  // 파티 가입
+  const [selectParty, setSelectParty] = useState(null);
+  const [selectService, setSelectService] = useState("");
+  // const [service, setService] = useState(null);
   return (
     <LoginContext.Provider
       value={{
@@ -34,24 +42,44 @@ function App() {
         setLoginNick,
         loginRole,
         setLoginRole,
+        loginStatus,
+        setLoginStatus,
       }}
     >
       <MenuContext.Provider value={{ selectedMenu, setSelectedMenu }}>
-        <>
-          <Router>
-            <Header></Header>
-            <Routes>
-              <Route path="/" element={<Main />} />
-              <Route path="/member/*" element={<Member />}></Route>
-              <Route path="/party/*" element={<Party />}></Route>
-              <Route path="/Mypage/*" element={<Mypage />}></Route>
-              <Route path="/denied" element={<Denied />}></Route>
-              <Route path="/admin/*" element={<AdminMain />} />
-              <Route path="/board/*" element={<Board />} />
-            </Routes>
-            <Footer></Footer>
-          </Router>
-        </>
+        <CreatePartyContext.Provider
+          value={{
+            service,
+            setService,
+          }}
+        >
+          <JoinPartyContext.Provider
+            value={{
+              selectParty,
+              setSelectParty,
+              service,
+              setService,
+              selectService,
+              setSelectService,
+            }}
+          >
+            <>
+              <Router>
+                <Header></Header>
+                <Routes>
+                  <Route path="/" element={<Main />} />
+                  <Route path="/member/*" element={<Member />}></Route>
+                  <Route path="/party/*" element={<Party />}></Route>
+                  <Route path="/Mypage/*" element={<Mypage />}></Route>
+                  <Route path="/denied" element={<Denied />}></Route>
+                  <Route path="/admin/*" element={<AdminMain />} />
+                  <Route path="/board/*" element={<Board />} />
+                </Routes>
+                <Footer></Footer>
+              </Router>
+            </>
+          </JoinPartyContext.Provider>
+        </CreatePartyContext.Provider>
       </MenuContext.Provider>
     </LoginContext.Provider>
   );
