@@ -78,7 +78,12 @@ const Login = () => {
         .catch((error) => {
           // 에러 핸들링
           console.error("Error during login:", error);
-          alert("아이디 혹은 비밀번호가 일치하지 않습니다.");
+          if (error.response && error.response.status === 403) {
+            // 403 Forbidden 에러일 때
+            alert("이용이 정지된 계정입니다.");
+          } else {
+            alert("아이디 혹은 비밀번호가 일치하지 않습니다.");
+          }
           let cookieRememeberId = cookies.get("rememberID");
           let cookieLoginId = cookies.get("loginID");
           if (cookieRememeberId) {
