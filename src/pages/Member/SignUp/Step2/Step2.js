@@ -102,6 +102,7 @@ const Step2 = () => {
           mycode: "인증 시간이 초과되었습니다.",
         }));
         handleCondition("mycode", false);
+        axios.get("/api/member/removeVerificationCode");
       } else {
         setCheckText((prev) => ({
           ...prev,
@@ -120,43 +121,6 @@ const Step2 = () => {
       setUser((prev) => ({ ...prev, [name]: value }));
     } else if (name === "mycode") {
       handleCode(value);
-      // // 인증번호를 입력하면 서버에 저장된 코드랑 일치하는지 확인
-      // setMycode(value);
-      // const formData = new FormData();
-      // formData.append("code", value);
-      // if (value !== "" && timeSeconds !== 0) {
-      //   axios
-      //     .post("/api/member/certification/signup", formData)
-      //     .then((resp) => {
-      //       if (resp.data) {
-      //         setCheckText((prev) => ({
-      //           ...prev,
-      //           mycode: "인증 코드가 일치합니다.",
-      //         }));
-      //         handleCondition("mycode", true);
-      //       } else {
-      //         setCheckText((prev) => ({
-      //           ...prev,
-      //           mycode: "인증 코드가 일치하지 않습니다.",
-      //         }));
-      //         handleCondition("mycode", false);
-      //       }
-      //     });
-      // } else {
-      //   if (timeSeconds === 0) {
-      //     setCheckText((prev) => ({
-      //       ...prev,
-      //       mycode: "인증 시간이 초과되었습니다.",
-      //     }));
-      //   } else {
-      //     setCheckText((prev) => ({
-      //       ...prev,
-      //       mycode: "",
-      //     }));
-      //   }
-
-      //   handleCondition("mycode", false);
-      // }
     } else {
       setPwCheckText(value);
     }
@@ -568,7 +532,11 @@ const Step2 = () => {
       // 이메일을 입력하지 않았으면
       alert("이메일 주소를 입력해주세요.");
     } else if (!signupConditions.email) {
-      alert("이메일 주소가 올바른 형식이 아닙니다.");
+      if(checkText.email==="중복된 이메일입니다. 사용하실 수 없습니다."){
+        alert("중복된 이메일은 본인 인증을 진행할 수 없습니다.")
+      }else{
+        alert("이메일 주소가 올바른 형식이 아닙니다.");
+      }
     } else {
       setLoading(true);
       const formData = new FormData();
@@ -586,14 +554,12 @@ const Step2 = () => {
             alert(
               "인증번호가 발송되었습니다. 메일을 확인해주세요. \n 메일이 도착하지 않을 경우 스팸 메일함을 확인해주세요."
             );
-            console.log(mycode);
             if (mycode !== "") {
-              console.log(mycode);
-              // handleCode(mycode);
               setMycode("");
             }
           } else {
             alert("인증번호 발송이 실패하였습니다.");
+            axios.get("/api/member/removeVerificationCode");
           }
         });
     }
@@ -608,9 +574,9 @@ const Step2 = () => {
         // 인증 시간 초과 시
         if (timeSeconds === 0) {
           setTimerStart(false);
-          // setFindId(false);
           alert("인증 시간이 초과되었습니다.");
           handleCondition("mycode", false);
+          axios.get("/api/member/removeVerificationCode");
         } else if (timeSeconds === 180) {
           setCheckText((prev) => ({
             ...prev,
