@@ -16,6 +16,7 @@ import LoadingSpinnerMini from '../../../components/LoadingSpinnerMini/LoadingSp
 import { timeFormatter } from '../components/TimeFormatter/TimeFormatter';
 import Pagination from 'react-js-pagination';
 import { LoginContext } from '../../../App';
+import { el } from 'date-fns/locale';
 
 const PaymentRecord = () =>{
 
@@ -38,6 +39,7 @@ const PaymentRecord = () =>{
         setSearchService("전체");
         setSearchType("전체");
         setSearchModalOpen(false);
+        setIsSelectDisable(false);
     }
 
     // 셀렉트 박스에서 서비스명 저장하는 State
@@ -168,6 +170,20 @@ const PaymentRecord = () =>{
         setCurrentLists(payList.slice(indexOfFirstPage, indexOfLastPage));
     }, [payList, page]);
 
+    // 셀렉트박스 State -> true : 비활성화, false: 활성화
+    const [isSelectDisabled,setIsSelectDisable]= useState(false);
+
+    // 인출 누르면 셀렉트박스 State를 false로 변환
+    const handleSelectDisable = (e) => {
+        console.log(e.target.value);
+        if(e.target.value == "인출"){
+            setIsSelectDisable(true);
+            setSearchService("전체");
+        }else{
+            setIsSelectDisable(false);
+        }
+    }
+
     return(
         <>
             <div className={style.container}>
@@ -254,8 +270,9 @@ const PaymentRecord = () =>{
 
                         <div className={style.selectBox}>
                             <div>
-                                 <select id="selectService" className={style.select}
-                                // value={serviceList}
+                                 <select id="selectService" disabled={isSelectDisabled}
+                                 className={style.select}
+                                value={searchService}
                                 onChange={handleServiceChange}
                                 >
                                     <option value="전체">이용 서비스 전체</option>
@@ -273,11 +290,12 @@ const PaymentRecord = () =>{
                             <div>
                                 <select id="paymentType" className={style.select}
                                 onChange={handlePaymentTypeChange}
+                                onClick={handleSelectDisable}
                                 >
                                     <option value="전체">결제/적립/인출 전체</option>
-                                    <option value="결제">결제</option>
-                                    <option value="적립">적립</option>
-                                    <option value="인출">인출</option>
+                                    <option value="결제" >결제</option>
+                                    <option value="적립" >적립</option>
+                                    <option value="인출" >인출</option>
                                 </select>
                             </div>
 

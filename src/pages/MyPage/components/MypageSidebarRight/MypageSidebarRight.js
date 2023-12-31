@@ -35,7 +35,7 @@ const MypageSidebarRight = () => {
                 console.log("밍글머니를 불러오는데 실패했습니다.");
             });
         }
-    }, [])
+    }, [mingleMoney])
 
 
     // 숫자를 천 단위로 콤마 찍어주는 함수
@@ -74,21 +74,24 @@ const MypageSidebarRight = () => {
         })
     }, [])
 
+     // 사용자가 입력한 돈 State
+     const [inputMoney, setInputMoney] = useState("");
+
     // 전액 인출 상태
     const [allMoney, setAllMoney] = useState(false);
     // 전액 인출
-    const handleAllMoney = () => {
+    const handleAllMoney = (e) => {
         if (mingleMoney === 0) {
             setAllMoney(false);
             alert("0원은 인출 불가능합니다.");
         } else {
+            console.log(e.target.value);
             setAllMoney(true);
+            setMingleMoney(mingleMoney); 
+            setInputMoney(true); // 전액 인출 시, 입력된 돈 초기화
         }
     }
-
-    // 사용자가 입력한 돈 State
-    const [inputMoney, setInputMoney] = useState("");
-
+    
 
     // 사용자가 입력한 돈
     const handleInputMoney = (e) => {
@@ -105,18 +108,31 @@ const MypageSidebarRight = () => {
     // 모달에서 인출하기 버튼 눌렀을 때
     const handleSubmit = () => {
         // 가지고 있는 돈보다 많게 입력하면
-        if (inputMoney > mingleMoney || inputMoney === '') {
+        if (inputMoney > mingleMoney) {
             alert("현재 밍글 머니 잔액보다 많은 금액은 인출이 불가능합니다.");
         } else {
             alert("인출되었습니다.");
             // 가지고 있는 돈보다 적으면 인출 가능
-            axios.get("/api/payment/withdrawMingleMoney", { params: { money: inputMoney } }).then((resp) => {
-                console.log(resp.data);
-                handleModalClose();
-                // window.location.reload();
-            }).catch(() => {
-                alert("인출에 실패했습니다.");
-            })
+            if(setAllMoney){
+                axios.get("/api/payment/withdrawMingleMoney", { params: { money: mingleMoney } }).then((resp) => {
+                    console.log(resp.data);
+                    setMingleMoney(resp.data);
+                    handleModalClose();
+                    // window.location.reload();
+                }).catch(() => {
+                    alert("인출에 실패했습니다.");
+                })
+            }else{
+                axios.get("/api/payment/withdrawMingleMoney", { params: { money: inputMoney } }).then((resp) => {
+                    console.log(resp.data);
+                    setMingleMoney(resp.data);
+                    handleModalClose();
+                    // window.location.reload();
+                }).catch(() => {
+                    alert("인출에 실패했습니다.");
+                })
+            }
+           
         }
     }
 
@@ -238,6 +254,11 @@ const MypageSidebarRight = () => {
         } else {
             alert("계좌 등록에 실패했습니다.");
         }
+    }
+
+    // 인출하기가 ture? false
+    const handleMoney = () => {
+        alert("금액을 다시 입력해주세요.");
     }
 
     return (
@@ -422,7 +443,7 @@ const MypageSidebarRight = () => {
                                         title={"인출하기"}
                                         width={100}
                                         heightPadding={10}
-                                        onClick={account ? handleSubmit : handleSubmitReject}
+                                        onClick={inputMoney !== "" ?  account ? handleSubmit : handleSubmitReject : handleMoney}
                                         activation={inputMoney ? true : false}
                                     ></PurpleRectangleBtn>
                                 </div>
