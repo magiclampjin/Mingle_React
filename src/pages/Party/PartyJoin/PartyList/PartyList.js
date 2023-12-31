@@ -119,7 +119,6 @@ const PartyList = () => {
   const getStartDate = (value) => {
     let now = new Date();
     now.setHours(0, 0, 0, 0);
-    now.setHours(now.getHours() + 9);
     const diff =
       (new Date(value).getTime() - now.getTime()) / (1000 * 60 * 60 * 24);
     if (diff === 0) {
