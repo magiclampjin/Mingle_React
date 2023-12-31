@@ -109,7 +109,6 @@ const PaymentRecord = () =>{
         axios.get("/api/payment/searchBy", { params: queryParams })
         .then((resp) => {
             // 성공적으로 처리된 경우의 로직
-            // console.log(resp.data);
             setPayList(resp.data);
             setLoading(false);
         })
@@ -175,7 +174,6 @@ const PaymentRecord = () =>{
 
     // 인출 누르면 셀렉트박스 State를 false로 변환
     const handleSelectDisable = (e) => {
-        console.log(e.target.value);
         if(e.target.value == "인출"){
             setIsSelectDisable(true);
             setSearchService("전체");

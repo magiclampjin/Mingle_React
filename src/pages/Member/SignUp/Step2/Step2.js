@@ -53,11 +53,6 @@ const Step2 = () => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  useEffect(() => {
-    console.log(user);
-    console.log(mycode);
-  }, [user, mycode]);
-
   // 뒤로가기 버튼을 통해서 들어오거나 주소를 통해서 들어왔다면 돌려보내기
   useEffect(() => {
     if (currentStep !== "step2") {

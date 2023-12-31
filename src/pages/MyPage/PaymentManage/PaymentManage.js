@@ -73,8 +73,7 @@ const PaymentManage = () =>{
     const [isAccount,setIsAccount] = useState(false);
 
     // 계좌번호 입력
-    const handleAccountNum = (e) =>{
-        console.log(e.target.value);
+    const handleAccountNum = (e) =>{ 
         // 숫자만 입력 받기
         const newAccountValue = e.target.value.replace(/[^0-9]/g, '').replace(/([\d]{16})([\d]{1,})/g, '$1');
         setAccountNum(newAccountValue);
@@ -88,7 +87,6 @@ const PaymentManage = () =>{
     const [isBank, setIsBank] = useState(false);
         
     const handleBankChange = (e) => {
-        console.log(e.target.value);
         const newBankValue = e.target.value;
         setSelectedBank(newBankValue);
 
@@ -107,7 +105,6 @@ const PaymentManage = () =>{
         // 은행 정보 불러오기
         setLoading(true);
         axios.get("/api/paymentAccount/selectBankList").then((resp)=>{
-            // console.log(resp.data);
             setBankList(resp.data);
             setLoading(false);
        }).catch(()=>{
@@ -209,12 +206,9 @@ const PaymentManage = () =>{
 
    // 계좌 등록 완료 버튼
     const handleSubmit = () =>{
-        console.log(totalValid);
         
         if(totalValid){
             // 계좌 등록
-            console.log("은행 : "+selectedBank);
-            console.log("계좌번호 : "+accountNum);
             axios.post("/api/paymentAccount/accountInsert",postData).then((resp)=>{
                 closeCardModal();
                 setUpdateAccount(accountNum);
@@ -234,7 +228,6 @@ const PaymentManage = () =>{
     useEffect(()=>{
         // if(loginId !== ""){
             axios.get("/api/paymentAccount/accountSelect").then((resp)=>{
-                console.log(resp.data);
                 setAccount(resp.data);
             }).catch(()=>{
                 alert("계좌를 불러오는데 실패했습니다.");
@@ -289,8 +282,6 @@ const PaymentManage = () =>{
         
         if(totalValid){
             // 계좌 등록
-            console.log("은행 : "+selectedBank);
-            console.log("계좌번호 : "+accountNum);
             axios.put("/api/paymentAccount/accountUpdate",postData).then((resp)=>{
                 closeUpdateModal();
                 setUpdateAccount(accountNum);

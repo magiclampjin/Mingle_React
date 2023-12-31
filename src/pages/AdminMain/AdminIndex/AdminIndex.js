@@ -12,7 +12,7 @@ import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 const AdminIndex = () => {
 
     const [authority, setAuthority] = useState(); // 관리자 권한 여부
-    const { loginId, setLoginId } = useContext(LoginContext); // 로그인 여부
+    const { loginId  } = useContext(LoginContext); // 로그인 여부
 
     // 선택한 서비스 정보 불러오기 로딩
     const [isServiceLoading, setServiceLoading] = useState(false);

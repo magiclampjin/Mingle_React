@@ -14,7 +14,6 @@ const Footer = () => {
         </div>
         <div className={style.footer__menu}>
           <div className={style.footer__navi}>
-            <div className={style.navi__conf}>1:1 문의하기</div>
             <div className={style.navi__conf}>개인정보처리방침</div>
             <div className={style.navi__conf}>서비스 이용약관</div>
             <div className={style.navi__conf} onClick={handleFAQClick}>FAQ</div>

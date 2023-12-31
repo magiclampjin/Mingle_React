@@ -6,9 +6,6 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Link,
-  Navigate,
-  useNavigate,
 } from "react-router-dom";
 import MypageMain from "./MypageMain/MypageMain";
 import MemberInfoUpdate from "./MemberInfoUpdate/MemberInfoUpdate";
@@ -16,8 +13,7 @@ import PaymentManage from "./PaymentManage/PaymentManage";
 import PaymentRecord from "./PaymentRecord/PaymentRecord";
 import { createContext, useContext, useEffect, useState } from "react";
 import MypageHam from "./components/MypageHam/MypageHam";
-import { LoginContext, ModalContext, MenuContext } from "../../App";
-import axios from "axios";
+import { LoginContext, MenuContext } from "../../App";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import Denied from "../../components/Denied/Denied";
 
@@ -26,15 +22,13 @@ export const mypageMenuContext = createContext();
 
 const Mypage = () => {
   // 로그인 컨텍스트
-  const { loginId, setLoginId } = useContext(LoginContext);
+  const { loginId, loginStatus } = useContext(LoginContext);
 
   // sidebar로 넘겨주는 State
   const [menu, setMenu] = useState("마이페이지");
 
   // 드롭다운 메뉴 State (닫힘 :false, 열림: true)
   const [dropDown, setDropDown] = useState(true);
-
-  const { loginStatus, setLoginStatus } = useContext(LoginContext);
 
   // 선택된 메뉴 초기화
   const { setSelectedMenu } = useContext(MenuContext);

@@ -102,7 +102,6 @@ const MemberInfoUpdate = () =>{
     const handlePhoneNum = (e) => {
         const phoneValue = e.target.value;
         setInputPhone(phoneValue.replace(/\D/g, '').substring(0, 11));
-        console.log(inputPhone);
 
         const result = isValidPhone(phoneValue);
         setIsPhone(result);
@@ -110,7 +109,6 @@ const MemberInfoUpdate = () =>{
 
     // 휴대폰 번호 변경하기 -> 확인
     const handlePhoneSubmit = () => {
-        console.log(isPhone);
         if(isPhone){
             axios.put("/api/member/mypagePhoneUpdate",{phone:inputPhone}).then((resp)=>{
                 if(resp.data == 0){
@@ -171,8 +169,7 @@ const MemberInfoUpdate = () =>{
             setTimerStart(false);
             alert("인증 시간이 초과되었습니다.");
             axios.get("/api/member/removeVerificationCode").then((resp)=>{
-                //console.log("삭제완료");
-            })
+            }).catch(()=>{alert("문제가 발생했습니다.");})
             }
         }
         };
@@ -226,7 +223,6 @@ const MemberInfoUpdate = () =>{
     // 인증번호 완료
     const handleAuthSubmit = (e)=>{
         axios.get("/api/member/emailChk",{params:{code:code, email:inputEmail}}).then((resp)=>{
-            console.log(resp.data);
             if(resp.data){
                 setIsEmailModalOpen(false);
                 alert("이메일이 변경되었습니다.");
