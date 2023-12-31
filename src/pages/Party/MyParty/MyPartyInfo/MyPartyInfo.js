@@ -34,15 +34,27 @@ const MyPartyInfo = () =>{
 
 
     // 시작일 경과 여부
-    const isStart = (value) => {
+    const isStart = (value, monthCount) => {
         let now = new Date();
         now.setHours(0,0,0,0);
         const diff = (new Date(value).getTime() - now.getTime())/(1000*60*60*24);
-        if(diff <= 0){
-            return 1;
+
+        // 종료일
+        let end = new Date(value);
+        end.setMonth(end.getMonth()+monthCount);
+        // 종료일까지 남은 일자
+        const diffEnd = (now.getTime() - end.getTime())/(1000*60*60*24);
+
+        if(diffEnd>=0){
+            return -1;
         }else{
-            return 0;
+            if(diff <= 0){
+                return 1;
+            }else{
+                return 0;
+            }
         }
+       
     }
 
     // 종료일 계산하는 함수
@@ -136,7 +148,7 @@ const MyPartyInfo = () =>{
                             <img src={`/assets/serviceLogo/${partyInfo.englishName}.png`} alt={`${partyInfo.name} 로고 이미지`} className={`${style.logoImg} ${style.VAlign}`}></img>
                             <div className={style.name}>{partyInfo.name} {partyInfo.plan}</div>
                             <div className={`${style.tags} ${style.centerAlign}`}>
-                                <div className={style.tag}>{isStart(partyInfo.startDate)===1?"진행":"예정"}</div>
+                                <div className={style.tag}>{isStart(partyInfo.startDate, partyInfo.monthCount)===1?"진행":isStart(partyInfo.startDate, partyInfo.monthCount)===0?"예정":"종료"}</div>
                                 {partyInfo.partyManager?<div className={style.tag}>방장</div>:null}
                             </div>
                         </div>
@@ -146,9 +158,15 @@ const MyPartyInfo = () =>{
                                     <div className={style.subTitle}>파티 정보</div>
                                     <div className={style.grayTitle}>파티 기간</div>
                                     <div className={style.subContent}>{partyInfo.startDate.slice(0,10)} <span className={style.br}>~</span> {getEndDate(partyInfo.startDate, partyInfo.monthCount)}</div>
-                                    <div className={style.grayTitle}>정산일</div>
-                                    <div className={style.subContent}>매달 {partyInfo.calculationDate}일</div>
-                                    {isManager?
+                                    {isStart(partyInfo.startDate, partyInfo.monthCount)===-1?null:
+                                    <>
+                                        <div className={style.grayTitle}>정산일</div>
+                                        <div className={style.subContent}>매달 {partyInfo.calculationDate}일</div>
+                                    </>}
+
+                                    {/* 파티 종료 */}
+                                    {isStart(partyInfo.startDate, partyInfo.monthCount)===-1?null:
+                                    isManager?
                                     <>
                                         <div className={style.grayTitle}>적립<span className={style.br}></span> 예정 금액</div>
                                         <div className={style.subContent}>매달 {formatNumber((Math.ceil((partyInfo.price)/(partyInfo.maxPeopleCount))-partyInfo.commission)*partyInfo.memberCnt)}원</div>
@@ -163,9 +181,9 @@ const MyPartyInfo = () =>{
                                 <div className={style.leftInfo}>
                                     <div className={style.subTitle}>계정 정보</div>
                                     <div className={style.grayTitle}>아이디</div>
-                                    <div className={style.subContent}>{isStart(partyInfo.startDate)===1?partyInfo.loginId:"파티가 시작되면 공개됩니다."}</div>
+                                    <div className={style.subContent}>{isStart(partyInfo.startDate, partyInfo.monthCount)===1?partyInfo.loginId:isStart(partyInfo.startDate, partyInfo.monthCount)===0?"파티가 시작되면 공개됩니다.":"파티가 종료되었습니다."}</div>
                                     <div className={style.grayTitle}>비밀번호</div>
-                                    <div className={style.subContent}>{isStart(partyInfo.startDate)===1?partyInfo.loginPw:"파티가 시작되면 공개됩니다."}</div>
+                                    <div className={style.subContent}>{isStart(partyInfo.startDate, partyInfo.monthCount)===1?partyInfo.loginPw:isStart(partyInfo.startDate, partyInfo.monthCount)===0?"파티가 시작되면 공개됩니다.":"파티가 종료되었습니다."}</div>
                                 </div>
                                 <div className={style.leftInfo}>
                                     <div className={style.subTitle}>기타 메뉴</div>
@@ -185,7 +203,7 @@ const MyPartyInfo = () =>{
                                         </>
                                         :null
                                     }
-                                    {isManager && partyInfo.memberCnt===0?
+                                    {isManager && partyInfo.memberCnt===0 && isStart(partyInfo.startDate, partyInfo.monthCount)!==-1?
                                     <>
                                         <div className={`${style.grayTitle} ${style.withdrawal}`} onClick={handleDeleteParty}>파티 삭제하기</div>
                                         <PartyDeleteModal
