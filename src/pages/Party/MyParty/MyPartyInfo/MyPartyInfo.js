@@ -8,6 +8,7 @@ import PartyWithdrawalModal from "./PartyWithdrawalModal/PartyWithdrawalModal";
 import { LoginContext } from "../../../../App";
 import PartyReportModal from "./PartyReportModal/PartyReportModal";
 import PartyDeleteModal from "./PartyDeleteModal/PartyDeleteModal";
+import PartyReply from "./PartyReply/PartyReply";
 
 const MyPartyInfo = () =>{
     const {selectParty} = useContext(myPartyContext);
@@ -250,8 +251,10 @@ const MyPartyInfo = () =>{
                                 </div>
                                 <div className={style.partyInfo}>
                                     <div className={style.infoContent}>
-                                        <div className={style.infoTitle}>파티댓글UI영역</div>
-                                        <div className={style.infoSubContent}>파티댓글UI영역</div>
+                                        <div className={style.infoTitle}>파티댓글</div>
+                                        <div className={style.infoSubContent}>
+                                            <PartyReply partyRegistrationId={partyInfo.partyRegistrationId}/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -187,6 +187,12 @@
     margin-right: 10px;
 }
 
+.timer {
+    font-size: 14px;
+    text-align: start;
+    margin-right: 10px;
+  }
+
 
 @media (max-width:786px) {
     .container{
