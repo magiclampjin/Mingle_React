@@ -1,6 +1,16 @@
 import style from "./Footer.module.css";
 
 const Footer = () => {
+  // 개인정보처리방침으로 이동
+  const handlePersonalInfoProcessingPolicyClick = () => {
+    window.open('https://impossible-log-6dc.notion.site/5b619505660d4f769da88d4424f1868c');
+  }
+
+  // 서비스 이용약관으로 이동
+  const handleTermsClick = () => {
+    window.open('https://impossible-log-6dc.notion.site/7bda14a78d6d40b68639fc1cabb5734b');
+  }
+
   // 자주 묻는 질문으로 이동
   const handleFAQClick = () => {
     window.open('https://impossible-log-6dc.notion.site/4ac5ec788ca04f6ab7304dbb71891974?pvs=4');
@@ -14,8 +24,8 @@ const Footer = () => {
         </div>
         <div className={style.footer__menu}>
           <div className={style.footer__navi}>
-            <div className={style.navi__conf}>개인정보처리방침</div>
-            <div className={style.navi__conf}>서비스 이용약관</div>
+            <div className={style.navi__conf} onClick={handlePersonalInfoProcessingPolicyClick}>개인정보처리방침</div>
+            <div className={style.navi__conf} onClick={handleTermsClick}>서비스 이용약관</div>
             <div className={style.navi__conf} onClick={handleFAQClick}>FAQ</div>
           </div>
           <div className={style.footer__info}>
