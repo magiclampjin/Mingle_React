@@ -14,7 +14,7 @@ const ContentsUserBox = () => {
     }, []);
 
     return (
-        <Col xs={12} md={6} className={style.box}>
+        <Col xs={12} className={style.box}>
             <Col xs={12} className={style.componentTitle}>이용자수</Col>
             <Col xs={12} className={style.componentBox}>
                 <div style={{ width: '100%', height: '100%', margin: '0 auto' }}>
