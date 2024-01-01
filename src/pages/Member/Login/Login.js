@@ -12,19 +12,10 @@ const Login = () => {
   const [user, setUser] = useState({ id: "", pw: "" });
   const [isLoading, setLoading] = useState(false);
   const [rememberId, setRememberId] = useState(false);
-  const { setLoginId } = useContext(LoginContext);
-  // const { setLogout } = useContext(LoginContext);
+  const { loginId, setLoginId } = useContext(LoginContext);
   const navi = useNavigate();
   const cookies = new Cookies();
 
-  // // 카카오 로그인 인증 키 및 redirectUrl
-  // const CLIENT_ID = process.env.REACT_APP_REST_API_KEY;
-  // const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URL;
-  // // 카카오 인증 url
-  // const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-
-  // // 구글 클라이언트 id
-  // const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
   useEffect(() => {
     // 아이디 기억하기를 했다면 쿠키에 있는 아이디 출력하기
     let cookieRememeberId = cookies.get("rememberID");
@@ -32,6 +23,11 @@ const Login = () => {
     if (cookieRememeberId) {
       setUser({ id: cookieLoginId, pw: "" });
       setRememberId(cookieRememeberId);
+    }
+
+    // 로그인 된 사용자는 접근 금지
+    if(loginId!==""){
+      navi("/");
     }
   }, []);
 
@@ -55,8 +51,6 @@ const Login = () => {
       formData.append("pw", user.pw);
       setLoading(true);
 
-      // const location = useLocation();
-
       axios
         .post("/api/member/login", formData)
         .then (()=> {        
@@ -78,7 +72,12 @@ const Login = () => {
         .catch((error) => {
           // 에러 핸들링
           console.error("Error during login:", error);
-          alert("아이디 혹은 비밀번호가 일치하지 않습니다.");
+          if (error.response && error.response.status === 403) {
+            // 403 Forbidden 에러일 때
+            alert("이용이 정지된 계정입니다.");
+          } else {
+            alert("아이디 혹은 비밀번호가 일치하지 않습니다.");
+          }
           let cookieRememeberId = cookies.get("rememberID");
           let cookieLoginId = cookies.get("loginID");
           if (cookieRememeberId) {
@@ -89,7 +88,6 @@ const Login = () => {
           }
 
           setLoading(false);
-          // navi("/denied");
         });
     } else {
       alert("아이디, 비밀번호를 모두 입력해주세요.");
@@ -112,17 +110,6 @@ const Login = () => {
   const handleFindInfo = () => {
     navi("/member/findInfo");
   };
-
-  // // 카카오 로그인
-  // const handleKakaoLogin = () => {
-  //   window.location.href = KAKAO_AUTH_URL;
-  //   // window.location.href = "/oauth2/authorization/kakao";
-  // };
-
-  const handleGoogleLogin=()=>{
-    // window.location.href
-    window.location.href="/oauth2/authorization/google";
-  }
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -179,22 +166,7 @@ const Login = () => {
           onClick={handleLogin}
           activation={true}
         ></PurpleRectangleBtn>
-        <img src="/assets/loginBtns/google.png" alt="구글 로그인 버튼" className={style.socialLoginbtn} onClick={handleGoogleLogin}/>
       </div>
-      <div>
-        
-        {/* <a href="/oauth2/authorization/google" class="btn btn-success active" role="button">Google Login</a> */}
-      </div>
-      {/* <div>
-       
-        <img
-          src="/assets/loginBtns/kakao.png"
-          className={style.socialLoginbtn}
-          onClick={handleKakaoLogin}
-        />
-        
-        <a href="/login/oauth2/code/google">구글 로그인</a>
-      </div> */}
     </div>
   );
 };

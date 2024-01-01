@@ -174,30 +174,6 @@ const PartyList = () => {
     }
   };
 
-  // // 파티 매칭 페이지로 이동
-  // const goMatchingParty = (e) => {
-  //   if (loginId) {
-  //     const contentElement = e.currentTarget;
-  //     const clickedElement = e.target;
-
-  //     if (
-  //       clickedElement === contentElement ||
-  //       contentElement.contains(clickedElement)
-  //     ) {
-  //       alert("열심히 기능을 만들고 있어요!\n고객님들의 편의를 위해 노력하겠습니다.^_^");
-  //     }
-  //   } else {
-  //     // 로그인하지않은 유저일 경우 로그인창으로 이동 혹은 현재 페이지 유지
-  //     if (
-  //       window.confirm(
-  //         "로그인 후 이용 가능한 서비스입니다.\n로그인 화면으로 이동하시겠습니까?"
-  //       )
-  //     ) {
-  //       navi("/member/login");
-  //     }
-  //   }
-  // };
-
   // 검색할 날짜 출력
   const getSearchDate = () => {
     const sd = period.start.toISOString().slice(5, 10);

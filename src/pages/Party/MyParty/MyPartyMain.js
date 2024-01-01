@@ -27,7 +27,6 @@ const MyPartyMain = () => {
           setLoading(true);
       else{
           if(loginId===""){
-            console.log("디나이드");
               navi("/denied");
           }
           setLoading(false);

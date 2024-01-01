@@ -4,7 +4,6 @@ import { MenuContext } from "../../App";
 import Login from "./Login/Login";
 import SignUp from "./SignUp/SignUp";
 import FindInfomation from "./FindInfomation/FindInfomation";
-import Oauth from "./Oauth/Oauth";
 const Member = () => {
   // 선택된 메뉴 초기화
   const { setSelectedMenu } = useContext(MenuContext);
@@ -16,7 +15,6 @@ const Member = () => {
       <Route path="/login" element={<Login />}></Route>
       <Route path="/signup/*" element={<SignUp />}></Route>
       <Route path="/findInfo/*" element={<FindInfomation />}></Route>
-      <Route path="/oauth/*" element={<Oauth />}></Route>
     </Routes>
   );
 };

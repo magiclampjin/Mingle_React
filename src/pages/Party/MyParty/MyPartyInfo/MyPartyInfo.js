@@ -4,10 +4,10 @@ import { myPartyContext } from "../MyPartyMain";
 import axios from "axios";
 import style from "./MyPartyInfo.module.css";
 import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
-import PartyWithdrawalModal from "./PartyWithdrawalModal/PartyWithdrawalModal";
 import { LoginContext } from "../../../../App";
 import PartyReportModal from "./PartyReportModal/PartyReportModal";
 import PartyDeleteModal from "./PartyDeleteModal/PartyDeleteModal";
+import PartyReply from "./PartyReply/PartyReply";
 
 const MyPartyInfo = () =>{
     const {selectParty} = useContext(myPartyContext);
@@ -69,37 +69,14 @@ const MyPartyInfo = () =>{
         return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     };
 
-    // 파티 탈퇴하기
-    const handleWithdrawal = () => {
-        // 파티장일 경우
-        // 1. 파티원이 없는 경우 -> 정상 해산 
-        // 2. 파티원이 있는 경우 -> 위약금
-        // 파티원일 경우
-        // 1. 위약금
-
-        setModalIsOpen(true);
-    }
-
-    // 파티 탈퇴 모달창 열림 / 닫힘 여부 state
-    const [modalIsOpen, setModalIsOpen] = useState(false);
-    // 파티 탈퇴 모달창 닫기
-    const closeModal = () => {
-        setModalIsOpen(false);
-    }
-
     // 파티 신고하기
     const handleReport = () => {
-        // 파티장일 경우
-        // 1. 파티원 신고 (미납 문제, 파티 댓글)
-        // 파티원일 경우
-        // 1. 파티장 신고 (서비스 계정관련 문제, 파티 댓글)
-
         setReportModalIsOpen(true);
     }
 
-    // 파티 탈퇴 모달창 열림 / 닫힘 여부 state
+    // 파티 신고 모달창 열림 / 닫힘 여부 state
     const [reportModalIsOpen, setReportModalIsOpen] = useState(false);
-    // 파티 탈퇴 모달창 닫기
+    // 파티 신고 모달창 닫기
     const closeReportModal = () => {
         setReportModalIsOpen(false);
     }
@@ -126,7 +103,6 @@ const MyPartyInfo = () =>{
             setPartyInfo(resp.data);
             setManager(resp.data.partyManager);
             setPartyMember(resp.data.memberNicknames.split(","));
-            console.log(resp.data);
             setLoading(false);
         }).catch(()=>{
             alert("정보를 불러오지 못 했습니다.\n같은 문제가 반복되면 관리자에게 문의하세요.");
@@ -187,7 +163,6 @@ const MyPartyInfo = () =>{
                                 </div>
                                 <div className={style.leftInfo}>
                                     <div className={style.subTitle}>기타 메뉴</div>
-                                    {/* <div className={`${style.grayTitle} ${style.withdrawal}`} onClick={handleWithdrawal}>파티 탈퇴하기</div> */}
                                     {
                                         partyMember.length>1?
                                         <>
@@ -215,12 +190,6 @@ const MyPartyInfo = () =>{
                                         />
                                     </>:null}
                                 </div>
-                                <PartyWithdrawalModal
-                                    isOpen={modalIsOpen}
-                                    onRequestClose={closeModal}
-                                    width={500}
-                                    height={270}
-                                />
                             </div>
                             <div className={style.right}>
                                 <div className={style.partyMemberInfo}>
@@ -250,8 +219,10 @@ const MyPartyInfo = () =>{
                                 </div>
                                 <div className={style.partyInfo}>
                                     <div className={style.infoContent}>
-                                        <div className={style.infoTitle}>파티댓글UI영역</div>
-                                        <div className={style.infoSubContent}>파티댓글UI영역</div>
+                                        <div className={style.infoTitle}>파티댓글</div>
+                                        <div className={style.infoSubContent}>
+                                            <PartyReply partyRegistrationId={partyInfo.partyRegistrationId} isEnd={isStart(partyInfo.startDate, partyInfo.monthCount)===-1}/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

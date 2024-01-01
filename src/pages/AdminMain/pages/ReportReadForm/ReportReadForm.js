@@ -83,7 +83,7 @@ const ReportReadForm = () => {
                 navigate(-1); // 이전 페이지로 이동
                 
             } catch (error) {
-                console.log("오류 : " + error);
+                alert("문제가 발생했습니다");
             }
         }
     }

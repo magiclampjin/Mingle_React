@@ -8,7 +8,7 @@ import { LoginContext } from "../../../../App";
 Modal.setAppElement("#root");
 
 const reportReasons = [
-    "허위사실 게제",
+    "허위사실 게재",
     "허위조작 / 광고",
     "폭력적인 내용 / 욕설",
     "인종차별 / 성차별",

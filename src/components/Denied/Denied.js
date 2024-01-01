@@ -12,7 +12,6 @@ import { MenuContext } from "../../App";
 const Denied = () => {
   const [authenticate, setAuthenticate] = useState();
   const { setSelectedMenu } = useContext(MenuContext);
-  const {loginId} = useContext(LoginContext);
   const navi = useNavigate();
 
 
@@ -26,11 +25,6 @@ const Denied = () => {
       }
     });
   }, []);
-
-  // 이전으로 돌아가기
-  // const handleBackPage = () => {
-  //   navi(-1);
-  // };
 
   // 메인으로 돌아가기
   const handleMainPage = () => {

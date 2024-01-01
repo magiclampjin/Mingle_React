@@ -19,7 +19,6 @@ reportWebVitals();
 /* global dataLayer */
 
 const googleAnalyticsId = process.env.REACT_APP_GOOGLE_ANALYTICS_ID;
-console.log('Google Analytics ID:', googleAnalyticsId);
 
 // Google Analytics 스크립트 동적으로 생성
 const scriptElement = document.createElement('script');
