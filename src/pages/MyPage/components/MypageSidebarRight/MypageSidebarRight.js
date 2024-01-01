@@ -88,7 +88,6 @@ const MypageSidebarRight = () => {
             console.log(e.target.value);
             setAllMoney(true);
             setMingleMoney(mingleMoney); 
-            setInputMoney(true); // 전액 인출 시, 입력된 돈 초기화
         }
     }
     
@@ -105,15 +104,23 @@ const MypageSidebarRight = () => {
 
     }
 
+    // // 전액인출
+    // const handleAllMingleMoney = (e)=>{
+    //     setAllMoney(true);
+        
+    // }
+
     // 모달에서 인출하기 버튼 눌렀을 때
     const handleSubmit = () => {
+        console.log("입력한 돈 : "+inputMoney);
         // 가지고 있는 돈보다 많게 입력하면
         if (inputMoney > mingleMoney) {
             alert("현재 밍글 머니 잔액보다 많은 금액은 인출이 불가능합니다.");
         } else {
             alert("인출되었습니다.");
             // 가지고 있는 돈보다 적으면 인출 가능
-            if(setAllMoney){
+            // 직접 입력
+            if(allMoney){
                 axios.get("/api/payment/withdrawMingleMoney", { params: { money: mingleMoney } }).then((resp) => {
                     console.log(resp.data);
                     setMingleMoney(resp.data);
@@ -122,7 +129,8 @@ const MypageSidebarRight = () => {
                 }).catch(() => {
                     alert("인출에 실패했습니다.");
                 })
-            }else{
+            }
+            else{
                 axios.get("/api/payment/withdrawMingleMoney", { params: { money: inputMoney } }).then((resp) => {
                     console.log(resp.data);
                     setMingleMoney(resp.data);
@@ -443,7 +451,10 @@ const MypageSidebarRight = () => {
                                         title={"인출하기"}
                                         width={100}
                                         heightPadding={10}
-                                        onClick={inputMoney !== "" ?  account ? handleSubmit : handleSubmitReject : handleMoney}
+                                        onClick={inputMoney ?  (account ? handleSubmit : handleSubmitReject) : 
+                                            (allMoney ? handleSubmit : handleMoney)
+                                            
+                                        }
                                         activation={inputMoney ? true : false}
                                     ></PurpleRectangleBtn>
                                 </div>
